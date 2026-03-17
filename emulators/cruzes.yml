@@ -1,0 +1,36 @@
+emulator: Cruzes
+type: libretro
+source: "https://github.com/libretro/libretro-samples/tree/master/tests/cruzes"
+cores:
+  - cruzes
+systems:
+  - game
+
+notes: |
+  Cruzes is an unfinished Picross puzzle game implemented as a libretro core,
+  part of the libretro-samples repository. It is not an emulator -- it is a
+  standalone game that runs directly within RetroArch.
+
+  The core sets supports_no_game to true (cruzes.c:772) and valid_extensions
+  to an empty string (cruzes.c:749). The puzzle grid is hardcoded in
+  retro_init (cruzes.c:706-717) via a string literal passed to load_challenge.
+
+  retro_load_game (cruzes.c:728-732) only sets the pixel format to RGB565
+  and returns true. It never reads from the game_info pointer, never calls
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, and never opens any file from disk.
+
+  The font data (Carlito-Regular.ttf) is converted to C header files at build
+  time by the ttf2c tool (font10.h, font16.h, font24.h) and compiled in.
+
+  No external BIOS, firmware, or system files are needed.
+
+files: []
+
+analysis:
+  file_loading: none
+  system_directory_used: false
+  supports_no_game: true
+  need_fullpath: false
+  is_experimental: true
+  license: 2-clause BSD
+  author: Higor Euripedes

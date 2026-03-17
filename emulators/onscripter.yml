@@ -1,0 +1,36 @@
+emulator: ONScripter
+type: libretro
+source: "https://github.com/iyzsong/onscripter-libretro"
+cores:
+  - onscripter
+systems:
+  - onscripter
+
+notes: |
+  ONScripter is a clone of NScripter, a Japanese visual novel engine by
+  Naoki Takahashi. The libretro port by iyzsong wraps the upstream engine
+  (ogapee/onscripter, tag 20230825) with an SDL-to-libretro shim layer.
+
+  No BIOS or system files are required. The .info file declares no
+  firmware entries and the core never calls
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
+
+  Game content is loaded directly from the archive path containing the
+  script file. The core opens txt, dat, ___, or ons script files via
+  ONScripter::openScript() and reads all game assets (graphics, audio,
+  fonts) from the same directory.
+
+  The engine looks for a font file named default.ttf in the game
+  directory. This is a per-game asset shipped with each visual novel,
+  not a system-level file managed by RetroArch.
+
+  Dependencies (bundled at build time via Guix): freetype, libjpeg,
+  libogg, libvorbis, libmad, bzip2, SDL (shimmed to libretro).
+
+  The core is marked is_experimental = true. It does not support
+  save states (retro_serialize_size returns 0).
+
+  Supported script formats: .txt, .dat, .___, .ons
+  needs_fullpath = true, block_extract = false.
+
+files: []

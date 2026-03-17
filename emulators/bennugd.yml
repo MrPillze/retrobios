@@ -1,0 +1,31 @@
+emulator: BennuGD
+type: libretro
+source: "https://github.com/diekleinekuh/BennuGD_libretro"
+cores:
+  - bennugd
+systems:
+  - bennugd
+
+# BennuGD is an open-source interpreter for BennuGD (.dcb/.dat) game files,
+# running as a libretro core. It is a successor to DIV Games Studio / Fenix.
+# Notable game: Streets of Rage Remake.
+#
+# The official libretro .info file (bennugd_libretro.info) declares zero
+# firmware entries. The core loads content directly via bgdi_main() and does
+# not reference any files from the system directory.
+#
+# retro_load_game() in libretro.c:888-911 only reads the content path and
+# the save directory. RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY is called once
+# (libretro.c:899) solely as a fallback for the save directory, never to
+# load BIOS or firmware.
+#
+# Supported extensions: dcb, dat, exe (Windows BennuGD executables)
+# Valid extensions in libretro.c: dat, dcb
+# Valid extensions in .info: dcb, dat, exe
+
+notes: |
+  No BIOS or firmware required. BennuGD is a self-contained game interpreter.
+  Games are loaded as .dcb or .dat bytecode files compiled by the BennuGD
+  toolchain. All game assets are bundled with the content.
+
+files: []

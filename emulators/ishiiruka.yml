@@ -1,0 +1,93 @@
+emulator: Ishiiruka
+type: libretro
+source: "https://github.com/libretro/ishiiruka"
+fork_of: Dolphin
+systems: [nintendo-gamecube, nintendo-wii]
+
+# Ishiiruka is a performance-focused Dolphin fork with custom GPU backends.
+# As a Dolphin fork, it shares the exact same BIOS file requirements and paths.
+# DSP HLE is enabled by default (ishiiruka_dsp_hle option), so DSP ROMs are
+# only needed when switching to LLE audio for accuracy.
+
+# Libretro paths (from Boot.cpp):
+#   Sys directory: system/dolphin-emu/Sys/
+#   User directory: saves/User/ (fallback: system/dolphin-emu/User/)
+# Same as dolphin_libretro - uses "dolphin-emu" subdirectory, not "ishiiruka".
+
+# Core options use "ishiiruka_" prefix (ishiiruka_dsp_hle, ishiiruka_efb_scale, etc.)
+
+files:
+  # -- GameCube IPL (Boot ROM) --
+  # Region-specific, placed in GC/<region>/IPL.bin
+  # Searched in User/GC/ then Sys/GC/
+  - name: "IPL.bin"
+    path: "GC/USA/IPL.bin"
+    size: 2097152
+    required: false
+    note: "GC NTSC-U boot ROM, same as Dolphin. HLE available"
+    source_ref: "Source/Core/Common/CommonPaths.h:115"
+
+  - name: "IPL.bin"
+    path: "GC/EUR/IPL.bin"
+    size: 2097152
+    required: false
+    note: "GC PAL boot ROM"
+
+  - name: "IPL.bin"
+    path: "GC/JAP/IPL.bin"
+    size: 2097152
+    required: false
+    note: "GC NTSC-J boot ROM"
+
+  # -- DSP ROMs --
+  # Only needed if DSP LLE is selected (ishiiruka_dsp_hle = disabled)
+  # Searched in User/GC/ then Sys/GC/
+  - name: "dsp_rom.bin"
+    path: "GC/dsp_rom.bin"
+    size: 8192
+    required: false
+    note: "DSP instruction ROM for LLE audio. Free replacement included, real dump more accurate"
+    source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150"
+
+  - name: "dsp_coef.bin"
+    path: "GC/dsp_coef.bin"
+    size: 4096
+    required: false
+    note: "DSP coefficient ROM for LLE audio. Free replacement included"
+    source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-152"
+
+  # -- GameCube Fonts --
+  # Loaded from Sys/GC/, free alternatives bundled
+  - name: "font_western.bin"
+    path: "GC/font_western.bin"
+    required: false
+    note: "Windows-1252 font for GC/Wii text. Free alternative bundled"
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:123"
+
+  - name: "font_japanese.bin"
+    path: "GC/font_japanese.bin"
+    required: false
+    note: "Shift-JIS font for Japanese text. Free alternative bundled"
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:122"
+
+notes:
+  dolphin_fork: true
+  fork_differences: >
+    Ishiiruka is a Dolphin fork focused on GPU performance (custom texture cache,
+    asynchronous shader compilation, post-processing). The BIOS/firmware handling
+    is identical to upstream Dolphin - same files, same paths, same HLE fallbacks.
+  hle_available: true
+  hle_note: >
+    DSP HLE is the default (ishiiruka_dsp_hle = enabled). No BIOS files are
+    required for most games. All files are optional with HLE/free replacements.
+  libretro_path: "system/dolphin-emu/"
+  libretro_note: >
+    Despite being named Ishiiruka, the libretro core uses "dolphin-emu" as its
+    system subdirectory (Boot.cpp:46,49). Users with existing Dolphin BIOS files
+    already have everything Ishiiruka needs.
+  data_dir_standalone: "ishiiruka"
+  data_dir_note: >
+    Standalone builds use "ishiiruka" as DOLPHIN_DATA_DIR (CommonPaths.h:24,27),
+    but the libretro core overrides this to use "dolphin-emu" paths.
+  library_name: "Ishiiruka"
+  valid_extensions: "elf|dol|gcm|iso|tgc|wbfs|ciso|gcz|wad"
