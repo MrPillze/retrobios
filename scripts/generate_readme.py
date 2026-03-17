@@ -97,6 +97,9 @@ def generate_readme(db: dict, configs: dict) -> str:
     for sha1, entry in db.get("files", {}).items():
         path = entry.get("path", "")
         parts = path.split("/")
+        # Skip .variants/ files from main listing (shown under their canonical file)
+        if ".variants/" in path:
+            continue
         if len(parts) >= 3:
             system = f"{parts[1]}/{parts[2]}"
         elif len(parts) >= 2:

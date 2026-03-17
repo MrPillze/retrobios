@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5314** files | **3466.1 MB** | Last updated: 2026-03-17T12:06:40Z
+> **5320** files | **4587.5 MB** | Last updated: 2026-03-17T12:12:49Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -45,7 +45,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 
 | Platform | Coverage | Status | Verification | Details |
 |----------|----------|--------|--------------|---------|
-| Batocera | 677/680 (99.6%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 585 verified, 92 untested, 3 missing |
+| Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 589 verified, 91 untested |
 | Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
 | Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 336 verified, 10 untested |
 | RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
@@ -58,18 +58,18 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 |--------|-------|------|
 | 3DO Company/3DO | 13 | 12.4 MB |
 | APF/Imagination Machine | 1 | 6.7 KB |
-| Acorn/Archimedes | 4 | 11.6 MB |
-| Acorn/BBC Micro | 18 | 975.2 KB |
+| Acorn/Archimedes | 2 | 6.2 MB |
+| Acorn/BBC Micro | 17 | 836.5 KB |
 | Acorn/Electron | 4 | 214.6 KB |
 | Amstrad/CPC | 4 | 112.0 KB |
 | Amstrad/PCW | 2 | 4.2 KB |
 | Apple/Apple II | 17 | 1.2 MB |
 | Apple/Macintosh | 17 | 37.9 MB |
 | Apple/Macintosh II | 10 | 50.3 MB |
-| Arcade/Arcade | 121 | 112.8 MB |
+| Arcade/Arcade | 105 | 594.6 MB |
 | Arcade/FBNeo | 31 | 29.6 MB |
-| Arcade/MAME | 1076 | 2151.1 MB |
-| Atari/400-800 | 8 | 100.5 KB |
+| Arcade/MAME | 1060 | 2120.8 MB |
+| Atari/400-800 | 7 | 90.5 KB |
 | Atari/5200 | 1 | 2.0 KB |
 | Atari/7800 | 4 | 40.0 KB |
 | Atari/Jaguar | 1 | 128.0 KB |
@@ -79,7 +79,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Bally/Astrocade | 1 | 6.6 KB |
 | Bandai/RX-78 | 1 | 6.2 KB |
 | Bit Corporation/Gamate | 1 | 5.0 KB |
-| Camputers/Lynx | 10 | 153.3 KB |
+| Camputers/Lynx | 9 | 128.8 KB |
 | Casio/Loopy | 1 | 467.0 KB |
 | Casio/PV-2000 | 1 | 13.3 KB |
 | Coleco/Adam | 5 | 69.0 KB |
@@ -88,7 +88,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Commodore/C128 | 7 | 360.0 KB |
 | DOS/DOSBox | 6 | 1.9 MB |
 | Dinothawr/Dinothawr | 1 | 6.4 MB |
-| Dragon/Dragon | 18 | 222.9 KB |
+| Dragon/Dragon | 17 | 206.9 KB |
 | EACA/Colour Genie | 1 | 16.0 KB |
 | Elektronika/BK | 8 | 100.0 KB |
 | Enterprise/64-128 | 15 | 414.2 KB |
@@ -96,39 +96,39 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Epoch/Game Pocket | 1 | 3.4 KB |
 | Epoch/Super Cassette Vision | 1 | 4.0 KB |
 | Fairchild/Channel F | 3 | 3.0 KB |
-| Fujitsu/FM Towns | 12 | 6.2 MB |
+| Fujitsu/FM Towns | 10 | 5.0 MB |
 | Fujitsu/FM-7 | 2 | 1.1 MB |
-| Funtech/Super A'Can | 2 | 11.1 KB |
+| Funtech/Super A'Can | 1 | 1.8 KB |
 | GCE/Vectrex | 2 | 16.9 KB |
 | Galaksija/CHRGEN.BIN | 1 | 2.0 KB |
 | Galaksija/ROM1.BIN | 1 | 4.0 KB |
-| GamePark/GP32 | 2 | 2.6 MB |
+| GamePark/GP32 | 1 | 1.3 MB |
 | Grundy/NewBrain | 2 | 8.2 KB |
 | Hartung/Game Master | 1 | 1.6 KB |
 | Id Software/Doom | 1 | 140.0 KB |
-| Id Software/Wolfenstein 3D | 2 | 357.7 KB |
+| Id Software/Wolfenstein 3D | 1 | 174.6 KB |
 | Infocom/Z-Machine | 2 | 448.4 KB |
-| Java/J2ME | 7 | 25.6 MB |
+| Java/J2ME | 6 | 25.1 MB |
 | Magnavox/Odyssey2 | 1 | 1024 B |
 | Mattel/Aquarius | 4 | 66.2 KB |
 | Mattel/Intellivision | 8 | 76.5 KB |
 | Microsoft/Chihiro | 1 | 256.0 KB |
-| Microsoft/MSX | 323 | 14.7 MB |
+| Microsoft/MSX | 319 | 14.6 MB |
 | Microsoft/Xbox | 2 | 768 B |
-| NEC/PC Engine | 10 | 2.0 MB |
+| NEC/PC Engine | 7 | 1.3 MB |
 | NEC/PC-6001 | 4 | 188.0 KB |
 | NEC/PC-8001 | 1 | 126.4 KB |
-| NEC/PC-98 | 49 | 3.3 MB |
+| NEC/PC-98 | 42 | 2.9 MB |
 | NEC/PC-FX | 4 | 3.5 MB |
-| Nintendo/3DS | 20 | 13.2 MB |
+| Nintendo/3DS | 18 | 9.8 MB |
 | Nintendo/Famicom Disk System | 1 | 8.0 KB |
 | Nintendo/Game Boy | 3 | 768 B |
 | Nintendo/Game Boy Advance | 2 | 32.0 KB |
-| Nintendo/Game Boy Color | 4 | 9.0 KB |
+| Nintendo/Game Boy Color | 3 | 6.8 KB |
 | Nintendo/GameCube | 64 | 12.6 MB |
 | Nintendo/NES | 3 | 1010.1 KB |
 | Nintendo/Nintendo 64DD | 15 | 14.5 MB |
-| Nintendo/Nintendo DS | 11 | 5.5 MB |
+| Nintendo/Nintendo DS | 11 | 245.3 MB |
 | Nintendo/Pokemon Mini | 1 | 4.0 KB |
 | Nintendo/SNES | 18 | 1.3 MB |
 | Nintendo/Satellaview | 3 | 3.0 MB |
@@ -136,46 +136,47 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Nintendo/Super Game Boy | 8 | 1.6 MB |
 | Oric/Oric | 21 | 181.1 KB |
 | Palm/Palm | 5 | 38.3 MB |
-| Philips/CD-i | 6 | 2.7 MB |
+| Philips/CD-i | 4 | 2.0 MB |
 | Philips/Videopac+ | 3 | 3.0 KB |
 | Pioneer/LaserActive | 5 | 1.8 MB |
-| SNK/Neo Geo | 5 | 5.1 MB |
-| SNK/Neo Geo CD | 17 | 6.5 MB |
+| SNK/Neo Geo | 2 | 837.9 KB |
+| SNK/Neo Geo CD | 14 | 5.8 MB |
 | SNK/Neo Geo Pocket | 1 | 64.0 KB |
 | Sega/32X | 3 | 3.2 KB |
 | Sega/AI | 1 | 335.2 KB |
 | Sega/Arcade | 4 | 1.8 MB |
 | Sega/Beena | 1 | 83.2 KB |
-| Sega/Dreamcast | 35 | 51.4 MB |
+| Sega/Dreamcast | 24 | 32.4 MB |
 | Sega/Game Gear | 1 | 1024 B |
 | Sega/Hikaru | 2 | 782.3 KB |
 | Sega/Master System | 2 | 16.0 KB |
-| Sega/Mega CD | 6 | 1.1 MB |
-| Sega/Mega Drive | 7 | 2.3 MB |
+| Sega/Mega CD | 5 | 1024.0 KB |
+| Sega/Mega Drive | 6 | 2.3 MB |
 | Sega/SC-3000 | 1 | 22.3 KB |
-| Sega/Saturn | 13 | 14.3 MB |
+| Sega/Saturn | 12 | 11.2 MB |
 | Sega/Triforce | 2 | 4.0 MB |
 | Sharp/MZ | 6 | 504.6 KB |
 | Sharp/X1 | 4 | 42.0 KB |
-| Sharp/X68000 | 9 | 1.3 MB |
+| Sharp/X68000 | 7 | 1.3 MB |
 | Sinclair/ZX Spectrum | 47 | 1.5 MB |
-| Sony/PlayStation | 18 | 9.0 MB |
-| Sony/PlayStation 2 | 84 | 305.9 MB |
+| Sony/PlayStation | 17 | 8.5 MB |
+| Sony/PlayStation 2 | 83 | 304.1 MB |
+| Sony/PlayStation 3 | 1 | 196.6 MB |
 | Sony/PlayStation Portable | 97 | 14.0 MB |
-| Sony/PlayStation Vita | 1 | 54.1 MB |
+| Sony/PlayStation Vita | 2 | 181.8 MB |
 | Synertek/SYM-1 | 1 | 8.0 KB |
-| Tandy/CoCo | 23 | 317.4 KB |
+| Tandy/CoCo | 21 | 263.0 KB |
 | Tandy/MC-10 | 2 | 14.2 KB |
 | Tandy/TRS-80 | 4 | 42.2 KB |
 | Tandy/VIS | 1 | 590.9 KB |
 | Texas Instruments/TI-83 | 3 | 2.8 MB |
-| Texas Instruments/TI-99 | 7 | 172.6 KB |
+| Texas Instruments/TI-99 | 5 | 121.0 KB |
 | Tiger/Game.com | 1 | 141.7 KB |
-| Tomy/Tutor | 2 | 497.2 KB |
+| Tomy/Tutor | 1 | 33.8 KB |
 | VTech/CreatiVision | 1 | 431.3 KB |
 | VTech/Laser 310 | 1 | 41.6 KB |
 | VTech/Socrates | 1 | 213.2 KB |
-| VTech/V.Smile | 2 | 5.8 MB |
+| VTech/V.Smile | 1 | 2.9 MB |
 | Videoton/TVC | 4 | 48.0 KB |
 | Vircon/Vircon32Bios.v32 | 1 | 1.0 MB |
 | ZC/ZC210 | 10 | 10.4 MB |
@@ -189,7 +190,7 @@ These are large asset packs required by specific cores. They are included in the
 |------|-------|------|
 | [RPG Maker/easyrpg](bios/RPG%20Maker/easyrpg) | 774 | 18.3 MB |
 | [RPG Maker/mkxp-z](bios/RPG%20Maker/mkxp-z) | 1761 | 225.6 MB |
-| [ScummVM/ScummVM](bios/ScummVM/ScummVM) | 226 | 128.6 MB |
+| [ScummVM/ScummVM](bios/ScummVM/ScummVM) | 218 | 126.1 MB |
 
 ## BIOS File Listing
 
@@ -257,24 +258,12 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Acorn/Archimedes
 
-- **[aa310.zip](bios/Acorn/Archimedes/.variants/aa310.zip)** (5,615,477 bytes)
-  - SHA1: `7a8669daa77e4f6ff260d5a8b5470d34fc063068`
-  - MD5: `5fa94e66b887e900c688751873a72dfa`
-  - CRC32: `09ec70cc`
-  - **Variants** (1 alternate versions):
-    - [aa310.zip](bios/Acorn/Archimedes/.variants/aa310.zip) (5,615,477 bytes) - SHA1: `7a8669daa77e4f6ff260d5a8b5470d34fc063068`, MD5: `5fa94e66b887e900c688751873a72dfa`
 - **[aa310.zip](bios/Acorn/Archimedes/aa310.zip)** (6,536,273 bytes)
   - SHA1: `db67429100680a7a991822b8e2b1ca958df1e140`
   - MD5: `dc68b6ad1c10b42ff4a7720e423af790`
   - CRC32: `9287f1f7`
   - **Variants** (1 alternate versions):
     - [aa310.zip](bios/Acorn/Archimedes/.variants/aa310.zip) (5,615,477 bytes) - SHA1: `7a8669daa77e4f6ff260d5a8b5470d34fc063068`, MD5: `5fa94e66b887e900c688751873a72dfa`
-- **[archimedes_keyboard.zip](bios/Acorn/Archimedes/.variants/archimedes_keyboard.zip)** (1,323 bytes)
-  - SHA1: `8d22783d40413a68038b2bff4dd4b263363a2c67`
-  - MD5: `2d894c91efbfcfeb1ba6c9fc32122409`
-  - CRC32: `9660c8d2`
-  - **Variants** (1 alternate versions):
-    - [archimedes_keyboard.zip](bios/Acorn/Archimedes/.variants/archimedes_keyboard.zip) (1,323 bytes) - SHA1: `8d22783d40413a68038b2bff4dd4b263363a2c67`, MD5: `2d894c91efbfcfeb1ba6c9fc32122409`
 - **[archimedes_keyboard.zip](bios/Acorn/Archimedes/archimedes_keyboard.zip)** (1,301 bytes)
   - SHA1: `baeb7254012b4a55893aba6e5c79ca747c02bdc3`
   - MD5: `5352d15a3b7938a276305a01080af64c`
@@ -313,12 +302,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `10cee3c9e02aae1ef8ffacc631d85516ed2766e7`
   - MD5: `549200855053cfe50fcbcf6d8ef9f4aa`
   - CRC32: `5623bbbf`
-- **[bbcb.zip](bios/Acorn/BBC%20Micro/.variants/bbcb.zip)** (141,996 bytes)
-  - SHA1: `1203096ca9d0748ba722066f47f089513a9be151`
-  - MD5: `224779dcd4b9aa1bb27865568fb80f72`
-  - CRC32: `440ff82b`
-  - **Variants** (1 alternate versions):
-    - [bbcb.zip](bios/Acorn/BBC%20Micro/.variants/bbcb.zip) (141,996 bytes) - SHA1: `1203096ca9d0748ba722066f47f089513a9be151`, MD5: `224779dcd4b9aa1bb27865568fb80f72`
 - **[bbcb.zip](bios/Acorn/BBC%20Micro/bbcb.zip)** (93,427 bytes)
   - SHA1: `4d7d8a60ffc39fd840365a45388850707b1d016d`
   - MD5: `2c8cf2053c40350aa460b70ca18b4207`
@@ -611,6 +594,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `de463b0577dfd1027bf7de523ff67a0fff861cdb`
   - MD5: `6c6c0c726cbf15e81785eb7592fdb51c`
   - CRC32: `b28f7112`
+- **[Firmware.19.0.0.zip](bios/Arcade/Arcade/Firmware.19.0.0.zip)** (338,076,508 bytes)
+  - SHA1: `ac4b78d53c7a97da2451ca35498395d8dd1e3024`
+  - MD5: `72d6c73306c7f0b76723f989e7e1bdd1`
+  - CRC32: `77228c84`
 - **[acpsx.zip](bios/Arcade/Arcade/acpsx.zip)** (126,167 bytes)
   - SHA1: `5426d52e17e0ff9195fabbb42f704342e556d08e`
   - MD5: `fcb631bf18a56f2d5b077fa846bab4a6`
@@ -665,10 +652,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `8fc2fd2e`
   - **Variants** (1 alternate versions):
     - [bubsys.zip.9a48e38c](bios/Arcade/Arcade/.variants/bubsys.zip.9a48e38c) (12,021 bytes) - SHA1: `9a48e38cb92b7e0fcc75156bdfa737c63a2cb1c3`, MD5: `17cce3efe7b03d0e789744ed7dc4c619`
-- **[bubsys.zip.9a48e38c](bios/Arcade/Arcade/.variants/bubsys.zip.9a48e38c)** (12,021 bytes)
-  - SHA1: `9a48e38cb92b7e0fcc75156bdfa737c63a2cb1c3`
-  - MD5: `17cce3efe7b03d0e789744ed7dc4c619`
-  - CRC32: `0de73e72`
 - **[cchip.zip](bios/Arcade/Arcade/cchip.zip)** (2,700 bytes)
   - SHA1: `364f2302a145a0fd6de767d7f8484badde1d1a6e`
   - MD5: `df6f8a3d83c028a5cb9f2f2be60773f3`
@@ -693,12 +676,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `45795e083e635c7beab9a40793c628a16f9990e6`
   - MD5: `5adf7b63da11f0d5c268635685e10666`
   - CRC32: `60874b78`
-- **[coh1000a.zip](bios/Arcade/Arcade/.variants/coh1000a.zip)** (126,281 bytes)
-  - SHA1: `f8526dcec63402d2533d8180e217fa03a6322c34`
-  - MD5: `a805db5d380c597ce14f42ad1afcfbe8`
-  - CRC32: `a33210fc`
-  - **Variants** (1 alternate versions):
-    - [coh1000a.zip](bios/Arcade/Arcade/.variants/coh1000a.zip) (126,281 bytes) - SHA1: `f8526dcec63402d2533d8180e217fa03a6322c34`, MD5: `a805db5d380c597ce14f42ad1afcfbe8`
 - **[coh1000a.zip](bios/Arcade/Arcade/coh1000a.zip)** (126,259 bytes)
   - SHA1: `c91f79c7ac73519c8b99c184b2fcbffae42fa324`
   - MD5: `5d44a53642580a6709defd456e637a39`
@@ -772,14 +749,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [decocass.zip.5c5f300f](bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f) (13,225 bytes) - SHA1: `5c5f300f3ab2bd10e2adf4dd96baa78317578d8d`, MD5: `2b268f2f8960e5124f9a8cc6cfe86773`
     - [decocass.zip.ca7bf859](bios/Arcade/Arcade/.variants/decocass.zip.ca7bf859) (4,603 bytes) - SHA1: `ca7bf85999eaaa79652c721986e64f769cf03892`, MD5: `e0d8f3de7d217882fec5aa55883b6a11`
-- **[decocass.zip.5c5f300f](bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f)** (13,225 bytes)
-  - SHA1: `5c5f300f3ab2bd10e2adf4dd96baa78317578d8d`
-  - MD5: `2b268f2f8960e5124f9a8cc6cfe86773`
-  - CRC32: `96ff4a07`
-- **[decocass.zip.ca7bf859](bios/Arcade/Arcade/.variants/decocass.zip.ca7bf859)** (4,603 bytes)
-  - SHA1: `ca7bf85999eaaa79652c721986e64f769cf03892`
-  - MD5: `e0d8f3de7d217882fec5aa55883b6a11`
-  - CRC32: `9f9c396d`
 - **[dkongg.dx2](bios/Arcade/Arcade/emudx/dkongg.dx2)** (2,465,000 bytes)
   - SHA1: `dca26abf3300940f3d68436aae2e1d45d4cddf07`
   - MD5: `4b55f1f4f5e47aef6a0efaa823bbda9f`
@@ -806,10 +775,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `32413056`
   - **Variants** (1 alternate versions):
     - [fdsbios.zip.c25686d2](bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2) (5,758 bytes) - SHA1: `c25686d24c7205473741f948f8a9df9906823145`, MD5: `c26bf1744cb7f6ffe441f463870321f8`
-- **[fdsbios.zip.c25686d2](bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2)** (5,758 bytes)
-  - SHA1: `c25686d24c7205473741f948f8a9df9906823145`
-  - MD5: `c26bf1744cb7f6ffe441f463870321f8`
-  - CRC32: `3d54fe55`
 - **[froggerg.dx2](bios/Arcade/Arcade/emudx/froggerg.dx2)** (1,080,548 bytes)
   - SHA1: `b238485515aa7a3c4a0bedac8699776da454d7ba`
   - MD5: `8bd0f9b8ef1f15180b1aec48bc44de48`
@@ -848,12 +813,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `fd02cfba`
   - **Variants** (1 alternate versions):
     - [hiscore.dat](bios/Arcade/MAME/.variants/hiscore.dat) (229,779 bytes) - SHA1: `1a2b8740f4672fd9668bfa6f648bb34f4339afb6`, MD5: `d0ada0b7ec2ca0238735250ce0ecbf62`
-- **[hng64.zip](bios/Arcade/Arcade/.variants/hng64.zip)** (41,592 bytes)
-  - SHA1: `fb0c36d69f66f4b10a895aa708ae37f826755257`
-  - MD5: `219a818c4ffd9fab04b9be9c7e2107a8`
-  - CRC32: `ae5c68a1`
-  - **Variants** (1 alternate versions):
-    - [hng64.zip](bios/Arcade/Arcade/.variants/hng64.zip) (41,592 bytes) - SHA1: `fb0c36d69f66f4b10a895aa708ae37f826755257`, MD5: `219a818c4ffd9fab04b9be9c7e2107a8`
 - **[hng64.zip](bios/Arcade/Arcade/hng64.zip)** (41,210 bytes)
   - SHA1: `98b92ece93d3e160c446a56ac859a8311333e36c`
   - MD5: `b37582d04dee048edb99743d44764407`
@@ -868,20 +827,10 @@ These are large asset packs required by specific cores. They are included in the
     - [hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968) (1,465,991 bytes) - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`, MD5: `36ac7b58216de5eecfaebe527bf6d02e`
     - [hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a) (816,543 bytes) - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`, MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
     - [hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a) (1,057,881 bytes) - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`, MD5: `6559697f76592be77a7a9ff3bfb6711a`
-- **[hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968)** (1,465,991 bytes)
-  - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`
-  - MD5: `36ac7b58216de5eecfaebe527bf6d02e`
-  - CRC32: `e2c08bbf`
 - **[isgsm.zip](bios/Arcade/Arcade/isgsm.zip)** (10,207 bytes)
   - SHA1: `f590ccf688b4c05fa1da5c5dd92c224545170c3b`
   - MD5: `4a56d56e2219c5e2b006b66a4263c01c`
   - CRC32: `26856bf9`
-- **[iteagle.zip](bios/Arcade/Arcade/.variants/iteagle.zip)** (3,614,545 bytes)
-  - SHA1: `cb6ecfa04936ea2ec833f08c080985c07b8a1435`
-  - MD5: `a8c8fe344adb352ea09166a7c43e33b0`
-  - CRC32: `29f7891d`
-  - **Variants** (1 alternate versions):
-    - [iteagle.zip](bios/Arcade/Arcade/.variants/iteagle.zip) (3,614,545 bytes) - SHA1: `cb6ecfa04936ea2ec833f08c080985c07b8a1435`, MD5: `a8c8fe344adb352ea09166a7c43e33b0`
 - **[iteagle.zip](bios/Arcade/Arcade/iteagle.zip)** (3,602,204 bytes)
   - SHA1: `7b5be2c65e378f736ee4689303349d80dc425f5f`
   - MD5: `3a6561f8d2bb8424e6797920759962aa`
@@ -892,12 +841,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `b4ff14ed8c3e37a4b45ce2d80c692961ffc88270`
   - MD5: `361f60b1d3ce84e17f027f3e547e3091`
   - CRC32: `201eeb68`
-- **[konamigx.zip](bios/Arcade/Arcade/.variants/konamigx.zip)** (8,734 bytes)
-  - SHA1: `dc5c6cc5c294accff4ebce2ac33355063cff8a9d`
-  - MD5: `981fa4057f4bd5c064ce446963d8ac33`
-  - CRC32: `08ba2527`
-  - **Variants** (1 alternate versions):
-    - [konamigx.zip](bios/Arcade/Arcade/.variants/konamigx.zip) (8,734 bytes) - SHA1: `dc5c6cc5c294accff4ebce2ac33355063cff8a9d`, MD5: `981fa4057f4bd5c064ce446963d8ac33`
 - **[konamigx.zip](bios/Arcade/Arcade/konamigx.zip)** (8,712 bytes)
   - SHA1: `8cf0aa7f9dca4d77485e605fb0e2173a734633bf`
   - MD5: `7b51d463324b6bf26e86c4afb7316a3a`
@@ -912,6 +855,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `65a2f2cee74c316d5f40b68deda66787609df353`
   - MD5: `d048a9ff941041de45c26474a0da40aa`
   - CRC32: `065d69d0`
+- **[maclc3.zip](bios/Arcade/Arcade/maclc3.zip)** (189,428,461 bytes)
+  - SHA1: `add40c002084e8e25768671877b2aa603aaf5cb1`
+  - MD5: `aff722788800df5b22d5a07cf8e558ee`
+  - CRC32: `81f21918`
 - **[macsbios.zip](bios/Arcade/Arcade/macsbios.zip)** (305,290 bytes)
   - SHA1: `4e0202f8430cb4842184df7b5418e32620156c7b`
   - MD5: `34530e248d96e7171af19155af315378`
@@ -967,10 +914,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33) (8,005,827 bytes) - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`, MD5: `58033e4ba5793c09dffb87f96f3e9301`
     - [naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c) (6,134,707 bytes) - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`, MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
-- **[naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33)** (8,005,827 bytes)
-  - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`
-  - MD5: `58033e4ba5793c09dffb87f96f3e9301`
-  - CRC32: `7eba26a4`
 - **[naomi2.zip](bios/Arcade/Arcade/naomi2.zip)** (5,384,060 bytes)
   - SHA1: `c63a74691ee7384080877268a70bb1f53bc66dee`
   - MD5: `dd6fb7894fb2398a55e83a51328a3ad6`
@@ -988,10 +931,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [neocdz.zip.4f28af31](bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31) (214,681 bytes) - SHA1: `4f28af31ca0defdd73d80edec2fa296908e624dc`, MD5: `62d56b126e78f3d82faa4ee8a92c3e82`
     - [neocdz.zip.891407e1](bios/SNK/Neo%20Geo%20CD/.variants/neocdz.zip.891407e1) (217,516 bytes) - SHA1: `891407e147b2c022ebedf8c51fe3a2f497304906`, MD5: `a7cca75f3d5af6acc85efcce589ab04f`
-- **[neocdz.zip.4f28af31](bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31)** (214,681 bytes)
-  - SHA1: `4f28af31ca0defdd73d80edec2fa296908e624dc`
-  - MD5: `62d56b126e78f3d82faa4ee8a92c3e82`
-  - CRC32: `6fc3e0de`
 - **[neogeo.zip](bios/Arcade/Arcade/neogeo.zip)** (1,859,335 bytes)
   - SHA1: `deb62b0074b8cae4f162c257662136733cfc76ad`
   - MD5: `00dad01abdbf8ea9e79ad2fe11bdb182`
@@ -1032,18 +971,6 @@ These are large asset packs required by specific cores. They are included in the
     - [pgm.zip.0783012b](bios/Arcade/Arcade/.variants/pgm.zip.0783012b) (2,094,614 bytes) - SHA1: `0783012b4eabca599e460988257ec37500501df6`, MD5: `68ef99a1f2847d08ff9242a90561d31b`
     - [pgm.zip.6bbbce09](bios/Arcade/Arcade/.variants/pgm.zip.6bbbce09) (2,190,114 bytes) - SHA1: `6bbbce094422062bd178d6007bed06dcdd0d8b78`, MD5: `653e991a39e867354d090c3394157d1c`
     - [pgm.zip.bc0acaef](bios/Arcade/Arcade/.variants/pgm.zip.bc0acaef) (2,190,092 bytes) - SHA1: `bc0acaefb5fac0cdc05476a9f452391d34a5150d`, MD5: `581cc172db39bb5007642405adf25b6e`
-- **[pgm.zip.0783012b](bios/Arcade/Arcade/.variants/pgm.zip.0783012b)** (2,094,614 bytes)
-  - SHA1: `0783012b4eabca599e460988257ec37500501df6`
-  - MD5: `68ef99a1f2847d08ff9242a90561d31b`
-  - CRC32: `713d6657`
-- **[pgm.zip.6bbbce09](bios/Arcade/Arcade/.variants/pgm.zip.6bbbce09)** (2,190,114 bytes)
-  - SHA1: `6bbbce094422062bd178d6007bed06dcdd0d8b78`
-  - MD5: `653e991a39e867354d090c3394157d1c`
-  - CRC32: `fefb84f1`
-- **[pgm.zip.bc0acaef](bios/Arcade/Arcade/.variants/pgm.zip.bc0acaef)** (2,190,092 bytes)
-  - SHA1: `bc0acaefb5fac0cdc05476a9f452391d34a5150d`
-  - MD5: `581cc172db39bb5007642405adf25b6e`
-  - CRC32: `578e8fde`
 - **[playch10.zip](bios/Arcade/Arcade/playch10.zip)** (23,388 bytes)
   - SHA1: `125e74975da3f7ac643232210ab37c33e4ece9ca`
   - MD5: `0329b5c0eb126c6da029b09ae63e707c`
@@ -1082,18 +1009,6 @@ These are large asset packs required by specific cores. They are included in the
     - [skns.zip.44bc8180](bios/Arcade/Arcade/.variants/skns.zip.44bc8180) (783,788 bytes) - SHA1: `44bc8180dca3dfdf1b461268919da8efb2e3fb07`, MD5: `49e192febe2f011d9be44ebc69129080`
     - [skns.zip.aabedfeb](bios/Arcade/Arcade/.variants/skns.zip.aabedfeb) (783,766 bytes) - SHA1: `aabedfebe2cd8cfede8c2a3cb9ff33166f0ef953`, MD5: `937ab1072d9ce3ecdf3d16d7fc72137a`
     - [skns.zip.eb2a8675](bios/Arcade/Arcade/.variants/skns.zip.eb2a8675) (783,766 bytes) - SHA1: `eb2a867578a05bbf8741e9fe7204301062df0cb8`, MD5: `fcb298d97792b9e9bdd3296cc6be10b6`
-- **[skns.zip.44bc8180](bios/Arcade/Arcade/.variants/skns.zip.44bc8180)** (783,788 bytes)
-  - SHA1: `44bc8180dca3dfdf1b461268919da8efb2e3fb07`
-  - MD5: `49e192febe2f011d9be44ebc69129080`
-  - CRC32: `33ca0801`
-- **[skns.zip.aabedfeb](bios/Arcade/Arcade/.variants/skns.zip.aabedfeb)** (783,766 bytes)
-  - SHA1: `aabedfebe2cd8cfede8c2a3cb9ff33166f0ef953`
-  - MD5: `937ab1072d9ce3ecdf3d16d7fc72137a`
-  - CRC32: `651b0f2b`
-- **[skns.zip.eb2a8675](bios/Arcade/Arcade/.variants/skns.zip.eb2a8675)** (783,766 bytes)
-  - SHA1: `eb2a867578a05bbf8741e9fe7204301062df0cb8`
-  - MD5: `fcb298d97792b9e9bdd3296cc6be10b6`
-  - CRC32: `ad37f2de`
 - **[spec128.zip](bios/Arcade/Arcade/spec128.zip)** (25,489 bytes)
   - SHA1: `b88619a845cbba8bc04ad396e99a02aa6d2da7c1`
   - MD5: `1a524bfa489cec90c941e6587d553a56`
@@ -1159,10 +1074,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `5b4c29c4`
   - **Variants** (1 alternate versions):
     - [ym2608.zip.0b651920](bios/Arcade/Arcade/.variants/ym2608.zip.0b651920) (7,587 bytes) - SHA1: `0b6519209766ed883e3fca4c61bf866804c89004`, MD5: `ddb8aacffffffa608ddbb4a6d6dda5ec`
-- **[ym2608.zip.0b651920](bios/Arcade/Arcade/.variants/ym2608.zip.0b651920)** (7,587 bytes)
-  - SHA1: `0b6519209766ed883e3fca4c61bf866804c89004`
-  - MD5: `ddb8aacffffffa608ddbb4a6d6dda5ec`
-  - CRC32: `b0e03aa6`
 
 ### Arcade/FBNeo
 
@@ -1999,24 +1910,12 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `386efdbdd17245a401cc1845154307765a42d1e9`
   - MD5: `6b78b82efbbf6ad3df412933f568cbd3`
   - CRC32: `c1e6960b`
-- **[cheat.7z](bios/Arcade/MAME/.variants/cheat.7z)** (1,395,328 bytes)
-  - SHA1: `7227b18e2c3e659abf74d9988e32150df64f60e9`
-  - MD5: `ca9891ddd3c1f7769f4f625146bd436f`
-  - CRC32: `4eaa5619`
-  - **Variants** (1 alternate versions):
-    - [cheat.7z](bios/Arcade/MAME/.variants/cheat.7z) (1,395,328 bytes) - SHA1: `7227b18e2c3e659abf74d9988e32150df64f60e9`, MD5: `ca9891ddd3c1f7769f4f625146bd436f`
 - **[cheat.7z](bios/Arcade/MAME/cheat.7z)** (1,872,934 bytes)
   - SHA1: `ea1faf0f32a10d35e854d29e79b2324a6f8d081f`
   - MD5: `9228a2cd258bec1c7b5799e2b8725cd3`
   - CRC32: `27653476`
   - **Variants** (1 alternate versions):
     - [cheat.7z](bios/Arcade/MAME/.variants/cheat.7z) (1,395,328 bytes) - SHA1: `7227b18e2c3e659abf74d9988e32150df64f60e9`, MD5: `ca9891ddd3c1f7769f4f625146bd436f`
-- **[cheat.dat](bios/Arcade/MAME/.variants/cheat.dat)** (7,954,315 bytes)
-  - SHA1: `5d1bc24ced608591a7fdced4088004678792dafd`
-  - MD5: `2055125ff0dddb98e76d46879d57f732`
-  - CRC32: `19369ac7`
-  - **Variants** (1 alternate versions):
-    - [cheat.dat](bios/Arcade/MAME/.variants/cheat.dat) (7,954,315 bytes) - SHA1: `5d1bc24ced608591a7fdced4088004678792dafd`, MD5: `2055125ff0dddb98e76d46879d57f732`
 - **[cheat.dat](bios/Arcade/MAME/cheat.dat)** (7,971,360 bytes)
   - SHA1: `32fc78415114a976af9c2ee53ea13de9f40b55ee`
   - MD5: `6b675b5df4bd7dd4496c836ecdacc582`
@@ -2902,48 +2801,12 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `041feccfae58fe052247119138098b51c26448ed`
   - MD5: `53da8a47c5b877ac7cd90fabe9467d94`
   - CRC32: `74f30fc6`
-- **[hiscore.dat](bios/Arcade/MAME/.variants/hiscore.dat)** (229,779 bytes)
-  - SHA1: `1a2b8740f4672fd9668bfa6f648bb34f4339afb6`
-  - MD5: `d0ada0b7ec2ca0238735250ce0ecbf62`
-  - CRC32: `235789ea`
-  - **Variants** (1 alternate versions):
-    - [hiscore.dat](bios/Arcade/MAME/.variants/hiscore.dat) (229,779 bytes) - SHA1: `1a2b8740f4672fd9668bfa6f648bb34f4339afb6`, MD5: `d0ada0b7ec2ca0238735250ce0ecbf62`
 - **[hiscore.dat](bios/Arcade/MAME/hiscore.dat)** (332,919 bytes)
   - SHA1: `d38572d22721eb5972f671cde54201d752dffe6b`
   - MD5: `0ca8052de426b7eadcb64da341eadec6`
   - CRC32: `19a61bc4`
   - **Variants** (1 alternate versions):
     - [hiscore.dat](bios/Arcade/MAME/.variants/hiscore.dat) (229,779 bytes) - SHA1: `1a2b8740f4672fd9668bfa6f648bb34f4339afb6`, MD5: `d0ada0b7ec2ca0238735250ce0ecbf62`
-- **[hiscore_2be55274.dat](bios/Arcade/MAME/.variants/hiscore_2be55274.dat)** (215,316 bytes)
-  - SHA1: `2be55274637792ee14e2aeedf76d8310d3a67e08`
-  - MD5: `6105ffbbd874b585d849ac4e93b29953`
-  - CRC32: `79178533`
-  - **Variants** (1 alternate versions):
-    - [hiscore_2be55274.dat](bios/Arcade/MAME/.variants/hiscore_2be55274.dat) (215,316 bytes) - SHA1: `2be55274637792ee14e2aeedf76d8310d3a67e08`, MD5: `6105ffbbd874b585d849ac4e93b29953`
-- **[hiscore_d7dc5d76.dat](bios/Arcade/MAME/.variants/hiscore_d7dc5d76.dat)** (144,044 bytes)
-  - SHA1: `d7dc5d76be3170f87e61b5a5a254295a7fd2ace0`
-  - MD5: `cf30511ea4b903ea0733ed8d96ecffdc`
-  - CRC32: `2a8f2e6b`
-  - **Variants** (1 alternate versions):
-    - [hiscore_d7dc5d76.dat](bios/Arcade/MAME/.variants/hiscore_d7dc5d76.dat) (144,044 bytes) - SHA1: `d7dc5d76be3170f87e61b5a5a254295a7fd2ace0`, MD5: `cf30511ea4b903ea0733ed8d96ecffdc`
-- **[hiscore_da74eabc.dat](bios/Arcade/MAME/.variants/hiscore_da74eabc.dat)** (4,656,808 bytes)
-  - SHA1: `da74eabc34cfbb9d66993c419b96d2c2d4bc7203`
-  - MD5: `279bbd03281286116c486f22170d3fc0`
-  - CRC32: `59f61ac4`
-  - **Variants** (1 alternate versions):
-    - [hiscore_da74eabc.dat](bios/Arcade/MAME/.variants/hiscore_da74eabc.dat) (4,656,808 bytes) - SHA1: `da74eabc34cfbb9d66993c419b96d2c2d4bc7203`, MD5: `279bbd03281286116c486f22170d3fc0`
-- **[hiscore_f270ada2.dat](bios/Arcade/MAME/.variants/hiscore_f270ada2.dat)** (3,787,551 bytes)
-  - SHA1: `f270ada2e7666e58a986915d2d22e4f8f48f52ca`
-  - MD5: `08d742177e66188bb50149ff5ea88957`
-  - CRC32: `0dd0736f`
-  - **Variants** (1 alternate versions):
-    - [hiscore_f270ada2.dat](bios/Arcade/MAME/.variants/hiscore_f270ada2.dat) (3,787,551 bytes) - SHA1: `f270ada2e7666e58a986915d2d22e4f8f48f52ca`, MD5: `08d742177e66188bb50149ff5ea88957`
-- **[history.dat](bios/Arcade/MAME/.variants/history.dat)** (6,113,294 bytes)
-  - SHA1: `1429a6517dc70e4b532c8ffd9c872fd8d837e8c4`
-  - MD5: `c6e68d119d83fc5d765269e94e7c8f62`
-  - CRC32: `313970f7`
-  - **Variants** (1 alternate versions):
-    - [history.dat](bios/Arcade/MAME/.variants/history.dat) (6,113,294 bytes) - SHA1: `1429a6517dc70e4b532c8ffd9c872fd8d837e8c4`, MD5: `c6e68d119d83fc5d765269e94e7c8f62`
 - **[history.dat](bios/Arcade/MAME/history.dat)** (38,635,890 bytes)
   - SHA1: `42d6d9ac933a7819adfd686f629a8e43aea4e880`
   - MD5: `343581020fb67c93e9655be579222ced`
@@ -3614,12 +3477,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `3db640b0744d7ab1ddf345b45ddaf02dd9c157c7`
   - MD5: `6886f5bfc46b3c58d175d811edf4b96c`
   - CRC32: `4092eaa2`
-- **[megaplay.zip](bios/Arcade/MAME/.variants/megaplay.zip)** (50,801 bytes)
-  - SHA1: `cbdb2ec6510fd760d2b6a0ad4c1f54b9f6b80b76`
-  - MD5: `1b5e4572439839af22bf682e409f9e8b`
-  - CRC32: `8d6da761`
-  - **Variants** (1 alternate versions):
-    - [megaplay.zip](bios/Arcade/MAME/.variants/megaplay.zip) (50,801 bytes) - SHA1: `cbdb2ec6510fd760d2b6a0ad4c1f54b9f6b80b76`, MD5: `1b5e4572439839af22bf682e409f9e8b`
 - **[megaplay.zip](bios/Arcade/MAME/megaplay.zip)** (49,978 bytes)
   - SHA1: `9012d69ce8d2efe231012dc033d651065b5f4669`
   - MD5: `1f862ac960cff360746fbf13621b2ddb`
@@ -3630,12 +3487,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `3ca2ca6570691c7e85bb4274f7802fdefeb12dba`
   - MD5: `382582e8155f8f1d3bed2b8ca1054de7`
   - CRC32: `f6418875`
-- **[megatech.zip](bios/Arcade/MAME/.variants/megatech.zip)** (33,159 bytes)
-  - SHA1: `7eb47299f58b0432fcab86d8a9b16a4b73c69d62`
-  - MD5: `0196924b2b5c08fff9a5a2daab763a9e`
-  - CRC32: `161b60e4`
-  - **Variants** (1 alternate versions):
-    - [megatech.zip](bios/Arcade/MAME/.variants/megatech.zip) (33,159 bytes) - SHA1: `7eb47299f58b0432fcab86d8a9b16a4b73c69d62`, MD5: `0196924b2b5c08fff9a5a2daab763a9e`
 - **[megatech.zip](bios/Arcade/MAME/megatech.zip)** (33,137 bytes)
   - SHA1: `6f93b0340588b6b03ff2cb4c3954c34ecf06aa9b`
   - MD5: `9a86eb85e9dca18d566adabd1a6b5391`
@@ -3948,18 +3799,6 @@ These are large asset packs required by specific cores. They are included in the
     - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
     - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
     - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
-- **[neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73)** (1,416,625 bytes)
-  - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`
-  - MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
-  - CRC32: `3a853b38`
-- **[neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51)** (1,578,888 bytes)
-  - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`
-  - MD5: `cc345d87f576665d1c2a673503c1991b`
-  - CRC32: `43d24424`
-- **[neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869)** (1,416,603 bytes)
-  - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`
-  - MD5: `1b78bb266499ee243bf660e069067e82`
-  - CRC32: `06e006d4`
 - **[nes.hsi](bios/Arcade/MAME/hash/nes.hsi)** (2,975,112 bytes)
   - SHA1: `e34d82605c9ed562691ab1463abd0bd9eedc42d7`
   - MD5: `cf7315d92ee6c538416c2f1bc585b965`
@@ -4028,12 +3867,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `709371018300b75895061256a75ab3c27b4cd196`
   - MD5: `039dae66757cabd240486a36bda26985`
   - CRC32: `d3f4d0c2`
-- **[nss.zip](bios/Arcade/MAME/.variants/nss.zip)** (50,412 bytes)
-  - SHA1: `f81a4fbfacf41dd485c691c73f83c9b52a9964f0`
-  - MD5: `4faaf2df15a5132eda3120d50d4a6693`
-  - CRC32: `c732ab81`
-  - **Variants** (1 alternate versions):
-    - [nss.zip](bios/Arcade/MAME/.variants/nss.zip) (50,412 bytes) - SHA1: `f81a4fbfacf41dd485c691c73f83c9b52a9964f0`, MD5: `4faaf2df15a5132eda3120d50d4a6693`
 - **[nss.zip](bios/Arcade/MAME/nss.zip)** (50,555 bytes)
   - SHA1: `3cc9e4df2511ff1c963ee2dd5eca44bb2377c986`
   - MD5: `40fc8187f2e49b35fcd15772cac2f191`
@@ -4320,12 +4153,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `9fae0dc3f466eefc5df1b42432734b094862b827`
   - MD5: `139935bbbd6b39687d4c6dbfd9a59a8b`
   - CRC32: `adc60828`
-- **[playch10.zip](bios/Arcade/MAME/.variants/playch10.zip)** (48,339 bytes)
-  - SHA1: `7ee7e5855c88f5328f68027f90c25b806e4ae502`
-  - MD5: `6676ac1b0e092704f4436f47c9b9c05a`
-  - CRC32: `1ae9f7ea`
-  - **Variants** (1 alternate versions):
-    - [playch10.zip](bios/Arcade/MAME/.variants/playch10.zip) (48,339 bytes) - SHA1: `7ee7e5855c88f5328f68027f90c25b806e4ae502`, MD5: `6676ac1b0e092704f4436f47c9b9c05a`
 - **[playch10.zip](bios/Arcade/MAME/playch10.zip)** (48,317 bytes)
   - SHA1: `7df6ca1485eb0a27e54713a73152b5b5919db0a0`
   - MD5: `9c66e3fc6bffc4a2fb05040f599f3b04`
@@ -4903,10 +4730,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [stvbios.zip](bios/Sega/Saturn/.variants/stvbios.zip) (3,203,164 bytes) - SHA1: `999ed28cfbf18103a4963b0d3797af3dcf67db05`, MD5: `9992f2761b0f6e83b3e923451ab8057b`
     - [stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5) (2,699,375 bytes) - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`, MD5: `c105e2d063aeb0f9b60c45fad6969265`
-- **[stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5)** (2,699,375 bytes)
-  - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`
-  - MD5: `c105e2d063aeb0f9b60c45fad6969265`
-  - CRC32: `1de93304`
 - **[su2000.zip](bios/Arcade/MAME/su2000.zip)** (90,751 bytes)
   - SHA1: `86f5074cf3c6353156ea3f1bb49bf840410cf0ea`
   - MD5: `9a3e9ef9fe9d504b01511e23b1f12986`
@@ -5686,11 +5509,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `3e28a1fe`
   - **Variants** (1 alternate versions):
     - [ATARIOSB.ROM.db103158](bios/Atari/400-800/.variants/ATARIOSB.ROM.db103158) (10,240 bytes) - SHA1: `db1031585968cfc6ec2ecda5c9a5a52f61444a3b`, MD5: `4177f386a3bac989a981d3fe3388cb6c`
-- **[ATARIOSB.ROM.db103158](bios/Atari/400-800/.variants/ATARIOSB.ROM.db103158)** (10,240 bytes)
-  - SHA1: `db1031585968cfc6ec2ecda5c9a5a52f61444a3b`
-  - MD5: `4177f386a3bac989a981d3fe3388cb6c`
-  - CRC32: `0e86d61d`
-  - Platform names: Batocera: `ATARIOSB.ROM`
 - **[ATARIXL.ROM](bios/Atari/400-800/ATARIXL.ROM)** (16,384 bytes)
   - SHA1: `ae4f523ba08b6fd59f3cae515a2b2410bbd98f55`
   - MD5: `06daac977823773a3eea3422fd26a703`
@@ -5969,12 +5787,6 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `b665e10211bbdbfaf2defb32d5580892`
   - CRC32: `d894562e`
   - Platform names: Batocera: `lynx48k.zip`
-- **[lynx48k.zip](bios/Camputers/Lynx/.variants/lynx48k.zip)** (25,092 bytes)
-  - SHA1: `80b3ed85d530456d9c879c9b4dd835d8e91637bb`
-  - MD5: `85ae78a20ffaff388dd09c75d9e1ec0e`
-  - CRC32: `1cc2abd3`
-  - **Variants** (1 alternate versions):
-    - [lynx48k.zip](bios/Camputers/Lynx/.variants/lynx48k.zip) (25,092 bytes) - SHA1: `80b3ed85d530456d9c879c9b4dd835d8e91637bb`, MD5: `85ae78a20ffaff388dd09c75d9e1ec0e`
 - **[lynx48k.zip](bios/Camputers/Lynx/lynx48k.zip)** (25,078 bytes)
   - SHA1: `64947e9b7d17870839aba5d93217183d480ff897`
   - MD5: `99adf15dc2e2bb76c5203d46c2a14ce9`
@@ -6265,10 +6077,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `e3879310`
   - **Variants** (1 alternate versions):
     - [d32.rom.e004e25a](bios/Dragon/Dragon/.variants/d32.rom.e004e25a) (16,384 bytes) - SHA1: `e004e25a8bb7bcd76a1aee7c2ec87b8fceda4332`, MD5: `d35177f73cf303c5565aa13ef8ca5251`
-- **[d32.rom.e004e25a](bios/Dragon/Dragon/.variants/d32.rom.e004e25a)** (16,384 bytes)
-  - SHA1: `e004e25a8bb7bcd76a1aee7c2ec87b8fceda4332`
-  - MD5: `d35177f73cf303c5565aa13ef8ca5251`
-  - CRC32: `ff7bf41e`
 - **[d64rom1.rom](bios/Dragon/Dragon/d64rom1.rom)** (16,384 bytes)
   - SHA1: `f119506eaa3b4b70b9aa0dd83761e8cbe043d042`
   - MD5: `5f0bee59710e55f5880e74890912ed78`
@@ -6513,24 +6321,12 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `639fef8ce51774e4e34b7bbb14116ce8a56fa87d`
   - MD5: `47d639ae07daa23d2b5a198ca3aebcd6`
   - CRC32: `23d8a749`
-- **[fmtowns.zip](bios/Fujitsu/FM%20Towns/.variants/fmtowns.zip)** (935,216 bytes)
-  - SHA1: `4aecb6c11ca508b1cc3788fc35c66b42155f1ff1`
-  - MD5: `b3acc6716b447a111b20ca4c26d676f6`
-  - CRC32: `6645fc7f`
-  - **Variants** (1 alternate versions):
-    - [fmtowns.zip](bios/Fujitsu/FM%20Towns/.variants/fmtowns.zip) (935,216 bytes) - SHA1: `4aecb6c11ca508b1cc3788fc35c66b42155f1ff1`, MD5: `b3acc6716b447a111b20ca4c26d676f6`
 - **[fmtowns.zip](bios/Fujitsu/FM%20Towns/fmtowns.zip)** (655,778 bytes)
   - SHA1: `8ba3bf533b0b75685f03d8759a7a34c32bfaf896`
   - MD5: `f76521f8e7c5bc104a8614c8aead1192`
   - CRC32: `2338792b`
   - **Variants** (1 alternate versions):
     - [fmtowns.zip](bios/Fujitsu/FM%20Towns/.variants/fmtowns.zip) (935,216 bytes) - SHA1: `4aecb6c11ca508b1cc3788fc35c66b42155f1ff1`, MD5: `b3acc6716b447a111b20ca4c26d676f6`
-- **[fmtownsux.zip](bios/Fujitsu/FM%20Towns/.variants/fmtownsux.zip)** (318,403 bytes)
-  - SHA1: `2618c293f40818eebc94a2c258757b6730bad28c`
-  - MD5: `b262b19228fe4f13724f0a648ad5f461`
-  - CRC32: `c89266d1`
-  - **Variants** (1 alternate versions):
-    - [fmtownsux.zip](bios/Fujitsu/FM%20Towns/.variants/fmtownsux.zip) (318,403 bytes) - SHA1: `2618c293f40818eebc94a2c258757b6730bad28c`, MD5: `b262b19228fe4f13724f0a648ad5f461`
 - **[fmtownsux.zip](bios/Fujitsu/FM%20Towns/fmtownsux.zip)** (838,046 bytes)
   - SHA1: `803023b68b8f8b03a245082d4acddc0e5708c222`
   - MD5: `443eeab819ebfb9ef39e928aabbb5567`
@@ -6551,12 +6347,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Funtech/Super A'Can
 
-- **[supracan.zip](bios/Funtech/Super%20A'Can/.variants/supracan.zip)** (9,482 bytes)
-  - SHA1: `e6fb1ead1fc6c051876f3a6ec0f68a1af6688e7d`
-  - MD5: `8f63cc8c8b03f3dc4e773c22b191742f`
-  - CRC32: `b8909cc0`
-  - **Variants** (1 alternate versions):
-    - [supracan.zip](bios/Funtech/Super%20A'Can/.variants/supracan.zip) (9,482 bytes) - SHA1: `e6fb1ead1fc6c051876f3a6ec0f68a1af6688e7d`, MD5: `8f63cc8c8b03f3dc4e773c22b191742f`
 - **[supracan.zip](bios/Funtech/Super%20A'Can/supracan.zip)** (1,849 bytes)
   - SHA1: `b59182226bb040d56db2ff53389d2cf193591c9a`
   - MD5: `f6f0b2ccbbeb2e1d6e843acb145490f8`
@@ -6591,12 +6381,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### GamePark/GP32
 
-- **[gp32.zip](bios/GamePark/GP32/.variants/gp32.zip)** (1,378,323 bytes)
-  - SHA1: `c73d11b0b7bd77a312afd54d7a8b3f40e36893bd`
-  - MD5: `8c392f475834218d88533150d36cc84c`
-  - CRC32: `fd9387d3`
-  - **Variants** (1 alternate versions):
-    - [gp32.zip](bios/GamePark/GP32/.variants/gp32.zip) (1,378,323 bytes) - SHA1: `c73d11b0b7bd77a312afd54d7a8b3f40e36893bd`, MD5: `8c392f475834218d88533150d36cc84c`
 - **[gp32.zip](bios/GamePark/GP32/gp32.zip)** (1,378,301 bytes)
   - SHA1: `35def9830e797fb0788740b5da0a7202933554df`
   - MD5: `e0abd9b6500f3414792b4288da5521fe`
@@ -6631,12 +6415,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Id Software/Wolfenstein 3D
 
-- **[ecwolf.pk3](bios/Id%20Software/Wolfenstein%203D/.variants/ecwolf.pk3)** (187,571 bytes)
-  - SHA1: `f3151d3307c6ff36c0562dac00b4ce195d3157d2`
-  - MD5: `f1c29d2dc0a1a48a0c007dbb38801950`
-  - CRC32: `88eab7e1`
-  - **Variants** (1 alternate versions):
-    - [ecwolf.pk3](bios/Id%20Software/Wolfenstein%203D/.variants/ecwolf.pk3) (187,571 bytes) - SHA1: `f3151d3307c6ff36c0562dac00b4ce195d3157d2`, MD5: `f1c29d2dc0a1a48a0c007dbb38801950`
 - **[ecwolf.pk3](bios/Id%20Software/Wolfenstein%203D/ecwolf.pk3)** (178,755 bytes)
   - SHA1: `9259b87edfe9b9f6d0749788a75a6ccf158f50aa`
   - MD5: `c011b428819eea4a80b455c245a5a04d`
@@ -6659,12 +6437,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Java/J2ME
 
-- **[freej2me-lr.jar](bios/Java/J2ME/.variants/freej2me-lr.jar)** (518,483 bytes)
-  - SHA1: `5f3f22ccca001c5d992b398a2c47a45510f6316c`
-  - MD5: `c575f2dd51217ce82fd925b2a27a857c`
-  - CRC32: `30464652`
-  - **Variants** (1 alternate versions):
-    - [freej2me-lr.jar](bios/Java/J2ME/.variants/freej2me-lr.jar) (518,483 bytes) - SHA1: `5f3f22ccca001c5d992b398a2c47a45510f6316c`, MD5: `c575f2dd51217ce82fd925b2a27a857c`
 - **[freej2me-lr.jar](bios/Java/J2ME/freej2me-lr.jar)** (552,042 bytes)
   - SHA1: `fb231192894e2fd17a5799fbbdf86a4696951bce`
   - MD5: `ccd92e7156ce2f0ce14c88ffb68a16eb`
@@ -6781,11 +6553,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `82312751`
   - **Variants** (1 alternate versions):
     - [CARTS.SHA.bf5fb954](bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954) (33,152 bytes) - SHA1: `bf5fb954db868e523febccc68549ed9187961076`, MD5: `74b0f217fa0e2b8bb5a2f8e2ecc69da3`
-- **[CARTS.SHA.bf5fb954](bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954)** (33,152 bytes)
-  - SHA1: `bf5fb954db868e523febccc68549ed9187961076`
-  - MD5: `74b0f217fa0e2b8bb5a2f8e2ecc69da3`
-  - CRC32: `d42f4444`
-  - Platform names: Lakka: `CARTS.SHA`, RetroArch: `CARTS.SHA`, RetroPie: `CARTS.SHA`
 - **[CYRILLIC.FNT](bios/Microsoft/MSX/CYRILLIC.FNT)** (2,048 bytes)
   - SHA1: `000ac11b702a4c42e40f135df12fa5f2f13e20a1`
   - MD5: `85b38e4128bbc300e675f55b278683a8`
@@ -6855,12 +6622,6 @@ These are large asset packs required by specific cores. They are included in the
   - Also known as: `MSX.rom`, `Machines/Shared Roms/MSX.rom`
   - **Variants** (1 alternate versions):
     - [MSX.ROM.e998f0c4](bios/Microsoft/MSX/.variants/MSX.ROM.e998f0c4) (32,768 bytes) - SHA1: `e998f0c441f4f1800ef44e42cd1659150206cf79`, MD5: `364a1a579fe5cb8dba54519bcfcdac0d`
-- **[MSX.ROM.e998f0c4](bios/Microsoft/MSX/.variants/MSX.ROM.e998f0c4)** (32,768 bytes)
-  - SHA1: `e998f0c441f4f1800ef44e42cd1659150206cf79`
-  - MD5: `364a1a579fe5cb8dba54519bcfcdac0d`
-  - CRC32: `a317e6b4`
-  - Also known as: `MSX.rom`
-  - Platform names: Batocera: `MSX.ROM`, Recalbox: `MSX.rom`, RetroBat: `MSX.ROM`
 - **[MSX2.ROM](bios/Microsoft/MSX/MSX2.ROM)** (32,768 bytes)
   - SHA1: `6103b39f1e38d1aa2d84b1c3219c44f1abb5436e`
   - MD5: `ec3a01c91f24fbddcbcab0ad301bc9ef`
@@ -6931,12 +6692,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `00870134`
   - **Variants** (1 alternate versions):
     - [MSX2P.ROM.e90f80a6](bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6) (32,768 bytes) - SHA1: `e90f80a61d94c617850c415e12ad70ac41e66bb7`, MD5: `847cc025ffae665487940ff2639540e5`
-- **[MSX2P.ROM.e90f80a6](bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6)** (32,768 bytes)
-  - SHA1: `e90f80a61d94c617850c415e12ad70ac41e66bb7`
-  - MD5: `847cc025ffae665487940ff2639540e5`
-  - CRC32: `19771608`
-  - Also known as: `MSX2P.rom`
-  - Platform names: Recalbox: `MSX2P.rom`, RetroBat: `MSX2P.ROM`
 - **[MSX2PEXT.ROM](bios/Microsoft/MSX/MSX2PEXT.ROM)** (16,384 bytes)
   - SHA1: `fe0254cbfc11405b79e7c86c7769bd6322b04995`
   - MD5: `7c8243c71d8f143b2531f01afa6a05dc`
@@ -7089,11 +6844,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `ab6874f8`
   - **Variants** (1 alternate versions):
     - [RS232.ROM.4e9384c9](bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9) (8,192 bytes) - SHA1: `4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7`, MD5: `55cca200bbbdd0a1ec5c9d70966c05c0`
-- **[RS232.ROM.4e9384c9](bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9)** (8,192 bytes)
-  - SHA1: `4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7`
-  - MD5: `55cca200bbbdd0a1ec5c9d70966c05c0`
-  - CRC32: `3353dcc6`
-  - Platform names: Recalbox: `RS232.ROM`
 - **[SUNRISEIDE.rom](bios/Microsoft/MSX/SUNRISEIDE.rom)** (65,536 bytes)
   - SHA1: `1c79c8fcfd661394f91be94b218955c84cabd742`
   - MD5: `7b564497beb2c0de0847f107dec00ddf`
@@ -8116,22 +7866,12 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `3f9f95a4`
   - **Variants** (1 alternate versions):
     - [syscard1.pce.008cf0f5](bios/NEC/PC%20Engine/.variants/syscard1.pce.008cf0f5) (262,656 bytes) - SHA1: `008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74`, MD5: `9f770275393b8627cf9d24e5c56d2ab9`
-- **[syscard1.pce.008cf0f5](bios/NEC/PC%20Engine/.variants/syscard1.pce.008cf0f5)** (262,656 bytes)
-  - SHA1: `008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74`
-  - MD5: `9f770275393b8627cf9d24e5c56d2ab9`
-  - CRC32: `31cc5649`
-  - Platform names: Recalbox: `syscard1.pce`
 - **[syscard2.pce](bios/NEC/PC%20Engine/syscard2.pce)** (262,144 bytes)
   - SHA1: `88da02e2503f7c32810f5d93a34849d470742b6d`
   - MD5: `3cdd6614a918616bfc41c862e889dd79`
   - CRC32: `283b74e0`
   - **Variants** (1 alternate versions):
     - [syscard2.pce.3ca4a3b8](bios/NEC/PC%20Engine/.variants/syscard2.pce.3ca4a3b8) (262,656 bytes) - SHA1: `3ca4a3b8d8a7f08492e684064c6fa362e914c1af`, MD5: `424f1d6bf93259bf255afa7d1dc9f721`
-- **[syscard2.pce.3ca4a3b8](bios/NEC/PC%20Engine/.variants/syscard2.pce.3ca4a3b8)** (262,656 bytes)
-  - SHA1: `3ca4a3b8d8a7f08492e684064c6fa362e914c1af`
-  - MD5: `424f1d6bf93259bf255afa7d1dc9f721`
-  - CRC32: `5c01c82b`
-  - Platform names: Recalbox: `syscard2.pce`
 - **[syscard2u.pce](bios/NEC/PC%20Engine/syscard2u.pce)** (262,144 bytes)
   - SHA1: `2bea3dac98f84b2f2f469fa77ea720b8770d598d`
   - MD5: `94279f315e8b52904f65ab3108542afe`
@@ -8142,11 +7882,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `6d9a73ef`
   - **Variants** (1 alternate versions):
     - [syscard3.pce.1b4c2603](bios/NEC/PC%20Engine/.variants/syscard3.pce.1b4c2603) (262,656 bytes) - SHA1: `1b4c260326d905bc718812dad0f68089977f427b`, MD5: `ff1a674273fe3540ccef576376407d1d`
-- **[syscard3.pce.1b4c2603](bios/NEC/PC%20Engine/.variants/syscard3.pce.1b4c2603)** (262,656 bytes)
-  - SHA1: `1b4c260326d905bc718812dad0f68089977f427b`
-  - MD5: `ff1a674273fe3540ccef576376407d1d`
-  - CRC32: `64f78e3c`
-  - Platform names: Recalbox: `syscard3.pce`
 - **[syscard3u.pce](bios/NEC/PC%20Engine/syscard3u.pce)** (262,144 bytes)
   - SHA1: `d02611d99921986147c753df14c7349b31d71950`
   - MD5: `0754f903b52e3b3342202bdafb13efa5`
@@ -8243,10 +7978,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `cd6dfabe`
   - **Variants** (1 alternate versions):
     - [FONT.ROM.554b8737](bios/NEC/PC-98/.variants/FONT.ROM.554b8737) (288,768 bytes) - SHA1: `554b87377d176830d21bd03964dc71f8e98676b1`, MD5: `ca87908a99ea423093f6d497fc367f7d`
-- **[FONT.ROM.554b8737](bios/NEC/PC-98/.variants/FONT.ROM.554b8737)** (288,768 bytes)
-  - SHA1: `554b87377d176830d21bd03964dc71f8e98676b1`
-  - MD5: `ca87908a99ea423093f6d497fc367f7d`
-  - CRC32: `a61c0649`
 - **[ITF.ROM](bios/NEC/PC-98/ITF.ROM)** (32,768 bytes)
   - SHA1: `9bca7d5116788776ed0f297bccb4dfc485379b41`
   - MD5: `e9fc3890963b12cf15d0a2eea5815b72`
@@ -8309,10 +8040,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `0a682b93`
   - **Variants** (1 alternate versions):
     - [bios.rom.2e923467](bios/NEC/PC-98/.variants/bios.rom.2e923467) (98,304 bytes) - SHA1: `2e92346727b0355bc1ec9a7ded1b444a4917f2b9`, MD5: `50274bb5dcb707e4450011b09accffcb`
-- **[bios.rom.2e923467](bios/NEC/PC-98/.variants/bios.rom.2e923467)** (98,304 bytes)
-  - SHA1: `2e92346727b0355bc1ec9a7ded1b444a4917f2b9`
-  - MD5: `50274bb5dcb707e4450011b09accffcb`
-  - CRC32: `34a19a59`
 - **[disk.rom](bios/NEC/PC-98/disk.rom)** (8,192 bytes)
   - SHA1: `8063185d4dd653dd75a68855148c9ee15b71164c`
   - MD5: `01b1af474fcabe93c40d779b234a3825`
@@ -8327,40 +8054,24 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `456d9fc7`
   - **Variants** (1 alternate versions):
     - [font.rom.425a896a](bios/NEC/PC-98/.variants/font.rom.425a896a) (6,144 bytes) - SHA1: `425a896af83386c7bafac59f94211cdbb9cce18d`, MD5: `14bc9e267cf0cb56d22d5c470f582d53`
-- **[font.rom.425a896a](bios/NEC/PC-98/.variants/font.rom.425a896a)** (6,144 bytes)
-  - SHA1: `425a896af83386c7bafac59f94211cdbb9cce18d`
-  - MD5: `14bc9e267cf0cb56d22d5c470f582d53`
-  - CRC32: `7a6edb47`
 - **[itf.rom](bios/NEC/PC-98/itf.rom)** (32,768 bytes)
   - SHA1: `a2fb11c000ed7c976520622cfb7940ed6ddc904e`
   - MD5: `72ea51443070f0e9212bfc9b793ee28e`
   - CRC32: `c1815325`
   - **Variants** (1 alternate versions):
     - [itf.rom.cf3aa193](bios/NEC/PC-98/.variants/itf.rom.cf3aa193) (32,768 bytes) - SHA1: `cf3aa193df2722899066246bccbed03f2e79a74a`, MD5: `a13d96da03a28af8418d7f86ab951f1a`
-- **[itf.rom.cf3aa193](bios/NEC/PC-98/.variants/itf.rom.cf3aa193)** (32,768 bytes)
-  - SHA1: `cf3aa193df2722899066246bccbed03f2e79a74a`
-  - MD5: `a13d96da03a28af8418d7f86ab951f1a`
-  - CRC32: `dd4c7bb8`
 - **[n88.rom](bios/NEC/PC-98/n88.rom)** (32,768 bytes)
   - SHA1: `3518193b8207bdebf22c1380c2db8c554baff329`
   - MD5: `22be239bc0c4298bc0561252eed98633`
   - CRC32: `ffd68be0`
   - **Variants** (1 alternate versions):
     - [n88.rom.9b1346d4](bios/NEC/PC-98/.variants/n88.rom.9b1346d4) (32,768 bytes) - SHA1: `9b1346d44044eeea921c4cce69b5dc49dbc0b7e9`, MD5: `f7cba6a308c2718dbe97e60e46ddd66a`
-- **[n88.rom.9b1346d4](bios/NEC/PC-98/.variants/n88.rom.9b1346d4)** (32,768 bytes)
-  - SHA1: `9b1346d44044eeea921c4cce69b5dc49dbc0b7e9`
-  - MD5: `f7cba6a308c2718dbe97e60e46ddd66a`
-  - CRC32: `73573432`
 - **[n88_0.rom](bios/NEC/PC-98/n88_0.rom)** (8,192 bytes)
   - SHA1: `d1ae642aed4f0584eeb81ff50180db694e5101d4`
   - MD5: `e28fe3f520bea594350ea8fb00395370`
   - CRC32: `61984bab`
   - **Variants** (1 alternate versions):
     - [n88_0.rom.5aedbc59](bios/NEC/PC-98/.variants/n88_0.rom.5aedbc59) (8,192 bytes) - SHA1: `5aedbc5916d67ef28767a2b942864765eea81bb8`, MD5: `c254685f00ca9c31b97203d6ef19f5e2`
-- **[n88_0.rom.5aedbc59](bios/NEC/PC-98/.variants/n88_0.rom.5aedbc59)** (8,192 bytes)
-  - SHA1: `5aedbc5916d67ef28767a2b942864765eea81bb8`
-  - MD5: `c254685f00ca9c31b97203d6ef19f5e2`
-  - CRC32: `a72697d7`
 - **[n88_1.rom](bios/NEC/PC-98/n88_1.rom)** (8,192 bytes)
   - SHA1: `4ae4d37409ff99411a623da9f6a44192170a854e`
   - MD5: `a8e298da7ac947669bcb1ff25cee0a83`
@@ -8399,11 +8110,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `fe9f57f2`
   - **Variants** (1 alternate versions):
     - [sound.rom.e09c5415](bios/NEC/PC-98/.variants/sound.rom.e09c5415) (16,384 bytes) - SHA1: `e09c54152c8093e1724842c711aed6417169db23`, MD5: `42c271f8b720e796a484cc1165ff4914`
-- **[sound.rom.e09c5415](bios/NEC/PC-98/.variants/sound.rom.e09c5415)** (16,384 bytes)
-  - SHA1: `e09c54152c8093e1724842c711aed6417169db23`
-  - MD5: `42c271f8b720e796a484cc1165ff4914`
-  - CRC32: `80eabfde`
-  - Platform names: Recalbox: `sound.rom`
 
 ### NEC/PC-FX
 
@@ -8470,10 +8176,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `951f635f`
   - **Variants** (1 alternate versions):
     - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
-- **[00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796)** (118,292 bytes)
-  - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`
-  - MD5: `6fd0dc38d37af0e6b894799c298a7659`
-  - CRC32: `90b2a0f2`
 - **[CFL_DB.dat](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/user/CFL_DB.dat)** (310,560 bytes)
   - SHA1: `dcdba80719d0d77fc77d4edc4d951cf6dc7cd167`
   - MD5: `6b2782bca7ee2873adc590f978264436`
@@ -8519,10 +8221,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `28418e6d`
   - **Variants** (1 alternate versions):
     - [shared_font.bin.44b6a43e](bios/Nintendo/3DS/.variants/shared_font.bin.44b6a43e) (3,350,532 bytes) - SHA1: `44b6a43eb05833d787d8b02a5572e3a684f23683`, MD5: `ced196afd79497857d8c5a0bfc2c0d4e`
-- **[shared_font.bin.44b6a43e](bios/Nintendo/3DS/.variants/shared_font.bin.44b6a43e)** (3,350,532 bytes)
-  - SHA1: `44b6a43eb05833d787d8b02a5572e3a684f23683`
-  - MD5: `ced196afd79497857d8c5a0bfc2c0d4e`
-  - CRC32: `4036c26b`
 - **[ubll.lst](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/user/ubll.lst)** (12,000 bytes)
   - SHA1: `28c07606c0cb782cc58faea250ed1eb4069c9bb5`
   - MD5: `ff6b0e55e075bfb147844ff12df05786`
@@ -8576,10 +8274,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `1d67e99e`
   - **Variants** (1 alternate versions):
     - [cgb_boot.bin.11390377](bios/Nintendo/Game%20Boy%20Color/.variants/cgb_boot.bin.11390377) (2,304 bytes) - SHA1: `113903775a9d34b798c2f8076672da6626815a91`, MD5: `62cfda90d22405cdff59700c388a57f6`
-- **[cgb_boot.bin.11390377](bios/Nintendo/Game%20Boy%20Color/.variants/cgb_boot.bin.11390377)** (2,304 bytes)
-  - SHA1: `113903775a9d34b798c2f8076672da6626815a91`
-  - MD5: `62cfda90d22405cdff59700c388a57f6`
-  - CRC32: `8113b4d8`
 - **[gbc_bios.bin](bios/Nintendo/Game%20Boy%20Color/gbc_bios.bin)** (2,304 bytes)
   - SHA1: `1293d68bf9643bc4f36954c1e80e38f39864528d`
   - MD5: `dbfce9db9deaa2567f6a84fde55f9680`
@@ -8962,6 +8656,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `d2a5af338f09c5cbdd5d7628db5b9c075c69b616`
   - MD5: `8daa89fd280b3e5ec79fbab73ad6684e`
   - CRC32: `df558b58`
+- **[dsi_nand.bin](bios/Nintendo/Nintendo%20DS/dsi_nand.bin)** (251,658,304 bytes)
+  - SHA1: `b48f44194fe918aaaec5298861479512b581d661`
+  - MD5: `dfafb1908da8f527df7a372e649b50be`
+  - CRC32: `416bf51a`
 - **[dsi_sd_card.bin](bios/Nintendo/Nintendo%20DS/dsi_sd_card.bin)** (1,048,576 bytes)
   - SHA1: `3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3`
   - MD5: `b6d81b360a5672d80c27430f39153e2c`
@@ -8977,11 +8675,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `945f9dc9`
   - **Variants** (1 alternate versions):
     - [firmware.bin.8497afdd](bios/Nintendo/Nintendo%20DS/.variants/firmware.bin.8497afdd) (262,144 bytes) - SHA1: `8497afdd16af92d6887b71582846c40514e9039f`, MD5: `145eaef5bd3037cbc247c213bb3da1b3`
-- **[firmware.bin.8497afdd](bios/Nintendo/Nintendo%20DS/.variants/firmware.bin.8497afdd)** (262,144 bytes)
-  - SHA1: `8497afdd16af92d6887b71582846c40514e9039f`
-  - MD5: `145eaef5bd3037cbc247c213bb3da1b3`
-  - CRC32: `41599ec9`
-  - Platform names: Recalbox: `firmware.bin`
 - **[nds7.bin](bios/Nintendo/Nintendo%20DS/nds7.bin)** (16,384 bytes)
   - SHA1: `24f67bdea115a2c847c8813a262502ee1607b7df`
   - MD5: `df692a80a5b1bc90728bc3dfc76cd948`
@@ -9272,20 +8965,12 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `0a67ff2c`
   - **Variants** (1 alternate versions):
     - [cdimono1.zip.e6714b3d](bios/Philips/CD-i/.variants/cdimono1.zip.e6714b3d) (468,660 bytes) - SHA1: `e6714b3d5fdc7023348435a77a016b763e0992b1`, MD5: `4d8f5238df9a374ce3640262773ba885`
-- **[cdimono1.zip.e6714b3d](bios/Philips/CD-i/.variants/cdimono1.zip.e6714b3d)** (468,660 bytes)
-  - SHA1: `e6714b3d5fdc7023348435a77a016b763e0992b1`
-  - MD5: `4d8f5238df9a374ce3640262773ba885`
-  - CRC32: `59205298`
 - **[cdimono2.zip](bios/Philips/CD-i/cdimono2.zip)** (500,003 bytes)
   - SHA1: `e1d30b1d6a23aaaa765102590dc3ffff19c0b09f`
   - MD5: `56683e58930b2b554e6594fe04eda238`
   - CRC32: `7bad9043`
   - **Variants** (1 alternate versions):
     - [cdimono2.zip.94922472](bios/Philips/CD-i/.variants/cdimono2.zip.94922472) (244,291 bytes) - SHA1: `9492247203b71c12d88fad0a5437376941c7870a`, MD5: `97aa5f47030cd9fdb679d4fafbb0e332`
-- **[cdimono2.zip.94922472](bios/Philips/CD-i/.variants/cdimono2.zip.94922472)** (244,291 bytes)
-  - SHA1: `9492247203b71c12d88fad0a5437376941c7870a`
-  - MD5: `97aa5f47030cd9fdb679d4fafbb0e332`
-  - CRC32: `4eab5eda`
 
 ### Philips/Videopac+
 
@@ -9327,12 +9012,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### SNK/Neo Geo
 
-- **[aes.zip](bios/SNK/Neo%20Geo/.variants/aes.zip)** (694,409 bytes)
-  - SHA1: `12b54bf6bf277791445c2618065ec88e0302957c`
-  - MD5: `b95fde264333c05a8e2e2754cdc8accc`
-  - CRC32: `9e5ee4a2`
-  - **Variants** (1 alternate versions):
-    - [aes.zip](bios/SNK/Neo%20Geo/.variants/aes.zip) (694,409 bytes) - SHA1: `12b54bf6bf277791445c2618065ec88e0302957c`, MD5: `b95fde264333c05a8e2e2754cdc8accc`
 - **[aes.zip](bios/SNK/Neo%20Geo/aes.zip)** (850,311 bytes)
   - SHA1: `23c66caa80b93199914fae246a5ea6e84db1be29`
   - MD5: `ad9585c72130c56f04ae26aae87c289d`
@@ -9349,15 +9028,6 @@ These are large asset packs required by specific cores. They are included in the
     - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
     - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
     - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
-- **[neogeo.zip.cdbde4e7](bios/SNK/Neo%20Geo/.variants/neogeo.zip.cdbde4e7)** (1,950,045 bytes)
-  - SHA1: `cdbde4e73d49ed3a682b99f66c231eb3dfd90dc7`
-  - MD5: `67682655fa5fb32831e28429643e26c7`
-  - CRC32: `3a1b0586`
-- **[neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4)** (1,862,445 bytes)
-  - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`
-  - MD5: `dffb72f116d36d025068b23970a4f6df`
-  - CRC32: `362e948d`
-  - Platform names: Batocera: `neogeo.zip`, RetroBat: `neogeo.zip`
 
 ### SNK/Neo Geo CD
 
@@ -9378,12 +9048,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `43d114ed19550da818889dd3d002f0caa4b0be1f`
   - MD5: `b39d656e4a1ff71e505b5424b87416b9`
   - CRC32: `8caec8d2`
-- **[neocd_aed2cb66.srm](bios/SNK/Neo%20Geo%20CD/.variants/neocd_aed2cb66.srm)** (8,192 bytes)
-  - SHA1: `aed2cb663b6370efb10969a3373fd84c558edb4f`
-  - MD5: `041fe48b90b1aed6d0b72da192fb76ef`
-  - CRC32: `e5554b80`
-  - **Variants** (1 alternate versions):
-    - [neocd_aed2cb66.srm](bios/SNK/Neo%20Geo%20CD/.variants/neocd_aed2cb66.srm) (8,192 bytes) - SHA1: `aed2cb663b6370efb10969a3373fd84c558edb4f`, MD5: `041fe48b90b1aed6d0b72da192fb76ef`
 - **[neocd_f.rom](bios/SNK/Neo%20Geo%20CD/neocd_f.rom)** (524,288 bytes)
   - SHA1: `a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b`
   - MD5: `8834880c33164ccbe6476b559f3e37de`
@@ -9415,10 +9079,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [neocdz.zip.4f28af31](bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31) (214,681 bytes) - SHA1: `4f28af31ca0defdd73d80edec2fa296908e624dc`, MD5: `62d56b126e78f3d82faa4ee8a92c3e82`
     - [neocdz.zip.891407e1](bios/SNK/Neo%20Geo%20CD/.variants/neocdz.zip.891407e1) (217,516 bytes) - SHA1: `891407e147b2c022ebedf8c51fe3a2f497304906`, MD5: `a7cca75f3d5af6acc85efcce589ab04f`
-- **[neocdz.zip.891407e1](bios/SNK/Neo%20Geo%20CD/.variants/neocdz.zip.891407e1)** (217,516 bytes)
-  - SHA1: `891407e147b2c022ebedf8c51fe3a2f497304906`
-  - MD5: `a7cca75f3d5af6acc85efcce589ab04f`
-  - CRC32: `05cfde8c`
 - **[ng-lo.rom](bios/SNK/Neo%20Geo%20CD/ng-lo.rom)** (65,536 bytes)
   - SHA1: `2b1c719531dac9bb503f22644e6e4236b91e7cfc`
   - MD5: `e255264d85d5765013b1b2fa8109dd53`
@@ -9433,10 +9093,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `ff3abc59`
   - **Variants** (1 alternate versions):
     - [uni-bioscd.rom.5158b728](bios/SNK/Neo%20Geo%20CD/.variants/uni-bioscd.rom.5158b728) (524,288 bytes) - SHA1: `5158b728e62b391fb69493743dcf7abbc62abc82`, MD5: `a147aeab5edeb1a9b652e7fb640f5bb3`
-- **[uni-bioscd.rom.5158b728](bios/SNK/Neo%20Geo%20CD/.variants/uni-bioscd.rom.5158b728)** (524,288 bytes)
-  - SHA1: `5158b728e62b391fb69493743dcf7abbc62abc82`
-  - MD5: `a147aeab5edeb1a9b652e7fb640f5bb3`
-  - CRC32: `0ffb3127`
 
 ### SNK/Neo Geo Pocket
 
@@ -9537,20 +9193,12 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `2c87c283`
   - **Variants** (1 alternate versions):
     - [airlbios.zip.ff161eaa](bios/Sega/Dreamcast/.variants/airlbios.zip.ff161eaa) (702,615 bytes) - SHA1: `ff161eaa16b36b519eeab26364b99f59b9e8128c`, MD5: `e80075c0dfcd39ab2bea972d150e0ba1`
-- **[airlbios.zip.ff161eaa](bios/Sega/Dreamcast/.variants/airlbios.zip.ff161eaa)** (702,615 bytes)
-  - SHA1: `ff161eaa16b36b519eeab26364b99f59b9e8128c`
-  - MD5: `e80075c0dfcd39ab2bea972d150e0ba1`
-  - CRC32: `fb55e65e`
 - **[awbios.zip](bios/Sega/Dreamcast/awbios.zip)** (34,620 bytes)
   - SHA1: `cdf247154e28c4b352b962a4a523587f2fde9305`
   - MD5: `0ec5ae5b5a5c4959fa8b43fcf8687f7c`
   - CRC32: `c295a8c2`
   - **Variants** (1 alternate versions):
     - [awbios.zip.1f62f581](bios/Sega/Dreamcast/.variants/awbios.zip.1f62f581) (34,598 bytes) - SHA1: `1f62f581094c90620c74d4d15c1c1640a973e684`, MD5: `59889f03e09c1d4246b7874096a3201c`
-- **[awbios.zip.1f62f581](bios/Sega/Dreamcast/.variants/awbios.zip.1f62f581)** (34,598 bytes)
-  - SHA1: `1f62f581094c90620c74d4d15c1c1640a973e684`
-  - MD5: `59889f03e09c1d4246b7874096a3201c`
-  - CRC32: `20cab9aa`
 - **[dc.zip](bios/Sega/Dreamcast/dc.zip)** (1,083,674 bytes)
   - SHA1: `24e80cdf0695361ae8de7cceda29843e0474ecd0`
   - MD5: `8248adaabb908bd0427d88c8d64a2a1a`
@@ -9570,14 +9218,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [dc_flash.bin.ac59626e](bios/Sega/Dreamcast/.variants/dc_flash.bin.ac59626e) (131,072 bytes) - SHA1: `ac59626eee00a6a9a8a2f7e3ac5c774678c116ba`, MD5: `2f818338f47701c606ade664a3e16a8a`
     - [dc_flash.bin.f695e418](bios/Sega/Dreamcast/.variants/dc_flash.bin.f695e418) (131,072 bytes) - SHA1: `f695e418bbfff01c47443fb8c4626d742951ed6a`, MD5: `9338b10ee6f13fbc8bfcd6276e156fad`
-- **[dc_flash.bin.ac59626e](bios/Sega/Dreamcast/.variants/dc_flash.bin.ac59626e)** (131,072 bytes)
-  - SHA1: `ac59626eee00a6a9a8a2f7e3ac5c774678c116ba`
-  - MD5: `2f818338f47701c606ade664a3e16a8a`
-  - CRC32: `4d458823`
-- **[dc_flash.bin.f695e418](bios/Sega/Dreamcast/.variants/dc_flash.bin.f695e418)** (131,072 bytes)
-  - SHA1: `f695e418bbfff01c47443fb8c4626d742951ed6a`
-  - MD5: `9338b10ee6f13fbc8bfcd6276e156fad`
-  - CRC32: `fa297c5b`
 - **[dc_nvmem.bin](bios/Sega/Dreamcast/dc_nvmem.bin)** (131,072 bytes)
   - SHA1: `72c65f2a11ee7b72b77b9945187b7a332632e14a`
   - MD5: `314fb1b16bd77154db4d30ff780a8e4f`
@@ -9588,20 +9228,12 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `96b7ce1e`
   - **Variants** (1 alternate versions):
     - [f355bios.zip.62a0d456](bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456) (1,381,185 bytes) - SHA1: `62a0d456ff84664a4f631938d3991088bc122f1b`, MD5: `f126d318f135f38ee377fef2acf08d7e`
-- **[f355bios.zip.62a0d456](bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456)** (1,381,185 bytes)
-  - SHA1: `62a0d456ff84664a4f631938d3991088bc122f1b`
-  - MD5: `f126d318f135f38ee377fef2acf08d7e`
-  - CRC32: `5177e8c4`
 - **[f355dlx.zip](bios/Sega/Dreamcast/f355dlx.zip)** (1,414,509 bytes)
   - SHA1: `4b21c78fdc782ef47d1f070ca7df0d50652d5612`
   - MD5: `bb92e8ca3c27546174131ab1f10b7a53`
   - CRC32: `d39556fc`
   - **Variants** (1 alternate versions):
     - [f355dlx.zip.3c1c6422](bios/Sega/Dreamcast/.variants/f355dlx.zip.3c1c6422) (2,315,343 bytes) - SHA1: `3c1c6422c332fc57c69c938db4dd3ac91eff4f02`, MD5: `5e83867c751f692a000afdf658dc181f`
-- **[f355dlx.zip.3c1c6422](bios/Sega/Dreamcast/.variants/f355dlx.zip.3c1c6422)** (2,315,343 bytes)
-  - SHA1: `3c1c6422c332fc57c69c938db4dd3ac91eff4f02`
-  - MD5: `5e83867c751f692a000afdf658dc181f`
-  - CRC32: `87e1cf82`
 - **[hod2bios.zip](bios/Sega/Dreamcast/hod2bios.zip)** (1,469,423 bytes)
   - SHA1: `b3a86809857fe9ce575da73f6ed6c5441d558e3d`
   - MD5: `9c755171b222fb1f4e1439d5b709dbf1`
@@ -9610,14 +9242,6 @@ These are large asset packs required by specific cores. They are included in the
     - [hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968) (1,465,991 bytes) - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`, MD5: `36ac7b58216de5eecfaebe527bf6d02e`
     - [hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a) (816,543 bytes) - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`, MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
     - [hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a) (1,057,881 bytes) - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`, MD5: `6559697f76592be77a7a9ff3bfb6711a`
-- **[hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a)** (816,543 bytes)
-  - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`
-  - MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
-  - CRC32: `9521330f`
-- **[hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a)** (1,057,881 bytes)
-  - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`
-  - MD5: `6559697f76592be77a7a9ff3bfb6711a`
-  - CRC32: `651142d3`
 - **[naomi.zip](bios/Sega/Dreamcast/naomi.zip)** (9,308,440 bytes)
   - SHA1: `d7ef86bd03de7c1d0e2b0762e04b6f8f8d26dbdb`
   - MD5: `eb4099aeb42ef089cfe94f8fe95e51f6`
@@ -9625,27 +9249,12 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33) (8,005,827 bytes) - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`, MD5: `58033e4ba5793c09dffb87f96f3e9301`
     - [naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c) (6,134,707 bytes) - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`, MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
-- **[naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c)** (6,134,707 bytes)
-  - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`
-  - MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
-  - CRC32: `cc8b8e1e`
 - **[naomi2.zip](bios/Sega/Dreamcast/naomi2.zip)** (7,038,226 bytes)
   - SHA1: `da79eca49c59f7661737643b5e11e63a73b51fcc`
   - MD5: `843c0d51237dc945f57237c4b9872b1d`
   - CRC32: `b700583b`
   - **Variants** (1 alternate versions):
     - [naomi2.zip.2962e338](bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338) (7,022,501 bytes) - SHA1: `2962e338ccc9f66f29b409f73ca27aeee79633ac`, MD5: `c50072cbab75673e1b1a6b94355e6fa8`
-- **[naomi2.zip.2962e338](bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338)** (7,022,501 bytes)
-  - SHA1: `2962e338ccc9f66f29b409f73ca27aeee79633ac`
-  - MD5: `c50072cbab75673e1b1a6b94355e6fa8`
-  - CRC32: `2143196c`
-  - Platform names: Lakka: `naomi2.zip`, RetroArch: `naomi2.zip`, RetroPie: `naomi2.zip`
-- **[naomi_boot.bin](bios/Sega/Dreamcast/.variants/naomi_boot.bin)** (181,208 bytes)
-  - SHA1: `56b2a1ca68bf3519f01abde00c22e7a3425494e5`
-  - MD5: `b5475847ee3a3ef2b12cda48dd49370d`
-  - CRC32: `da4fbc94`
-  - **Variants** (1 alternate versions):
-    - [naomi_boot.bin](bios/Sega/Dreamcast/.variants/naomi_boot.bin) (181,208 bytes) - SHA1: `56b2a1ca68bf3519f01abde00c22e7a3425494e5`, MD5: `b5475847ee3a3ef2b12cda48dd49370d`
 - **[naomi_boot.bin](bios/Sega/Dreamcast/naomi_boot.bin)** (2,097,152 bytes)
   - SHA1: `6d27d71aec4dfba98f66316ae74a1426d567698a`
   - MD5: `3bffafac42a7767d8dcecf771f5552ba`
@@ -9718,11 +9327,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `c6d10268`
   - **Variants** (1 alternate versions):
     - [bios_CD_U.bin.5adb6c3a](bios/Sega/Mega%20CD/.variants/bios_CD_U.bin.5adb6c3a) (131,072 bytes) - SHA1: `5adb6c3af218c60868e6b723ec47e36bbdf5e6f0`, MD5: `854b9150240a198070150e4566ae1290`
-- **[bios_CD_U.bin.5adb6c3a](bios/Sega/Mega%20CD/.variants/bios_CD_U.bin.5adb6c3a)** (131,072 bytes)
-  - SHA1: `5adb6c3af218c60868e6b723ec47e36bbdf5e6f0`
-  - MD5: `854b9150240a198070150e4566ae1290`
-  - CRC32: `9f6f6276`
-  - Platform names: Batocera: `bios_CD_U.bin`, RetroBat: `bios_CD_U.bin`
 - **[cart.brm](bios/Sega/Mega%20CD/cart.brm)** (524,288 bytes)
   - SHA1: `2a170e18ca44a8bbaa8d36675cdae9e7203026d0`
   - MD5: `51de1667b2a131377ed6f2aacbe14e7e`
@@ -9744,11 +9348,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `3f888cf4`
   - **Variants** (1 alternate versions):
     - [bios_MD.bin.453fca4e](bios/Sega/Mega%20Drive/.variants/bios_MD.bin.453fca4e) (16,384 bytes) - SHA1: `453fca4e1db6fae4a10657c4451bccbb71955628`, MD5: `45e298905a08f9cfb38fd504cd6dbc84`
-- **[bios_MD.bin.453fca4e](bios/Sega/Mega%20Drive/.variants/bios_MD.bin.453fca4e)** (16,384 bytes)
-  - SHA1: `453fca4e1db6fae4a10657c4451bccbb71955628`
-  - MD5: `45e298905a08f9cfb38fd504cd6dbc84`
-  - CRC32: `5f5e64eb`
-  - Platform names: Recalbox: `bios_MD.bin`
 - **[ggenie.bin](bios/Sega/Mega%20Drive/ggenie.bin)** (32,768 bytes)
   - SHA1: `937e1878ebd104f489e6bdbc410a184f79f1144a`
   - MD5: `e8af7fe115a75c849f6aab3701e7799b`
@@ -9817,13 +9416,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `df94c5b4d47eb3cc404d88b33a8fda237eaf4720`
   - MD5: `85ec9ca47d8f6807718151cbcca8b964`
   - CRC32: `224b752c`
-- **[stvbios.zip](bios/Sega/Saturn/.variants/stvbios.zip)** (3,203,164 bytes)
-  - SHA1: `999ed28cfbf18103a4963b0d3797af3dcf67db05`
-  - MD5: `9992f2761b0f6e83b3e923451ab8057b`
-  - CRC32: `0ab1c9ec`
-  - **Variants** (2 alternate versions):
-    - [stvbios.zip](bios/Sega/Saturn/.variants/stvbios.zip) (3,203,164 bytes) - SHA1: `999ed28cfbf18103a4963b0d3797af3dcf67db05`, MD5: `9992f2761b0f6e83b3e923451ab8057b`
-    - [stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5) (2,699,375 bytes) - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`, MD5: `c105e2d063aeb0f9b60c45fad6969265`
 - **[stvbios.zip](bios/Sega/Saturn/stvbios.zip)** (2,699,371 bytes)
   - SHA1: `ae5557ed313b6708bb7c2aee0944e39335a8f814`
   - MD5: `14c3c8f5cdc4dc0531228bd344afcf89`
@@ -9901,13 +9493,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `8d72c5b4d63bb14c5dbdac495244d659aa1498b6`
   - MD5: `cb0a5cfcf7247a7eab74bb2716260269`
   - CRC32: `9f3195f1`
-- **[config](bios/Sharp/X68000/.variants/config)** (264 bytes)
-  - SHA1: `76c18deb168ad0ffd7886a130a9e74e915070782`
-  - MD5: `51b55ee3807901c015fdb93616858b8b`
-  - CRC32: `72628c06`
-  - **Variants** (2 alternate versions):
-    - [config](bios/Sharp/X68000/.variants/config) (264 bytes) - SHA1: `76c18deb168ad0ffd7886a130a9e74e915070782`, MD5: `51b55ee3807901c015fdb93616858b8b`
-    - [config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f) (48 bytes) - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`, MD5: `d407317a52f8425a6753232064d14700`
 - **[config](bios/Sharp/X68000/config)** (1,196 bytes)
   - SHA1: `a6256a471d6f3a3e511c405df0b9642d481c0780`
   - MD5: `ea8519ce69ec9432e585c92ba5edd2e4`
@@ -9915,10 +9500,6 @@ These are large asset packs required by specific cores. They are included in the
   - **Variants** (2 alternate versions):
     - [config](bios/Sharp/X68000/.variants/config) (264 bytes) - SHA1: `76c18deb168ad0ffd7886a130a9e74e915070782`, MD5: `51b55ee3807901c015fdb93616858b8b`
     - [config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f) (48 bytes) - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`, MD5: `d407317a52f8425a6753232064d14700`
-- **[config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f)** (48 bytes)
-  - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`
-  - MD5: `d407317a52f8425a6753232064d14700`
-  - CRC32: `5dd9a0c5`
 - **[iplrom.dat](bios/Sharp/X68000/iplrom.dat)** (131,072 bytes)
   - SHA1: `0ed038ed2133b9f78c6e37256807424e0d927560`
   - MD5: `7fd4caabac1d9169e289f0f7bbf71d8e`
@@ -10161,11 +9742,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `37157331`
   - **Variants** (1 alternate versions):
     - [scph1001.bin.649895ef](bios/Sony/PlayStation/.variants/scph1001.bin.649895ef) (524,288 bytes) - SHA1: `649895efd79d14790eabb362e94eb0622093dfb9`, MD5: `dc2b9bf8da62ec93e868cfd29f0d067d`
-- **[scph1001.bin.649895ef](bios/Sony/PlayStation/.variants/scph1001.bin.649895ef)** (524,288 bytes)
-  - SHA1: `649895efd79d14790eabb362e94eb0622093dfb9`
-  - MD5: `dc2b9bf8da62ec93e868cfd29f0d067d`
-  - CRC32: `55847d8c`
-  - Platform names: Batocera: `scph1001.bin`, Recalbox: `scph1001.bin`
 - **[scph1002.bin](bios/Sony/PlayStation/scph1002.bin)** (524,288 bytes)
   - SHA1: `20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c`
   - MD5: `54847e693405ffeb0359c6287434cbef`
@@ -10233,12 +9809,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `57369df9ca82a460e596cea7835c5a0797dee668`
   - MD5: `526291c9c9bae8b184b0e5f4bfa94eb9`
   - CRC32: `20b4ea53`
-  - **Variants** (1 alternate versions):
-    - [GameIndex.yaml](bios/Sony/PlayStation%202/resources/.variants/GameIndex.yaml) (1,799,606 bytes) - SHA1: `6eddec30056cde7c664a0cf508dcad29353a12bb`, MD5: `5dea62f70439682a6cee16ba3823d11e`
-- **[GameIndex.yaml](bios/Sony/PlayStation%202/resources/.variants/GameIndex.yaml)** (1,799,606 bytes)
-  - SHA1: `6eddec30056cde7c664a0cf508dcad29353a12bb`
-  - MD5: `5dea62f70439682a6cee16ba3823d11e`
-  - CRC32: `0b805686`
   - **Variants** (1 alternate versions):
     - [GameIndex.yaml](bios/Sony/PlayStation%202/resources/.variants/GameIndex.yaml) (1,799,606 bytes) - SHA1: `6eddec30056cde7c664a0cf508dcad29353a12bb`, MD5: `5dea62f70439682a6cee16ba3823d11e`
 - **[GameIndex.yaml](bios/Sony/PlayStation%202/resources/GameIndex.yaml)** (2,665,743 bytes)
@@ -10573,6 +10143,13 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `47d2ec4b342649e4c391043ab915d4435f9d180d`
   - MD5: `44552702b05697a14ccbe2ca22ee7139`
   - CRC32: `2c3bcd32`
+
+### Sony/PlayStation 3
+
+- **[PS3UPDAT.PUP](bios/Sony/PlayStation%203/PS3UPDAT.PUP)** (206,126,236 bytes)
+  - SHA1: `093f8698b54b78dcb701de2043f82639de51d63b`
+  - MD5: `05fe32f5dc8c78acbcd84d36ee7fdc5b`
+  - CRC32: `24bdb2db`
 
 ### Sony/PlayStation Portable
 
@@ -10967,12 +10544,16 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Sony/PlayStation Vita
 
-- **[PSP2UPDAT.PUP](bios/Sony/PlayStation%20Vita/.variants/PSP2UPDAT.PUP)** (56,768,512 bytes)
-  - SHA1: `3ae832c9800fcaa007eccfc48f24242967c111f8`
-  - MD5: `8b5f60b56c3da8365b973dba570c53a5`
-  - CRC32: `c0c3a1fe`
+- **[PSP2UPDAT.PUP](bios/Sony/PlayStation%20Vita/PSP2UPDAT.PUP)** (56,778,752 bytes)
+  - SHA1: `ed3a4cb264fff283209f10ae58c96c6090fed187`
+  - MD5: `59dcf059d3328fb67be7e51f8aa33418`
+  - CRC32: `082ecf86`
   - **Variants** (1 alternate versions):
     - [PSP2UPDAT.PUP](bios/Sony/PlayStation%20Vita/.variants/PSP2UPDAT.PUP) (56,768,512 bytes) - SHA1: `3ae832c9800fcaa007eccfc48f24242967c111f8`, MD5: `8b5f60b56c3da8365b973dba570c53a5`
+- **[PSVUPDAT.PUP](bios/Sony/PlayStation%20Vita/PSVUPDAT.PUP)** (133,834,240 bytes)
+  - SHA1: `cc72dfcc964577cc29112ef368c28f55277c237c`
+  - MD5: `f2c7b12fe85496ec88a0391b514d6e3b`
+  - CRC32: `39075d41`
 
 ### Synertek/SYM-1
 
@@ -11010,24 +10591,12 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `c2fc43556eb6b7b25bdf5955bd9df825`
   - CRC32: `d8f4d15e`
   - Platform names: Batocera: `coco2b.zip`
-- **[coco.zip](bios/Tandy/CoCo/.variants/coco.zip)** (41,046 bytes)
-  - SHA1: `567c5b5054552a2771eafa7966844a146f0dde96`
-  - MD5: `1d33d70f35b33873fc75941d95ad1ffa`
-  - CRC32: `31c53421`
-  - **Variants** (1 alternate versions):
-    - [coco.zip](bios/Tandy/CoCo/.variants/coco.zip) (41,046 bytes) - SHA1: `567c5b5054552a2771eafa7966844a146f0dde96`, MD5: `1d33d70f35b33873fc75941d95ad1ffa`
 - **[coco.zip](bios/Tandy/CoCo/coco.zip)** (7,438 bytes)
   - SHA1: `e31fbbb831f32886e57410183bc4e85d36c2dc7a`
   - MD5: `b0b96aadef063b07f079fca138b79e28`
   - CRC32: `d25f9837`
   - **Variants** (1 alternate versions):
     - [coco.zip](bios/Tandy/CoCo/.variants/coco.zip) (41,046 bytes) - SHA1: `567c5b5054552a2771eafa7966844a146f0dde96`, MD5: `1d33d70f35b33873fc75941d95ad1ffa`
-- **[coco2.zip](bios/Tandy/CoCo/.variants/coco2.zip)** (14,619 bytes)
-  - SHA1: `f2fa8d8e940f1d91a1b1624013df5dca0bb1ee44`
-  - MD5: `b81dc552536796d234c08587bac7be43`
-  - CRC32: `d13aefe2`
-  - **Variants** (1 alternate versions):
-    - [coco2.zip](bios/Tandy/CoCo/.variants/coco2.zip) (14,619 bytes) - SHA1: `f2fa8d8e940f1d91a1b1624013df5dca0bb1ee44`, MD5: `b81dc552536796d234c08587bac7be43`
 - **[coco2.zip](bios/Tandy/CoCo/coco2.zip)** (14,597 bytes)
   - SHA1: `a4ec389d7ecffdcc741ea79064dc9dbc12ccbc5a`
   - MD5: `e3f77c0e71716399ed93d556c73532e7`
@@ -11157,24 +10726,12 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `693f5b4fe1e5eb6429fd6614fb7bb14350939814`
   - MD5: `04714f43347cefb2a051a77116344b3f`
   - CRC32: `1a52b40c`
-- **[ti99_4a.zip](bios/Texas%20Instruments/TI-99/.variants/ti99_4a.zip)** (21,615 bytes)
-  - SHA1: `630b9f529b954851fbdcfeb1d91a950d4bda0547`
-  - MD5: `6e30e823ddba73234480984ee50730c1`
-  - CRC32: `ea0cc014`
-  - **Variants** (1 alternate versions):
-    - [ti99_4a.zip](bios/Texas%20Instruments/TI-99/.variants/ti99_4a.zip) (21,615 bytes) - SHA1: `630b9f529b954851fbdcfeb1d91a950d4bda0547`, MD5: `6e30e823ddba73234480984ee50730c1`
 - **[ti99_4a.zip](bios/Texas%20Instruments/TI-99/ti99_4a.zip)** (21,377 bytes)
   - SHA1: `e05575b630bea7ff98b9ca1f083d745abb3110b6`
   - MD5: `3df4d280ad76edc0662c2e89ad4f2f74`
   - CRC32: `f93bd9f7`
   - **Variants** (1 alternate versions):
     - [ti99_4a.zip](bios/Texas%20Instruments/TI-99/.variants/ti99_4a.zip) (21,615 bytes) - SHA1: `630b9f529b954851fbdcfeb1d91a950d4bda0547`, MD5: `6e30e823ddba73234480984ee50730c1`
-- **[ti99_speech.zip](bios/Texas%20Instruments/TI-99/.variants/ti99_speech.zip)** (31,291 bytes)
-  - SHA1: `8212fbd8899a2808c7ace4559245861e5bee2c9a`
-  - MD5: `42f768a66fa8b27dadb8361dd2e2e012`
-  - CRC32: `b3ef7ac7`
-  - **Variants** (1 alternate versions):
-    - [ti99_speech.zip](bios/Texas%20Instruments/TI-99/.variants/ti99_speech.zip) (31,291 bytes) - SHA1: `8212fbd8899a2808c7ace4559245861e5bee2c9a`, MD5: `42f768a66fa8b27dadb8361dd2e2e012`
 - **[ti99_speech.zip](bios/Texas%20Instruments/TI-99/ti99_speech.zip)** (31,184 bytes)
   - SHA1: `a11d1801594fa3d1f95d37bbcc2e0faa1ad013c6`
   - MD5: `01770fde15c34ff88bb49526d38cb1f6`
@@ -11191,12 +10748,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Tomy/Tutor
 
-- **[tutor.zip](bios/Tomy/Tutor/.variants/tutor.zip)** (474,462 bytes)
-  - SHA1: `8bbe175a406e2e38227d8bdca1a820c727f80c03`
-  - MD5: `37c052c1388be33bac2fac88a439322c`
-  - CRC32: `dc569ae7`
-  - **Variants** (1 alternate versions):
-    - [tutor.zip](bios/Tomy/Tutor/.variants/tutor.zip) (474,462 bytes) - SHA1: `8bbe175a406e2e38227d8bdca1a820c727f80c03`, MD5: `37c052c1388be33bac2fac88a439322c`
 - **[tutor.zip](bios/Tomy/Tutor/tutor.zip)** (34,653 bytes)
   - SHA1: `273dbb7a93eb0ab83c2e13e9db51b897cc18f838`
   - MD5: `4f0e9736c6ff1671459b1f3c80f74f98`
@@ -11227,12 +10778,6 @@ These are large asset packs required by specific cores. They are included in the
 
 ### VTech/V.Smile
 
-- **[vsmile.zip](bios/VTech/V.Smile/.variants/vsmile.zip)** (3,036,769 bytes)
-  - SHA1: `ef840acaf38fe2d6d6ac112335510d6082742db4`
-  - MD5: `a9809431b9f09e8d0f31e7adfabeb025`
-  - CRC32: `c9002d3d`
-  - **Variants** (1 alternate versions):
-    - [vsmile.zip](bios/VTech/V.Smile/.variants/vsmile.zip) (3,036,769 bytes) - SHA1: `ef840acaf38fe2d6d6ac112335510d6082742db4`, MD5: `a9809431b9f09e8d0f31e7adfabeb025`
 - **[vsmile.zip](bios/VTech/V.Smile/vsmile.zip)** (3,078,731 bytes)
   - SHA1: `65e526ae3e4795a9186c53c7428d8b946170befe`
   - MD5: `aadb355f8db993f50c6e83eb835dd55d`
@@ -11326,4 +10871,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T12:06:40Z*
+*Auto-generated on 2026-03-17T12:12:49Z*
