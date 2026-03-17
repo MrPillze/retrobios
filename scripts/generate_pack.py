@@ -106,7 +106,12 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                 if os.path.exists(local_path):
                     return local_path, "zip_exact"
 
-    # No MD5 specified = any file with that name is acceptable
+    # Release assets override local files (authoritative large files)
+    cached = fetch_large_file(name)
+    if cached:
+        return cached, "release_asset"
+
+    # No MD5 specified = any local file with that name is acceptable
     if not md5:
         name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
         for match_sha1 in name_matches:
@@ -115,17 +120,13 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                 if os.path.exists(local_path):
                     return local_path, "exact"
 
+    # Name fallback (hash mismatch)
     name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
     for match_sha1 in name_matches:
         if match_sha1 in db["files"]:
             local_path = db["files"][match_sha1]["path"]
             if os.path.exists(local_path):
                 return local_path, "hash_mismatch"
-
-    # Last resort: try downloading from large-files release
-    cached = fetch_large_file(name)
-    if cached:
-        return cached, "release_asset"
 
     return None, "not_found"
 
