@@ -38,6 +38,8 @@ DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_BIOS_DIR = "bios"
 
+MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
+
 LEGACY_BRANCHES = ["libretro", "RetroArch", "RetroPie", "Recalbox", "batocera", "Other"]
 
 PUBLIC_REPOS = [
@@ -106,6 +108,14 @@ def verify_content(data: bytes, expected: dict) -> bool:
     return False
 
 
+def _read_limited(resp, limit: int = MAX_DOWNLOAD) -> bytes | None:
+    """Read response up to limit bytes. Returns None if exceeded."""
+    data = resp.read(limit + 1)
+    if len(data) > limit:
+        return None
+    return data
+
+
 def step1_crossref_db(entry: dict, db: dict) -> str | None:
     """Check if file exists under different name/path in database."""
     sha1 = entry.get("sha1")
@@ -166,7 +176,9 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
             with urllib.request.urlopen(req, timeout=30) as resp:
-                data = resp.read()
+                data = _read_limited(resp)
+                if data is None:
+                    continue
                 if verify_content(data, entry):
                     return data
         except (urllib.error.URLError, urllib.error.HTTPError):
@@ -177,7 +189,9 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
                 with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = resp.read()
+                    data = _read_limited(resp)
+                    if data is None:
+                        continue
                     if verify_content(data, entry):
                         return data
             except (urllib.error.URLError, urllib.error.HTTPError):
@@ -196,7 +210,9 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
                 with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = resp.read()
+                    data = _read_limited(resp)
+                    if data is None:
+                        continue
                     if verify_content(data, entry):
                         return data
             except (urllib.error.URLError, urllib.error.HTTPError):
@@ -223,8 +239,8 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
                     try:
                         req2 = urllib.request.Request(dl_url, headers={"User-Agent": "retrobios-fetch/1.0"})
                         with urllib.request.urlopen(req2, timeout=30) as resp2:
-                            data = resp2.read()
-                            if verify_content(data, entry):
+                            data = _read_limited(resp2)
+                            if data is not None and verify_content(data, entry):
                                 return data
                     except (urllib.error.URLError, urllib.error.HTTPError):
                         pass
@@ -236,7 +252,7 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
 
 def place_file(data: bytes, entry: dict, bios_dir: str, db: dict) -> str:
     """Place a fetched BIOS file in the correct location."""
-    name = entry["name"]
+    name = os.path.basename(entry["name"])
     system = entry["system"]
 
     dest_dir = Path(bios_dir)

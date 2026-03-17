@@ -39,12 +39,35 @@ DEFAULT_BIOS_DIR = "bios"
 LARGE_FILES_RELEASE = "large-files"
 LARGE_FILES_REPO = "Abdess/retrobios"
 
+MAX_ENTRY_SIZE = 512 * 1024 * 1024  # 512MB
 
-def fetch_large_file(name: str, dest_dir: str = ".cache/large") -> str | None:
+
+def _verify_file_hash(path: str, expected_sha1: str = "",
+                      expected_md5: str = "") -> bool:
+    """Compute and compare hash of a local file."""
+    if not expected_sha1 and not expected_md5:
+        return True
+    h = hashlib.sha1() if expected_sha1 else hashlib.md5()
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(65536)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest() == (expected_sha1 or expected_md5)
+
+
+def fetch_large_file(name: str, dest_dir: str = ".cache/large",
+                     expected_sha1: str = "", expected_md5: str = "") -> str | None:
     """Download a large file from the 'large-files' GitHub release if not cached."""
     cached = os.path.join(dest_dir, name)
     if os.path.exists(cached):
-        return cached
+        if expected_sha1 or expected_md5:
+            if _verify_file_hash(cached, expected_sha1, expected_md5):
+                return cached
+            os.unlink(cached)
+        else:
+            return cached
 
     encoded_name = urllib.request.quote(name)
     url = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/{encoded_name}"
@@ -58,9 +81,21 @@ def fetch_large_file(name: str, dest_dir: str = ".cache/large") -> str | None:
                     if not chunk:
                         break
                     f.write(chunk)
-        return cached
     except (urllib.error.URLError, urllib.error.HTTPError):
         return None
+
+    if expected_sha1 or expected_md5:
+        if not _verify_file_hash(cached, expected_sha1, expected_md5):
+            os.unlink(cached)
+            return None
+    return cached
+
+
+def _sanitize_path(raw: str) -> str:
+    """Strip path traversal components from a relative path."""
+    raw = raw.replace("\\", "/")
+    parts = [p for p in raw.split("/") if p and p != ".."]
+    return "/".join(parts)
 
 
 def resolve_file(file_entry: dict, db: dict, bios_dir: str,
@@ -110,7 +145,7 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                     return local_path, "zip_exact"
 
     # Release assets override local files (authoritative large files)
-    cached = fetch_large_file(name)
+    cached = fetch_large_file(name, expected_sha1=sha1 or "", expected_md5=md5 or "")
     if cached:
         return cached, "release_asset"
 
@@ -146,6 +181,8 @@ def build_zip_contents_index(db: dict) -> dict:
                 for info in zf.infolist():
                     if info.is_dir():
                         continue
+                    if info.file_size > MAX_ENTRY_SIZE:
+                        continue
                     data = zf.read(info.filename)
                     inner_md5 = hashlib.md5(data).hexdigest()
                     index[inner_md5] = sha1
@@ -160,6 +197,14 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
     if not url:
         return False
 
+    sha256 = file_entry.get("sha256")
+    sha1 = file_entry.get("sha1")
+    md5 = file_entry.get("md5")
+
+    if not (sha256 or sha1 or md5):
+        print(f"    WARNING: no hash for {file_entry['name']}, skipping unverifiable download")
+        return False
+
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "retrobios-pack-gen/1.0"})
         with urllib.request.urlopen(req, timeout=120) as resp:
@@ -167,11 +212,6 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
     except urllib.error.URLError as e:
         print(f"    WARNING: Failed to download {url}: {e}")
         return False
-
-    # Verify hash
-    sha256 = file_entry.get("sha256")
-    sha1 = file_entry.get("sha1")
-    md5 = file_entry.get("md5")
 
     if sha256:
         actual = hashlib.sha256(data).hexdigest()
@@ -228,7 +268,9 @@ def generate_pack(
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for sys_id, system in sorted(config.get("systems", {}).items()):
             for file_entry in system.get("files", []):
-                dest = file_entry.get("destination", file_entry["name"])
+                dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+                if not dest:
+                    continue
                 if base_dest:
                     full_dest = f"{base_dest}/{dest}"
                 else:
@@ -316,8 +358,11 @@ def _extract_zip_to_archive(source_zip: str, dest_prefix: str, target_zf: zipfil
         for info in src.infolist():
             if info.is_dir():
                 continue
+            clean_name = _sanitize_path(info.filename)
+            if not clean_name:
+                continue
             data = src.read(info.filename)
-            target_path = f"{dest_prefix}/{info.filename}" if dest_prefix else info.filename
+            target_path = f"{dest_prefix}/{clean_name}" if dest_prefix else clean_name
             target_zf.writestr(target_path, data)
 
 
