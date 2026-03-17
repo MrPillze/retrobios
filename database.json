@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-17T11:35:52Z",
-  "total_files": 5285,
-  "total_size": 3625498424,
+  "generated_at": "2026-03-17T11:42:55Z",
+  "total_files": 5302,
+  "total_size": 4808398841,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -984,6 +984,15 @@
       "sha256": "90dc3258512e46ecf4ea8dfd0a8ebdb805bb001f2edfd6b882a1924da8ac305a",
       "crc32": "b28f7112"
     },
+    "ac4b78d53c7a97da2451ca35498395d8dd1e3024": {
+      "path": "bios/Arcade/Arcade/Firmware.19.0.0.zip",
+      "name": "Firmware.19.0.0.zip",
+      "size": 338076508,
+      "sha1": "ac4b78d53c7a97da2451ca35498395d8dd1e3024",
+      "md5": "72d6c73306c7f0b76723f989e7e1bdd1",
+      "sha256": "2f3791655e6c1b56f07a309b69ce8ea35d8412695599bbb6d4b0e29d1b044b66",
+      "crc32": "77228c84"
+    },
     "5426d52e17e0ff9195fabbb42f704342e556d08e": {
       "path": "bios/Arcade/Arcade/acpsx.zip",
       "name": "acpsx.zip",
@@ -1532,6 +1541,15 @@
       "md5": "d048a9ff941041de45c26474a0da40aa",
       "sha256": "9d057f11a2c4cfa7c637016fbca20c125c86a137ab4ca1957079f5cf0e73000c",
       "crc32": "065d69d0"
+    },
+    "add40c002084e8e25768671877b2aa603aaf5cb1": {
+      "path": "bios/Arcade/Arcade/maclc3.zip",
+      "name": "maclc3.zip",
+      "size": 189428461,
+      "sha1": "add40c002084e8e25768671877b2aa603aaf5cb1",
+      "md5": "aff722788800df5b22d5a07cf8e558ee",
+      "sha256": "e663e456e88f475b3cacc06e75f50605e700789aa327b6648c627a560762a5d6",
+      "crc32": "81f21918"
     },
     "4e0202f8430cb4842184df7b5418e32620156c7b": {
       "path": "bios/Arcade/Arcade/macsbios.zip",
@@ -3963,6 +3981,15 @@
       "sha256": "341e5e85502aed67e6720bedf71246d3f49aca875839a2fd38e95705e6e36655",
       "crc32": "c5832dc2"
     },
+    "b72be08cc1949cdc29e83454a0862f1b62b47578": {
+      "path": "bios/Arcade/MAME/hash/3do.xml",
+      "name": "3do.xml",
+      "size": 3719,
+      "sha1": "b72be08cc1949cdc29e83454a0862f1b62b47578",
+      "md5": "b97ac00615753261f44fd78d1ea9feab",
+      "sha256": "e5d85b2c91aa10fb477fcdb6609609cecf3710a95bbe5485b8eb9d2b6879e0c2",
+      "crc32": "2928ff45"
+    },
     "76c4888e7892adb8f6761ffe1f41a58bf13f7e91": {
       "path": "bios/Arcade/MAME/hash/3do_m2.xml",
       "name": "3do_m2.xml",
@@ -6222,6 +6249,15 @@
       "sha256": "da8a1cfb60e9de3d8e1443c306d80e59605567ab7fdbbf82bf9fd780d1e95dec",
       "crc32": "baa3ce82"
     },
+    "0359a21a9ba8a486cdcdccaefb17777e039debad": {
+      "path": "bios/Arcade/MAME/hash/generic_cdrom.xml",
+      "name": "generic_cdrom.xml",
+      "size": 52073,
+      "sha1": "0359a21a9ba8a486cdcdccaefb17777e039debad",
+      "md5": "970b04a54ff4189816e744bb71b0fcf5",
+      "sha256": "debb345703c68c64228d2abf02bcb11393283a27794cc4f7e38d7f957f088f6e",
+      "crc32": "43a7d2b8"
+    },
     "b89189bfd7e94e6e6d0090bd240b66f0cb3734b8": {
       "path": "bios/Arcade/MAME/hash/generic_flop_525.xml",
       "name": "generic_flop_525.xml",
@@ -6959,6 +6995,15 @@
       "md5": "ce32f7b5e64c584d4609184190c631fa",
       "sha256": "b1207ab9c378cac6949fdd2c3bc78063d38d7e2e41d6e40ae8b2cbc6f2b377a1",
       "crc32": "99083ef6"
+    },
+    "c8e1b348aee1ef0b600b6951f88182a9796a8aef": {
+      "path": "bios/Arcade/MAME/hash/k28o.xml",
+      "name": "k28o.xml",
+      "size": 827,
+      "sha1": "c8e1b348aee1ef0b600b6951f88182a9796a8aef",
+      "md5": "2edef7927f5caf45333da537a1ddb99a",
+      "sha256": "5f8ad911a232c6576ba729d845cf5ba7099ce180d08839c5354a57a9b895ece1",
+      "crc32": "fe9dcd57"
     },
     "cb2a8dfe670854fc5b2280539263cb34ee87bf1d": {
       "path": "bios/Arcade/MAME/hash/kaypro.xml",
@@ -13791,6 +13836,24 @@
       "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
       "crc32": "721f61df"
     },
+    "7a812f277cf2440421044a7acde1c47abd01951e": {
+      "path": "bios/Microsoft/MSX/Databases/colecodb.xml",
+      "name": "colecodb.xml",
+      "size": 158187,
+      "sha1": "7a812f277cf2440421044a7acde1c47abd01951e",
+      "md5": "2db63ed28d016e85817717a267906d46",
+      "sha256": "b59745c9fb79e0c467958385ac27924e7da61b997b4c240d1b661defadc3f0a5",
+      "crc32": "bfcb1ad5"
+    },
+    "a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d": {
+      "path": "bios/Microsoft/MSX/Databases/msxcaswavdb.xml",
+      "name": "msxcaswavdb.xml",
+      "size": 819679,
+      "sha1": "a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d",
+      "md5": "e68b6f7593e06fc649e6a2c702641a60",
+      "sha256": "a520c49efe0701c3c415aea779eb3abe531a5eaceeca2c31c960528994fc6367",
+      "crc32": "ae40504a"
+    },
     "573aa830b7bef4452808b40df883469907db2fed": {
       "path": "bios/Microsoft/MSX/Databases/msxromdb.xml",
       "name": "msxromdb.xml",
@@ -13799,6 +13862,33 @@
       "md5": "c0a94965701431e0df29949189e424dd",
       "sha256": "e78ad4b290fa26705605dfd1d8245cc81beede9cb3e74b9cded15948fe70d5d6",
       "crc32": "ed4c6720"
+    },
+    "4053159367d4c65c559cd500fdd05c9717dbfe06": {
+      "path": "bios/Microsoft/MSX/Databases/msxsysromdb.xml",
+      "name": "msxsysromdb.xml",
+      "size": 157542,
+      "sha1": "4053159367d4c65c559cd500fdd05c9717dbfe06",
+      "md5": "b4db7d459c1a819e09739a404dcc7bfc",
+      "sha256": "60a950a01e11f8852b5b4bc83172d7b18d76b0a41e4d4c786b60f9ea28d0a0f2",
+      "crc32": "c89859f5"
+    },
+    "ddc2b4877813256de3439d54fc5f474bd64c3996": {
+      "path": "bios/Microsoft/MSX/Databases/segadb.xml",
+      "name": "segadb.xml",
+      "size": 82318,
+      "sha1": "ddc2b4877813256de3439d54fc5f474bd64c3996",
+      "md5": "2bcd219deccab45469eb39759aa549be",
+      "sha256": "8eeabab42b3fcfc6c0af59592d182a5ddbebc95fb2c56cd8d3523ce42a4a1677",
+      "crc32": "b607ef94"
+    },
+    "d83168b0b5abf8df0ceb8a147b6708823957a71a": {
+      "path": "bios/Microsoft/MSX/Databases/svidb.xml",
+      "name": "svidb.xml",
+      "size": 261070,
+      "sha1": "d83168b0b5abf8df0ceb8a147b6708823957a71a",
+      "md5": "1e3ecfda27d503596de9e2e810dc3cac",
+      "sha256": "84c8aa742f1cbd00b60650ddde0e7c3a142a4e41d4600676338ec4963f9cb166",
+      "crc32": "db3dadd4"
     },
     "9d789166e3caf28e4742fe933d962e99618c633d": {
       "path": "bios/Microsoft/MSX/FMPAC.ROM",
@@ -17931,6 +18021,15 @@
       "sha256": "31f2c580b271f7c8bb98f4ed1deac3a89fd1c95089c7c4a7061466e2286cd964",
       "crc32": "38dfa295"
     },
+    "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2": {
+      "path": "bios/Nintendo/GameCube/dolphin-emu/Sys/GC/dsp_coef.bin",
+      "name": "dsp_coef.bin",
+      "size": 4096,
+      "sha1": "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2",
+      "md5": "246b4a629edeb193341fade6b965985f",
+      "sha256": "d7741279c2e8ec5c5fb318f8fbdd6de6bf583520d288e836a5383233a4238179",
+      "crc32": "8209b868"
+    },
     "e6c0050b3c67ee26198488fbbe4a5d019c15b628": {
       "path": "bios/Nintendo/GameCube/dolphin-emu/Sys/codehandler.bin",
       "name": "codehandler.bin",
@@ -18245,6 +18344,15 @@
       "md5": "8daa89fd280b3e5ec79fbab73ad6684e",
       "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
       "crc32": "df558b58"
+    },
+    "b48f44194fe918aaaec5298861479512b581d661": {
+      "path": "bios/Nintendo/Nintendo DS/dsi_nand.bin",
+      "name": "dsi_nand.bin",
+      "size": 251658304,
+      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
+      "md5": "dfafb1908da8f527df7a372e649b50be",
+      "sha256": "f57d9bf00529bec35d58404faff029a193fd2ccda0a83403ec4e6cc32626721b",
+      "crc32": "416bf51a"
     },
     "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3": {
       "path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
@@ -18758,6 +18866,15 @@
       "md5": "9a432244d9ee4a49e8ddcde64af94e05",
       "sha256": "0ed991887342fba9e4b71668ff4c14ed93c2b3a19b4874dd0282404a1c442094",
       "crc32": "aa727c5d"
+    },
+    "ecfc092fe6371dbf38e238a8ba5f90785b5db52d": {
+      "path": "bios/Other/xrick/data.zip",
+      "name": "data.zip",
+      "size": 1457440,
+      "sha1": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
+      "md5": "a471e64e9f69afbe59c10cc94ed1b184",
+      "sha256": "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb",
+      "crc32": "74b76447"
     },
     "cea669f6d740f29ca248d2e8837a4b4f86fbe75a": {
       "path": "bios/Palm/Palm/bootloader-dbvz.rom",
@@ -43797,6 +43914,15 @@
       "sha256": "b104d1a01e3ea552b63d98da9365f6beaba40864baa74b5b53159f17fc8f1149",
       "crc32": "d713b1ab"
     },
+    "659a025dfa39a8caada7dac6e69b4d7c88217b3f": {
+      "path": "bios/ScummVM/ScummVM/scummvm/extra/fonts-imgui.dat",
+      "name": "fonts-imgui.dat",
+      "size": 4000965,
+      "sha1": "659a025dfa39a8caada7dac6e69b4d7c88217b3f",
+      "md5": "9eb64ec7aa31dc2f5b55541415ecdf8b",
+      "sha256": "f38eca5a71b33c267cfd909ddda2a859e0e5d4a70976e2cbba03cf9fcb0509d2",
+      "crc32": "ef97328a"
+    },
     "718c1a00d38e0810a1ad0ffde79f73447f846f01": {
       "path": "bios/ScummVM/ScummVM/scummvm.zip",
       "name": "scummvm.zip",
@@ -46119,6 +46245,15 @@
       "sha256": "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d",
       "crc32": "2c3bcd32"
     },
+    "093f8698b54b78dcb701de2043f82639de51d63b": {
+      "path": "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
+      "name": "PS3UPDAT.PUP",
+      "size": 206126236,
+      "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
+      "md5": "05fe32f5dc8c78acbcd84d36ee7fdc5b",
+      "sha256": "69070a95780f59fc9e0d82bcf53eb9b28fd4ed4a7d54d0a40045f80422fd98d6",
+      "crc32": "24bdb2db"
+    },
     "6bf1ae9fb01915966b715836253592cbf588b406": {
       "path": "bios/Sony/PlayStation Portable/Roboto-Condensed.ttf",
       "name": "Roboto-Condensed.ttf",
@@ -47001,6 +47136,24 @@
       "sha256": "f372d306a7f2711125bea29aa75cbcb1eb19724e9648478fba07b8d655b37344",
       "crc32": "c0c3a1fe"
     },
+    "ed3a4cb264fff283209f10ae58c96c6090fed187": {
+      "path": "bios/Sony/PlayStation Vita/PSP2UPDAT.PUP",
+      "name": "PSP2UPDAT.PUP",
+      "size": 56778752,
+      "sha1": "ed3a4cb264fff283209f10ae58c96c6090fed187",
+      "md5": "59dcf059d3328fb67be7e51f8aa33418",
+      "sha256": "c3c03fc7363dd573d90e5157629bf11551f434b283cc898d9ffc71dd716b791c",
+      "crc32": "082ecf86"
+    },
+    "cc72dfcc964577cc29112ef368c28f55277c237c": {
+      "path": "bios/Sony/PlayStation Vita/PSVUPDAT.PUP",
+      "name": "PSVUPDAT.PUP",
+      "size": 133834240,
+      "sha1": "cc72dfcc964577cc29112ef368c28f55277c237c",
+      "md5": "f2c7b12fe85496ec88a0391b514d6e3b",
+      "sha256": "6ef6dc8da6db026f28647713e473486d770087a605c52a8d751bfca7478386cf",
+      "crc32": "39075d41"
+    },
     "567c5b5054552a2771eafa7966844a146f0dde96": {
       "path": "bios/Tandy/CoCo/.variants/coco.zip",
       "name": "coco.zip",
@@ -47680,6 +47833,7 @@
       "fcb298d97792b9e9bdd3296cc6be10b6": "eb2a867578a05bbf8741e9fe7204301062df0cb8",
       "ddb8aacffffffa608ddbb4a6d6dda5ec": "0b6519209766ed883e3fca4c61bf866804c89004",
       "6c6c0c726cbf15e81785eb7592fdb51c": "de463b0577dfd1027bf7de523ff67a0fff861cdb",
+      "72d6c73306c7f0b76723f989e7e1bdd1": "ac4b78d53c7a97da2451ca35498395d8dd1e3024",
       "fcb631bf18a56f2d5b077fa846bab4a6": "5426d52e17e0ff9195fabbb42f704342e556d08e",
       "7a11bfe0cc72886d032e386db68f890c": "f2a730530f4989ca0e8860aa4e455b6a5fe69e1d",
       "c266fc58905af1e246dffadc84301042": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
@@ -47741,6 +47895,7 @@
       "7b51d463324b6bf26e86c4afb7316a3a": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
       "7a14456d6e8afaf540f2368fead25f26": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
       "d048a9ff941041de45c26474a0da40aa": "65a2f2cee74c316d5f40b68deda66787609df353",
+      "aff722788800df5b22d5a07cf8e558ee": "add40c002084e8e25768671877b2aa603aaf5cb1",
       "34530e248d96e7171af19155af315378": "4e0202f8430cb4842184df7b5418e32620156c7b",
       "b48fb4fb35dc348f4904a318dbf9a712": "697551fcf9557ae33e31096b118a0c6769700a2e",
       "6bb005f55ba39bc5f6b330b663da1a58": "c9ee16e26e03496195a7bff151efbdd89da01204",
@@ -48011,6 +48166,7 @@
       "d520d30148cba5f329acd81878cbfee7": "f216c17e3191b1c8acb36568b0a2f983b5b7fea1",
       "276fade02477a6b45f41ba8ac6aa0c5c": "d0a347bbf8d3d6996a025054fe84f16719cc871f",
       "7175cddafebedf82bc9ff45d2cfe4056": "ae5df95815e83f646815798cb4bb1b454fde4dbd",
+      "b97ac00615753261f44fd78d1ea9feab": "b72be08cc1949cdc29e83454a0862f1b62b47578",
       "247231a6722888d6447ba2c770dd0034": "76c4888e7892adb8f6761ffe1f41a58bf13f7e91",
       "9f01210e6365d9e6a500e514bea47f75": "18f13bd6a6360b737a2693175df329a98f0a52d7",
       "920cf004839c488d9b7deae749301bf0": "c23a9a31c88c6fcbc1b63258f71fd0430cac78ca",
@@ -48262,6 +48418,7 @@
       "d2f51f275a1e7bb0cd6d94ecb870ec1d": "524904de8a57267849d3ec5e0562468a787d0ef0",
       "81098f0c8a0c7af462e271cd8d9b5762": "69d61900e0cd88000a07865f05c88ddea9711f0c",
       "3350ddc4fa7459fe222ecdc8dac59755": "8aeb0ba09e56a1a2f6ccdeae226161ddf5d01fe8",
+      "970b04a54ff4189816e744bb71b0fcf5": "0359a21a9ba8a486cdcdccaefb17777e039debad",
       "1f91365563b32c89b68e924ab6902a89": "b89189bfd7e94e6e6d0090bd240b66f0cb3734b8",
       "1b17d6165b1200a9e92997be38f99d62": "3cc96d84b1a1e52ff2824d89fcfbb1fbab3a80bb",
       "48278b70a822d31357338d8ad297a2e7": "3f6e3bdb863bdc4c44551ba6b6eb78fb7a20ae20",
@@ -48344,6 +48501,7 @@
       "d5f8d77fe10ca03c96cdcad6b5a690bc": "cd8d912fa5e3955ffea6131d0af9c4135dee0de0",
       "29f1c0ebe5e2b73410c31751889e8814": "d61f79a3b7714d7c0f22c8728d120df71856cd86",
       "ce32f7b5e64c584d4609184190c631fa": "ddf6aa7fed0347300d1c275a60942d83fc0a68d1",
+      "2edef7927f5caf45333da537a1ddb99a": "c8e1b348aee1ef0b600b6951f88182a9796a8aef",
       "0f428c7d4d0ba69063dc614d2f60b649": "cb2a8dfe670854fc5b2280539263cb34ee87bf1d",
       "57cc4b89ca00ee76b384c297d025fe66": "c779d453275893aa448a2f24d8b7b2314a471f85",
       "aa15534b1794deb81ebec53d0d64ba03": "066300fdc114f51411804f4623aa5c7311850e84",
@@ -49103,7 +49261,12 @@
       "d6dedca1112ddfda94cc9b2e426b818b": "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81",
       "85b38e4128bbc300e675f55b278683a8": "000ac11b702a4c42e40f135df12fa5f2f13e20a1",
       "80dcd1ad1a4cf65d64b7ba10504e8190": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
+      "2db63ed28d016e85817717a267906d46": "7a812f277cf2440421044a7acde1c47abd01951e",
+      "e68b6f7593e06fc649e6a2c702641a60": "a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d",
       "c0a94965701431e0df29949189e424dd": "573aa830b7bef4452808b40df883469907db2fed",
+      "b4db7d459c1a819e09739a404dcc7bfc": "4053159367d4c65c559cd500fdd05c9717dbfe06",
+      "2bcd219deccab45469eb39759aa549be": "ddc2b4877813256de3439d54fc5f474bd64c3996",
+      "1e3ecfda27d503596de9e2e810dc3cac": "d83168b0b5abf8df0ceb8a147b6708823957a71a",
       "6f69cc8b5ed761b03afd78000dfb0e19": "9d789166e3caf28e4742fe933d962e99618c633d",
       "af8537262df8df267072f359399a7635": "2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c",
       "fd0b8f1766dc6dcc03a43d9c79dc4e37": "977fed1135b6cc73e765b47f51570fc00acd5b79",
@@ -49563,6 +49726,7 @@
       "352330dec2014511dc8a37d7ad1e7388": "350d25662d422d862a9241ee315e77d038ae9e64",
       "f940710cea29e8a74620954076a8427e": "324d143ab76f0b208c3e867d30c17574fd676ee6",
       "59f19ca228e8c8cc7d227f620ac28326": "18cc21df587d9cd9302f38a00ed9a23d619f5673",
+      "246b4a629edeb193341fade6b965985f": "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2",
       "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "561532ad496f644897952d2cef5bb431": "27872c201e87b06a19bf85d36c796ef383f8d52d",
       "b953eb1a8fc9922b3f7051c1cdc451f1": "ae7233cae8f94749796e0b740d6021e3b00a8926",
@@ -49598,6 +49762,7 @@
       "bfd8292fbf0a251647a23c5cb310a97a": "f1ad917e0affaeb8d2114c7ecd02b9f938c3cbd9",
       "94bc5094607c5e6598d50472c52f27f2": "1cf9e67c2c703bb9961bbcdd39cd2c7e319a803b",
       "8daa89fd280b3e5ec79fbab73ad6684e": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "dfafb1908da8f527df7a372e649b50be": "b48f44194fe918aaaec5298861479512b581d661",
       "b6d81b360a5672d80c27430f39153e2c": "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3",
       "74f23348012d7b3e1cc216c47192ffeb": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
       "e45033d9b0fa6b0de071292bba7c9d13": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
@@ -49655,6 +49820,7 @@
       "0a814078410353744e2947a8e9342e4e": "35f92a0477a88f5cf564971125047ffcfa02ec10",
       "82a22231d402cd3284c698ba16a51d1d": "d8ce5b1405b6428969493efeb6f3aa2027c41bdc",
       "9a432244d9ee4a49e8ddcde64af94e05": "86fc8dc0932f983efa199e31ae05a4424772f959",
+      "a471e64e9f69afbe59c10cc94ed1b184": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
       "9da101cd2317830649a31f8fa46debec": "cea669f6d740f29ca248d2e8837a4b4f86fbe75a",
       "abed11421f47bbf3f654af618e0c6a8a": "a368b40751dd017163c9c1a615d6f3506b7dcbdf",
       "83cb1d1c76e568b916dc2e7c0bf669f6": "cc4898ee8cae4669fc19e184c5b560c770e731b3",
@@ -52437,6 +52603,7 @@
       "5e4442498b8c6a0f815b4030b2a52acb": "20f9a6a9838e3189774ea7ac6b8e62d6720dc683",
       "993adab2fd44277d5fd7aa5971e7099c": "57403a286c4d251384442a507d285b2dc5ce330e",
       "93c6d6379eb0290ce93854a6888ec3f4": "7bafa28dfd9b3be17430d467d8787d8204437ba0",
+      "9eb64ec7aa31dc2f5b55541415ecdf8b": "659a025dfa39a8caada7dac6e69b4d7c88217b3f",
       "a17e0e0150155400d8cced329563d9c8": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
       "89664136c503a30894d5c713be5bfe90": "8a571cfc431b5fe794f0262f0e55f72927ab27b4",
       "eb57cfe7e1c2a4ddd6bad967bba0384a": "c015f49d676aa2cfa677b8f9018e04769ec1caa0",
@@ -52695,6 +52862,7 @@
       "5dea62f70439682a6cee16ba3823d11e": "6eddec30056cde7c664a0cf508dcad29353a12bb",
       "de6da198a7359d1200c3eeb6df9c7eda": "40ecf6138c99a0aba775ef93240b295025a45500",
       "44552702b05697a14ccbe2ca22ee7139": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "05fe32f5dc8c78acbcd84d36ee7fdc5b": "093f8698b54b78dcb701de2043f82639de51d63b",
       "55caa30ec34ef081ded15615db54eafe": "6bf1ae9fb01915966b715836253592cbf588b406",
       "a062688b08c70a42ff2a0acff6c46d93": "08325554623568bb9babadc10213bfc0b1151766",
       "ad0542e2956a8dddf52357f28a8a7d9c": "9d6c9874c1d6a0c57a1345f211154fe1e494b55a",
@@ -52793,6 +52961,8 @@
       "331d6806a56d7370515d94a66616eca6": "78632d0fe9dd77bf9a2264f192fae6f0af03a71c",
       "c96bb62586bf81dd6237c417f8cf3bb8": "18985a2079c7570c13cf39e0d001eef87538cd15",
       "8b5f60b56c3da8365b973dba570c53a5": "3ae832c9800fcaa007eccfc48f24242967c111f8",
+      "59dcf059d3328fb67be7e51f8aa33418": "ed3a4cb264fff283209f10ae58c96c6090fed187",
+      "f2c7b12fe85496ec88a0391b514d6e3b": "cc72dfcc964577cc29112ef368c28f55277c237c",
       "1d33d70f35b33873fc75941d95ad1ffa": "567c5b5054552a2771eafa7966844a146f0dde96",
       "b81dc552536796d234c08587bac7be43": "f2fa8d8e940f1d91a1b1624013df5dca0bb1ee44",
       "79ea46603d716578d5f2b52eb4c33ca2": "f34e61c3cf711fb59ff4f1d4c0d2863dab0ab5d1",
@@ -53066,7 +53236,8 @@
         "1365b42d35d80feac9050caea8d6bd9d374fd1d2"
       ],
       "maclc3.zip": [
-        "f454095619834dbfb9e8de0111bb3ee5fc21622d"
+        "f454095619834dbfb9e8de0111bb3ee5fc21622d",
+        "add40c002084e8e25768671877b2aa603aaf5cb1"
       ],
       "macos3.img": [
         "0546dd0fa34f4e6d913e4254ddb5350e1e42800c"
@@ -53179,6 +53350,9 @@
       "3dobios.zip": [
         "de463b0577dfd1027bf7de523ff67a0fff861cdb",
         "12516c82f52a8abb252fba754f95b7952c295e6f"
+      ],
+      "Firmware.19.0.0.zip": [
+        "ac4b78d53c7a97da2451ca35498395d8dd1e3024"
       ],
       "acpsx.zip": [
         "5426d52e17e0ff9195fabbb42f704342e556d08e"
@@ -54133,6 +54307,9 @@
       "32x.xml": [
         "ae5df95815e83f646815798cb4bb1b454fde4dbd"
       ],
+      "3do.xml": [
+        "b72be08cc1949cdc29e83454a0862f1b62b47578"
+      ],
       "3do_m2.xml": [
         "76c4888e7892adb8f6761ffe1f41a58bf13f7e91"
       ],
@@ -54889,6 +55066,9 @@
       "gcslottv.xml": [
         "8aeb0ba09e56a1a2f6ccdeae226161ddf5d01fe8"
       ],
+      "generic_cdrom.xml": [
+        "0359a21a9ba8a486cdcdccaefb17777e039debad"
+      ],
       "generic_flop_525.xml": [
         "b89189bfd7e94e6e6d0090bd240b66f0cb3734b8"
       ],
@@ -55134,6 +55314,9 @@
       ],
       "k28m2.xml": [
         "ddf6aa7fed0347300d1c275a60942d83fc0a68d1"
+      ],
+      "k28o.xml": [
+        "c8e1b348aee1ef0b600b6951f88182a9796a8aef"
       ],
       "kaypro.xml": [
         "cb2a8dfe670854fc5b2280539263cb34ee87bf1d"
@@ -57221,8 +57404,23 @@
       "DISK.ROM": [
         "032cb1c1c75b9a191fa1230978971698d9d2a17f"
       ],
+      "colecodb.xml": [
+        "7a812f277cf2440421044a7acde1c47abd01951e"
+      ],
+      "msxcaswavdb.xml": [
+        "a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d"
+      ],
       "msxromdb.xml": [
         "573aa830b7bef4452808b40df883469907db2fed"
+      ],
+      "msxsysromdb.xml": [
+        "4053159367d4c65c559cd500fdd05c9717dbfe06"
+      ],
+      "segadb.xml": [
+        "ddc2b4877813256de3439d54fc5f474bd64c3996"
+      ],
+      "svidb.xml": [
+        "d83168b0b5abf8df0ceb8a147b6708823957a71a"
       ],
       "FMPAC.ROM": [
         "9d789166e3caf28e4742fe933d962e99618c633d"
@@ -58185,6 +58383,9 @@
       "wc24recv.ctl": [
         "18cc21df587d9cd9302f38a00ed9a23d619f5673"
       ],
+      "dsp_coef.bin": [
+        "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2"
+      ],
       "codehandler.bin": [
         "e6c0050b3c67ee26198488fbbe4a5d019c15b628"
       ],
@@ -58289,6 +58490,9 @@
       ],
       "dsi_firmware.bin": [
         "d2a5af338f09c5cbdd5d7628db5b9c075c69b616"
+      ],
+      "dsi_nand.bin": [
+        "b48f44194fe918aaaec5298861479512b581d661"
       ],
       "dsi_sd_card.bin": [
         "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3"
@@ -58458,6 +58662,9 @@
       ],
       "telmon24.rom": [
         "86fc8dc0932f983efa199e31ae05a4424772f959"
+      ],
+      "data.zip": [
+        "ecfc092fe6371dbf38e238a8ba5f90785b5db52d"
       ],
       "bootloader-dbvz.rom": [
         "cea669f6d740f29ca248d2e8837a4b4f86fbe75a"
@@ -66068,6 +66275,9 @@
       "prince_translation.dat": [
         "57403a286c4d251384442a507d285b2dc5ce330e"
       ],
+      "fonts-imgui.dat": [
+        "659a025dfa39a8caada7dac6e69b4d7c88217b3f"
+      ],
       "scummvm.zip": [
         "718c1a00d38e0810a1ad0ffde79f73447f846f01"
       ],
@@ -66774,6 +66984,9 @@
       "rom1.bin": [
         "47d2ec4b342649e4c391043ab915d4435f9d180d"
       ],
+      "PS3UPDAT.PUP": [
+        "093f8698b54b78dcb701de2043f82639de51d63b"
+      ],
       "Roboto-Condensed.ttf": [
         "6bf1ae9fb01915966b715836253592cbf588b406"
       ],
@@ -67063,7 +67276,11 @@
         "18985a2079c7570c13cf39e0d001eef87538cd15"
       ],
       "PSP2UPDAT.PUP": [
-        "3ae832c9800fcaa007eccfc48f24242967c111f8"
+        "3ae832c9800fcaa007eccfc48f24242967c111f8",
+        "ed3a4cb264fff283209f10ae58c96c6090fed187"
+      ],
+      "PSVUPDAT.PUP": [
+        "cc72dfcc964577cc29112ef368c28f55277c237c"
       ],
       "coco.zip": [
         "567c5b5054552a2771eafa7966844a146f0dde96",
@@ -67818,8 +68035,75 @@
       "ep64.zip": [
         "6033a0535136c40c47137e4d1cd9273c06d5fdff"
       ],
+      "apple2gs1.rom": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "APPLE2GS.ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "apple2gs3.rom": [
+        "bc32bc0e8902946663998f56aea52be597d9e361"
+      ],
+      "n88knj1.rom": [
+        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
+      ],
+      "quasi88/n88knj1.rom": [
+        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
+      ],
       "gexpress.pce": [
         "014881a959e045e00f4db8f52955200865d40280"
+      ],
+      "FMPAC.rom": [
+        "9d789166e3caf28e4742fe933d962e99618c633d"
+      ],
+      "fmpac.rom": [
+        "9d789166e3caf28e4742fe933d962e99618c633d"
+      ],
+      "MSX.rom": [
+        "e998f0c441f4f1800ef44e42cd1659150206cf79",
+        "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498"
+      ],
+      "MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "nms8245_basic-bios2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "MSX2P.rom": [
+        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
+      ],
+      "MSXR2.ROM": [
+        "04990aa1c3a3fc7294ec884b81deaa89832df614"
+      ],
+      "128p-1.rom": [
+        "80080644289ed93d71a1103992a154cc9802b2fa"
+      ],
+      "IPL.n64": [
+        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
+      ],
+      "IPL_JAP.n64": [
+        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
+      ],
+      "d64rom2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64tano2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64_2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64tano.rom": [
+        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
+      ],
+      "d64_1.rom": [
+        "f119506eaa3b4b70b9aa0dd83761e8cbe043d042"
+      ],
+      "fs-5500_disk.rom": [
+        "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
       ],
       "pcfxbios.bin": [
         "1a77fd83e337f906aecab27a1604db064cf10074"
@@ -67839,9 +68123,6 @@
       ],
       "bios_U.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
-      "128p-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
       ],
       "plus3e-3.rom": [
         "65f031caa8148a5493afe42c41f4929deab26b4e"
@@ -67872,70 +68153,6 @@
       ],
       "ps2-0200e-20040614.bin": [
         "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "apple2gs1.rom": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "APPLE2GS.ROM": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "apple2gs3.rom": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "n88knj1.rom": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "quasi88/n88knj1.rom": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "FMPAC.rom": [
-        "9d789166e3caf28e4742fe933d962e99618c633d"
-      ],
-      "fmpac.rom": [
-        "9d789166e3caf28e4742fe933d962e99618c633d"
-      ],
-      "MSX.rom": [
-        "e998f0c441f4f1800ef44e42cd1659150206cf79",
-        "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498"
-      ],
-      "MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "nms8245_basic-bios2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "MSX2P.rom": [
-        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
-      ],
-      "MSXR2.ROM": [
-        "04990aa1c3a3fc7294ec884b81deaa89832df614"
-      ],
-      "IPL.n64": [
-        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "IPL_JAP.n64": [
-        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "d64rom2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64tano2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64_2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64tano.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "d64_1.rom": [
-        "f119506eaa3b4b70b9aa0dd83761e8cbe043d042"
-      ],
-      "fs-5500_disk.rom": [
-        "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
       ],
       "dmg0_rom.bin": [
         "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
@@ -68096,6 +68313,7 @@
       "ad37f2de": "eb2a867578a05bbf8741e9fe7204301062df0cb8",
       "b0e03aa6": "0b6519209766ed883e3fca4c61bf866804c89004",
       "b28f7112": "de463b0577dfd1027bf7de523ff67a0fff861cdb",
+      "77228c84": "ac4b78d53c7a97da2451ca35498395d8dd1e3024",
       "9c9601ca": "5426d52e17e0ff9195fabbb42f704342e556d08e",
       "f83ec60f": "f2a730530f4989ca0e8860aa4e455b6a5fe69e1d",
       "da9beacc": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
@@ -68157,6 +68375,7 @@
       "ce2a2c77": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
       "7325a518": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
       "065d69d0": "65a2f2cee74c316d5f40b68deda66787609df353",
+      "81f21918": "add40c002084e8e25768671877b2aa603aaf5cb1",
       "946c6bb8": "4e0202f8430cb4842184df7b5418e32620156c7b",
       "bfce92a3": "697551fcf9557ae33e31096b118a0c6769700a2e",
       "7c57bff1": "c9ee16e26e03496195a7bff151efbdd89da01204",
@@ -68427,6 +68646,7 @@
       "7e3cd247": "f216c17e3191b1c8acb36568b0a2f983b5b7fea1",
       "6cb9e876": "d0a347bbf8d3d6996a025054fe84f16719cc871f",
       "c5832dc2": "ae5df95815e83f646815798cb4bb1b454fde4dbd",
+      "2928ff45": "b72be08cc1949cdc29e83454a0862f1b62b47578",
       "887fce47": "76c4888e7892adb8f6761ffe1f41a58bf13f7e91",
       "7f35b7a4": "18f13bd6a6360b737a2693175df329a98f0a52d7",
       "f118faf5": "c23a9a31c88c6fcbc1b63258f71fd0430cac78ca",
@@ -68678,6 +68898,7 @@
       "decf78e3": "524904de8a57267849d3ec5e0562468a787d0ef0",
       "ad3db1b8": "69d61900e0cd88000a07865f05c88ddea9711f0c",
       "baa3ce82": "8aeb0ba09e56a1a2f6ccdeae226161ddf5d01fe8",
+      "43a7d2b8": "0359a21a9ba8a486cdcdccaefb17777e039debad",
       "e96bdc03": "b89189bfd7e94e6e6d0090bd240b66f0cb3734b8",
       "a9ccd529": "3cc96d84b1a1e52ff2824d89fcfbb1fbab3a80bb",
       "1785bef3": "3f6e3bdb863bdc4c44551ba6b6eb78fb7a20ae20",
@@ -68760,6 +68981,7 @@
       "0a051810": "cd8d912fa5e3955ffea6131d0af9c4135dee0de0",
       "e348f35b": "d61f79a3b7714d7c0f22c8728d120df71856cd86",
       "99083ef6": "ddf6aa7fed0347300d1c275a60942d83fc0a68d1",
+      "fe9dcd57": "c8e1b348aee1ef0b600b6951f88182a9796a8aef",
       "47a222f8": "cb2a8dfe670854fc5b2280539263cb34ee87bf1d",
       "47c8d6b0": "c779d453275893aa448a2f24d8b7b2314a471f85",
       "79fc98d7": "066300fdc114f51411804f4623aa5c7311850e84",
@@ -69519,7 +69741,12 @@
       "82312751": "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81",
       "73af9bc3": "000ac11b702a4c42e40f135df12fa5f2f13e20a1",
       "721f61df": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
+      "bfcb1ad5": "7a812f277cf2440421044a7acde1c47abd01951e",
+      "ae40504a": "a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d",
       "ed4c6720": "573aa830b7bef4452808b40df883469907db2fed",
+      "c89859f5": "4053159367d4c65c559cd500fdd05c9717dbfe06",
+      "b607ef94": "ddc2b4877813256de3439d54fc5f474bd64c3996",
+      "db3dadd4": "d83168b0b5abf8df0ceb8a147b6708823957a71a",
       "0e84505d": "9d789166e3caf28e4742fe933d962e99618c633d",
       "5d6c4d27": "2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c",
       "47b843ca": "977fed1135b6cc73e765b47f51570fc00acd5b79",
@@ -69979,6 +70206,7 @@
       "351f4ad3": "350d25662d422d862a9241ee315e77d038ae9e64",
       "4b177fa3": "324d143ab76f0b208c3e867d30c17574fd676ee6",
       "38dfa295": "18cc21df587d9cd9302f38a00ed9a23d619f5673",
+      "8209b868": "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2",
       "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "c047465a": "27872c201e87b06a19bf85d36c796ef383f8d52d",
       "54c7d10e": "ae7233cae8f94749796e0b740d6021e3b00a8926",
@@ -70014,6 +70242,7 @@
       "7389b815": "f1ad917e0affaeb8d2114c7ecd02b9f938c3cbd9",
       "62efc03d": "1cf9e67c2c703bb9961bbcdd39cd2c7e319a803b",
       "df558b58": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "416bf51a": "b48f44194fe918aaaec5298861479512b581d661",
       "a738ea1c": "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3",
       "6f6d289b": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
       "945f9dc9": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
@@ -70071,6 +70300,7 @@
       "94358dc6": "35f92a0477a88f5cf564971125047ffcfa02ec10",
       "29e86dbc": "d8ce5b1405b6428969493efeb6f3aa2027c41bdc",
       "aa727c5d": "86fc8dc0932f983efa199e31ae05a4424772f959",
+      "74b76447": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
       "a975efe4": "cea669f6d740f29ca248d2e8837a4b4f86fbe75a",
       "9261a5aa": "a368b40751dd017163c9c1a615d6f3506b7dcbdf",
       "6481a088": "cc4898ee8cae4669fc19e184c5b560c770e731b3",
@@ -72853,6 +73083,7 @@
       "cdd29c08": "20f9a6a9838e3189774ea7ac6b8e62d6720dc683",
       "7f92430d": "57403a286c4d251384442a507d285b2dc5ce330e",
       "d713b1ab": "7bafa28dfd9b3be17430d467d8787d8204437ba0",
+      "ef97328a": "659a025dfa39a8caada7dac6e69b4d7c88217b3f",
       "a93f1c4b": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
       "9643ad1a": "8a571cfc431b5fe794f0262f0e55f72927ab27b4",
       "e43dc0a3": "c015f49d676aa2cfa677b8f9018e04769ec1caa0",
@@ -73111,6 +73342,7 @@
       "0b805686": "6eddec30056cde7c664a0cf508dcad29353a12bb",
       "a3e573a0": "40ecf6138c99a0aba775ef93240b295025a45500",
       "2c3bcd32": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "24bdb2db": "093f8698b54b78dcb701de2043f82639de51d63b",
       "72d2fd97": "6bf1ae9fb01915966b715836253592cbf588b406",
       "c48bf84b": "08325554623568bb9babadc10213bfc0b1151766",
       "2b629346": "9d6c9874c1d6a0c57a1345f211154fe1e494b55a",
@@ -73209,6 +73441,8 @@
       "616f5e40": "78632d0fe9dd77bf9a2264f192fae6f0af03a71c",
       "92ddefae": "18985a2079c7570c13cf39e0d001eef87538cd15",
       "c0c3a1fe": "3ae832c9800fcaa007eccfc48f24242967c111f8",
+      "082ecf86": "ed3a4cb264fff283209f10ae58c96c6090fed187",
+      "39075d41": "cc72dfcc964577cc29112ef368c28f55277c237c",
       "31c53421": "567c5b5054552a2771eafa7966844a146f0dde96",
       "d13aefe2": "f2fa8d8e940f1d91a1b1624013df5dca0bb1ee44",
       "c3854ddf": "f34e61c3cf711fb59ff4f1d4c0d2863dab0ab5d1",
