@@ -1,0 +1,56 @@
+emulator: PD777
+type: libretro
+source: "https://github.com/W88DodPECuThLOl/PD777"
+cores:
+  - pd777
+systems:
+  - epochcv
+
+notes: |
+  PD777 is an Epoch Cassette Vision emulator (NEC uPD777C CPU) with a libretro
+  interface, by W88DodPECuThLOl.
+
+  No BIOS or firmware files required. The .info file declares firmware_count = 0.
+
+  Game loading in source/libretro/libretro.cpp:retro_load_game() (line 386-474).
+  The core loads a code ROM file (.bin777) directly from the content path, then
+  attempts to load a pattern ROM file (.ptn777) by replacing the extension.
+
+  If neither file is found, the core falls back to hardcoded ROM data compiled
+  from source/core/rom.cpp (Battle Vader program + pattern ROM dumps from
+  oguchi-rd.com).
+
+  The code ROM supports three formats:
+    - Raw order: exactly 0xF00 bytes, program words in sequential address order
+    - Raw address: address/data pairs (compiled-in rawRom[] array)
+    - Formatted: header starting with "_CassetteVision_000" magic, version 0 or 1,
+      includes key mapping, title, and code section at offset 0x100
+
+  The pattern ROM supports three formats:
+    - Formatted: 0x340 bytes, header "*CassetteVision*0000", 7x7 + 8x7 CG patterns
+    - Raw bitstream: 0x4D0 bytes, bit-packed 7x7 and 8x7 character patterns
+    - Built-in: fallback to patternRom[] / patternRom8[] arrays in rom.cpp
+
+  The system directory path is retrieved via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+  but is not used for any file loading.
+
+  Game identification uses a checksum over the loaded ROM to detect known cassettes
+  (Battle Vader, Galaxian, etc.) and apply per-game key mappings and bent character
+  tables. 11 cassette IDs are recognized (1-9, 11, 12).
+
+  Supported extensions: zip, bin777, ptn777.
+
+files: []
+
+platform_details:
+  cpu: "NEC uPD777C (uPD774 variant)"
+  system: "Epoch Cassette Vision (1981)"
+  region: "Japan"
+  notes: |
+    The Cassette Vision uses a NEC uPD777C (or uPD774 variant) as its main
+    processor. Program ROM and pattern/character ROM are per-cartridge, not
+    system-level. There is no system BIOS - the CPU executes directly from
+    the cartridge ROM.
+
+    The emulator supports analog paddles (4 paddles mapped to 2 analog sticks),
+    lever switches, push buttons, course switch, and a lightgun peripheral.

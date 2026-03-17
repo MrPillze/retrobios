@@ -1,0 +1,49 @@
+emulator: "FreeIntv (Touchscreen Overlay)"
+type: libretro
+source: "https://github.com/libretro/FreeIntv"
+cores:
+  - freeintv
+systems:
+  - intellivision
+
+notes: |
+  Same repo and core as FreeIntv. The touchscreen overlay feature is a
+  compile-time option within the same codebase, not a separate core. The
+  library_name is "freeintv" (src/libretro.c:1413), identical to the
+  non-overlay build.
+
+  The overlay system adds an onscreen interactive keypad for touchscreen
+  and mouse input. It is toggled via core option freeintv_multiscreen_overlay
+  (src/libretro_core_options.h:82-85). When enabled, the display splits into
+  game + keypad side-by-side (multi-screen mode).
+
+  Visual assets (controller base frame, banner, default keypad image) are
+  compiled into the binary from C headers: banner.h, keypad_frame_graphic.h,
+  default_keypad_image.h. These are NOT files the user needs to provide.
+
+  ROM-specific overlays are optional 370x600 PNG files placed by the user in
+  system/freeintv_overlays/<rom_name>.png. These are cosmetic per-game keypad
+  images and are not BIOS files.
+
+  BIOS loading is unchanged from the base FreeIntv core. retro_load_game()
+  (src/libretro.c:1169-1174) loads exec.bin and grom.bin from the system
+  directory with no variation based on overlay mode.
+
+bios_identical_to: freeintv
+
+files:
+  - name: "exec.bin"
+    system: intellivision
+    required: true
+    size: 8192
+    md5: 62e761035cb657903761800f4437b8af
+    note: "Executive ROM. Same file as base FreeIntv."
+    source_ref: "src/intv.c:47-71, src/libretro.c:1169"
+
+  - name: "grom.bin"
+    system: intellivision
+    required: true
+    size: 2048
+    md5: 0cd5946c6473e42e8e4c2137785e427f
+    note: "Graphics ROM. Same file as base FreeIntv."
+    source_ref: "src/intv.c:73-98, src/libretro.c:1173"

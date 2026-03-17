@@ -1,0 +1,61 @@
+emulator: ClownMDEmu
+type: libretro
+source: "https://github.com/libretro/clownmdemu-libretro"
+cores:
+  - clownmdemu
+systems:
+  - sega-megadrive
+  - sega-megacd
+
+notes: |
+  ClownMDEmu is a Sega Mega Drive/Genesis and Mega CD emulator by Clownacy.
+  Supports cartridge (bin/md/gen) and CD (cue/iso/chd) formats, plus a
+  subsystem for cartridge+CD combo (Mega CD Mode 1).
+
+  The core has NO external BIOS file requirements. firmware_count = 0 in the
+  libretro .info file confirms this.
+
+  Mega CD boot ROM: a custom open-source replacement boot ROM is compiled
+  directly into the binary as a 16384-entry uint16 array
+  (mega-cd-boot-rom.c included into bus-main-m68k.c:19-21). Source at
+  https://github.com/Clownacy/clownmdemu-mcd-boot. No external CD BIOS
+  files (bios_CD_E.bin, bios_CD_U.bin, bios_CD_J.bin) are needed or loaded.
+
+  TMSS (Trademark Security System): not implemented at all. No TMSS ROM is
+  loaded or checked. The core boots games directly without the "Produced by
+  or under license from Sega" screen.
+
+  The system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY) is only used
+  as a fallback path for Backup RAM (BuRAM) save files, not for BIOS loading.
+
+  CD add-on can be enabled for cartridge games via the "clownmdemu_cd_addon"
+  core option to allow CD music features, but this uses the built-in boot
+  ROM, not an external BIOS.
+
+  The core implements its own Mega CD BIOS call handler (MegaCDBIOSCall in
+  bus-sub-m68k.c) via HLE (high-level emulation) of Sub-CPU BIOS functions
+  including CDBIOS, CDCTRN, FDRSET, FDRCHG, DRVINIT, CDCSTOP, CDCSTAT,
+  CDCREAD, and others.
+
+files: []
+
+analysis:
+  tmss:
+    supported: false
+    notes: |
+      TMSS is not implemented. No ROM loaded, no "Produced by Sega" check.
+      No references to TMSS exist anywhere in the codebase.
+
+  megacd_bios:
+    external_required: false
+    builtin_boot_rom: true
+    boot_rom_source: "https://github.com/Clownacy/clownmdemu-mcd-boot"
+    boot_rom_location: "source/mega-cd-boot-rom.c (16384 uint16 entries = 32 KB)"
+    bus_mapping: "0x400000-0x41FFFF (address & 0x20000 == 0)"
+    source_ref: "bus-main-m68k.c:19-21, bus-main-m68k.c:484-494"
+    bios_hle: true
+    hle_source_ref: "bus-sub-m68k.c:64 (MegaCDBIOSCall)"
+    notes: |
+      The Mega CD boot ROM is an open-source replacement compiled into the
+      binary. Sub-CPU BIOS calls are handled via HLE. No external Sega CD
+      BIOS files (bios_CD_E/U/J.bin) are needed.

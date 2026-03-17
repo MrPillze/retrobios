@@ -1,0 +1,91 @@
+emulator: Mesen
+type: libretro
+source: "https://github.com/libretro/Mesen"
+systems: [nintendo-nes, nintendo-fds]
+
+notes: |
+  Mesen is a cycle-accurate NES/Famicom emulator (the original, NES-only
+  version -- not Mesen2 which adds SNES/GB/PCE). NES cartridge games
+  need no BIOS. Famicom Disk System games require the FDS BIOS ROM.
+
+  The core tries two filenames for the FDS BIOS: FdsBios.bin first, then
+  disksys.rom as fallback. Both are loaded from the system directory root
+  (GetHomeFolder = RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY). If neither is
+  found or the file is not exactly 8192 bytes, FDS games fail to load.
+
+  The Study Box is an obscure Famicom tape-based learning peripheral
+  (mapper 186). Its BIOS (StudyBox.bin, 256 KB) is loaded the same way.
+  Only needed for Study Box tape dumps (.stbx format).
+
+  MesenDB.txt (game database for CRC-based ROM identification) is baked
+  into the core binary as MesenDB.inc. An external file in the system
+  directory overrides the built-in copy but is never required.
+
+  MesenPalette.pal is an optional custom palette file, loaded only when
+  the mesen_palette core option is set to Custom. Accepts 192 bytes
+  (64 colors) or 1536 bytes (512 colors with emphasis combos). Multiple
+  palettes exist so no canonical hash.
+
+  HdPacks go in system/HdPacks/<rom_name>/ -- not BIOS files, ignored
+  here.
+
+  File path construction: Libretro/libretro.cpp retro_init() sets
+  FolderUtilities::SetHomeFolder(systemFolder). All BIOS lookups use
+  FolderUtilities::CombinePath(GetHomeFolder(), filename) -- flat,
+  no subdirectories.
+
+files:
+  # --- Famicom Disk System BIOS (required for FDS games) ---
+  - name: "disksys.rom"
+    system: nintendo-fds
+    description: "FDS BIOS ROM"
+    required: true
+    size: 8192
+    md5: "ca30b50f880eb660a320674ed365ef7a"
+    sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
+    source_ref: "Core/FdsLoader.cpp:45-60 (LoadBios), Core/FdsLoader.cpp:140-146 (LoadRom validates size == 0x2000)"
+    notes: "Mapped at 0xE000-0xFFFF as PRG ROM bank 0. Core tries FdsBios.bin first, falls back to disksys.rom. CRC32 0x5E607DCF (standard Famicom). Size must be exactly 8192 bytes or BiosMissing is set."
+
+  # --- FDS BIOS alternate filename ---
+  - name: "FdsBios.bin"
+    system: nintendo-fds
+    description: "FDS BIOS ROM (Mesen-preferred filename)"
+    required: false
+    size: 8192
+    md5: "ca30b50f880eb660a320674ed365ef7a"
+    sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
+    source_ref: "Core/FdsLoader.cpp:50 (primary lookup path)"
+    notes: "Same file as disksys.rom. Mesen checks this name first. Only one of the two is needed."
+
+  # --- Study Box BIOS (required for Study Box tape content) ---
+  - name: "StudyBox.bin"
+    system: nintendo-nes
+    description: "Famicom Study Box BIOS ROM"
+    required: false
+    size: 262144
+    md5: ~
+    sha1: ~
+    source_ref: "Core/StudyBoxLoader.cpp:125-133 (LoadBios), Core/StudyBoxLoader.cpp:146-157 (LoadRom validates size == 0x40000)"
+    notes: "256 KB BIOS for the Study Box tape peripheral (mapper 186, iNES mapper 65533). Only needed for .stbx tape dumps. Extremely obscure hardware, no widely-known hash."
+
+  # --- Game database (optional, baked-in fallback) ---
+  - name: "MesenDB.txt"
+    system: nintendo-nes
+    description: "Mesen game database for CRC-based ROM identification"
+    required: false
+    size: ~
+    md5: ~
+    sha1: ~
+    source_ref: "Core/GameDatabase.cpp:74-81 (InitDatabase), Libretro/MesenDB.inc (baked-in copy)"
+    notes: "CSV game database keyed by CRC32. Used for mapper, mirroring, input type, and VS System detection. A complete copy is compiled into the binary, so this file is optional. Placing a newer version in the system directory overrides the built-in data."
+
+  # --- Custom palette (optional, core option mesen_palette = Custom) ---
+  - name: "MesenPalette.pal"
+    system: nintendo-nes
+    description: "External NES color palette"
+    required: false
+    size: 192
+    md5: ~
+    sha1: ~
+    source_ref: "Libretro/libretro.cpp:301-323 (load_custom_palette)"
+    notes: "Loaded when mesen_palette core option is Custom. Accepts 192 bytes (64 RGB triplets) or 1536 bytes (512 entries for emphasis combos). Falls back to built-in default palette. Multiple valid palettes exist so no canonical hash."

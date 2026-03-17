@@ -1,0 +1,59 @@
+emulator: bnes
+type: libretro
+source: "https://github.com/libretro/bnes-libretro"
+cores:
+  - bnes
+systems:
+  - nes
+
+notes: |
+  bnes is a NES emulator based on byuu's bNES/higan v083 NES module, ported
+  to libretro by Ryphecha. It is a lightweight, accuracy-focused NES core.
+
+  The core loads cartridge data entirely through retro_load_game with
+  need_fullpath=false (libretro.cpp:129). ROM data is passed as a memory
+  buffer and parsed by Cartridge::load (cartridge.cpp:18-31), which detects
+  iNES headers (16-byte offset) and delegates to Board::load for mapper setup.
+
+  The PPU generates its palette from a hardcoded color table in libretro.cpp
+  (lines 20-37) with emphasis factor tables. No external palette file is loaded.
+
+  System::init (system.cpp:62-66) only sets up the interface pointer and
+  default input devices. No system ROM, BIOS, or firmware is loaded at any
+  stage of initialization or cartridge loading.
+
+  The core does not call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and has no
+  file I/O for BIOS or firmware. FDS (Famicom Disk System) is not supported,
+  so disksys.rom is not needed.
+
+  No external BIOS or firmware files are needed.
+
+files: []
+
+analysis:
+  bios_search:
+    retro_load_game: "libretro.cpp:181-211 - loads cartridge data only, no BIOS"
+    cartridge_load: "cartridge.cpp:18-31 - parses iNES header + ROM data"
+    system_init: "system.cpp:62-66 - sets interface pointer, no ROM loading"
+    system_power: "system.cpp:43-50 - powers subsystems, no file I/O"
+    interface_init: "interface.cpp:17-20 - stores derived pointer, calls system.init"
+  supported_mappers:
+    - NROM
+    - SxROM (MMC1)
+    - UxROM
+    - CNROM
+    - TxROM (MMC3)
+    - ExROM (MMC5)
+    - AxROM
+    - BnROM
+    - GxROM
+    - PxROM (MMC4)
+    - FxROM (MMC4)
+    - Bandai FCG
+    - Konami VRC4
+    - Konami VRC6
+    - Konami VRC7
+    - Sunsoft 5B
+  fds_support: false
+  filesystem_access: false
+  system_directory_used: false

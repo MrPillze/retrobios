@@ -1,0 +1,43 @@
+emulator: "Game & Watch"
+type: libretro
+source: "https://github.com/libretro/gw-libretro"
+cores:
+  - gw
+systems:
+  - handheld-electronic
+
+notes: |
+  gw-libretro runs Game & Watch simulators converted from MADrigal's Pascal
+  source code via pas2lua. Each game is a self-contained .mgw archive (bzip2
+  compressed tar v7) containing Lua scripts, sprites, and sound data.
+
+  retro_get_system_info (libretro.c:187-194) sets valid_extensions to "mgw",
+  need_fullpath to false, and block_extract to false. The core reads content
+  entirely from the retro_game_info buffer passed by the frontend.
+
+  retro_load_game (libretro.c:256-310) passes the content buffer to
+  gwrom_init() which decompresses and parses the tar archive in memory.
+  gwlua_create() then initializes the Lua VM from the archive entries.
+
+  The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, never opens
+  files from the filesystem, and has no firmware or BIOS dependencies.
+  All game data is bundled in the .mgw content files available from
+  libretro's buildbot (bot.libretro.com/assets/cores/HandheldElectronicGame/).
+
+  No external BIOS or firmware files are needed.
+
+files: []
+
+analysis:
+  content_format:
+    extension: ".mgw"
+    archive_type: "tar v7 + bzip2"
+    decompression: "gwrom.c using bundled bzip2 library"
+    source_ref: "gwrom/gwrom.h:21-27"
+  game_engine:
+    language: "Lua (bundled lua 5.3)"
+    runtime: "gwlua (gwlua/)"
+    rendering: "retroluxury (retroluxury/)"
+    resolution: "128x128 base, variable via gwlua_set_fb/gwlua_zoom"
+  filesystem_access: false
+  system_directory_used: false
