@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/Abdess/retroarch_system/schemas/platform.schema.json",
+  "$id": "https://github.com/Abdess/retrobios/schemas/platform.schema.json",
   "title": "Platform Configuration",
   "description": "Schema for retrogaming platform BIOS configuration files",
   "type": "object",

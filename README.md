@@ -30,8 +30,8 @@ python scripts/download.py --verify retroarch ~/RetroArch/system/
 Some platforms are archived and not included in automated releases. You can generate any pack locally - including archived ones:
 
 ```bash
-git clone https://github.com/Abdess/retroarch_system.git
-cd retroarch_system
+git clone https://github.com/Abdess/retrobios.git
+cd retrobios
 pip install pyyaml
 
 # Generate for a specific platform

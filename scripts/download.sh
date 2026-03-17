@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-REPO="Abdess/retroarch_system"
+REPO="Abdess/retrobios"
 API="https://api.github.com/repos/${REPO}/releases/latest"
 
 usage() {
