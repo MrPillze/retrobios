@@ -1,11 +1,14 @@
 
 desktop.ini
 .DS_Store
+Thumbs.db
 __pycache__/
 *.pyc
 .cache/
 dist/
 *.tmp
+*.log
+node_modules/
 
 # Large files stored as GitHub Release assets (> 50MB)
 bios/Arcade/Arcade/Firmware.19.0.0.zip
