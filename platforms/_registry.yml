@@ -43,6 +43,18 @@ platforms:
     hash_type: md5
     schedule: weekly
 
+  emudeck:
+    config: emudeck.yml
+    status: active
+    scraper: emudeck
+    source_url: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
+    source_wiki: "https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables/"
+    source_format: bash_script+csv
+    hash_type: md5
+    schedule: weekly
+    # dragoonDorise/EmuDeck = official repo (creator's account, 3.4k stars)
+    # EmuDeck/emudeck.github.io = official wiki (org account)
+
   lakka:
     config: lakka.yml
     status: active

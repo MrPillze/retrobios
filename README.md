@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5320** files | **4587.5 MB** | Last updated: 2026-03-17T12:12:49Z
+> **5320** files | **4587.5 MB** | Last updated: 2026-03-17T12:24:18Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -46,6 +46,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Platform | Coverage | Status | Verification | Details |
 |----------|----------|--------|--------------|---------|
 | Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 589 verified, 91 untested |
+| EmuDeck | 126/165 (76.4%) | ![EmuDeck 76%](https://img.shields.io/badge/EmuDeck-76%25-yellow) 🟡 | md5 | 126 verified, 39 missing |
 | Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
 | Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 336 verified, 10 untested |
 | RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
@@ -5861,7 +5862,7 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `2c66f5911e5b42b8ebe113403548eee7`
   - CRC32: `3aa93ef3`
   - Also known as: `bioscv.rom`, `boot.rom`, `coleco.rom`, `colecovision.rom`
-  - Platform names: Batocera: `adam.zip`, Batocera: `colecovision.rom`, Lakka: `colecovision.rom`, Recalbox: `coleco.rom`, Recalbox: `boot.rom`, RetroArch: `colecovision.rom`, RetroBat: `colecovision.rom`, RetroBat: `coleco.rom`, RetroPie: `colecovision.rom`
+  - Platform names: Batocera: `adam.zip`, Batocera: `colecovision.rom`, EmuDeck: `colecovision.rom`, Lakka: `colecovision.rom`, Recalbox: `coleco.rom`, Recalbox: `boot.rom`, RetroArch: `colecovision.rom`, RetroBat: `colecovision.rom`, RetroBat: `coleco.rom`, RetroPie: `colecovision.rom`
 
 ### Commodore/Amiga
 
@@ -8440,7 +8441,7 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `db92574caab77a7ec99d4605fd6f2450`
   - CRC32: `ad1b7f16`
   - Also known as: `IPL.bin`
-  - Platform names: Batocera: `IPL.bin`
+  - Platform names: Batocera: `IPL.bin`, EmuDeck: `IPL.bin`
 - **[grayscale.glsl](bios/Nintendo/GameCube/Sys/Shaders/Anaglyph/grayscale.glsl)** (251 bytes)
   - SHA1: `efb0a4dec70d7c86f0771184c31e231335453a08`
   - MD5: `f41d6f54225edf96dc6870d800530eb2`
@@ -8680,13 +8681,13 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `df692a80a5b1bc90728bc3dfc76cd948`
   - CRC32: `1280f0d5`
   - Also known as: `bios7.bin`
-  - Platform names: Batocera: `bios7.bin`, Lakka: `bios7.bin`, Recalbox: `bios7.bin`, RetroArch: `bios7.bin`, RetroBat: `bios7.bin`, RetroPie: `bios7.bin`
+  - Platform names: Batocera: `bios7.bin`, EmuDeck: `bios7.bin`, Lakka: `bios7.bin`, Recalbox: `bios7.bin`, RetroArch: `bios7.bin`, RetroBat: `bios7.bin`, RetroPie: `bios7.bin`
 - **[nds9.bin](bios/Nintendo/Nintendo%20DS/nds9.bin)** (4,096 bytes)
   - SHA1: `bfaac75f101c135e32e2aaf541de6b1be4c8c62d`
   - MD5: `a392174eb3e572fed6447e956bde4b25`
   - CRC32: `2ab23573`
   - Also known as: `bios9.bin`
-  - Platform names: Batocera: `bios9.bin`, Lakka: `bios9.bin`, Recalbox: `bios9.bin`, RetroArch: `bios9.bin`, RetroBat: `bios9.bin`, RetroPie: `bios9.bin`
+  - Platform names: Batocera: `bios9.bin`, EmuDeck: `bios9.bin`, Lakka: `bios9.bin`, Recalbox: `bios9.bin`, RetroArch: `bios9.bin`, RetroBat: `bios9.bin`, RetroPie: `bios9.bin`
 
 ### Nintendo/Pokemon Mini
 
@@ -9317,14 +9318,20 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `f891e0ea651e2232af0c5c4cb46a0cae2ee8f356`
   - MD5: `e66fa1dc5820d254611fdcdba0662372`
   - CRC32: `529ac15a`
+  - Also known as: `sega-mega-cd:e66fa1dc5820d254611fdcdba0662372`
+  - Platform names: EmuDeck: ``
 - **[bios_CD_J.bin](bios/Sega/Mega%20CD/bios_CD_J.bin)** (131,072 bytes)
   - SHA1: `4846f448160059a7da0215a5df12ca160f26dd69`
   - MD5: `278a9397d192149e84e820ac621a8edd`
   - CRC32: `9d2da8f2`
+  - Also known as: `sega-mega-cd:278a9397d192149e84e820ac621a8edd`
+  - Platform names: EmuDeck: ``
 - **[bios_CD_U.bin](bios/Sega/Mega%20CD/bios_CD_U.bin)** (131,072 bytes)
   - SHA1: `f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed`
   - MD5: `2efd74e3232ff260e371b99f84024f7f`
   - CRC32: `c6d10268`
+  - Also known as: `sega-mega-cd:2efd74e3232ff260e371b99f84024f7f`
+  - Platform names: EmuDeck: ``
   - **Variants** (1 alternate versions):
     - [bios_CD_U.bin.5adb6c3a](bios/Sega/Mega%20CD/.variants/bios_CD_U.bin.5adb6c3a) (131,072 bytes) - SHA1: `5adb6c3af218c60868e6b723ec47e36bbdf5e6f0`, MD5: `854b9150240a198070150e4566ae1290`
 - **[cart.brm](bios/Sega/Mega%20CD/cart.brm)** (524,288 bytes)
@@ -9335,6 +9342,8 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `e4193c6ae44c3cea002707d2a88f1fbcced664de`
   - MD5: `bdeb4c47da613946d422d97d98b21cda`
   - CRC32: `550f30bb`
+  - Also known as: `sega-mega-cd:bdeb4c47da613946d422d97d98b21cda`
+  - Platform names: EmuDeck: ``
 
 ### Sega/Mega Drive
 
@@ -9382,14 +9391,20 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `49d8493008fa715ca0c94d99817a5439d6f2c796`
   - MD5: `3ea3202e2634cb47cb90f3a05c015010`
   - CRC32: `721e1b60`
+  - Also known as: `sega-saturn:3ea3202e2634cb47cb90f3a05c015010`
+  - Platform names: EmuDeck: ``
 - **[mpr-17933.bin](bios/Sega/Saturn/mpr-17933.bin)** (524,288 bytes)
   - SHA1: `faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3`
   - MD5: `3240872c70984b6cbfda1586cab68dbe`
   - CRC32: `4afcf0fa`
+  - Also known as: `sega-saturn:3240872c70984b6cbfda1586cab68dbe`
+  - Platform names: EmuDeck: ``
 - **[mpr-18100.bin](bios/Sega/Saturn/mpr-18100.bin)** (524,288 bytes)
   - SHA1: `8a22710e09ce75f39625894366cafe503ed1942d`
   - MD5: `cb2cebc1b6e573b7c44523d037edcd45`
   - CRC32: `3408dbf4`
+  - Also known as: `sega-saturn:cb2cebc1b6e573b7c44523d037edcd45`
+  - Platform names: EmuDeck: ``
 - **[mpr-18811-mx.ic1](bios/Sega/Saturn/mpr-18811-mx.ic1)** (2,097,152 bytes)
   - SHA1: `a67cd4f550751f8b91de2b8b74528ab4e0c11c77`
   - MD5: `255113ba943c92a54facd25a10fd780c`
@@ -9406,16 +9421,20 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `2b8cb4f87580683eb4d760e4ed210813d667f0a2`
   - MD5: `af5828fdff51384f99b3c4926be27762`
   - CRC32: `2aba43c2`
-  - Also known as: `saturn_bios.bin`
-  - Platform names: Batocera: `saturn_bios.bin`, Lakka: `saturn_bios.bin`, Recalbox: `saturn_bios.bin`, RetroArch: `saturn_bios.bin`, RetroBat: `saturn_bios.bin`, RetroPie: `saturn_bios.bin`
+  - Also known as: `saturn_bios.bin`, `sega-saturn:af5828fdff51384f99b3c4926be27762`
+  - Platform names: Batocera: `saturn_bios.bin`, EmuDeck: `saturn_bios.bin`, EmuDeck: ``, Lakka: `saturn_bios.bin`, Recalbox: `saturn_bios.bin`, RetroArch: `saturn_bios.bin`, RetroBat: `saturn_bios.bin`, RetroPie: `saturn_bios.bin`
 - **[sega_100a.bin](bios/Sega/Saturn/sega_100a.bin)** (524,288 bytes)
   - SHA1: `3bb41feb82838ab9a35601ac666de5aacfd17a58`
   - MD5: `f273555d7d91e8a5a6bfd9bcf066331c`
   - CRC32: `f90f0089`
+  - Also known as: `sega-saturn:f273555d7d91e8a5a6bfd9bcf066331c`
+  - Platform names: EmuDeck: ``
 - **[sega_101.bin](bios/Sega/Saturn/sega_101.bin)** (524,288 bytes)
   - SHA1: `df94c5b4d47eb3cc404d88b33a8fda237eaf4720`
   - MD5: `85ec9ca47d8f6807718151cbcca8b964`
   - CRC32: `224b752c`
+  - Also known as: `sega-saturn:85ec9ca47d8f6807718151cbcca8b964`
+  - Platform names: EmuDeck: ``
 - **[stvbios.zip](bios/Sega/Saturn/stvbios.zip)** (2,699,371 bytes)
   - SHA1: `ae5557ed313b6708bb7c2aee0944e39335a8f814`
   - MD5: `14c3c8f5cdc4dc0531228bd344afcf89`
@@ -9427,6 +9446,8 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `4154e11959f3d5639b11d7902b3a393a99fb5776`
   - MD5: `ac4e4b6522e200c0d23d371a8cecbfd3`
   - CRC32: `e4d61811`
+  - Also known as: `sega-saturn:ac4e4b6522e200c0d23d371a8cecbfd3`
+  - Platform names: EmuDeck: ``
 
 ### Sega/Triforce
 
@@ -9724,50 +9745,70 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `c40146361eb8cf670b19fdc9759190257803cab7`
   - MD5: `81bbe60ba7a3d1cea1d48c14cbcc647b`
   - CRC32: `2f53b852`
+  - Also known as: `sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b`
+  - Platform names: EmuDeck: ``
 - **[psxonpsp660.bin](bios/Sony/PlayStation/psxonpsp660.bin)** (524,288 bytes)
   - SHA1: `96880d1ca92a016ff054be5159bb06fe03cb4e14`
   - MD5: `c53ca5908936d412331790f4426c6c33`
   - CRC32: `5660f34f`
+  - Also known as: `sony-playstation:c53ca5908936d412331790f4426c6c33`
+  - Platform names: EmuDeck: ``
 - **[scph100.bin](bios/Sony/PlayStation/scph100.bin)** (524,288 bytes)
   - SHA1: `339a48f4fcf63e10b5b867b8c93cfd40945faf6c`
   - MD5: `8abc1b549a4a80954addc48ef02c4521`
   - CRC32: `f2af798b`
+  - Also known as: `sony-playstation:8abc1b549a4a80954addc48ef02c4521`
+  - Platform names: EmuDeck: ``
 - **[scph1000.bin](bios/Sony/PlayStation/scph1000.bin)** (524,288 bytes)
   - SHA1: `343883a7b555646da8cee54aadd2795b6e7dd070`
   - MD5: `239665b1a3dade1b5a52c06338011044`
   - CRC32: `3b601fc8`
+  - Also known as: `sony-playstation:239665b1a3dade1b5a52c06338011044`
+  - Platform names: EmuDeck: ``
 - **[scph1001.bin](bios/Sony/PlayStation/scph1001.bin)** (524,288 bytes)
   - SHA1: `10155d8d6e6e832d6ea66db9bc098321fb5e8ebf`
   - MD5: `924e392ed05558ffdb115408c263dccf`
   - CRC32: `37157331`
+  - Also known as: `sony-playstation:924e392ed05558ffdb115408c263dccf`
+  - Platform names: EmuDeck: ``
   - **Variants** (1 alternate versions):
     - [scph1001.bin.649895ef](bios/Sony/PlayStation/.variants/scph1001.bin.649895ef) (524,288 bytes) - SHA1: `649895efd79d14790eabb362e94eb0622093dfb9`, MD5: `dc2b9bf8da62ec93e868cfd29f0d067d`
 - **[scph1002.bin](bios/Sony/PlayStation/scph1002.bin)** (524,288 bytes)
   - SHA1: `20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c`
   - MD5: `54847e693405ffeb0359c6287434cbef`
   - CRC32: `9bb87c4b`
+  - Also known as: `sony-playstation:54847e693405ffeb0359c6287434cbef`
+  - Platform names: EmuDeck: ``
 - **[scph101.bin](bios/Sony/PlayStation/scph101.bin)** (524,288 bytes)
   - SHA1: `dcffe16bd90a723499ad46c641424981338d8378`
   - MD5: `6e3735ff4c7dc899ee98981385f6f3d0`
   - CRC32: `171bdcec`
+  - Also known as: `sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0`
+  - Platform names: EmuDeck: ``
 - **[scph102A.bin](bios/Sony/PlayStation/scph102A.bin)** (524,288 bytes)
   - SHA1: `beb0ac693c0dc26daf5665b3314db81480fa5c7c`
   - MD5: `b10f5e0e3d9eb60e5159690680b1e774`
   - CRC32: `0bad7ea9`
+  - Also known as: `sony-playstation:b10f5e0e3d9eb60e5159690680b1e774`
+  - Platform names: EmuDeck: ``
 - **[scph102B.bin](bios/Sony/PlayStation/scph102B.bin)** (524,288 bytes)
   - SHA1: `dbc7339e5d85827c095764fc077b41f78fd2ecae`
   - MD5: `de93caec13d1a141a40a79f5c86168d6`
   - CRC32: `76b880e5`
-  - Also known as: `scph102C.bin`
-  - Platform names: Lakka: `scph102C.bin`, RetroArch: `scph102C.bin`, RetroPie: `scph102C.bin`
+  - Also known as: `scph102C.bin`, `sony-playstation:de93caec13d1a141a40a79f5c86168d6`
+  - Platform names: EmuDeck: ``, Lakka: `scph102C.bin`, RetroArch: `scph102C.bin`, RetroPie: `scph102C.bin`
 - **[scph3000.bin](bios/Sony/PlayStation/scph3000.bin)** (524,288 bytes)
   - SHA1: `b06f4a861f74270be819aa2a07db8d0563a7cc4e`
   - MD5: `849515939161e62f6b866f6853006780`
   - CRC32: `3539def6`
+  - Also known as: `sony-playstation:849515939161e62f6b866f6853006780`
+  - Platform names: EmuDeck: ``
 - **[scph3500.bin](bios/Sony/PlayStation/scph3500.bin)** (524,288 bytes)
   - SHA1: `e38466a4ba8005fba7e9e3c7b9efeba7205bee3f`
   - MD5: `cba733ceeff5aef5c32254f1d617fa62`
   - CRC32: `bc190209`
+  - Also known as: `sony-playstation:cba733ceeff5aef5c32254f1d617fa62`
+  - Platform names: EmuDeck: ``
 - **[scph5000.bin](bios/Sony/PlayStation/scph5000.bin)** (524,288 bytes)
   - SHA1: `e340db2696274dda5fdc25e434a914db71e8b02b`
   - MD5: `eb201d2d98251a598af467d4347bb62f`
@@ -9776,28 +9817,32 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `b05def971d8ec59f346f2d9ac21fb742e3eb6917`
   - MD5: `8dd7d5296a650fac7319bce665a6a53c`
   - CRC32: `ff3eeb8c`
+  - Also known as: `sony-playstation:8dd7d5296a650fac7319bce665a6a53c`
+  - Platform names: EmuDeck: ``
 - **[scph5501.bin](bios/Sony/PlayStation/scph5501.bin)** (524,288 bytes)
   - SHA1: `0555c6fae8906f3f09baf5988f00e55f88e9f30b`
   - MD5: `490f666e1afb15b7362b406ed1cea246`
   - CRC32: `8d8cb7e4`
-  - Also known as: `scph7003.bin`
-  - Platform names: Lakka: `scph7003.bin`, RetroArch: `scph7003.bin`, RetroPie: `scph7003.bin`
+  - Also known as: `scph7003.bin`, `sony-playstation:490f666e1afb15b7362b406ed1cea246`
+  - Platform names: EmuDeck: ``, Lakka: `scph7003.bin`, RetroArch: `scph7003.bin`, RetroPie: `scph7003.bin`
 - **[scph5502.bin](bios/Sony/PlayStation/scph5502.bin)** (524,288 bytes)
   - SHA1: `f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0`
   - MD5: `32736f17079d0b2b7024407c39bd3050`
   - CRC32: `d786f0b9`
-  - Also known as: `scph5552.bin`
-  - Platform names: Lakka: `scph5552.bin`, RetroArch: `scph5552.bin`, RetroPie: `scph5552.bin`
+  - Also known as: `scph5552.bin`, `sony-playstation:32736f17079d0b2b7024407c39bd3050`
+  - Platform names: EmuDeck: ``, Lakka: `scph5552.bin`, RetroArch: `scph5552.bin`, RetroPie: `scph5552.bin`
 - **[scph7001.bin](bios/Sony/PlayStation/scph7001.bin)** (524,288 bytes)
   - SHA1: `14df4f6c1e367ce097c11deae21566b4fe5647a9`
   - MD5: `1e68c231d0896b7eadcad1d7d8e76129`
   - CRC32: `502224b6`
+  - Also known as: `sony-playstation:1e68c231d0896b7eadcad1d7d8e76129`
+  - Platform names: EmuDeck: ``
 - **[scph7002.bin](bios/Sony/PlayStation/scph7002.bin)** (524,288 bytes)
   - SHA1: `8d5de56a79954f29e9006929ba3fed9b6a418c1d`
   - MD5: `b9d9a0286c33dc6b7237bb13cd46fdee`
   - CRC32: `318178bf`
-  - Also known as: `scph7502.bin`, `scph9002(7502).bin`
-  - Platform names: Lakka: `scph7502.bin`, Lakka: `scph9002(7502).bin`, RetroArch: `scph7502.bin`, RetroArch: `scph9002(7502).bin`, RetroPie: `scph7502.bin`, RetroPie: `scph9002(7502).bin`
+  - Also known as: `scph7502.bin`, `scph9002(7502).bin`, `sony-playstation:b9d9a0286c33dc6b7237bb13cd46fdee`
+  - Platform names: EmuDeck: ``, Lakka: `scph7502.bin`, Lakka: `scph9002(7502).bin`, RetroArch: `scph7502.bin`, RetroArch: `scph9002(7502).bin`, RetroPie: `scph7502.bin`, RetroPie: `scph9002(7502).bin`
 
 ### Sony/PlayStation 2
 
@@ -9829,8 +9874,8 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `aea061e6e263fdcc1c4fdbd68553ef78dae74263`
   - MD5: `acf4730ceb38ac9d8c7d8e21f2614600`
   - CRC32: `b7ef81a9`
-  - Also known as: `ps2-0100j-20000117.bin`
-  - Platform names: Lakka: `ps2-0100j-20000117.bin`, RetroArch: `ps2-0100j-20000117.bin`, RetroPie: `ps2-0100j-20000117.bin`
+  - Also known as: `ps2-0100j-20000117.bin`, `sony-playstation-2:acf4730ceb38ac9d8c7d8e21f2614600`
+  - Platform names: EmuDeck: ``, Lakka: `ps2-0100j-20000117.bin`, RetroArch: `ps2-0100j-20000117.bin`, RetroPie: `ps2-0100j-20000117.bin`
 - **[SCPH-30004R.bin](bios/Sony/PlayStation%202/SCPH-30004R.bin)** (4,194,304 bytes)
   - SHA1: `8fa040852d4b8688f0c84bcfffc65eb208f2b432`
   - MD5: `28922c703cc7d2cf856f177f2985b3a9`
@@ -9839,14 +9884,14 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `f9a5d629a036b99128f7cb530c6e3ca016e9c8b7`
   - MD5: `d5ce2c7d119f563ce04bc04dbc3a323e`
   - CRC32: `a19e0bf5`
-  - Also known as: `ps2-0160a-20020207.bin`
-  - Platform names: Lakka: `ps2-0160a-20020207.bin`, RetroArch: `ps2-0160a-20020207.bin`, RetroPie: `ps2-0160a-20020207.bin`
+  - Also known as: `ps2-0160a-20020207.bin`, `sony-playstation-2:d5ce2c7d119f563ce04bc04dbc3a323e`
+  - Platform names: EmuDeck: ``, Lakka: `ps2-0160a-20020207.bin`, RetroArch: `ps2-0160a-20020207.bin`, RetroPie: `ps2-0160a-20020207.bin`
 - **[SCPH-70004.BIN](bios/Sony/PlayStation%202/SCPH-70004.BIN)** (4,194,304 bytes)
   - SHA1: `434bc0b4eb4827da0773ec0795aadc5162569a07`
   - MD5: `dc752f160044f2ed5fc1f4964db2a095`
   - CRC32: `6f8e3c29`
-  - Also known as: `ps2-0200e-20040614.bin`
-  - Platform names: Lakka: `ps2-0200e-20040614.bin`, RetroArch: `ps2-0200e-20040614.bin`, RetroPie: `ps2-0200e-20040614.bin`
+  - Also known as: `ps2-0200e-20040614.bin`, `sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095`
+  - Platform names: EmuDeck: ``, Lakka: `ps2-0200e-20040614.bin`, RetroArch: `ps2-0200e-20040614.bin`, RetroPie: `ps2-0200e-20040614.bin`
 - **[SCPH-70004.EROM](bios/Sony/PlayStation%202/SCPH-70004.EROM)** (3,145,728 bytes)
   - SHA1: `ec0121bb8e2a209044309780d2efc2559c9a0ef1`
   - MD5: `9feb1fdeadd6232a13b95e60b34ccef9`
@@ -9863,282 +9908,422 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `5b33170323ed6344e2363fed8115dc3918bb96a4`
   - MD5: `32f2e4d5ff5ee11072a6bc45530f5765`
   - CRC32: `5a04500c`
+  - Also known as: `sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765`
+  - Platform names: EmuDeck: ``
 - **[ps2-0101j-20000217.bin](bios/Sony/PlayStation%202/ps2-0101j-20000217.bin)** (4,194,304 bytes)
   - SHA1: `916e02431bcd73140504da3355c9598143b77e11`
   - MD5: `b1459d7446c69e3e97e6ace3ae23dd1c`
   - CRC32: `211dfb6a`
+  - Also known as: `sony-playstation-2:b1459d7446c69e3e97e6ace3ae23dd1c`
+  - Platform names: EmuDeck: ``
 - **[ps2-0101jd-20000217.bin](bios/Sony/PlayStation%202/ps2-0101jd-20000217.bin)** (4,194,304 bytes)
   - SHA1: `16f4a284d0e760ee13a2aff2f7dda928255e3080`
   - MD5: `acf9968c8f596d2b15f42272082513d1`
   - CRC32: `4f8b4205`
+  - Also known as: `sony-playstation-2:acf9968c8f596d2b15f42272082513d1`
+  - Platform names: EmuDeck: ``
 - **[ps2-0101xd-20000224.bin](bios/Sony/PlayStation%202/ps2-0101xd-20000224.bin)** (4,194,304 bytes)
   - SHA1: `4440b246bfde7bb31002c584a76c6ef384908e84`
   - MD5: `d3f1853a16c2ec18f3cd1ae655213308`
   - CRC32: `2fef9faf`
+  - Also known as: `sony-playstation-2:d3f1853a16c2ec18f3cd1ae655213308`
+  - Platform names: EmuDeck: ``
 - **[ps2-0110a-20000727.bin](bios/Sony/PlayStation%202/ps2-0110a-20000727.bin)** (4,194,304 bytes)
   - SHA1: `20f6ce6693cf97e9494f8f0227f2b7988ffaf961`
   - MD5: `a20c97c02210f16678ca3010127caf36`
   - CRC32: `9678ad6a`
+  - Also known as: `sony-playstation-2:a20c97c02210f16678ca3010127caf36`
+  - Platform names: EmuDeck: ``
 - **[ps2-0110ad-20000727.bin](bios/Sony/PlayStation%202/ps2-0110ad-20000727.bin)** (4,194,304 bytes)
   - SHA1: `339c646cf0699268552df5b05f18f0a03a9f55ff`
   - MD5: `63e6fd9b3c72e0d7b920e80cf76645cd`
   - CRC32: `795578c1`
+  - Also known as: `sony-playstation-2:63e6fd9b3c72e0d7b920e80cf76645cd`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120a-20000902.bin](bios/Sony/PlayStation%202/ps2-0120a-20000902.bin)** (4,194,304 bytes)
   - SHA1: `dbc2318a1029347b5af3a0c74b0bdf88d19efee6`
   - MD5: `8db2fbbac7413bf3e7154c1e0715e565`
   - CRC32: `1ae71e5d`
+  - Also known as: `sony-playstation-2:8db2fbbac7413bf3e7154c1e0715e565`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120e-20000902.bin](bios/Sony/PlayStation%202/ps2-0120e-20000902.bin)** (4,194,304 bytes)
   - SHA1: `274c05fec654913a3f698d4b0d592085866a2cbd`
   - MD5: `b7fa11e87d51752a98b38e3e691cbf17`
   - CRC32: `7b08c33b`
+  - Also known as: `sony-playstation-2:b7fa11e87d51752a98b38e3e691cbf17`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120ed-20000902-20030110.bin](bios/Sony/PlayStation%202/ps2-0120ed-20000902-20030110.bin)** (4,194,304 bytes)
   - SHA1: `1b73dec999fcc2b92fa958110ff6bfe4d0af276e`
   - MD5: `3016b3dd42148a67e2c048595ca4d7ce`
   - CRC32: `e2f78425`
+  - Also known as: `sony-playstation-2:3016b3dd42148a67e2c048595ca4d7ce`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120ed-20000902.bin](bios/Sony/PlayStation%202/ps2-0120ed-20000902.bin)** (4,194,304 bytes)
   - SHA1: `3bb1eecd618ab5c973c7bc53671a4475a02e1d5b`
   - MD5: `91c87cb2f2eb6ce529a2360f80ce2457`
   - CRC32: `25495aa7`
+  - Also known as: `sony-playstation-2:91c87cb2f2eb6ce529a2360f80ce2457`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120j-20001027-185015.bin](bios/Sony/PlayStation%202/ps2-0120j-20001027-185015.bin)** (4,194,304 bytes)
   - SHA1: `e481079eca752225555f0c26d14c9d0f94d9a8e9`
   - MD5: `f63bc530bd7ad7c026fcd6f7bd0d9525`
   - CRC32: `9b096622`
+  - Also known as: `sony-playstation-2:f63bc530bd7ad7c026fcd6f7bd0d9525`
+  - Platform names: EmuDeck: ``
 - **[ps2-0120j-20001027-191435.bin](bios/Sony/PlayStation%202/ps2-0120j-20001027-191435.bin)** (4,194,304 bytes)
   - SHA1: `a9f5d8ed56cfff18add1b599010493461fa02448`
   - MD5: `cee06bd68c333fc5768244eae77e4495`
   - CRC32: `c1ccf3f6`
+  - Also known as: `sony-playstation-2:cee06bd68c333fc5768244eae77e4495`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150a-20001228.bin](bios/Sony/PlayStation%202/ps2-0150a-20001228.bin)** (4,194,304 bytes)
   - SHA1: `5af5b5077d84a9c037ebe12bfab8a38b31d8a543`
   - MD5: `8accc3c49ac45f5ae2c5db0adc854633`
   - CRC32: `bce74746`
+  - Also known as: `sony-playstation-2:8accc3c49ac45f5ae2c5db0adc854633`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150ad-20001228-20030520.bin](bios/Sony/PlayStation%202/ps2-0150ad-20001228-20030520.bin)** (4,194,304 bytes)
   - SHA1: `7284b9d16df9935afc384318e024c87ef0574fe5`
   - MD5: `0bf988e9c7aaa4c051805b0fa6eb3387`
   - CRC32: `0380c2ce`
+  - Also known as: `sony-playstation-2:0bf988e9c7aaa4c051805b0fa6eb3387`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150e-20001228.bin](bios/Sony/PlayStation%202/ps2-0150e-20001228.bin)** (4,194,304 bytes)
   - SHA1: `e22ef231faf3661edd92f2ee449a71297c82a092`
   - MD5: `838544f12de9b0abc90811279ee223c8`
   - CRC32: `1559fd43`
+  - Also known as: `sony-playstation-2:838544f12de9b0abc90811279ee223c8`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150ed-20001228-20030520.bin](bios/Sony/PlayStation%202/ps2-0150ed-20001228-20030520.bin)** (4,194,304 bytes)
   - SHA1: `d004326c9d8060812b4433c3f07646b04854d6c4`
   - MD5: `6f9a6feb749f0533aaae2cc45090b0ed`
   - CRC32: `60bc0031`
+  - Also known as: `sony-playstation-2:6f9a6feb749f0533aaae2cc45090b0ed`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150j-20010118.bin](bios/Sony/PlayStation%202/ps2-0150j-20010118.bin)** (4,194,304 bytes)
   - SHA1: `d6f365a0f07cd04ed28108e6ec5076e2f81e5f72`
   - MD5: `815ac991d8bc3b364696bead3457de7d`
   - CRC32: `4fc3b495`
+  - Also known as: `sony-playstation-2:815ac991d8bc3b364696bead3457de7d`
+  - Platform names: EmuDeck: ``
 - **[ps2-0150jd-20010118.bin](bios/Sony/PlayStation%202/ps2-0150jd-20010118.bin)** (4,194,304 bytes)
   - SHA1: `334e029fc7fd50222a399c50384ff42732652259`
   - MD5: `bb6bbc850458fff08af30e969ffd0175`
   - CRC32: `0b3ec2bc`
+  - Also known as: `sony-playstation-2:bb6bbc850458fff08af30e969ffd0175`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160a-20010427.bin](bios/Sony/PlayStation%202/ps2-0160a-20010427.bin)** (4,194,304 bytes)
   - SHA1: `7331a40b4b4feb1b3f0f77b013b6d38483577baa`
   - MD5: `b107b5710042abe887c0f6175f6e94bb`
   - CRC32: `4008ac18`
+  - Also known as: `sony-playstation-2:b107b5710042abe887c0f6175f6e94bb`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160a-20010704.bin](bios/Sony/PlayStation%202/ps2-0160a-20010704.bin)** (4,194,304 bytes)
   - SHA1: `ce92e8e8c88665f2f645a9522e337823d47a914a`
   - MD5: `18bcaadb9ff74ed3add26cdf709fff2e`
   - CRC32: `c506c693`
+  - Also known as: `sony-playstation-2:18bcaadb9ff74ed3add26cdf709fff2e`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160a-20011004.bin](bios/Sony/PlayStation%202/ps2-0160a-20011004.bin)** (4,194,304 bytes)
   - SHA1: `d257bce6ecaf3bafb704c75a1b4741b910bd2d49`
   - MD5: `7200a03d51cacc4c14fcdfdbc4898431`
   - CRC32: `a01ec625`
+  - Also known as: `sony-playstation-2:7200a03d51cacc4c14fcdfdbc4898431`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160e-20010704.bin](bios/Sony/PlayStation%202/ps2-0160e-20010704.bin)** (4,194,304 bytes)
   - SHA1: `3cbd048e437c785b5a05a0feced00117a8a42545`
   - MD5: `491209dd815ceee9de02dbbc408c06d6`
   - CRC32: `f1ac735f`
+  - Also known as: `sony-playstation-2:491209dd815ceee9de02dbbc408c06d6`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160e-20011004.bin](bios/Sony/PlayStation%202/ps2-0160e-20011004.bin)** (4,194,304 bytes)
   - SHA1: `ee34c3a87c53c75ca2a37d77b0042ca24d07831f`
   - MD5: `8359638e857c8bc18c3c18ac17d9cc3c`
   - CRC32: `82aa5055`
+  - Also known as: `sony-playstation-2:8359638e857c8bc18c3c18ac17d9cc3c`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160e-20020319.bin](bios/Sony/PlayStation%202/ps2-0160e-20020319.bin)** (4,194,304 bytes)
   - SHA1: `bff2902bd0ce9729a060581132541e9fd1a9fab6`
   - MD5: `0d2228e6fd4fb639c9c39d077a9ec10c`
   - CRC32: `2fe21e4d`
+  - Also known as: `sony-playstation-2:0d2228e6fd4fb639c9c39d077a9ec10c`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160e-20020426.bin](bios/Sony/PlayStation%202/ps2-0160e-20020426.bin)** (4,194,304 bytes)
   - SHA1: `d106b757ae2544dfe63f7e1924e59d5ad44c0c29`
   - MD5: `5b1f47fbeb277c6be2fccdd6344ff2fd`
   - CRC32: `dad0baec`
+  - Also known as: `sony-playstation-2:5b1f47fbeb277c6be2fccdd6344ff2fd`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160h-20010730.bin](bios/Sony/PlayStation%202/ps2-0160h-20010730.bin)** (4,194,304 bytes)
   - SHA1: `ba15dcf7aac13864c08222037e9321d7468c87d1`
   - MD5: `352d2ff9b3f68be7e6fa7e6dd8389346`
   - CRC32: `75f83c67`
+  - Also known as: `sony-playstation-2:352d2ff9b3f68be7e6fa7e6dd8389346`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160h-20020426.bin](bios/Sony/PlayStation%202/ps2-0160h-20020426.bin)** (4,194,304 bytes)
   - SHA1: `e3a74125c426bcacabca00b513fab928665c8846`
   - MD5: `315a4003535dfda689752cb25f24785c`
   - CRC32: `3355623e`
+  - Also known as: `sony-playstation-2:315a4003535dfda689752cb25f24785c`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160j-20010427.bin](bios/Sony/PlayStation%202/ps2-0160j-20010427.bin)** (4,194,304 bytes)
   - SHA1: `e525a0c900e37acf0ae5a655d82a0abcb07c6f1f`
   - MD5: `ab55cceea548303c22c72570cfd4dd71`
   - CRC32: `c268ef47`
+  - Also known as: `sony-playstation-2:ab55cceea548303c22c72570cfd4dd71`
+  - Platform names: EmuDeck: ``
 - **[ps2-0160j-20020426.bin](bios/Sony/PlayStation%202/ps2-0160j-20020426.bin)** (4,194,304 bytes)
   - SHA1: `003628c137dae577ff3b04b93ca1787b0c944702`
   - MD5: `72da56fccb8fcd77bba16d1b6f479914`
   - CRC32: `c9363baf`
+  - Also known as: `sony-playstation-2:72da56fccb8fcd77bba16d1b6f479914`
+  - Platform names: EmuDeck: ``
 - **[ps2-0170a-20030325.bin](bios/Sony/PlayStation%202/ps2-0170a-20030325.bin)** (4,194,304 bytes)
   - SHA1: `d269d1ed513227f3ef7133c76cf1b3a64f97b15d`
   - MD5: `8aa12ce243210128c5074552d3b86251`
   - CRC32: `9a99e3f4`
+  - Also known as: `sony-playstation-2:8aa12ce243210128c5074552d3b86251`
+  - Platform names: EmuDeck: ``
 - **[ps2-0170ad-20030325.bin](bios/Sony/PlayStation%202/ps2-0170ad-20030325.bin)** (4,194,304 bytes)
   - SHA1: `c5bc6e893b4c43d528142e56c96073024de64157`
   - MD5: `eb960de68f0c0f7f9fa083e9f79d0360`
   - CRC32: `0e1ece79`
+  - Also known as: `sony-playstation-2:eb960de68f0c0f7f9fa083e9f79d0360`
+  - Platform names: EmuDeck: ``
 - **[ps2-0170e-20030227.bin](bios/Sony/PlayStation%202/ps2-0170e-20030227.bin)** (4,194,304 bytes)
   - SHA1: `ad15bd7eabd5bd81ba011516a5be44947d6641aa`
   - MD5: `6e69920fa6eef8522a1d688a11e41bc6`
   - CRC32: `51b5fb8b`
+  - Also known as: `sony-playstation-2:6e69920fa6eef8522a1d688a11e41bc6`
+  - Platform names: EmuDeck: ``
 - **[ps2-0170ed-20030227.bin](bios/Sony/PlayStation%202/ps2-0170ed-20030227.bin)** (4,194,304 bytes)
   - SHA1: `e220bb282378c1f48ea1b585b3675e51a6dca572`
   - MD5: `666018ffec65c5c7e04796081295c6c7`
   - CRC32: `970a9c56`
+  - Also known as: `sony-playstation-2:666018ffec65c5c7e04796081295c6c7`
+  - Platform names: EmuDeck: ``
 - **[ps2-0170j-20030206.bin](bios/Sony/PlayStation%202/ps2-0170j-20030206.bin)** (4,194,304 bytes)
   - SHA1: `d812ac65c357d392396ca9edee812dc41bed8bde`
   - MD5: `312ad4816c232a9606e56f946bc0678a`
   - CRC32: `9457f64e`
+  - Also known as: `sony-playstation-2:312ad4816c232a9606e56f946bc0678a`
+  - Platform names: EmuDeck: ``
 - **[ps2-0180cd-20030224.bin](bios/Sony/PlayStation%202/ps2-0180cd-20030224.bin)** (4,194,304 bytes)
   - SHA1: `2de87767008fc4a303af64a46251156e965d9065`
   - MD5: `240d4c5ddd4b54069bdc4a3cd2faf99d`
   - CRC32: `8c1a04cf`
+  - Also known as: `sony-playstation-2:240d4c5ddd4b54069bdc4a3cd2faf99d`
+  - Platform names: EmuDeck: ``
 - **[ps2-0180j-20031028.bin](bios/Sony/PlayStation%202/ps2-0180j-20031028.bin)** (4,194,304 bytes)
   - SHA1: `aa4a35c14ee342cf7a03b1dde294ca10e64889e1`
   - MD5: `1c6cd089e6c83da618fbf2a081eb4888`
   - CRC32: `585fd27c`
+  - Also known as: `sony-playstation-2:1c6cd089e6c83da618fbf2a081eb4888`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190a-20030623.bin](bios/Sony/PlayStation%202/ps2-0190a-20030623.bin)** (4,194,304 bytes)
   - SHA1: `c74d92a2952a2912b6698cbcf7742adac8f784d3`
   - MD5: `35461cecaa51712b300b2d6798825048`
   - CRC32: `b3e87709`
+  - Also known as: `sony-playstation-2:35461cecaa51712b300b2d6798825048`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190a-20040329.bin](bios/Sony/PlayStation%202/ps2-0190a-20040329.bin)** (4,194,304 bytes)
   - SHA1: `b68c05f5cd86bf03cb38a643a723b7a97b759531`
   - MD5: `81f4336c1de607dd0865011c0447052e`
   - CRC32: `9ba4c32f`
+  - Also known as: `sony-playstation-2:81f4336c1de607dd0865011c0447052e`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190c-20030623.bin](bios/Sony/PlayStation%202/ps2-0190c-20030623.bin)** (4,194,304 bytes)
   - SHA1: `92d9eb4b11cef97bb69a275b2851b72f7b0023d6`
   - MD5: `1b6e631b536247756287b916f9396872`
   - CRC32: `d2347ee7`
+  - Also known as: `sony-playstation-2:1b6e631b536247756287b916f9396872`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190e-20030623.bin](bios/Sony/PlayStation%202/ps2-0190e-20030623.bin)** (4,194,304 bytes)
   - SHA1: `18b9ba833c469c4683676cc20da5124080d980bb`
   - MD5: `bd6415094e1ce9e05daabe85de807666`
   - CRC32: `1752a52e`
+  - Also known as: `sony-playstation-2:bd6415094e1ce9e05daabe85de807666`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190e-20030822.bin](bios/Sony/PlayStation%202/ps2-0190e-20030822.bin)** (4,194,304 bytes)
   - SHA1: `6e1f0eb4aec51a6288b3d802d3bcdb477cf52104`
   - MD5: `afde410bd026c16be605a1ae4bd651fd`
   - CRC32: `3afd1d1e`
+  - Also known as: `sony-playstation-2:afde410bd026c16be605a1ae4bd651fd`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190h-20030623.bin](bios/Sony/PlayStation%202/ps2-0190h-20030623.bin)** (4,194,304 bytes)
   - SHA1: `caa18ed04854a91e68f2d61a782560edd6373bbf`
   - MD5: `2e70ad008d4ec8549aada8002fdf42fb`
   - CRC32: `41391dd3`
+  - Also known as: `sony-playstation-2:2e70ad008d4ec8549aada8002fdf42fb`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190j-20030623.bin](bios/Sony/PlayStation%202/ps2-0190j-20030623.bin)** (4,194,304 bytes)
   - SHA1: `6a6ecfe6c10e42eff1ca056349def799b5629067`
   - MD5: `463d87789c555a4a7604e97d7db545d1`
   - CRC32: `7c10a967`
+  - Also known as: `sony-playstation-2:463d87789c555a4a7604e97d7db545d1`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190j-20030822.bin](bios/Sony/PlayStation%202/ps2-0190j-20030822.bin)** (4,194,304 bytes)
   - SHA1: `0ea98a25a32145dda514de2f0d4bfbbd806bd00c`
   - MD5: `00da1b177096cfd2532c8fa22b43e667`
   - CRC32: `79d60546`
+  - Also known as: `sony-playstation-2:00da1b177096cfd2532c8fa22b43e667`
+  - Platform names: EmuDeck: ``
 - **[ps2-0190r-20030623.bin](bios/Sony/PlayStation%202/ps2-0190r-20030623.bin)** (4,194,304 bytes)
   - SHA1: `34a81db03ab617fbfdd7f9b861692dd2ecd57b82`
   - MD5: `b53d51edc7fc086685e31b811dc32aad`
   - CRC32: `25f6212a`
+  - Also known as: `sony-playstation-2:b53d51edc7fc086685e31b811dc32aad`
+  - Platform names: EmuDeck: ``
 - **[ps2-0200a-20040614.bin](bios/Sony/PlayStation%202/ps2-0200a-20040614.bin)** (4,194,304 bytes)
   - SHA1: `7a62e5f48603582707e9898eb055ea3eaee50d4c`
   - MD5: `d333558cc14561c1fdc334c75d5f37b7`
   - CRC32: `7ebd68de`
+  - Also known as: `sony-playstation-2:d333558cc14561c1fdc334c75d5f37b7`
+  - Platform names: EmuDeck: ``
 - **[ps2-0200ed-20040614.bin](bios/Sony/PlayStation%202/ps2-0200ed-20040614.bin)** (4,194,304 bytes)
   - SHA1: `902f4680b258abd40c0922f6b0d581cbd8f8a73e`
   - MD5: `63ead1d74893bf7f36880af81f68a82d`
   - CRC32: `881c9aa9`
+  - Also known as: `sony-playstation-2:63ead1d74893bf7f36880af81f68a82d`
+  - Platform names: EmuDeck: ``
 - **[ps2-0200h-20040614.bin](bios/Sony/PlayStation%202/ps2-0200h-20040614.bin)** (4,194,304 bytes)
   - SHA1: `7f8e812cab7c7393c85eac6c42661e1fd0a642df`
   - MD5: `3e3e030c0f600442fa05b94f87a1e238`
   - CRC32: `b57201bf`
+  - Also known as: `sony-playstation-2:3e3e030c0f600442fa05b94f87a1e238`
+  - Platform names: EmuDeck: ``
 - **[ps2-0200j-20040614.bin](bios/Sony/PlayStation%202/ps2-0200j-20040614.bin)** (4,194,304 bytes)
   - SHA1: `224ab5704ab719edeb05ca1d835812252c97c1b3`
   - MD5: `0eee5d1c779aa50e94edd168b4ebf42e`
   - CRC32: `2f314730`
+  - Also known as: `sony-playstation-2:0eee5d1c779aa50e94edd168b4ebf42e`
+  - Platform names: EmuDeck: ``
 - **[ps2-0210j-20040917.bin](bios/Sony/PlayStation%202/ps2-0210j-20040917.bin)** (4,194,304 bytes)
   - SHA1: `bbb1af3085e77599691ec430d147810157da934f`
   - MD5: `1ad977bb539fc9448a08ab276a836bbc`
   - CRC32: `55710d11`
+  - Also known as: `sony-playstation-2:1ad977bb539fc9448a08ab276a836bbc`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220a-20050620.bin](bios/Sony/PlayStation%202/ps2-0220a-20050620.bin)** (4,194,304 bytes)
   - SHA1: `48d0445dffd1e879c7ae752c5166ec3101921555`
   - MD5: `929a14baca1776b00869f983aa6e14d2`
   - CRC32: `d305a97a`
+  - Also known as: `sony-playstation-2:929a14baca1776b00869f983aa6e14d2`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220a-20060210.bin](bios/Sony/PlayStation%202/ps2-0220a-20060210.bin)** (4,194,304 bytes)
   - SHA1: `92e488d5b2705e4cca83d4d1efbc421012faf83e`
   - MD5: `cb801b7920a7d536ba07b6534d2433ca`
   - CRC32: `1279fce9`
+  - Also known as: `sony-playstation-2:cb801b7920a7d536ba07b6534d2433ca`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220a-20060905.bin](bios/Sony/PlayStation%202/ps2-0220a-20060905.bin)** (4,194,304 bytes)
   - SHA1: `8361d615cc895962e0f0838489337574dbdc9173`
   - MD5: `40c11c063b3b9409aa5e4058e984e30c`
   - CRC32: `1c17eafc`
+  - Also known as: `sony-playstation-2:40c11c063b3b9409aa5e4058e984e30c`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220ad-20050620.bin](bios/Sony/PlayStation%202/ps2-0220ad-20050620.bin)** (4,194,304 bytes)
   - SHA1: `7c7efdfcec7705f4e84bb47f45322104e39eed09`
   - MD5: `9959ad7a8685cad66206e7752ca23f8b`
   - CRC32: `181f1bda`
+  - Also known as: `sony-playstation-2:9959ad7a8685cad66206e7752ca23f8b`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220ad-20060905.bin](bios/Sony/PlayStation%202/ps2-0220ad-20060905.bin)** (4,194,304 bytes)
   - SHA1: `4191b5842f31a9985b5428bc9d2b733ce3abb583`
   - MD5: `21fe4cad111f7dc0f9af29477057f88d`
   - CRC32: `431d9b7f`
+  - Also known as: `sony-playstation-2:21fe4cad111f7dc0f9af29477057f88d`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220e-20050620.bin](bios/Sony/PlayStation%202/ps2-0220e-20050620.bin)** (4,194,304 bytes)
   - SHA1: `929a85e974faf4b40d0a7785023b758402c43bd9`
   - MD5: `573f7d4a430c32b3cc0fd0c41e104bbd`
   - CRC32: `e2862e39`
+  - Also known as: `sony-playstation-2:573f7d4a430c32b3cc0fd0c41e104bbd`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220e-20060210.bin](bios/Sony/PlayStation%202/ps2-0220e-20060210.bin)** (4,194,304 bytes)
   - SHA1: `28ad756d0cfd1e7b2e2de3de5d9e14207ee89761`
   - MD5: `af60e6d1a939019d55e5b330d24b1c25`
   - CRC32: `23fa7baa`
+  - Also known as: `sony-playstation-2:af60e6d1a939019d55e5b330d24b1c25`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220e-20060905.bin](bios/Sony/PlayStation%202/ps2-0220e-20060905.bin)** (4,194,304 bytes)
   - SHA1: `da5aacead2fb55807d6d4e70b1f10f4fdcfd3281`
   - MD5: `80bbb237a6af9c611df43b16b930b683`
   - CRC32: `2d946dbf`
+  - Also known as: `sony-playstation-2:80bbb237a6af9c611df43b16b930b683`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220h-20050620.bin](bios/Sony/PlayStation%202/ps2-0220h-20050620.bin)** (4,194,304 bytes)
   - SHA1: `0a071d1b46607a7694770407606d8599f62a372b`
   - MD5: `df63a604e8bff5b0599bd1a6c2721bd0`
   - CRC32: `e27c4a6c`
+  - Also known as: `sony-playstation-2:df63a604e8bff5b0599bd1a6c2721bd0`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220h-20060210.bin](bios/Sony/PlayStation%202/ps2-0220h-20060210.bin)** (4,194,304 bytes)
   - SHA1: `fce2a24e5e0400cc6d98c08f426405d19173813e`
   - MD5: `549a66d0c698635ca9fa3ab012da7129`
   - CRC32: `23001fff`
+  - Also known as: `sony-playstation-2:549a66d0c698635ca9fa3ab012da7129`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220h-20060905.bin](bios/Sony/PlayStation%202/ps2-0220h-20060905.bin)** (4,194,304 bytes)
   - SHA1: `a5a2ee0dd9a86ca35b94e97ca92476a584f755bf`
   - MD5: `c37bce95d32b2be480f87dd32704e664`
   - CRC32: `2d6e09ea`
+  - Also known as: `sony-playstation-2:c37bce95d32b2be480f87dd32704e664`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220j-20050620.bin](bios/Sony/PlayStation%202/ps2-0220j-20050620.bin)** (4,194,304 bytes)
   - SHA1: `7ffa75d142cb8eeea6c777dbcf263143655275d5`
   - MD5: `eb4f40fcf4911ede39c1bbfe91e7a89a`
   - CRC32: `d27fc41d`
+  - Also known as: `sony-playstation-2:eb4f40fcf4911ede39c1bbfe91e7a89a`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220j-20060210.bin](bios/Sony/PlayStation%202/ps2-0220j-20060210.bin)** (4,194,304 bytes)
   - SHA1: `0edf1fbb772a8e6a79ae00e977450e3ade25c4f3`
   - MD5: `5b1ba4bb914406fae75ab8e38901684d`
   - CRC32: `1303918e`
+  - Also known as: `sony-playstation-2:5b1ba4bb914406fae75ab8e38901684d`
+  - Platform names: EmuDeck: ``
 - **[ps2-0220j-20060905.bin](bios/Sony/PlayStation%202/ps2-0220j-20060905.bin)** (4,194,304 bytes)
   - SHA1: `3baf847c1c217aa71ac6d298389c88edb3db32e2`
   - MD5: `5de9d0d730ff1e7ad122806335332524`
   - CRC32: `1d6d879b`
+  - Also known as: `sony-playstation-2:5de9d0d730ff1e7ad122806335332524`
+  - Platform names: EmuDeck: ``
 - **[ps2-0230a-20080220.bin](bios/Sony/PlayStation%202/ps2-0230a-20080220.bin)** (4,194,304 bytes)
   - SHA1: `f9229fe159d0353b9f0632f3fdc66819c9030458`
   - MD5: `21038400dc633070a78ad53090c53017`
   - CRC32: `286897c2`
+  - Also known as: `sony-playstation-2:21038400dc633070a78ad53090c53017`
+  - Platform names: EmuDeck: ``
 - **[ps2-0230e-20080220.bin](bios/Sony/PlayStation%202/ps2-0230e-20080220.bin)** (4,194,304 bytes)
   - SHA1: `9915b5ba56798f4027ac1bd8d10abe0c1c9c326a`
   - MD5: `dc69f0643a3030aaa4797501b483d6c4`
   - CRC32: `19eb1081`
+  - Also known as: `sony-playstation-2:dc69f0643a3030aaa4797501b483d6c4`
+  - Platform names: EmuDeck: ``
 - **[ps2-0230h-20080220.bin](bios/Sony/PlayStation%202/ps2-0230h-20080220.bin)** (4,194,304 bytes)
   - SHA1: `a277b456849697abec11285c6b35bc734598c220`
   - MD5: `30d56e79d89fbddf10938fa67fe3f34e`
   - CRC32: `191174d4`
+  - Also known as: `sony-playstation-2:30d56e79d89fbddf10938fa67fe3f34e`
+  - Platform names: EmuDeck: ``
 - **[ps2-0230j-20080220.bin](bios/Sony/PlayStation%202/ps2-0230j-20080220.bin)** (4,194,304 bytes)
   - SHA1: `fbd54bfc020af34008b317dcb80b812dd29b3759`
   - MD5: `80ac46fa7e77b8ab4366e86948e54f83`
   - CRC32: `2912faa5`
+  - Also known as: `sony-playstation-2:80ac46fa7e77b8ab4366e86948e54f83`
+  - Platform names: EmuDeck: ``
 - **[ps2-0250e-20100415.bin](bios/Sony/PlayStation%202/ps2-0250e-20100415.bin)** (4,194,304 bytes)
   - SHA1: `b9cb5775af29cd4d1ec5521e8231f8b6636e2e44`
   - MD5: `93ea3bcee4252627919175ff1b16a1d9`
   - CRC32: `7e75fc28`
+  - Also known as: `sony-playstation-2:93ea3bcee4252627919175ff1b16a1d9`
+  - Platform names: EmuDeck: ``
 - **[ps2-0250j-20100415.bin](bios/Sony/PlayStation%202/ps2-0250j-20100415.bin)** (4,194,304 bytes)
   - SHA1: `4b5ef16b67e3b523d28ed2406106cb80470a06d0`
   - MD5: `d3e81e95db25f5a86a7b7474550a2155`
   - CRC32: `4e8c160c`
+  - Also known as: `sony-playstation-2:d3e81e95db25f5a86a7b7474550a2155`
+  - Platform names: EmuDeck: ``
 - **[rom1.bin](bios/Sony/PlayStation%202/rom1.bin)** (199,680 bytes)
   - SHA1: `47d2ec4b342649e4c391043ab915d4435f9d180d`
   - MD5: `44552702b05697a14ccbe2ca22ee7139`
@@ -10871,4 +11056,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T12:12:49Z*
+*Auto-generated on 2026-03-17T12:24:18Z*
