@@ -1,0 +1,66 @@
+emulator: Mini vMac
+type: libretro
+source: "https://github.com/libretro/libretro-minivmac"
+systems: [macintosh-ii]
+
+# Mini vMac is a Macintosh II emulator. The libretro port is hardcoded for
+# Mac II emulation (CurEmMd = kEmMd_II) with 68020 CPU, FPU, ADB, VIA2, ASC.
+# ROM is loaded from the RetroArch system directory.
+
+# ROM loading order (OSGLUERETRO.c LoadMacRom):
+#   1. <system>/MacIIx.ROM    (tried first, same 256 KB size)
+#   2. <system>/MacII.ROM     (defined as RomFileName in CNFGRAPI.h)
+#   3. --rom command line arg  (if provided)
+#   4. ~/.gryphel/mnvm_rom/MacII.ROM
+#   5. app parent directory
+#   6. current directory
+
+# ROM size: kROM_Size = 0x00040000 = 262144 bytes (256 KB)
+# ROM checksums defined in CNFGRAPI.h:
+#   kRomCheckSum1 = 0x9779D2C4 (Mac II v1)
+#   kRomCheckSum2 = 0x97221136 (Mac II v2)
+# Note: DisableRomCheck = 1, so checksum validation is skipped at runtime
+# (ROMEMDEV.c patches the ROM check jump). Any 256 KB Mac II ROM works.
+
+files:
+  # -- MacII.ROM (primary, required) --
+  # Standard Macintosh II ROM image. This is the hardcoded RomFileName.
+  # The core reads exactly kROM_Size (262144) bytes from this file.
+
+  - name: "MacII.ROM"
+    path: "MacII.ROM"
+    required: true
+    size: 262144
+    source_ref: "minivmac/cfg/CNFGRAPI.h:32, minivmac/src/OSGLUERETRO.c:781"
+    note: >
+      Macintosh II ROM image (256 KB). The core loads this from the system
+      directory. Must be exactly 262144 bytes. ROM checksum verification is
+      disabled in the libretro build, so either Mac II ROM revision works.
+
+  # -- MacIIx.ROM (alternative, optional) --
+  # Tried before MacII.ROM in the loading sequence. The Mac IIx ROM is the
+  # same 256 KB size and is compatible with the Mac II emulation mode.
+
+  - name: "MacIIx.ROM"
+    path: "MacIIx.ROM"
+    required: false
+    size: 262144
+    source_ref: "minivmac/src/OSGLUERETRO.c:778"
+    note: >
+      Macintosh IIx ROM image (256 KB). Checked first in the ROM loading
+      sequence. If present, it takes priority over MacII.ROM. The Mac IIx
+      uses the same 68020-class architecture as the Mac II.
+
+notes:
+  emulation_target: >
+    The libretro build is configured exclusively for Macintosh II emulation
+    (kEmMd_II). Build options: 68020 CPU, FPU enabled, ADB keyboard/mouse,
+    VIA2, ASC sound chip. Screen: 640x480, 8-bit color depth.
+  disk_formats: >
+    Supported disk image formats: .dsk, .img, .zip, .hvf, .cmd
+    The core auto-inserts the loaded content as a floppy disk.
+    Supports up to NumDrives simultaneous disk images.
+  rom_checksum_note: >
+    DisableRomCheck is set to 1 in ROMEMDEV.c, meaning the core patches out
+    the ROM checksum verification at boot. This allows any valid Mac II era
+    ROM to work regardless of exact revision.

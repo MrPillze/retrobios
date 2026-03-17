@@ -1,0 +1,32 @@
+emulator: ECWolf
+type: libretro
+source: "https://github.com/libretro/ecwolf"
+cores: [ecwolf]
+systems: [wolfenstein3d]
+verification: md5
+notes: >
+  Wolfenstein 3D source port. Plays Wolf3D (wl6/wl1), Spear of Destiny (sod/sdm),
+  Super 3D Noah's Ark (n3d), and community pk3 mods. The core requires ecwolf.pk3
+  in the system directory - this is the engine data package built from wadsrc/static/
+  containing IWADINFO definitions, palettes, sprites, map configs, and lump remappers.
+  Game data files (vswap, gamemaps, vgagraph, audiot) are loaded from the content
+  directory, not the system directory. The core auto-detects the game variant by
+  scanning lump contents against IWADINFO MustContain rules. Spear of Destiny
+  mission packs (sd2/sd3) and Mac Wolfenstein variants are also supported.
+  Blake Stone and Rise of the Triad support is flagged as Preview.
+  The SelectGame path searches: content directory, system directory, BaseDataPaths
+  config, then platform-specific paths (Steam, GOG installs on desktop).
+
+files:
+  - name: "ecwolf.pk3"
+    description: "ECWolf engine data package"
+    required: true
+    md5: "c011b428819eea4a80b455c245a5a04d"
+    source_ref: "ecwolf_libretro.info:firmware0, version.h:MAIN_PK3, wl_iwad.cpp:SelectGame"
+    notes: >
+      Built from wadsrc/static/ via zipdir. Contains IWADINFO (game detection rules),
+      palettes (wolfpal, spearpal, blakepal, noahpal), map lump remappers (wl6map,
+      sodmap, etc.), DECORATE actor definitions, MAPINFO, SNDINFO, SNDSEQ, textures,
+      sprites, fonts, and localization strings. Without this file the core errors
+      with "Could not open ecwolf.pk3!". The md5 corresponds to the version shipped
+      with the current libretro buildbot release.

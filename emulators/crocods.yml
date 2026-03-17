@@ -1,0 +1,59 @@
+emulator: CrocoDS
+type: libretro
+source: "https://github.com/libretro/libretro-crocods"
+cores:
+  - crocods
+systems:
+  - amstrad-cpc
+
+notes: |
+  CrocoDS is an Amstrad CPC 6128 emulator ported to libretro. Supports
+  .dsk, .sna, and .kcr file formats.
+
+  All system ROMs are compiled directly into the core binary as C byte
+  arrays. No external BIOS files are required.
+
+  Embedded ROMs (crocods-core/):
+    - cpc6128.bin.c: cpc6128_bin[32768] - CPC 6128 OS (16KB) + BASIC 1.1 (16KB)
+    - romdisc.bin.c: romdisc_bin[16384] - AMSDOS disk controller ROM (16KB)
+
+  ROM initialization in InitMemCPC() (crocods-core/vga.c:185-200):
+    - ROMINF (lower ROM, 16KB): first half of cpc6128_bin (OS)
+    - ROMEXT[0] (upper ROM slot 0, 16KB): second half of cpc6128_bin (BASIC)
+    - ROMEXT[7] (upper ROM slot 7, 16KB): romdisc_bin (AMSDOS)
+
+  Called from HardResetCPC() (crocods-core/platform.c:1009-1020) using
+  the extern byte arrays directly. No filesystem ROM loading exists in
+  the libretro path.
+
+  A Multiface ROM loader exists (crocods-core/multiface.c:51-61) that
+  reads LocRomMulti via fopen(), but InitMultiface() is never called
+  from the libretro build or platform.c. Dead code in libretro context.
+
+  The core does not request retro_system_directory or declare any
+  firmware entries in the .info file. need_fullpath is false.
+
+  Only the CPC 6128 model is emulated (no CPC 464/664 selection).
+
+files: []
+
+platform_details:
+  bios_mapping:
+    source_ref: "crocods-core/vga.c:185-200, crocods-core/platform.c:1009-1020"
+    notes: |
+      All ROMs are embedded. InitMemCPC() copies cpc6128_bin and romdisc_bin
+      into ROMINF and ROMEXT arrays via memcpy. No filesystem lookup occurs.
+      retro_set_environment() does not request system_directory.
+
+  embedded_roms:
+    source_ref: "crocods-core/cpc6128.bin.c, crocods-core/romdisc.bin.c"
+    notes: |
+      2 ROM sets embedded as C byte arrays:
+      cpc6128_bin (32KB) - CPC 6128 OS (lower 16KB) + BASIC 1.1 (upper 16KB)
+      romdisc_bin (16KB) - AMSDOS disk controller ROM, mapped to slot 7
+
+  model_rom_map:
+    source_ref: "crocods-core/vga.c:189-192"
+    notes: |
+      CPC 6128 only: OS in ROMINF, BASIC in ROMEXT[0], AMSDOS in ROMEXT[7]
+      emulator_patch_ROM() applies language patches to ROMINF after loading

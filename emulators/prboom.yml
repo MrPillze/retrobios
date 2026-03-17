@@ -1,0 +1,47 @@
+emulator: PrBoom
+type: libretro
+source: "https://github.com/libretro/libretro-prboom"
+systems: [doom]
+
+notes: |
+  PrBoom is a Doom source port based on MBF (Marine's Best Friend), itself
+  derived from Boom. The libretro port plays Doom, Doom II, Final Doom,
+  FreeDoom, and custom WADs/PWADs.
+
+  The core requires prboom.wad, a small engine data WAD containing internal
+  resources: font glyphs, palette, colormaps, sine/tangent tables, gamma
+  tables, menu graphics, and a null sprite (TNT1A0). It is NOT a game WAD.
+  The file is generated at build time by the rdatawad tool from raw PPM
+  graphics and LMP lumps (see Makefile.prboomdata), but ships pre-built
+  in the repository root.
+
+  Without prboom.wad the core falls back to hardcoded internal defaults
+  (d_main.c:1073-1074), so the file is technically optional but expected
+  for correct rendering of menus, HUD digits, and extended features.
+
+  File search order (libretro.c I_FindFile, line 1743):
+  1. WAD directory (same folder as the loaded game WAD)
+  2. system/prboom/ subdirectory
+  3. system/ directory directly
+  4. Parent folders of WAD directory (recursive, if enabled)
+
+  The core accepts .wad, .iwad, .pwad, and .lmp extensions. Game IWADs
+  it recognizes (d_main.c:133-145): doom2f.wad, doom2.wad, plutonia.wad,
+  tnt.wad, freedoom2.wad, doom.wad, doomu.wad, freedoom1.wad,
+  freedoom.wad, doom1.wad.
+
+  The src/ directory contains a second, larger prboom.wad (228743 bytes,
+  md5 23afd6143cb1ffec99a46755f9209ea6) which is the upstream PrBoom
+  original. The root copy (143312 bytes) is the libretro-specific build.
+
+files:
+  - name: "prboom.wad"
+    system: doom
+    description: "PrBoom engine data WAD (fonts, palette, colormaps, tables, menu graphics)"
+    required: false
+    size: 143312
+    md5: "72ae1b47820fcc93cc0df9c428d0face"
+    sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
+    crc32: "a5751b99"
+    source_ref: "d_main.c:1069-1078 (PACKAGE .wad load), libretro.c:1743-1780 (I_FindFile search), config.h:46 (PACKAGE=prboom)"
+    notes: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."
