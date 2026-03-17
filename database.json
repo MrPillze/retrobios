@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-17T13:09:48Z",
-  "total_files": 5348,
-  "total_size": 4871540563,
+  "generated_at": "2026-03-17T13:37:13Z",
+  "total_files": 5351,
+  "total_size": 4875892291,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -44742,6 +44742,24 @@
       "sha256": "b09db1827cfdcaf442e74328bc1e170920a6bce1ea99dcda89ee00f23b6ef467",
       "crc32": "2ea250c0"
     },
+    "230ebfc49dc9e15422089474bcc9fa040f2c57eb": {
+      "path": "bios/Sega/Mega CD/.variants/megacd_v100s_jp.bin",
+      "name": "megacd_v100s_jp.bin",
+      "size": 131072,
+      "sha1": "230ebfc49dc9e15422089474bcc9fa040f2c57eb",
+      "md5": "a3ddcc8483b0368141adfd99d9a1e466",
+      "sha256": "37dec869e959bf04dcbebc1e8fa32ae3d3993d723f89997fc243fa2ab19a86e3",
+      "crc32": "79f85384"
+    },
+    "5a8c4b91d3034c1448aac4b5dc9a6484fce51636": {
+      "path": "bios/Sega/Mega CD/.variants/segacd2_v200_us.bin",
+      "name": "segacd2_v200_us.bin",
+      "size": 131072,
+      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
+      "md5": "310a9081d2edf2d316ab38813136725e",
+      "sha256": "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c",
+      "crc32": "8af65f58"
+    },
     "328a3228c29fba244b9db2055adc1ec4f7a87e6b": {
       "path": "bios/Sega/Mega CD/.variants/segacd2_v211x_us.bin",
       "name": "segacd2_v211x_us.bin",
@@ -45614,6 +45632,15 @@
       "md5": "85fede415f4294cc777517d7eada482e",
       "sha256": "c1ff621d7910105d4ee45c31e9fd8fd0d79a545c78b66c69a562ee1ffbae8d72",
       "crc32": "2cbe8995"
+    },
+    "48f6a9e001e2cb002217107c46fb0459069d1a42": {
+      "path": "bios/Sony/PlayStation/.variants/ps1_rom.bin.fbb5f59e",
+      "name": "ps1_rom.bin.fbb5f59e",
+      "size": 4089584,
+      "sha1": "48f6a9e001e2cb002217107c46fb0459069d1a42",
+      "md5": "fbb5f59ec332451debccf1e377017237",
+      "sha256": "f6dcfa82cdd48be227b171b01812fa688973159b8be52ba716c67086a6b7e0ea",
+      "crc32": "d5ff6273"
     },
     "649895efd79d14790eabb362e94eb0622093dfb9": {
       "path": "bios/Sony/PlayStation/.variants/scph1001.bin.649895ef",
@@ -53109,6 +53136,8 @@
       "bc6ae4e1db01a2f349d9af392bf7e2bd": "6a40a5cec00c3b49a4fd013505c5580baa733a29",
       "29ad9ce848b49d0f9cefc294137f653c": "0d5485e67c3f033c41d677cc9936afd6ad618d5f",
       "cc049159d7e744c15eee080c241273b4": "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94",
+      "a3ddcc8483b0368141adfd99d9a1e466": "230ebfc49dc9e15422089474bcc9fa040f2c57eb",
+      "310a9081d2edf2d316ab38813136725e": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "ecc837c31d77b774c6e27e38f828aa9a": "328a3228c29fba244b9db2055adc1ec4f7a87e6b",
       "96ea588d647f2ab1f291279fc691663c": "c5c24e6439a148b7f4c7ea269d09b7a23fe25075",
       "baca1df271d7c11fe50087c0358f4eb5": "2b125c0545afa089b617f2558e686ea723bdc06e",
@@ -53206,6 +53235,7 @@
       "575d203c6e15e679fba0b73f854ec7a2": "7e265a2c1f621ed365ea23bdcafdedbc79c1299c",
       "0da70a5d2a0e733398e005b96b7e4ba6": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
       "85fede415f4294cc777517d7eada482e": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "fbb5f59ec332451debccf1e377017237": "48f6a9e001e2cb002217107c46fb0459069d1a42",
       "dc2b9bf8da62ec93e868cfd29f0d067d": "649895efd79d14790eabb362e94eb0622093dfb9",
       "e2110b8a2b97a8e0b857a45d32f7e187": "b6a11579caef3875504fcf3831b8e3922746df2c",
       "9a09ab7e49b422c007e6d54d7c49b965": "7771d6e90980408f753891648685def6dd42ef6d",
@@ -66964,6 +66994,12 @@
       "megacd_v100o_jp.bin": [
         "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94"
       ],
+      "megacd_v100s_jp.bin": [
+        "230ebfc49dc9e15422089474bcc9fa040f2c57eb"
+      ],
+      "segacd2_v200_us.bin": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      ],
       "segacd2_v211x_us.bin": [
         "328a3228c29fba244b9db2055adc1ec4f7a87e6b"
       ],
@@ -67236,6 +67272,9 @@
       ],
       "zx128.rom": [
         "16375d42ea109b47edded7a16028de7fdb3013a1"
+      ],
+      "ps1_rom.bin.fbb5f59e": [
+        "48f6a9e001e2cb002217107c46fb0459069d1a42"
       ],
       "scph1001.bin.649895ef": [
         "649895efd79d14790eabb362e94eb0622093dfb9"
@@ -68650,6 +68689,9 @@
       "sony-playstation:d8f485717a5237285e4d7c5f881b7f32": [
         "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
       ],
+      "sony-playstation:fbb5f59ec332451debccf1e377017237": [
+        "48f6a9e001e2cb002217107c46fb0459069d1a42"
+      ],
       "sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b": [
         "c40146361eb8cf670b19fdc9759190257803cab7"
       ],
@@ -68887,6 +68929,9 @@
       "sega-mega-cd:278a9397d192149e84e820ac621a8edd": [
         "4846f448160059a7da0215a5df12ca160f26dd69"
       ],
+      "sega-mega-cd:a3ddcc8483b0368141adfd99d9a1e466": [
+        "230ebfc49dc9e15422089474bcc9fa040f2c57eb"
+      ],
       "sega-mega-cd:bdeb4c47da613946d422d97d98b21cda": [
         "e4193c6ae44c3cea002707d2a88f1fbcced664de"
       ],
@@ -68901,6 +68946,9 @@
       ],
       "sega-mega-cd:683a8a9e273662561172468dfa2858eb": [
         "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
+      ],
+      "sega-mega-cd:310a9081d2edf2d316ab38813136725e": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
       ],
       "sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a": [
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
@@ -74183,6 +74231,8 @@
       "9bce40b2": "6a40a5cec00c3b49a4fd013505c5580baa733a29",
       "f18dde5b": "0d5485e67c3f033c41d677cc9936afd6ad618d5f",
       "2ea250c0": "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94",
+      "79f85384": "230ebfc49dc9e15422089474bcc9fa040f2c57eb",
+      "8af65f58": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "2e49d72c": "328a3228c29fba244b9db2055adc1ec4f7a87e6b",
       "e7e3afe2": "c5c24e6439a148b7f4c7ea269d09b7a23fe25075",
       "d48c44b5": "2b125c0545afa089b617f2558e686ea723bdc06e",
@@ -74280,6 +74330,7 @@
       "ae16233a": "7e265a2c1f621ed365ea23bdcafdedbc79c1299c",
       "10751aba": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
       "2cbe8995": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "d5ff6273": "48f6a9e001e2cb002217107c46fb0459069d1a42",
       "55847d8c": "649895efd79d14790eabb362e94eb0622093dfb9",
       "1e26792f": "b6a11579caef3875504fcf3831b8e3922746df2c",
       "6a0e22a0": "7771d6e90980408f753891648685def6dd42ef6d",

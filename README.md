@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5348** files | **4645.9 MB** | Last updated: 2026-03-17T13:09:48Z
+> **5351** files | **4650.0 MB** | Last updated: 2026-03-17T13:37:13Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -46,7 +46,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Platform | Coverage | Status | Verification | Details |
 |----------|----------|--------|--------------|---------|
 | Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 589 verified, 91 untested |
-| EmuDeck | 160/164 (97.6%) | ![EmuDeck 98%](https://img.shields.io/badge/EmuDeck-98%25-brightgreen) 🟢 | md5 | 160 verified, 4 missing |
+| EmuDeck | 163/164 (99.4%) | ![EmuDeck 99%](https://img.shields.io/badge/EmuDeck-99%25-brightgreen) 🟢 | md5 | 163 verified, 1 missing |
 | Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
 | Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 336 verified, 10 untested |
 | RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
@@ -9819,6 +9819,8 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `2f53b852`
   - Also known as: `sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b`
   - Platform names: EmuDeck: ``
+  - **Variants** (1 alternate versions):
+    - [ps1_rom.bin.fbb5f59e](bios/Sony/PlayStation/.variants/ps1_rom.bin.fbb5f59e) (4,089,584 bytes) - SHA1: `48f6a9e001e2cb002217107c46fb0459069d1a42`, MD5: `fbb5f59ec332451debccf1e377017237`
 - **[ps2-50j.bin](bios/Sony/PlayStation/ps2-50j.bin)** (524,288 bytes)
   - SHA1: `d7d6be084f51354bc951d8fa2d8d912aa70abc5e`
   - MD5: `d8f485717a5237285e4d7c5f881b7f32`
@@ -11166,4 +11168,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T13:09:48Z*
+*Auto-generated on 2026-03-17T13:37:13Z*
