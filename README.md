@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5320** files | **4587.5 MB** | Last updated: 2026-03-17T12:24:18Z
+> **5348** files | **4645.9 MB** | Last updated: 2026-03-17T13:09:48Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -46,11 +46,11 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Platform | Coverage | Status | Verification | Details |
 |----------|----------|--------|--------------|---------|
 | Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 589 verified, 91 untested |
-| EmuDeck | 126/165 (76.4%) | ![EmuDeck 76%](https://img.shields.io/badge/EmuDeck-76%25-yellow) 🟡 | md5 | 126 verified, 39 missing |
+| EmuDeck | 160/164 (97.6%) | ![EmuDeck 98%](https://img.shields.io/badge/EmuDeck-98%25-brightgreen) 🟢 | md5 | 160 verified, 4 missing |
 | Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
 | Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 336 verified, 10 untested |
 | RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
-| RetroBat | 343/343 (100.0%) | ![RetroBat 100%](https://img.shields.io/badge/RetroBat-100%25-brightgreen) 🟢 | md5 | 340 verified, 3 untested |
+| RetroBat | 343/343 (100.0%) | ![RetroBat 100%](https://img.shields.io/badge/RetroBat-100%25-brightgreen) 🟢 | md5 | 341 verified, 2 untested |
 | RetroPie | 398/398 (100.0%) | ![RetroPie](https://img.shields.io/badge/RetroPie-archived-lightgrey) 📦 | existence | 398 present *(archived - generate manually)* |
 
 ## Systems
@@ -65,7 +65,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Amstrad/CPC | 4 | 112.0 KB |
 | Amstrad/PCW | 2 | 4.2 KB |
 | Apple/Apple II | 17 | 1.2 MB |
-| Apple/Macintosh | 17 | 37.9 MB |
+| Apple/Macintosh | 18 | 60.1 MB |
 | Apple/Macintosh II | 10 | 50.3 MB |
 | Arcade/Arcade | 105 | 594.6 MB |
 | Arcade/FBNeo | 31 | 29.6 MB |
@@ -115,13 +115,13 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Mattel/Intellivision | 8 | 76.5 KB |
 | Microsoft/Chihiro | 1 | 256.0 KB |
 | Microsoft/MSX | 319 | 14.6 MB |
-| Microsoft/Xbox | 2 | 768 B |
+| Microsoft/Xbox | 3 | 1.0 MB |
 | NEC/PC Engine | 7 | 1.3 MB |
 | NEC/PC-6001 | 4 | 188.0 KB |
 | NEC/PC-8001 | 1 | 126.4 KB |
 | NEC/PC-98 | 42 | 2.9 MB |
 | NEC/PC-FX | 4 | 3.5 MB |
-| Nintendo/3DS | 18 | 9.8 MB |
+| Nintendo/3DS | 19 | 9.8 MB |
 | Nintendo/Famicom Disk System | 1 | 8.0 KB |
 | Nintendo/Game Boy | 3 | 768 B |
 | Nintendo/Game Boy Advance | 2 | 32.0 KB |
@@ -135,6 +135,9 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Nintendo/Satellaview | 3 | 3.0 MB |
 | Nintendo/SuFami Turbo | 1 | 256.0 KB |
 | Nintendo/Super Game Boy | 8 | 1.6 MB |
+| Nintendo/Switch | 2 | 16.8 KB |
+| Nintendo/Wii U | 1 | 439.0 KB |
+| Nokia/N-Gage | 1 | 17.8 MB |
 | Oric/Oric | 21 | 181.1 KB |
 | Palm/Palm | 5 | 38.3 MB |
 | Philips/CD-i | 4 | 2.0 MB |
@@ -159,11 +162,11 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Sharp/MZ | 6 | 504.6 KB |
 | Sharp/X1 | 4 | 42.0 KB |
 | Sharp/X68000 | 7 | 1.3 MB |
-| Sinclair/ZX Spectrum | 47 | 1.5 MB |
-| Sony/PlayStation | 17 | 8.5 MB |
+| Sinclair/ZX Spectrum | 46 | 502.3 KB |
+| Sony/PlayStation | 26 | 13.5 MB |
 | Sony/PlayStation 2 | 83 | 304.1 MB |
 | Sony/PlayStation 3 | 1 | 196.6 MB |
-| Sony/PlayStation Portable | 97 | 14.0 MB |
+| Sony/PlayStation Portable | 98 | 24.3 MB |
 | Sony/PlayStation Vita | 2 | 181.8 MB |
 | Synertek/SYM-1 | 1 | 8.0 KB |
 | Tandy/CoCo | 21 | 263.0 KB |
@@ -500,6 +503,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `0f033f8d7793c58d3ef5374174eec3ab86b33ba1`
   - MD5: `96c9bdde5f9910d5ac8bee917ed8cffa`
   - CRC32: `43272790`
+- **[mac755.chd](bios/Apple/Macintosh/mac755.chd)** (23,360,456 bytes)
+  - SHA1: `817fbb2bbce56bf8e473ee2525ca34bcdeaddb90`
+  - MD5: `58d73d87e189ddc68ee9c64440ab1a05`
+  - CRC32: `69a1983e`
 - **[macclasc.zip](bios/Apple/Macintosh/macclasc.zip)** (436,715 bytes)
   - SHA1: `39a3243624df5a962c160c7bc1535b50c538f0bd`
   - MD5: `28cada606496d94c0a3dc99816654221`
@@ -7844,6 +7851,12 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Microsoft/Xbox
 
+- **[Complex_4627v1.03.bin](bios/Microsoft/Xbox/Complex_4627v1.03.bin)** (1,048,576 bytes)
+  - SHA1: `3944392c954cfb176d4210544e88353b3c5d36b1`
+  - MD5: `39cee882148a87f93cb440b99dde3ceb`
+  - CRC32: `1dbb7b59`
+  - Also known as: `Complex_4627.bin`
+  - Platform names: Batocera: `Complex_4627.bin`, Recalbox: `Complex_4627.bin`, RetroBat: `Complex_4627.bin`
 - **[mcpx_1.0.bin](bios/Microsoft/Xbox/mcpx_1.0.bin)** (512 bytes)
   - SHA1: `5d270675b54eb8071b480e42d22a3015ac211cef`
   - MD5: `d49c52a4102f6df7bcf8d0617ac475ed`
@@ -8181,6 +8194,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `dcdba80719d0d77fc77d4edc4d951cf6dc7cd167`
   - MD5: `6b2782bca7ee2873adc590f978264436`
   - CRC32: `c4df011e`
+- **[aes_keys.txt](bios/Nintendo/3DS/aes_keys.txt)** (2,875 bytes)
+  - SHA1: `b968ad53cbbe9aa6f5806e6b62854b3f8e821732`
+  - MD5: `13513e1f94c4cca3ae6faf218735082e`
+  - CRC32: `11e6e534`
 - **[config](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/sysdata/00010017/00000000/config)** (32,768 bytes)
   - SHA1: `5c7c5a5768bbb8b293744f42acdc5467c1d54148`
   - MD5: `3155c83220c178dd0ae325e5c037fc61`
@@ -8572,8 +8589,20 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `bf861922dcb78c316360e3e742f4f70ff63c9bc3`
   - MD5: `8d3d9f294b6e174bc7b1d2fd1c727530`
   - CRC32: `7f933ce2`
-  - Also known as: `IPL.n64`, `IPL_JAP.n64`
-  - Platform names: Recalbox: `IPL.n64`, RetroBat: `IPL_JAP.n64`
+  - Also known as: `64DD_IPL_JP.n64`, `IPL.n64`, `IPL_JAP.n64`
+  - Platform names: EmuDeck: `64DD_IPL_JP.n64`, Recalbox: `IPL.n64`, RetroBat: `IPL_JAP.n64`
+- **[64DD_IPL_DEV.n64](bios/Nintendo/Nintendo%2064DD/64DD_IPL_DEV.n64)** (4,194,304 bytes)
+  - SHA1: `10c4173c2a7eb09c6579818f72ef18fa0b6d32de`
+  - MD5: `aad37b1492886b892f1821f37fd3ae34`
+  - CRC32: `b78064d9`
+  - Also known as: `IPL_DEV.n64`
+  - Platform names: RetroBat: `IPL_DEV.n64`
+- **[64DD_IPL_US.n64](bios/Nintendo/Nintendo%2064DD/64DD_IPL_US.n64)** (4,194,304 bytes)
+  - SHA1: `3c5b93ca231550c68693a14f03cea8d5dbd1be9e`
+  - MD5: `37c36e4286d36892a9fc70eafe4104be`
+  - CRC32: `d0f567ca`
+  - Also known as: `IPL_USA.n64`
+  - Platform names: RetroBat: `IPL_USA.n64`
 - **[GLideN64.1e462a6e.OpenGL.keys](bios/Nintendo/Nintendo%2064DD/shaders/GLideN64.1e462a6e.OpenGL.keys)** (464 bytes)
   - SHA1: `b31cca5881bb7fa071ccb5940b1bd7a6e4056e35`
   - MD5: `57eca542eab9ca9303e09d18819feb03`
@@ -8622,14 +8651,6 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `683a8fca9a782de05e8f6b1fcc5573ad9011a032`
   - MD5: `758ad9874925c54e04db50f11385f515`
   - CRC32: `451efb01`
-- **[IPL_DEV.n64](bios/Nintendo/Nintendo%2064DD/IPL_DEV.n64)** (4,194,304 bytes)
-  - SHA1: `10c4173c2a7eb09c6579818f72ef18fa0b6d32de`
-  - MD5: `aad37b1492886b892f1821f37fd3ae34`
-  - CRC32: `b78064d9`
-- **[IPL_USA.n64](bios/Nintendo/Nintendo%2064DD/IPL_USA.n64)** (4,194,304 bytes)
-  - SHA1: `3c5b93ca231550c68693a14f03cea8d5dbd1be9e`
-  - MD5: `37c36e4286d36892a9fc70eafe4104be`
-  - CRC32: `d0f567ca`
 
 ### Nintendo/Nintendo DS
 
@@ -8837,6 +8858,31 @@ These are large asset packs required by specific cores. They are included in the
   - MD5: `a43cbd0ab271990f434412fc5c500eff`
   - CRC32: `4c866029`
   - Also known as: `sgb_bios.bin`
+
+### Nintendo/Switch
+
+- **[prod.keys](bios/Nintendo/Switch/prod.keys)** (16,025 bytes)
+  - SHA1: `c146b651696d25287241f4bab18226e488bc45b3`
+  - MD5: `31fda6c3678507b12631dfd01b0415ef`
+  - CRC32: `a65c13ca`
+- **[title.keys](bios/Nintendo/Switch/title.keys)** (1,224 bytes)
+  - SHA1: `bfee8e708dc4c8f27bfe51a12d57caaa0b7f74de`
+  - MD5: `f65367650f88124362922994b78ede77`
+  - CRC32: `77cacffb`
+
+### Nintendo/Wii U
+
+- **[keys.txt](bios/Nintendo/Wii%20U/keys.txt)** (449,507 bytes)
+  - SHA1: `9edc52be45201ec99f6e4ceb5dc6abfc633c4eae`
+  - MD5: `9b60696402ca3524a707f3974370f74a`
+  - CRC32: `d6d5725f`
+
+### Nokia/N-Gage
+
+- **[SYM.ROM](bios/Nokia/N-Gage/SYM.ROM)** (18,612,224 bytes)
+  - SHA1: `34e5be43effe08435b4535b68b45bb9e61d384e9`
+  - MD5: `64a95a4a884cf4cc15a566b856603193`
+  - CRC32: `343a0710`
 
 ### Oric/Oric
 
@@ -9588,10 +9634,6 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `ddee531f`
   - Also known as: `zx48.rom`
   - Platform names: Batocera: `zx48.rom`, Lakka: `zx48.rom`, RetroArch: `zx48.rom`, RetroPie: `zx48.rom`
-- **[Complex_4627.bin](bios/Sinclair/ZX%20Spectrum/Complex_4627.bin)** (1,048,576 bytes)
-  - SHA1: `3944392c954cfb176d4210544e88353b3c5d36b1`
-  - MD5: `39cee882148a87f93cb440b99dde3ceb`
-  - CRC32: `1dbb7b59`
 - **[disciple.rom](bios/Sinclair/ZX%20Spectrum/disciple.rom)** (8,192 bytes)
   - SHA1: `9a75ed4b293f968985be4c9aa893cd88276d1ced`
   - MD5: `78e61a2a02121873c1756b21fd1398b1`
@@ -9741,11 +9783,47 @@ These are large asset packs required by specific cores. They are included in the
 
 ### Sony/PlayStation
 
+- **[dtlh1100.bin](bios/Sony/PlayStation/dtlh1100.bin)** (524,288 bytes)
+  - SHA1: `73107d468fc7cb1d2c5b18b269715dd889ecef06`
+  - MD5: `ca5cfc321f916756e3f0effbfaeba13b`
+  - CRC32: `decb22f5`
+  - Also known as: `sony-playstation:ca5cfc321f916756e3f0effbfaeba13b`
+  - Platform names: EmuDeck: ``
+- **[dtlh2000.bin](bios/Sony/PlayStation/dtlh2000.bin)** (524,288 bytes)
+  - SHA1: `1a8d6f9453111b1d317bb7dae300495fbf54600c`
+  - MD5: `2118230527a9f51bd9216e32fa912842`
+  - CRC32: `18d0f7d8`
+  - Also known as: `sony-playstation:2118230527a9f51bd9216e32fa912842`
+  - Platform names: EmuDeck: ``
+- **[ps-21a.bin](bios/Sony/PlayStation/ps-21a.bin)** (524,288 bytes)
+  - SHA1: `ca7af30b50d9756cbd764640126c454cff658479`
+  - MD5: `da27e8b6dab242d8f91a9b25d80c63b8`
+  - CRC32: `aff00f2f`
+  - Also known as: `sony-playstation:da27e8b6dab242d8f91a9b25d80c63b8`
+  - Platform names: EmuDeck: ``
+- **[ps-21e.bin](bios/Sony/PlayStation/ps-21e.bin)** (524,288 bytes)
+  - SHA1: `76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc`
+  - MD5: `417b34706319da7cf001e76e40136c23`
+  - CRC32: `86c30531`
+  - Also known as: `sony-playstation:417b34706319da7cf001e76e40136c23`
+  - Platform names: EmuDeck: ``
+- **[ps-22j.bin](bios/Sony/PlayStation/ps-22j.bin)** (524,288 bytes)
+  - SHA1: `ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d`
+  - MD5: `57a06303dfa9cf9351222dfcbb4a29d9`
+  - CRC32: `24fc7e17`
+  - Also known as: `sony-playstation:57a06303dfa9cf9351222dfcbb4a29d9`
+  - Platform names: EmuDeck: ``
 - **[ps1_rom.bin](bios/Sony/PlayStation/ps1_rom.bin)** (524,288 bytes)
   - SHA1: `c40146361eb8cf670b19fdc9759190257803cab7`
   - MD5: `81bbe60ba7a3d1cea1d48c14cbcc647b`
   - CRC32: `2f53b852`
   - Also known as: `sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b`
+  - Platform names: EmuDeck: ``
+- **[ps2-50j.bin](bios/Sony/PlayStation/ps2-50j.bin)** (524,288 bytes)
+  - SHA1: `d7d6be084f51354bc951d8fa2d8d912aa70abc5e`
+  - MD5: `d8f485717a5237285e4d7c5f881b7f32`
+  - CRC32: `0dcce9d7`
+  - Also known as: `sony-playstation:d8f485717a5237285e4d7c5f881b7f32`
   - Platform names: EmuDeck: ``
 - **[psxonpsp660.bin](bios/Sony/PlayStation/psxonpsp660.bin)** (524,288 bytes)
   - SHA1: `96880d1ca92a016ff054be5159bb06fe03cb4e14`
@@ -9779,12 +9857,16 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `9bb87c4b`
   - Also known as: `sony-playstation:54847e693405ffeb0359c6287434cbef`
   - Platform names: EmuDeck: ``
+  - **Variants** (1 alternate versions):
+    - [scph1002.bin.e2110b8a](bios/Sony/PlayStation/.variants/scph1002.bin.e2110b8a) (524,288 bytes) - SHA1: `b6a11579caef3875504fcf3831b8e3922746df2c`, MD5: `e2110b8a2b97a8e0b857a45d32f7e187`
 - **[scph101.bin](bios/Sony/PlayStation/scph101.bin)** (524,288 bytes)
   - SHA1: `dcffe16bd90a723499ad46c641424981338d8378`
   - MD5: `6e3735ff4c7dc899ee98981385f6f3d0`
   - CRC32: `171bdcec`
   - Also known as: `sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0`
   - Platform names: EmuDeck: ``
+  - **Variants** (1 alternate versions):
+    - [scph101.bin.9a09ab7e](bios/Sony/PlayStation/.variants/scph101.bin.9a09ab7e) (524,288 bytes) - SHA1: `7771d6e90980408f753891648685def6dd42ef6d`, MD5: `9a09ab7e49b422c007e6d54d7c49b965`
 - **[scph102A.bin](bios/Sony/PlayStation/scph102A.bin)** (524,288 bytes)
   - SHA1: `beb0ac693c0dc26daf5665b3314db81480fa5c7c`
   - MD5: `b10f5e0e3d9eb60e5159690680b1e774`
@@ -9831,6 +9913,24 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `d786f0b9`
   - Also known as: `scph5552.bin`, `sony-playstation:32736f17079d0b2b7024407c39bd3050`
   - Platform names: EmuDeck: ``, Lakka: `scph5552.bin`, RetroArch: `scph5552.bin`, RetroPie: `scph5552.bin`
+- **[scph5903.bin](bios/Sony/PlayStation/scph5903.bin)** (1,048,576 bytes)
+  - SHA1: `15c94da3cc5a38a582429575af4198c487fe893c`
+  - MD5: `81328b966e6dcf7ea1e32e55e1c104bb`
+  - CRC32: `446ec5b2`
+  - Also known as: `sony-playstation:81328b966e6dcf7ea1e32e55e1c104bb`
+  - Platform names: EmuDeck: ``
+- **[scph7000.bin](bios/Sony/PlayStation/scph7000.bin)** (524,288 bytes)
+  - SHA1: `77b10118d21ac7ffa9b35f9c4fd814da240eb3e9`
+  - MD5: `8e4c14f567745eff2f0408c8129f72a6`
+  - CRC32: `ec541cd0`
+  - Also known as: `sony-playstation:8e4c14f567745eff2f0408c8129f72a6`
+  - Platform names: EmuDeck: ``
+- **[scph7000w.bin](bios/Sony/PlayStation/scph7000w.bin)** (524,288 bytes)
+  - SHA1: `1b0dbdb23da9dc0776aac58d0755dc80fea20975`
+  - MD5: `b84be139db3ee6cbd075630aa20a6553`
+  - CRC32: `b7c43dad`
+  - Also known as: `sony-playstation:b84be139db3ee6cbd075630aa20a6553`
+  - Platform names: EmuDeck: ``
 - **[scph7001.bin](bios/Sony/PlayStation/scph7001.bin)** (524,288 bytes)
   - SHA1: `14df4f6c1e367ce097c11deae21566b4fe5647a9`
   - MD5: `1e68c231d0896b7eadcad1d7d8e76129`
@@ -9866,6 +9966,8 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `1bae895fbdd658cfb56c53cc2139282cc1e778de`
   - MD5: `b406d05922dac2eaf3c2e68157b1b468`
   - CRC32: `b5fad94a`
+  - Also known as: `SCPH-70004_BIOS_V12_EUR_200.ROM2`
+  - Platform names: EmuDeck: `SCPH-70004_BIOS_V12_EUR_200.ROM2`
 - **[SCPH-10000.MEC](bios/Sony/PlayStation%202/SCPH-10000.MEC)** (4 bytes)
   - SHA1: `3f8affbe07024ccd2f5b8374072d0928c583a862`
   - MD5: `3faf7c064a4984f53e2ef5e80ed543bc`
@@ -9890,16 +9992,20 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `434bc0b4eb4827da0773ec0795aadc5162569a07`
   - MD5: `dc752f160044f2ed5fc1f4964db2a095`
   - CRC32: `6f8e3c29`
-  - Also known as: `ps2-0200e-20040614.bin`, `sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095`
-  - Platform names: EmuDeck: ``, Lakka: `ps2-0200e-20040614.bin`, RetroArch: `ps2-0200e-20040614.bin`, RetroPie: `ps2-0200e-20040614.bin`
+  - Also known as: `SCPH-70004_BIOS_V12_EUR_200.BIN`, `ps2-0200e-20040614.bin`, `sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095`
+  - Platform names: EmuDeck: `SCPH-70004_BIOS_V12_EUR_200.BIN`, EmuDeck: ``, Lakka: `ps2-0200e-20040614.bin`, RetroArch: `ps2-0200e-20040614.bin`, RetroPie: `ps2-0200e-20040614.bin`
 - **[SCPH-70004.EROM](bios/Sony/PlayStation%202/SCPH-70004.EROM)** (3,145,728 bytes)
   - SHA1: `ec0121bb8e2a209044309780d2efc2559c9a0ef1`
   - MD5: `9feb1fdeadd6232a13b95e60b34ccef9`
   - CRC32: `bf3cbc65`
+  - Also known as: `SCPH-70004_BIOS_V12_EUR_200.EROM`
+  - Platform names: EmuDeck: `SCPH-70004_BIOS_V12_EUR_200.EROM`
 - **[SCPH-70004.ROM1](bios/Sony/PlayStation%202/SCPH-70004.ROM1)** (524,288 bytes)
   - SHA1: `cc44355ded232a2ba5309bb24d4cd55af08696b2`
   - MD5: `82dc50fa18e636850f557c4ea66c7bfd`
   - CRC32: `0e8797c0`
+  - Also known as: `SCPH-70004_BIOS_V12_EUR_200.ROM1`
+  - Platform names: EmuDeck: `SCPH-70004_BIOS_V12_EUR_200.ROM1`
 - **[SCPH30004R.nvm](bios/Sony/PlayStation%202/SCPH30004R.nvm)** (1,024 bytes)
   - SHA1: `62f5a0b54a174daf2bf66634b86c6f2a3cd297ce`
   - MD5: `20581825a81dcaf1ea544b645af70a15`
@@ -10550,6 +10656,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `a8e0dfbe537b6f6495ee646fde4894cdc21e8520`
   - MD5: `12bf703aaf5657e25356f7d395e6dbfa`
   - CRC32: `5abcff18`
+- **[ppsspp.zip](bios/Sony/PlayStation%20Portable/ppsspp.zip)** (10,754,518 bytes)
+  - SHA1: `5c34edb64e86f90ecf2702f40f5c09e92892d2f2`
+  - MD5: `e8daf776024fb6a4fb5bb6b5b4cfaa1d`
+  - CRC32: `9c66abe4`
 - **[psp_color.fsh](bios/Sony/PlayStation%20Portable/shaders/psp_color.fsh)** (1,365 bytes)
   - SHA1: `0dc7f5e2b7812db05a63f2cb9f106aadc0107181`
   - MD5: `2dcb856f9eb57f7b496e381854cf2a63`
@@ -11056,4 +11166,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T12:24:18Z*
+*Auto-generated on 2026-03-17T13:09:48Z*
