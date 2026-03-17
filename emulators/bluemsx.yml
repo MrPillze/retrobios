@@ -1,0 +1,644 @@
+emulator: blueMSX
+type: libretro
+source: "https://github.com/libretro/blueMSX-libretro"
+cores:
+  - bluemsx
+systems:
+  - msx
+  - msx2
+  - msx2plus
+  - msxturboR
+  - colecovision
+  - sega-sg1000
+  - sega-sc3000
+  - sega-sf7000
+  - spectravideo
+
+# blueMSX is a multi-system emulator covering MSX (1/2/2+/turboR), ColecoVision,
+# SVI (Spectravideo), and SEGA SG-1000/SC-3000/SF-7000. The core ships its entire
+# machine database (config.ini per machine model) plus ROM files under
+# <system_dir>/Machines/. Each machine config.ini references ROM paths relative
+# to the Machines directory.
+#
+# Machine type selection (libretro.c:855-896):
+#   Core option "bluemsx_msxtype" selects the machine. "Auto" defaults to SC-3000
+#   then switches based on file extension: .dsk/.cas/.rom/.mx1/.mx2 -> MSX2+,
+#   .col -> ColecoVision, .sg -> SG-1000, .sc -> SC-3000, .sf/.sf7 -> SF-7000.
+#
+# C-BIOS (open source MSX BIOS replacement) is bundled for MSX, MSX2, MSX2+.
+#   Machines: "MSX - C-BIOS", "MSX2 - C-BIOS", "MSX2+ - C-BIOS"
+#   These allow running cartridge ROMs without copyrighted BIOS files.
+#   Disk and tape software requires real BIOS ROMs.
+#
+# ROM loading (Src/Board/Machine.c:594-647):
+#   machineCreate() reads <machinesDir>/<machineName>/config.ini which lists
+#   ROM slots. ROM paths in config.ini are relative to machinesDir parent.
+#
+# All files go under: <system_dir>/Machines/
+
+notes: |
+  The directory structure must be preserved exactly as shipped in the repo's
+  system/bluemsx/ folder. The core expects Machines/ and Databases/ subdirectories
+  inside the system directory. Each machine model has its own subdirectory with
+  a config.ini and associated ROM files.
+
+  Default machines (used when selecting base type names like "MSX", "MSX2", etc.)
+  reference ROMs from "Machines/Shared Roms/". Machine-specific variants (e.g.
+  "MSX2 - Panasonic FS-A1F") have their own ROMs in their own subdirectory.
+
+  C-BIOS machines work for cartridge-based games without any copyrighted BIOS.
+  For disk/tape support, real BIOS ROMs are required.
+
+files:
+  # ============================================================
+  # Shared ROMs (Machines/Shared Roms/)
+  # Used by the default/generic machine configs and many specific models.
+  # ============================================================
+
+  # -- MSX1 main BIOS variants --
+
+  - name: MSX.rom
+    path: "Machines/Shared Roms/MSX.rom"
+    size: 32768
+    required: true
+    system: msx
+    note: "MSX1 generic BIOS. Used by default 'MSX' machine config."
+    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+
+  - name: MSXJ.rom
+    path: "Machines/Shared Roms/MSXJ.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Japanese BIOS. Used by 'MSX - Japanese' machine."
+    source_ref: "system/bluemsx/Machines/MSX - Japanese/config.ini"
+
+  - name: MSXBR.rom
+    path: "Machines/Shared Roms/MSXBR.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Brazilian BIOS."
+
+  - name: MSXFR.rom
+    path: "Machines/Shared Roms/MSXFR.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 French BIOS."
+
+  - name: MSXG.rom
+    path: "Machines/Shared Roms/MSXG.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 German BIOS."
+
+  - name: MSXKR.rom
+    path: "Machines/Shared Roms/MSXKR.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Korean BIOS."
+
+  - name: MSXR.rom
+    path: "Machines/Shared Roms/MSXR.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Russian BIOS."
+
+  - name: MSXSE.ROM
+    path: "Machines/Shared Roms/MSXSE.ROM"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Swedish BIOS."
+
+  - name: MSXSP.rom
+    path: "Machines/Shared Roms/MSXSP.rom"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Spanish BIOS."
+
+  - name: MSXAR.ROM
+    path: "Machines/Shared Roms/MSXAR.ROM"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Arabic BIOS."
+
+  - name: MSXR2.ROM
+    path: "Machines/Shared Roms/MSXR2.ROM"
+    size: 32768
+    required: false
+    system: msx
+    note: "MSX1 Russian BIOS (variant 2)."
+
+  - name: MSXHAN.rom
+    path: "Machines/Shared Roms/MSXHAN.rom"
+    size: 8192
+    required: false
+    system: msx
+    note: "MSX1 Korean Hangul extension ROM."
+
+  # -- MSX2 main BIOS + extension --
+
+  - name: MSX2.rom
+    path: "Machines/Shared Roms/MSX2.rom"
+    size: 32768
+    required: true
+    system: msx2
+    note: "MSX2 generic main BIOS. Used by default 'MSX2' machine config."
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+
+  - name: MSX2EXT.rom
+    path: "Machines/Shared Roms/MSX2EXT.rom"
+    size: 16384
+    required: true
+    system: msx2
+    note: "MSX2 extension BIOS (SubROM). Required alongside MSX2.rom."
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+
+  - name: MSX2J.rom
+    path: "Machines/Shared Roms/MSX2J.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Japanese main BIOS."
+
+  - name: MSX2JEXT.rom
+    path: "Machines/Shared Roms/MSX2JEXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 Japanese extension BIOS."
+
+  - name: MSX2BR.rom
+    path: "Machines/Shared Roms/MSX2BR.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Brazilian main BIOS."
+
+  - name: MSX2BREXT.rom
+    path: "Machines/Shared Roms/MSX2BREXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 Brazilian extension BIOS."
+
+  - name: MSX2FR.rom
+    path: "Machines/Shared Roms/MSX2FR.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 French main BIOS."
+
+  - name: MSX2FREXT.rom
+    path: "Machines/Shared Roms/MSX2FREXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 French extension BIOS."
+
+  - name: MSX2G.rom
+    path: "Machines/Shared Roms/MSX2G.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 German main BIOS."
+
+  - name: MSX2GEXT.rom
+    path: "Machines/Shared Roms/MSX2GEXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 German extension BIOS."
+
+  - name: MSX2KR.rom
+    path: "Machines/Shared Roms/MSX2KR.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Korean main BIOS."
+
+  - name: MSX2KREXT.rom
+    path: "Machines/Shared Roms/MSX2KREXT.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Korean extension BIOS."
+
+  - name: MSX2R.rom
+    path: "Machines/Shared Roms/MSX2R.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Russian main BIOS."
+
+  - name: MSX2REXT.rom
+    path: "Machines/Shared Roms/MSX2REXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 Russian extension BIOS."
+
+  - name: MSX2R2.ROM
+    path: "Machines/Shared Roms/MSX2R2.ROM"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Russian main BIOS (variant 2)."
+
+  - name: MSX2SE.rom
+    path: "Machines/Shared Roms/MSX2SE.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Swedish main BIOS."
+
+  - name: MSX2SP.rom
+    path: "Machines/Shared Roms/MSX2SP.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Spanish main BIOS."
+
+  - name: MSX2SPEXT.rom
+    path: "Machines/Shared Roms/MSX2SPEXT.rom"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 Spanish extension BIOS."
+
+  - name: MSX2AR.ROM
+    path: "Machines/Shared Roms/MSX2AR.ROM"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Arabic main BIOS."
+
+  - name: MSX2AREXT.ROM
+    path: "Machines/Shared Roms/MSX2AREXT.ROM"
+    size: 16384
+    required: false
+    system: msx2
+    note: "MSX2 Arabic extension BIOS."
+
+  - name: MSX2HAN.rom
+    path: "Machines/Shared Roms/MSX2HAN.rom"
+    size: 32768
+    required: false
+    system: msx2
+    note: "MSX2 Korean Hangul BIOS."
+
+  # -- MSX2+ main BIOS + extension --
+
+  - name: MSX2P.rom
+    path: "Machines/Shared Roms/MSX2P.rom"
+    size: 32768
+    required: true
+    system: msx2plus
+    note: "MSX2+ main BIOS. Used by default 'MSX2+' machine config (auto-selected for .dsk/.cas/.rom)."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  - name: MSX2PEXT.rom
+    path: "Machines/Shared Roms/MSX2PEXT.rom"
+    size: 16384
+    required: true
+    system: msx2plus
+    note: "MSX2+ extension BIOS (SubROM)."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  - name: MSX2PMUS.rom
+    path: "Machines/Shared Roms/MSX2PMUS.rom"
+    size: 16384
+    required: true
+    system: msx2plus
+    note: "MSX2+ MSX-MUSIC BIOS (FM-PAC built-in). Used by MSX2+ and MSX2 default configs."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  # -- MSX turboR BIOS set --
+
+  - name: MSXTR.ROM
+    path: "Machines/Shared Roms/MSXTR.ROM"
+    size: 32768
+    required: true
+    system: msxturboR
+    note: "MSX turboR main BIOS."
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+
+  - name: MSXTREXT.ROM
+    path: "Machines/Shared Roms/MSXTREXT.ROM"
+    size: 16384
+    required: true
+    system: msxturboR
+    note: "MSX turboR extension BIOS."
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+
+  - name: MSXTRMUS.ROM
+    path: "Machines/Shared Roms/MSXTRMUS.ROM"
+    size: 16384
+    required: true
+    system: msxturboR
+    note: "MSX turboR MSX-MUSIC BIOS."
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+
+  - name: MSXTROPT.ROM
+    path: "Machines/Shared Roms/MSXTROPT.ROM"
+    size: 16384
+    required: true
+    system: msxturboR
+    note: "MSX turboR option ROM (firmware utilities)."
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+
+  - name: MSXDOS23.ROM
+    path: "Machines/Shared Roms/MSXDOS23.ROM"
+    size: 65536
+    required: true
+    system: msxturboR
+    note: "MSX-DOS 2.3 ROM. Used by turboR default config for disk operations."
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+
+  # -- Shared utility/extension ROMs --
+
+  - name: KANJI.rom
+    path: "Machines/Shared Roms/KANJI.rom"
+    size: 262144
+    required: false
+    note: "Kanji font ROM (256 KB). Used by MSX2+, turboR, and Japanese MSX2 machines."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  - name: MSXKANJI.rom
+    path: "Machines/Shared Roms/MSXKANJI.rom"
+    size: 32768
+    required: false
+    note: "MSX-Kanji driver ROM. Used by MSX2+, turboR, and Japanese MSX2 for kanji display."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  - name: FMPAC.rom
+    path: "Machines/Shared Roms/FMPAC.rom"
+    size: 65536
+    required: false
+    note: "FM-PAC cartridge ROM (YM2413 FM synthesis). Loaded as expansion cartridge by MegaromCartridge.c."
+    source_ref: "Src/Memory/MegaromCartridge.c:290"
+
+  - name: XBASIC2.rom
+    path: "Machines/Shared Roms/XBASIC2.rom"
+    size: 16384
+    required: false
+    note: "MSX-BASIC 2 extension ROM. Used by MSX2, MSX2+, and turboR default configs."
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+
+  - name: PAINT.rom
+    path: "Machines/Shared Roms/PAINT.rom"
+    size: 65536
+    required: false
+    note: "Paint utility ROM. Used by some MSX2 Japanese machine configs."
+
+  - name: SWP.rom
+    path: "Machines/Shared Roms/SWP.rom"
+    size: 32768
+    required: false
+    note: "Software World Processor ROM. Used by Al Alamiah MSX2 machines."
+
+  - name: ARABIC.rom
+    path: "Machines/Shared Roms/ARABIC.rom"
+    size: 32768
+    required: false
+    note: "Arabic character set extension ROM."
+
+  - name: HANGUL.rom
+    path: "Machines/Shared Roms/HANGUL.rom"
+    size: 131072
+    required: false
+    note: "Korean Hangul font ROM (128 KB)."
+
+  - name: RS232.ROM
+    path: "Machines/Shared Roms/RS232.ROM"
+    size: 8192
+    required: false
+    note: "RS-232C serial interface ROM."
+
+  - name: MOONSOUND.rom
+    path: "Machines/Shared Roms/MOONSOUND.rom"
+    size: 2097152
+    required: false
+    note: "MoonSound (OPL4) wavetable ROM (2 MB). Used by MSX2, MSX2+, and turboR configs."
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+
+  # -- Disk controller ROMs --
+
+  - name: PANASONICDISK.rom
+    path: "Machines/Shared Roms/PANASONICDISK.rom"
+    size: 16384
+    required: false
+    note: "Panasonic disk controller ROM. Used by MSX2+ and turboR default configs."
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+
+  - name: PHILIPSDISK.rom
+    path: "Machines/Shared Roms/PHILIPSDISK.rom"
+    size: 16384
+    required: false
+    note: "Philips disk controller ROM. Used by MSX1 and MSX2 default configs."
+    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+
+  - name: NATIONALDISK.rom
+    path: "Machines/Shared Roms/NATIONALDISK.rom"
+    size: 16384
+    required: false
+    note: "National disk controller ROM."
+
+  - name: MICROSOLDISK.ROM
+    path: "Machines/Shared Roms/MICROSOLDISK.ROM"
+    size: 16384
+    required: false
+    note: "Microsol disk controller ROM."
+
+  # -- Expansion hardware ROMs --
+
+  - name: SUNRISEIDE.rom
+    path: "Machines/Shared Roms/SUNRISEIDE.rom"
+    size: 65536
+    required: false
+    note: "Sunrise IDE interface ROM. Loaded as expansion cartridge."
+    source_ref: "Src/Memory/MegaromCartridge.c:310"
+
+  - name: BEERIDE.ROM
+    path: "Machines/Shared Roms/BEERIDE.ROM"
+    size: 16384
+    required: false
+    note: "Beer IDE interface ROM."
+    source_ref: "Src/Memory/MegaromCartridge.c:318"
+
+  - name: NOVAXIS.rom
+    path: "Machines/Shared Roms/NOVAXIS.rom"
+    size: 16384
+    required: false
+    note: "Novaxis SCSI interface ROM."
+    source_ref: "Src/Memory/MegaromCartridge.c:326"
+
+  - name: nowindDos1.rom
+    path: "Machines/Shared Roms/nowindDos1.rom"
+    size: 524288
+    required: false
+    note: "Nowind USB disk interface with MSX-DOS 1."
+    source_ref: "Src/Memory/MegaromCartridge.c:334"
+
+  - name: nowindDos2.rom
+    path: "Machines/Shared Roms/nowindDos2.rom"
+    size: 524288
+    required: false
+    note: "Nowind USB disk interface with MSX-DOS 2."
+    source_ref: "Src/Memory/MegaromCartridge.c:338"
+
+  - name: GCVMX80.ROM
+    path: "Machines/Shared Roms/GCVMX80.ROM"
+    size: 8192
+    required: false
+    note: "GCV MX-80 printer interface ROM."
+
+  - name: ARAB1.ROM
+    path: "Machines/Shared Roms/ARAB1.ROM"
+    size: 32768
+    required: false
+    note: "Arabic support ROM (variant 1)."
+
+  # ============================================================
+  # C-BIOS ROMs (open source, bundled with core)
+  # These are pre-installed and do not require user-supplied files.
+  # ============================================================
+
+  - name: cbios_main_msx1.rom
+    path: "Machines/MSX - C-BIOS/cbios_main_msx1.rom"
+    size: 32768
+    required: false
+    bundled: true
+    system: msx
+    note: "C-BIOS MSX1 main ROM (open source). Bundled with core. Cartridge games only."
+
+  - name: cbios_logo_msx1.rom
+    path: "Machines/MSX - C-BIOS/cbios_logo_msx1.rom"
+    size: 16384
+    required: false
+    bundled: true
+    system: msx
+    note: "C-BIOS MSX1 logo ROM (open source). Bundled with core."
+
+  - name: cbios_main_msx2.rom
+    path: "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom"
+    size: 32768
+    required: false
+    bundled: true
+    system: msx2
+    note: "C-BIOS MSX2 main ROM (open source). Bundled with core. Cartridge games only."
+
+  - name: cbios_logo_msx2.rom
+    path: "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom"
+    size: 16384
+    required: false
+    bundled: true
+    system: msx2
+    note: "C-BIOS MSX2 logo ROM (open source). Bundled with core."
+
+  - name: cbios_sub.rom
+    path: "Machines/MSX2 - C-BIOS/cbios_sub.rom"
+    size: 16384
+    required: false
+    bundled: true
+    system: msx2
+    note: "C-BIOS MSX2/MSX2+ sub ROM (open source). Bundled with core."
+
+  - name: "cbios_main_msx2+.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom"
+    size: 32768
+    required: false
+    bundled: true
+    system: msx2plus
+    note: "C-BIOS MSX2+ main ROM (open source). Bundled with core. Cartridge games only."
+
+  - name: "cbios_logo_msx2+.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom"
+    size: 16384
+    required: false
+    bundled: true
+    system: msx2plus
+    note: "C-BIOS MSX2+ logo ROM (open source). Bundled with core."
+
+  - name: cbios_music.rom
+    path: "Machines/MSX2+ - C-BIOS/cbios_music.rom"
+    size: 16384
+    required: false
+    bundled: true
+    system: msx2plus
+    note: "C-BIOS MSX2+ music ROM (open source). Bundled with core."
+
+  # ============================================================
+  # ColecoVision BIOS
+  # ============================================================
+
+  - name: coleco.rom
+    path: "Machines/COL - ColecoVision/coleco.rom"
+    size: 8192
+    required: true
+    system: colecovision
+    note: "ColecoVision BIOS ROM. Required for ColecoVision mode."
+    source_ref: "system/bluemsx/Machines/COL - ColecoVision/config.ini"
+
+  # ============================================================
+  # SEGA SF-7000 BIOS
+  # SG-1000 and SC-3000 do not require BIOS ROMs.
+  # ============================================================
+
+  - name: sf7000.rom
+    path: "Machines/SEGA - SF-7000/sf7000.rom"
+    size: 8192
+    required: true
+    system: sega-sf7000
+    note: "Sega SF-7000 BIOS ROM. SG-1000 and SC-3000 have no BIOS requirement."
+    source_ref: "system/bluemsx/Machines/SEGA - SF-7000/config.ini"
+
+  # ============================================================
+  # Spectravideo SVI BIOS files
+  # ============================================================
+
+  - name: svi318.rom
+    path: "Machines/SVI - Spectravideo SVI-318/svi318.rom"
+    size: 32768
+    required: true
+    system: spectravideo
+    note: "SVI-318 BIOS ROM."
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-318/config.ini"
+
+  - name: svi328.rom
+    path: "Machines/SVI - Spectravideo SVI-328/svi328.rom"
+    size: 32768
+    required: true
+    system: spectravideo
+    note: "SVI-328 BIOS ROM."
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328/config.ini"
+
+  # ============================================================
+  # Databases (required for ROM identification/mapper detection)
+  # Shipped with the core, not user-supplied.
+  # ============================================================
+
+  - name: msxromdb.xml
+    path: "Databases/msxromdb.xml"
+    required: false
+    bundled: true
+    note: "MSX ROM database for mapper auto-detection. Bundled with core."
+
+  - name: msxsysromdb.xml
+    path: "Databases/msxsysromdb.xml"
+    required: false
+    bundled: true
+    note: "MSX system ROM database. Bundled with core."
+
+# Machine count: 170+ machine configurations covering dozens of regional MSX
+# variants from manufacturers like Panasonic, Sony, Philips, Yamaha, Sanyo,
+# National, Toshiba, Daewoo, Sharp, Gradiente, Spectravideo, and others.
+# Each has its own ROM set in its own subdirectory. The Shared Roms directory
+# covers the generic/default configs that most users will need.

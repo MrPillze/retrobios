@@ -1,0 +1,175 @@
+emulator: PicoDrive
+type: libretro
+source: "https://github.com/libretro/picodrive"
+systems:
+  - sega-megadrive
+  - sega-genesis
+  - sega-megacd
+  - sega-segacd
+  - sega-32x
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+  - sega-pico
+
+notes: |
+  PicoDrive is a fast Mega Drive / Genesis emulator with Mega CD, 32X, Master
+  System, Game Gear, SG-1000 and Sega Pico support.
+
+  Mega CD / Sega CD games require a region-matching BIOS file. The core searches
+  the system directory for each name in order, trying .bin then .zip extension,
+  and uses the first file found. If no BIOS is found, CD games fail to load with
+  PM_BAD_CD_NO_BIOS. MSU-MD games can run without BIOS.
+
+  BIOS filename search order (platform/libretro/libretro.c:1265-1329):
+    US: us_scd2_9306, SegaCDBIOS9303, us_scd1_9210, bios_CD_U
+    EU: eu_mcd2_9306, eu_mcd2_9303, eu_mcd1_9210, bios_CD_E
+    JP: jp_mcd2_921222, jp_mcd1_9112, jp_mcd1_9111, bios_CD_J
+
+  32X BIOS files (m68k, master SH2, slave SH2) are fully optional. The core
+  has built-in HLE that generates replacement code at startup when the external
+  BIOS pointers are NULL (pico/32x/memory.c:2200 get_bios(), pico/32x/32x.c:172).
+  The libretro frontend does not expose any 32X BIOS loading path. Only the
+  standalone platform code references 32X_M_BIOS.BIN / 32X_S_BIOS.BIN, and
+  that code is currently disabled (#if 0 in platform/common/emu.c:1529).
+
+  Master System, Game Gear, SG-1000: no BIOS file loaded. The core initializes
+  VDP registers and RAM to simulate post-BIOS state (pico/sms.c:1080-1096).
+
+files:
+  # -------------------------------------------------------
+  # Mega CD / Sega CD - US region
+  # -------------------------------------------------------
+  - name: "us_scd2_9306.bin"
+    system: sega-segacd
+    required: true
+    size: 131072  # 128 KB (0x20000)
+    note: "US Sega CD Model 2 BIOS (September 1993). First in US search order."
+    source_ref: "platform/libretro/libretro.c:1266"
+
+  - name: "SegaCDBIOS9303.bin"
+    system: sega-segacd
+    required: false
+    size: 131072
+    note: "US Sega CD BIOS (March 1993). Second in US search order."
+    source_ref: "platform/libretro/libretro.c:1266"
+
+  - name: "us_scd1_9210.bin"
+    system: sega-segacd
+    required: false
+    size: 131072
+    note: "US Sega CD Model 1 BIOS (October 1992). Third in US search order."
+    source_ref: "platform/libretro/libretro.c:1266"
+
+  - name: "bios_CD_U.bin"
+    system: sega-segacd
+    required: false
+    size: 131072
+    note: "US Sega CD BIOS (generic name). Last in US search order."
+    source_ref: "platform/libretro/libretro.c:1266"
+
+  # -------------------------------------------------------
+  # Mega CD / Sega CD - EU region
+  # -------------------------------------------------------
+  - name: "eu_mcd2_9306.bin"
+    system: sega-megacd
+    required: true
+    size: 131072
+    note: "EU Mega CD Model 2 BIOS (June 1993). First in EU search order."
+    source_ref: "platform/libretro/libretro.c:1269"
+
+  - name: "eu_mcd2_9303.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "EU Mega CD Model 2 BIOS (March 1993). Second in EU search order."
+    source_ref: "platform/libretro/libretro.c:1269"
+
+  - name: "eu_mcd1_9210.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "EU Mega CD Model 1 BIOS (October 1992). Third in EU search order."
+    source_ref: "platform/libretro/libretro.c:1269"
+
+  - name: "bios_CD_E.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "EU Mega CD BIOS (generic name). Last in EU search order."
+    source_ref: "platform/libretro/libretro.c:1269"
+
+  # -------------------------------------------------------
+  # Mega CD / Sega CD - JP region
+  # -------------------------------------------------------
+  - name: "jp_mcd2_921222.bin"
+    system: sega-megacd
+    required: true
+    size: 131072
+    note: "JP Mega CD Model 2 BIOS (December 1992). First in JP search order."
+    source_ref: "platform/libretro/libretro.c:1272"
+
+  - name: "jp_mcd1_9112.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "JP Mega CD Model 1 BIOS (December 1991). Second in JP search order."
+    source_ref: "platform/libretro/libretro.c:1272"
+
+  - name: "jp_mcd1_9111.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "JP Mega CD Model 1 BIOS (November 1991). Third in JP search order."
+    source_ref: "platform/libretro/libretro.c:1272"
+
+  - name: "bios_CD_J.bin"
+    system: sega-megacd
+    required: false
+    size: 131072
+    note: "JP Mega CD BIOS (generic name). Last in JP search order."
+    source_ref: "platform/libretro/libretro.c:1272"
+
+  # -------------------------------------------------------
+  # Sega 32X - HLE available, not loaded by libretro frontend
+  # -------------------------------------------------------
+  - name: "32X_G_BIOS.BIN"
+    system: sega-32x
+    required: false
+    size: 256  # 0x100
+    note: "32X 68K (Genesis-side) BIOS. HLE replacement generated when NULL."
+    source_ref: "pico/32x/memory.c:2207-2243"
+
+  - name: "32X_M_BIOS.BIN"
+    system: sega-32x
+    required: false
+    size: 2048  # 0x800
+    note: "32X Master SH2 BIOS. HLE replacement generated when NULL."
+    source_ref: "pico/32x/memory.c:2250-2277"
+
+  - name: "32X_S_BIOS.BIN"
+    system: sega-32x
+    required: false
+    size: 1024  # 0x400
+    note: "32X Slave SH2 BIOS. HLE replacement generated when NULL."
+    source_ref: "pico/32x/memory.c:2280-2298"
+
+platform_details:
+  megacd:
+    bios_size: 131072     # 128 KB
+    hle_available: false
+    region_specific: true
+    extensions_tried: [".bin", ".zip"]
+    source_ref: "pico/pico_int.h:559, platform/libretro/libretro.c:1310-1318"
+
+  32x:
+    m68k_bios_size: 256       # 0x100
+    master_sh2_bios_size: 2048  # 0x800
+    slave_sh2_bios_size: 1024   # 0x400
+    hle_available: true
+    source_ref: "pico/pico.h:53-55, pico/pico_int.h:679-693"
+
+  sms:
+    hle_available: true
+    note: "No BIOS file loaded. VDP/RAM initialized to post-BIOS state."
+    source_ref: "pico/sms.c:1080-1096"

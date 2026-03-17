@@ -1,0 +1,154 @@
+emulator: Genesis Plus GX
+type: libretro
+source: "https://github.com/libretro/Genesis-Plus-GX"
+cores:
+  - genesis_plus_gx
+  - genesis_plus_gx_wide
+systems:
+  - sega-megadrive
+  - sega-megacd
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+
+notes: |
+  Genesis Plus GX is a Sega 8/16-bit emulator covering SG-1000, Master System,
+  Game Gear, Mega Drive/Genesis, and Mega CD/Sega CD.
+
+  BIOS loading is handled by load_bios() in core/loadrom.c. The libretro port
+  resolves filenames from the system directory in libretro/libretro.c:3516-3527.
+
+  Mega CD BIOS is required to boot CD images (load fails without it).
+  Master System, Game Gear, and Mega Drive BIOS files are optional boot ROMs
+  gated behind the "genesis_plus_gx_bios" core option (config.bios).
+  Lock-on ROMs (Game Genie, Action Replay, Sonic & Knuckles) are optional
+  and loaded only when the corresponding lock-on feature is enabled.
+
+files:
+  # -------------------------------------------------------
+  # Sega Mega CD / Sega CD - boot ROMs (required for CD)
+  # -------------------------------------------------------
+  - name: bios_CD_U.bin
+    system: sega-megacd
+    required: true
+    size: 131072  # 128 KB (0x20000)
+    note: "Sega CD (NTSC-U) boot ROM. Loaded for REGION_USA."
+    source_ref: "core/loadrom.c:409"
+
+  - name: bios_CD_E.bin
+    system: sega-megacd
+    required: true
+    size: 131072
+    note: "Mega CD (PAL) boot ROM. Loaded for REGION_EUROPE."
+    source_ref: "core/loadrom.c:412"
+
+  - name: bios_CD_J.bin
+    system: sega-megacd
+    required: true
+    size: 131072
+    note: "Mega CD (NTSC-J) boot ROM. Loaded for default/Japan region."
+    source_ref: "core/loadrom.c:415"
+
+  # -------------------------------------------------------
+  # Sega Master System - boot ROMs (optional, behind config.bios)
+  # -------------------------------------------------------
+  - name: bios_U.sms
+    system: sega-mastersystem
+    required: false
+    note: "Master System (NTSC-U) boot ROM. Snail maze game built in."
+    source_ref: "core/loadrom.c:511"
+
+  - name: bios_E.sms
+    system: sega-mastersystem
+    required: false
+    note: "Master System (PAL) boot ROM. Snail maze / Sonic built in."
+    source_ref: "core/loadrom.c:514"
+
+  - name: bios_J.sms
+    system: sega-mastersystem
+    required: false
+    note: "Master System (NTSC-J) boot ROM."
+    source_ref: "core/loadrom.c:517"
+
+  # -------------------------------------------------------
+  # Sega Game Gear - boot ROM (optional, behind config.bios)
+  # -------------------------------------------------------
+  - name: bios.gg
+    system: sega-gamegear
+    required: false
+    note: "Game Gear boot ROM (Majesco 1KB or standard). Shows startup logo."
+    source_ref: "core/loadrom.c:480"
+
+  # -------------------------------------------------------
+  # Sega Mega Drive / Genesis - TMSS boot ROM (optional)
+  # -------------------------------------------------------
+  - name: bios_MD.bin
+    system: sega-megadrive
+    required: false
+    size: 2048  # 2 KB (0x800)
+    note: "Mega Drive TMSS boot ROM. Shows 'Produced by or under license' screen."
+    source_ref: "libretro/libretro.c:3651"
+
+  # -------------------------------------------------------
+  # Lock-on ROMs (optional, feature-gated)
+  # -------------------------------------------------------
+  - name: ggenie.bin
+    system: sega-megadrive
+    required: false
+    size: 32768  # 32 KB (0x8000)
+    note: "Game Genie ROM. Loaded when Game Genie lock-on is enabled."
+    source_ref: "core/cart_hw/ggenie.c:64"
+
+  - name: areplay.bin
+    system: sega-megadrive
+    required: false
+    size: 65536  # max 64 KB (0x10000)
+    note: "Action Replay (Pro) ROM. Loaded when Action Replay lock-on is enabled."
+    source_ref: "core/cart_hw/areplay.c:64"
+
+  - name: sk.bin
+    system: sega-megadrive
+    required: false
+    size: 2097152  # 2 MB (0x200000)
+    note: "Sonic & Knuckles ROM. Required for S&K lock-on feature."
+    source_ref: "core/cart_hw/md_cart.c:867"
+
+  - name: sk2chip.bin
+    system: sega-megadrive
+    required: false
+    size: 262144  # 256 KB (0x40000)
+    note: "Sonic & Knuckles UPMEM ROM. Used by Sonic 2 & Knuckles lock-on."
+    source_ref: "core/cart_hw/md_cart.c:873"
+
+platform_details:
+  megacd:
+    bootrom_size: 131072      # 128 KB
+    source_ref: "core/cd_hw/scd.h:73"
+    notes: |
+      CD boot ROM region is auto-detected from disc image header.
+      Hardware model detected from boot ROM string at offset 0x120:
+        WONDER-MEGA BOOT -> Wondermega
+        WONDERMEGA2 BOOT -> Wondermega M2 / X'Eye
+        CDX BOOT ROM     -> CDX / Multi-Mega
+
+  megadrive:
+    tmss_rom_size: 2048       # 2 KB
+    source_ref: "libretro/libretro.c:3648-3666"
+    notes: |
+      TMSS boot ROM validated by checking "GENESIS OS" at offset 0x120.
+      Only loaded when genesis_plus_gx_bios core option is enabled.
+
+  mastersystem:
+    bios_max_size: 4194304    # 4 MB (stored above cart ROM)
+    source_ref: "core/loadrom.c:504-527"
+    notes: |
+      BIOS ROM loaded into cart.rom + 0x400000. SEGA mapper assumed
+      for ROMs larger than 48KB, otherwise no mapper.
+      Region selected based on current region_code setting.
+
+  gamegear:
+    bios_max_size: 4194304    # 4 MB (stored above cart ROM)
+    source_ref: "core/loadrom.c:467-489"
+    notes: |
+      Handles 1KB Majesco GG BIOS (mapped to $0000-$03FF) and
+      standard larger BIOS ROMs.
