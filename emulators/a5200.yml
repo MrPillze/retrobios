@@ -1,0 +1,47 @@
+emulator: a5200
+type: libretro
+source: "https://github.com/libretro/a5200"
+cores:
+  - a5200
+systems:
+  - atari-5200
+
+# a5200 is a dedicated Atari 5200 emulator forked from Atari800/Atari++ codebase.
+# It loads the official 5200 OS ROM from <system_dir>/5200.rom (2048 bytes, mapped
+# to memory at 0xF800-0xFFFF via MEMORY_InitialiseMachine).
+#
+# If 5200.rom is missing or the user selects "internal" via core option "a5200_bios",
+# the core falls back to Altirra 5200 OS, an open-source replacement compiled from
+# Altirra-3.20-test4 (altirra_5200_os.c). The fallback has reduced compatibility
+# compared to the original Atari OS ROM.
+#
+# BIOS loading (libretro.c:409-500):
+#   1. check_bios_variable() reads core option "a5200_bios" (official/internal)
+#   2. load_bios() attempts to read <system_dir>/5200.rom (0x800 bytes)
+#   3. On failure or "internal" selected: memcpy from ROM_altirra_5200_os fallback
+#
+# Cartridge detection (atari.c:169-236):
+#   Auto-detects cart type from header bytes and size. ROM database in cartridge.c
+#   maps MD5 hashes to cart types (standard 8K/16K/32K/40K, bounty bob, super cart).
+
+files:
+  - name: "5200.rom"
+    path: "5200.rom"
+    size: 2048
+    required: false
+    note: >
+      Atari 5200 OS ROM. Provides the built-in OS routines used by all 5200
+      cartridges. Without it, the core uses the Altirra open-source replacement
+      which has lower compatibility with some games. Core option "a5200_bios"
+      controls whether to use this file or the internal fallback.
+    source_ref: "libretro/libretro.c:58-59, libretro/libretro.c:409-500, emu/memory.c:46"
+
+notes:
+  altirra_fallback: >
+    The built-in Altirra 5200 OS (from altirra_5200_os.c, 0x800 bytes) is a free
+    replacement that works for most games but some titles require the original ROM
+    for full compatibility. The core displays a notification when falling back.
+  cart_db: >
+    cartridge.c contains an MD5-based ROM database for automatic cart type detection
+    (standard, EE banked, bounty bob, super cart variants). Unknown ROMs are detected
+    by size heuristic.

@@ -1,0 +1,209 @@
+emulator: Opera (4DO)
+type: libretro
+core: opera_libretro
+source: "https://github.com/libretro/opera-libretro"
+systems:
+  - 3do
+
+notes: |
+  Opera is the libretro port of the 4DO/FreeDO 3DO Interactive Multiplayer emulator.
+  The core requires exactly one system BIOS ROM (rom1) selected via the opera_bios
+  core option. BIOS files are loaded from the system directory with
+  read_file_from_system_directory() and byteswapped on little-endian hosts.
+  The core will not start without a valid BIOS ROM.
+
+  The user selects which BIOS to use from the core option dropdown, which only
+  lists BIOS files physically present in the system directory. Any single BIOS
+  from the list below is sufficient to run games from its region.
+
+  Kanji font ROMs (rom2) are optional and only needed for Japanese text rendering.
+  They are loaded via opera_lr_opts_set_font() and selected via opera_font core option.
+
+  All BIOS files are exactly 1 MB (1048576 bytes) except 3do_arcade_saot.bin (512 KB)
+  and panafz1-kanji.bin (933636 bytes).
+
+  BIOS definitions: libopera/opera_bios.c BIOSES[] lines 3-136.
+  BIOS loading: opera_lr_opts.c opera_lr_opts_set_bios() lines 239-270.
+  Font loading: opera_lr_opts.c opera_lr_opts_set_font() lines 272-320.
+  Core option: libretro_core_options.c opera_bios / opera_font.
+
+files:
+  # -------------------------------------------------------
+  # Panasonic FZ-1 (US) - original 3DO launch model
+  # -------------------------------------------------------
+  - name: "panafz1.bin"
+    system: 3do
+    region: [north-america]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "f47264dd47fe30f73ab3c010015c155b"
+    sha1: "34bf189111295f74d7b7dfc1f304d98b8d36325a"
+    note: "Panasonic FZ-1 (U). Version unknown, dated 1993-08-03."
+    source_ref: "libopera/opera_bios.c:6-17"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-1 (Japan)
+  # -------------------------------------------------------
+  - name: "panafz1j.bin"
+    system: 3do
+    region: [japan]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "a496cfdded3da562759be3561317b605"
+    sha1: "ec7ec62d60ec0459a14ed56ebc66761ef3c80efc"
+    note: "Panasonic FZ-1 (J). Version 1.54, dated 1994-01-22."
+    source_ref: "libopera/opera_bios.c:19-30"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-1 (Japan) [No RSA]
+  # -------------------------------------------------------
+  - name: "panafz1j-norsa.bin"
+    system: 3do
+    region: [japan]
+    required: false
+    size: 1048576  # 1 MB
+    md5: "f6c71de7470d16abe4f71b1444883dc8"
+    sha1: "a417587ae3b0b8ef00c830920c21af8bee88e419"
+    note: "Panasonic FZ-1 (J) with RSA check removed. Version 1.54."
+    source_ref: "libopera/opera_bios.c:32-43"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-10 (US) - slim redesign
+  # -------------------------------------------------------
+  - name: "panafz10.bin"
+    system: 3do
+    region: [north-america]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "51f2f43ae2f3508a14d9f56597e2d3ce"
+    sha1: "3c912300775d1ad730dc35757e279c274c0acaad"
+    note: "Panasonic FZ-10 (U). Version 1.59.1.1, dated 1994-08-25."
+    source_ref: "libopera/opera_bios.c:45-56"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-10 (US) [No RSA]
+  # -------------------------------------------------------
+  - name: "panafz10-norsa.bin"
+    system: 3do
+    region: [north-america]
+    required: false
+    size: 1048576  # 1 MB
+    md5: "1477bda80dc33731a65468c1f5bcbee9"
+    sha1: "f05e642322c03694f06a809c0b90fc27ac73c002"
+    note: "Panasonic FZ-10 (U) with RSA check removed. Version 1.59.1.1."
+    source_ref: "libopera/opera_bios.c:58-69"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-10 (Europe) ANVIL
+  # -------------------------------------------------------
+  - name: "panafz10e-anvil.bin"
+    system: 3do
+    region: [europe]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "a48e6746bd7edec0f40cff078f0bb19f"
+    sha1: "a900371f0cdcdc03f79557f11d406fd71251a5fd"
+    note: "Panasonic FZ-10 (E) ANVIL. Version 1.66.1.1, dated 1994-09-22."
+    source_ref: "libopera/opera_bios.c:71-82"
+
+  # -------------------------------------------------------
+  # Panasonic FZ-10 (Europe) ANVIL [No RSA]
+  # -------------------------------------------------------
+  - name: "panafz10e-anvil-norsa.bin"
+    system: 3do
+    region: [europe]
+    required: false
+    size: 1048576  # 1 MB
+    md5: "cf11bbb5a16d7af9875cca9de9a15e09"
+    sha1: "2765c7b4557cc838b32567d2428d088980295159"
+    note: "Panasonic FZ-10 (E) ANVIL with RSA check removed. Version 1.66.1.1."
+    source_ref: "libopera/opera_bios.c:84-95"
+
+  # -------------------------------------------------------
+  # Goldstar GDO-101M (US)
+  # -------------------------------------------------------
+  - name: "goldstar.bin"
+    system: 3do
+    region: [north-america]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "8639fd5e549bd6238cfee79e3e749114"
+    sha1: "c4a2e5336f77fb5f743de1eea2cda43675ee2de7"
+    note: "Goldstar GDO-101M. Version 1.59, dated 1994-05-10."
+    source_ref: "libopera/opera_bios.c:97-108"
+
+  # -------------------------------------------------------
+  # Sanyo Try IMP-21J (Japan)
+  # -------------------------------------------------------
+  - name: "sanyotry.bin"
+    system: 3do
+    region: [japan]
+    required: true
+    size: 1048576  # 1 MB
+    md5: "35fa1a1ebaaeea286dc5cd15487c13ea"
+    sha1: "b01c53da256dde43ffec4ad3fc3adfa8d635e943"
+    note: "Sanyo Try IMP-21J. Version 1.59, dated 1994-05-10."
+    source_ref: "libopera/opera_bios.c:110-121"
+
+  # -------------------------------------------------------
+  # 3DO Arcade - SAOT
+  # -------------------------------------------------------
+  - name: "3do_arcade_saot.bin"
+    system: 3do
+    region: [north-america]
+    required: false
+    size: 524288  # 512 KB
+    md5: "8970fc987ab89a7f64da9f8a8c4333ff"
+    sha1: "520d3d1b5897800af47f92efd2444a26b7a7dead"
+    note: "3DO Arcade SAOT board BIOS. Half the size of consumer BIOS ROMs."
+    source_ref: "libopera/opera_bios.c:123-134"
+
+  # -------------------------------------------------------
+  # Kanji font ROM - FZ-1 (933636 bytes, non-standard size)
+  # -------------------------------------------------------
+  - name: "panafz1-kanji.bin"
+    system: 3do
+    region: [japan]
+    required: false
+    size: 933636
+    md5: "b8dc97f778a6245c58e064b0312e8281"
+    sha1: "acd39a8fee1b9d2950d5ab447846c11fb31af63e"
+    note: "Kanji font ROM for FZ-1. Version 16.4, dated 1993-08-03. Optional, Japanese text only."
+    source_ref: "libopera/opera_bios.c:141-152"
+
+  # -------------------------------------------------------
+  # Kanji font ROM - FZ-1J (1 MB)
+  # -------------------------------------------------------
+  - name: "panafz1j-kanji.bin"
+    system: 3do
+    region: [japan]
+    required: false
+    size: 1048576  # 1 MB
+    md5: "c23fb5d5e6bb1c240d02cf968972be37"
+    sha1: "884515605ee243577ab20767ef8c1a7368e4e407"
+    note: "Kanji font ROM for FZ-1J. Version 16.4, dated 1993-08-03. Optional, Japanese text only."
+    source_ref: "libopera/opera_bios.c:154-165"
+
+  # -------------------------------------------------------
+  # Kanji font ROM - FZ-10JA ANVIL (1 MB)
+  # -------------------------------------------------------
+  - name: "panafz10ja-anvil-kanji.bin"
+    system: 3do
+    region: [japan]
+    required: false
+    size: 1048576  # 1 MB
+    md5: "428577250f43edc902ea239c50d2240d"
+    sha1: "2e857b957803d0331fd229328df01f3ffab69eee"
+    note: "Kanji font ROM for FZ-10JA ANVIL. Version 16.4. Optional, Japanese text only."
+    source_ref: "libopera/opera_bios.c:167-178"
+
+platform_details:
+  3do:
+    rom1_size: 1048576          # 1 MB standard BIOS
+    rom1_arcade_size: 524288    # 512 KB arcade BIOS
+    rom2_max_size: 1048576      # 1 MB kanji font ROM
+    bios_selection: "core option opera_bios, user picks from detected files"
+    font_selection: "core option opera_font, optional"
+    byteswap: "rom1 is byteswapped on little-endian (opera_mem_rom1_byteswap32_if_le)"
+    hle_available: false
+    source_ref: "opera_lr_opts.c:239-270, libopera/opera_bios.c:3-180"

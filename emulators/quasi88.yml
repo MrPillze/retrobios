@@ -1,0 +1,155 @@
+emulator: QUASI88
+type: libretro
+source: "https://github.com/libretro/quasi88-libretro"
+cores:
+  - quasi88
+systems:
+  - pc-8801
+
+# QUASI88 is a NEC PC-8801 emulator. The libretro port includes a pseudo-BIOS
+# (pbios_n88, pbios_disk) compiled into the core that provides basic compatibility
+# when real BIOS files are missing. With the pseudo-BIOS, many disk-based games
+# will boot, but compatibility is lower than with real ROMs.
+#
+# ROM file search order (libretro.c:444-491):
+#   1. <download_dir>/<filename>
+#   2. <system_dir>/quasi88/<filename>
+#   3. <system_dir>/<filename>
+#   Each ROM entry has up to 4 alternate filenames tried in order.
+#
+# ROM loading (libretro.c:550-594):
+#   N88.ROM and DISK.ROM (SUB_ROM) are the only two checked for failure.
+#   If missing, the core falls back to the built-in pseudo-BIOS.
+#   All other ROMs are loaded silently if present, ignored if absent.
+#
+# The original QUASI88 (memory.c:80-95) uses uppercase-first filenames
+# (N88.ROM, N88EXT0.ROM, etc.) while the libretro .info file standardizes
+# on lowercase with underscore variants (n88.rom, n88_0.rom, etc.).
+# The core tries both naming conventions.
+#
+# FONT.ROM/FONT2.ROM/FONT3.ROM are not listed in the .info file.
+# When missing, the core uses built-in fonts or falls back to kanji ROM glyphs.
+
+notes: |
+  Files go in <system_dir>/quasi88/ or directly in <system_dir>/.
+  The pseudo-BIOS built into the core covers N88-BASIC V2 and the disk
+  subsystem at a basic level. For full compatibility (N-BASIC, V1H/V1S modes,
+  dictionary lookup, kanji display), real ROM files are needed.
+
+  N88_0.ROM (EXT0) is marked required in the .info file because it contains
+  the N88-BASIC V2 extension used by most software. EXT1-EXT3 are version-
+  specific extensions (V1H, V1S, older V2) needed only for specific titles.
+
+  The core option "quasi88_basic_mode" selects N88 V2, N88 V1H, N88 V1S,
+  or N mode. Each mode requires its corresponding ROM to be present.
+
+files:
+  # -- Required for full operation --
+
+  - name: n88.rom
+    path: "quasi88/n88.rom"
+    size: 32768
+    required: true
+    note: "N88-BASIC main ROM (32 KB). Core falls back to pseudo-BIOS if missing."
+    source_ref: "src/LIBRETRO/libretro.c:550"
+    aliases: ["N88.ROM"]
+
+  - name: n88_0.rom
+    path: "quasi88/n88_0.rom"
+    size: 8192
+    required: true
+    note: "N88-BASIC V2 extension ROM 0 (8 KB). Needed for most PC-8801 software."
+    source_ref: "src/LIBRETRO/libretro.c:555"
+    aliases: ["N88_0.ROM", "N88EXT0.ROM", "n88ext0.rom"]
+
+  # -- Optional extensions --
+
+  - name: n88_1.rom
+    path: "quasi88/n88_1.rom"
+    size: 8192
+    required: false
+    note: "N88-BASIC V1H extension ROM 1 (8 KB). For V1 High-speed mode software."
+    source_ref: "src/LIBRETRO/libretro.c:556"
+    aliases: ["N88_1.ROM", "N88EXT1.ROM", "n88ext1.rom"]
+
+  - name: n88_2.rom
+    path: "quasi88/n88_2.rom"
+    size: 8192
+    required: false
+    note: "N88-BASIC V1S extension ROM 2 (8 KB). For V1 Standard mode software."
+    source_ref: "src/LIBRETRO/libretro.c:557"
+    aliases: ["N88_2.ROM", "N88EXT2.ROM", "n88ext2.rom"]
+
+  - name: n88_3.rom
+    path: "quasi88/n88_3.rom"
+    size: 8192
+    required: false
+    note: "N88-BASIC extension ROM 3 (8 KB). Older V2 extension, rarely needed."
+    source_ref: "src/LIBRETRO/libretro.c:558"
+    aliases: ["N88_3.ROM", "N88EXT3.ROM", "n88ext3.rom"]
+
+  - name: n88n.rom
+    path: "quasi88/n88n.rom"
+    size: 32768
+    required: false
+    note: "N-BASIC ROM (32 KB). For PC-8001 compatible N-BASIC mode."
+    source_ref: "src/LIBRETRO/libretro.c:559"
+    aliases: ["N88N.ROM", "N80.ROM", "n80.rom"]
+
+  - name: disk.rom
+    path: "quasi88/disk.rom"
+    size: 2048
+    required: false
+    note: "Disk subsystem ROM (2 KB, 2D type). Core falls back to pseudo-BIOS if missing. 8 KB variant (2HD type) also accepted."
+    source_ref: "src/LIBRETRO/libretro.c:552"
+    aliases: ["DISK.ROM", "N88SUB.ROM", "n88sub.rom"]
+
+  - name: n88knj1.rom
+    path: "quasi88/n88knj1.rom"
+    size: 131072
+    required: false
+    note: "Kanji ROM level 1 (128 KB). Required for Japanese text display. Also used as font fallback."
+    source_ref: "src/LIBRETRO/libretro.c:560"
+    aliases: ["N88KNJ1.ROM", "KANJI1.ROM", "kanji1.rom"]
+
+  - name: n88knj2.rom
+    path: "quasi88/n88knj2.rom"
+    size: 131072
+    required: false
+    note: "Kanji ROM level 2 (128 KB). Extended kanji character set."
+    source_ref: "src/LIBRETRO/libretro.c:561"
+    aliases: ["N88KNJ2.ROM", "KANJI2.ROM", "kanji2.rom"]
+
+  - name: n88jisho.rom
+    path: "quasi88/n88jisho.rom"
+    size: 524288
+    required: false
+    note: "Dictionary ROM (512 KB). Japanese dictionary lookup, very few titles use it."
+    source_ref: "src/LIBRETRO/libretro.c:562"
+    aliases: ["N88JISHO.ROM", "JISYO.ROM", "jisyo.rom"]
+
+  # -- Font ROMs (not in .info, core has built-in fallback) --
+
+  - name: font.rom
+    path: "quasi88/font.rom"
+    size: 4096
+    required: false
+    note: "ANK font ROM (4 KB). Falls back to built-in font or kanji ROM glyphs."
+    source_ref: "src/LIBRETRO/libretro.c:566"
+    aliases: ["FONT.ROM"]
+
+  - name: font2.rom
+    path: "quasi88/font2.rom"
+    size: 4096
+    required: false
+    note: "Second font ROM (4 KB). Falls back to built-in ANH font."
+    source_ref: "src/LIBRETRO/libretro.c:576"
+    aliases: ["FONT2.ROM"]
+
+  - name: font3.rom
+    path: "quasi88/font3.rom"
+    size: 4096
+    required: false
+    note: "Third font ROM (4 KB). Zeroed out if missing."
+    source_ref: "src/LIBRETRO/libretro.c:588"
+    aliases: ["FONT3.ROM"]

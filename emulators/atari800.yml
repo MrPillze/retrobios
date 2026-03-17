@@ -1,0 +1,178 @@
+emulator: Atari800
+type: libretro
+source: "https://github.com/libretro/libretro-atari800"
+systems: [atari-400, atari-800, atari-800xl, atari-130xe, atari-5200, atari-xegs]
+
+# Atari800 emulates the Atari 8-bit family (400/800/XL/XE) and the 5200 console.
+# All BIOS files are optional -- the core ships built-in Altirra OS replacements
+# (altirraos_800, altirraos_xl, altirra_5200_os, altirra_basic) compiled into the
+# binary. If real ROM files are found in the system directory they take priority.
+#
+# ROM discovery (sysrom.c SYSROM_FindInDir):
+#   1. Scan system directory for files of valid size (0x800, 0x2000, 0x2800, 0x4000)
+#   2. Match by CRC32 against known ROM revisions
+#   3. If no CRC match, try case-insensitive filename match (MatchByName)
+#   4. Results stored in .atari800.cfg (generated on first run)
+#
+# The core generates .atari800.cfg in the frontend home directory on first boot.
+# Core option "atari800_system" selects the emulated machine type:
+#   400/800, 800XL (64KB), 130XE (128KB), Modern XL/XE(320KB), Modern XL/XE(576KB),
+#   Modern XL/XE(1088KB), 5200
+
+files:
+  # -- Atari 5200 BIOS --
+  # Original 5200 OS ($F800-$FFFF, 2 KB). Matched by CRC32: 0x4248d3e3 (orig)
+  # or 0xc2ba2613 (rev A). Altirra 5200 OS used as fallback.
+  # Filename match (case-insensitive): atari5200.rom, atar5200.rom, 5200.rom,
+  #   5200.bin, atari_5200.rom
+
+  - name: "5200.rom"
+    path: "5200.rom"
+    required: false
+    size: 2048
+    md5: 281f20ea4320404ec820fb7ec0693b38
+    note: >
+      Atari 5200 BIOS (original). Mapped at $F800-$FFFF.
+      Altirra 5200 OS is used when this file is absent.
+    source_ref: "atari800/src/sysrom.c:101, libretro info firmware0"
+
+  # -- Atari BASIC ROM --
+  # Atari BASIC interpreter (8 KB). Three known revisions:
+  #   Rev A: CRC32 0x4bec4de2, Rev B: CRC32 0xf0202fb3, Rev C: CRC32 0x7d684184
+  # Auto-select prefers Rev C > B > A > custom > Altirra BASIC.
+  # Filename match: ataribasic.rom, ataribas.rom, basic.rom, atari_basic.rom
+  # Core option "atari800_opt2" enables BASIC (needed for some 400/800 software).
+
+  - name: "ATARIBAS.ROM"
+    path: "ATARIBAS.ROM"
+    required: false
+    size: 8192
+    md5: 0bac0c6a50104045d902df4503a4c30b
+    note: >
+      Atari BASIC Rev C. Required for 400/800 software that needs BASIC.
+      Altirra BASIC is used as fallback. Enable via core option atari800_opt2.
+    source_ref: "atari800/src/sysrom.c:103-105, libretro info firmware1"
+
+  # -- Atari 400/800 OS A --
+  # Original Atari 400/800 OS (10 KB). Two known CRC32 values:
+  #   NTSC: 0xc1b3bb02, PAL: 0x72b3fed4
+  # Filename match: atariosa.rom, atari_osa.rom, atari_os_a.rom
+
+  - name: "ATARIOSA.ROM"
+    path: "ATARIOSA.ROM"
+    required: false
+    size: 10240
+    md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+    note: >
+      Atari 400/800 OS Rev A. Altirra OS 800 is used as fallback.
+      Auto-select order: OS B NTSC, OS A NTSC, OS A PAL, custom, Altirra.
+    source_ref: "atari800/src/sysrom.c:87-89, libretro info firmware2"
+
+  # -- Atari 400/800 OS B --
+  # OS revision B (10 KB), NTSC: CRC32 0x0e86d61d
+  # Filename match: atariosb.rom, atari_osb.rom, atari_os_b.rom
+
+  - name: "ATARIOSB.ROM"
+    path: "ATARIOSB.ROM"
+    required: false
+    size: 10240
+    md5: 4177f386a3bac989a981d3fe3388cb6c
+    note: >
+      Atari 400/800 OS Rev B (NTSC). Preferred over Rev A for 400/800 mode.
+    source_ref: "atari800/src/sysrom.c:89, libretro info firmware3"
+
+  # -- Atari XL/XE OS --
+  # XL/XE OS (16 KB). Many revisions known by CRC32 in sysrom.c:
+  #   BB01R2 (800XL stock): 0x1f9cd270
+  #   CC01R4: 0x0e000b99
+  #   BB01R4: 0x1eaf4002
+  # Auto-select prefers BB01R2 for 800XL, BB01R3 for XE, BB01R4 for XEGS.
+  # Filename match: atarixlxe.rom, atarixl.rom, atari_xlxe.rom, atari_xl_xe.rom
+
+  - name: "ATARIXL.ROM"
+    path: "ATARIXL.ROM"
+    required: false
+    size: 16384
+    md5: 06daac977823773a3eea3422fd26a703
+    note: >
+      Atari XL/XE OS. Used for 800XL, 130XE, and XEGS modes.
+      Altirra XL OS is used as fallback.
+    source_ref: "atari800/src/sysrom.c:90-99, libretro info firmware4"
+
+  # -- Atari XL/XE/XEGS OS v4 (BB01R4) --
+  # XEGS-specific OS revision BB01R4 (16 KB), CRC32: 0x1eaf4002
+  # Preferred for XEGS machine mode. Same filename matching as ATARIXL above.
+
+  - name: "BB01R4_OS.ROM"
+    path: "BB01R4_OS.ROM"
+    required: false
+    size: 16384
+    md5: b7a2a04677d34f069eeb643d5238bf86
+    note: >
+      Atari XEGS OS Rev 4 (BB01R4). Preferred OS for XEGS machine mode.
+    source_ref: "atari800/src/sysrom.c:98, libretro info firmware5"
+
+  # -- XEGS Missile Command built-in game --
+  # The XEGS had Missile Command in ROM (8 KB), CRC32: 0xbdca01fb
+  # No filename auto-match -- must be set via config or detected by CRC.
+
+  - name: "XEGAME.ROM"
+    path: "XEGAME.ROM"
+    required: false
+    size: 8192
+    md5: d7eb37aec6960cba36bc500e0e5d00bc
+    note: >
+      XEGS built-in Missile Command ROM. Only used in XEGS machine mode.
+      No built-in replacement exists for this ROM.
+    source_ref: "atari800/src/sysrom.c:106, libretro info firmware6"
+
+# Known ROM revisions from sysrom.c (CRC32 identifiers):
+#
+# 400/800 OS:
+#   SYSROM_A_NTSC    0xc1b3bb02  10 KB  OS Rev A (NTSC)
+#   SYSROM_A_PAL     0x72b3fed4  10 KB  OS Rev A (PAL)
+#   SYSROM_B_NTSC    0x0e86d61d  10 KB  OS Rev B (NTSC)
+#
+# XL/XE OS (all 16 KB):
+#   SYSROM_AA00R10   0xc5c11546  1200XL first rev
+#   SYSROM_AA01R11   0x1a1d7b1b  1200XL second rev
+#   SYSROM_BB00R1    0x643bcc98  600XL stock
+#   SYSROM_BB01R2    0x1f9cd270  800XL stock
+#   SYSROM_BB02R3    0x0d477aa1  XL/XE rev 3a
+#   SYSROM_BB02R3V4  0xd425a9cf  XL/XE rev 3b
+#   SYSROM_CC01R4    0x0e000b99  XL/XE rev 5
+#   SYSROM_BB01R3    0x29f133f7  XE stock
+#   SYSROM_BB01R4    0x1eaf4002  XEGS stock
+#   SYSROM_BB01R59   0x45f47988  XL/XE rev 59
+#   SYSROM_BB01R59A  0xf0a236d3  XL/XE rev 59a
+#
+# 5200 OS (2 KB):
+#   SYSROM_5200      0x4248d3e3  Original
+#   SYSROM_5200A     0xc2ba2613  Rev A
+#
+# BASIC (8 KB):
+#   SYSROM_BASIC_A   0x4bec4de2  Rev A
+#   SYSROM_BASIC_B   0xf0202fb3  Rev B
+#   SYSROM_BASIC_C   0x7d684184  Rev C
+#
+# XEGAME (8 KB):
+#   SYSROM_XEGAME    0xbdca01fb  Missile Command
+#
+# Built-in Altirra replacements (no file needed):
+#   altirraos_800    10 KB  400/800 OS replacement
+#   altirraos_xl     16 KB  XL/XE OS replacement
+#   altirra_5200_os   2 KB  5200 OS replacement
+#   altirra_basic     8 KB  BASIC replacement
+
+notes:
+  altirra_note: >
+    The Altirra OS/BASIC replacements are open-source alternatives compiled
+    directly into the core binary (roms/ directory in source). They provide
+    good compatibility for most software but real ROMs give better accuracy.
+  cfg_note: >
+    On first boot the core creates .atari800.cfg in the frontend home directory.
+    It scans the system directory for ROM files by CRC32 first, then by filename.
+    The core option atari800_opt1 controls whether this legacy config is loaded.
+  machine_selection: >
+    Core option atari800_system selects the emulated machine. Each machine type
+    has its own preferred OS ROM auto-select order defined in sysrom.c.

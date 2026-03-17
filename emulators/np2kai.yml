@@ -1,0 +1,162 @@
+emulator: NP2kai
+type: libretro
+source: "https://github.com/libretro/NP2kai"
+systems: [pc-98]
+
+# NP2kai is a PC-9801/9821 emulator (Neko Project II kai).
+# All BIOS/font/sound files are loaded from <system>/np2kai/ subdirectory.
+# The core sets np2cfg.biospath to "<system>/np2kai/" in retro_load_game()
+# (sdl/libretro/libretro.c:1800-1815). All getbiospath() calls resolve
+# relative to that directory.
+#
+# The core has a built-in BIOS simulator (BIOS_SIMULATE) that can boot
+# without a real BIOS ROM, but a real bios.rom provides better compatibility.
+# Font data is auto-generated from built-in tables if font.bmp is missing,
+# but Japanese kanji display requires the real font file.
+#
+# The fmgen YM2608 rhythm engine (fmgen_opna.cpp:1413-1443) loads WAV files
+# with uppercase extension (.WAV) but the built-in rhythm engine (rhythmc.c)
+# uses lowercase (.wav). Both paths resolve from np2kai/.
+# The fmgen engine also accepts "2608_RYM.WAV" as fallback for the rim sample.
+
+files:
+  # -- Main BIOS ROM --
+  # Loaded in bios/bios.c:430-440. 96 KB (0x18000) mapped at 0xe8000.
+  # Without this, the built-in BIOS simulator is used (less compatible).
+  - name: "bios.rom"
+    path: "np2kai/bios.rom"
+    required: false
+    note: >
+      PC-9801 system BIOS ROM (96 KB). Provides full hardware compatibility.
+      The core can boot without it using the built-in BIOS simulator, but
+      some software may not work correctly. Loaded at address 0xe8000.
+    source_ref: "bios/bios.c:430-440, common/strres.c:60"
+
+  # -- ITF ROM --
+  # Initial Test Firmware, loaded at ITF_ADRS (0xf8000), 32 KB.
+  # Only loaded when BIOS_SIMULATE is not defined (bios/bios.c:569-574).
+  # In the libretro build, BIOS_SIMULATE is typically enabled, so this is
+  # only needed for non-simulated builds.
+  - name: "itf.rom"
+    path: "np2kai/itf.rom"
+    required: false
+    note: >
+      Initial Test Firmware ROM (32 KB). Used for hardware initialization
+      and memory check at boot. Only loaded when the built-in ITF simulator
+      is disabled. Most libretro builds include the simulator.
+    source_ref: "bios/bios.c:569-574"
+
+  # -- Font file --
+  # Set explicitly in libretro.c:1813 as "<system>/np2kai/font.bmp".
+  # The core also supports FONT.ROM / font.rom (V98 format) via font_load().
+  # Without any font file, built-in 8x8 bitmap data is used but kanji
+  # characters will not display correctly.
+  - name: "font.bmp"
+    path: "np2kai/font.bmp"
+    required: false
+    note: >
+      PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
+      The core also accepts FONT.ROM (V98 format). Without this file,
+      only basic ASCII characters render correctly using built-in data.
+    source_ref: "sdl/libretro/libretro.c:1813, font/fontdata.c:11-14"
+
+  # -- Sound BIOS ROM --
+  # Loaded by soundrom_load() as "sound.rom" (soundrom.c:15-16, 28-32).
+  # The filename is composed as "sound" + optional board name + ".rom".
+  # 16 KB ROM for the FM sound board.
+  - name: "sound.rom"
+    path: "np2kai/sound.rom"
+    required: false
+    note: >
+      FM sound board BIOS ROM (16 KB). Used by the PC-9801-26K/86/118
+      sound boards. The core falls back to a minimal built-in default
+      (9-byte stub) if this file is missing.
+    source_ref: "sound/soundrom.c:15-16,21-55,93-106"
+
+  # -- YM2608 OPNA rhythm samples --
+  # Loaded by both the built-in rhythm engine (rhythmc.c:60-71) and the
+  # fmgen engine (fmgen_opna.cpp:1413-1443). Required for YM2608 OPNA
+  # rhythm sound channel (bass drum, snare, etc).
+  # The fmgen engine tries uppercase .WAV, the built-in engine uses .wav.
+  # Place lowercase versions - the filesystem handles case on most platforms.
+  - name: "2608_bd.wav"
+    path: "np2kai/2608_bd.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: bass drum"
+    source_ref: "sound/rhythmc.c:11, sound/fmgen/fmgen_opna.cpp:1431-1433"
+
+  - name: "2608_sd.wav"
+    path: "np2kai/2608_sd.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: snare drum"
+    source_ref: "sound/rhythmc.c:12"
+
+  - name: "2608_top.wav"
+    path: "np2kai/2608_top.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: top cymbal"
+    source_ref: "sound/rhythmc.c:13"
+
+  - name: "2608_hh.wav"
+    path: "np2kai/2608_hh.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: hi-hat"
+    source_ref: "sound/rhythmc.c:14"
+
+  - name: "2608_tom.wav"
+    path: "np2kai/2608_tom.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: tom"
+    source_ref: "sound/rhythmc.c:15"
+
+  - name: "2608_rim.wav"
+    path: "np2kai/2608_rim.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: rim shot"
+    source_ref: "sound/rhythmc.c:16"
+
+  # -- IDE BIOS ROM --
+  # Loaded by ideio.c:1913-1931. Tried in order: ide.rom, d8000.rom,
+  # bank3.bin, bios9821.rom. Only loaded when IDE BIOS is enabled in
+  # core options (np2cfg.idebios) and a real BIOS ROM is also present.
+  - name: "ide.rom"
+    path: "np2kai/ide.rom"
+    required: false
+    note: >
+      IDE controller BIOS ROM (8 KB). Required for real IDE BIOS emulation
+      (HDD boot from IDE). The core also checks d8000.rom, bank3.bin,
+      and bios9821.rom as fallback filenames. Without this, a simulated
+      IDE BIOS is used.
+    source_ref: "cbus/ideio.c:1913-1931"
+
+  # -- SCSI BIOS ROM --
+  # Loaded by scsiio.c:219-231. Falls back to built-in scsibios[] stub.
+  - name: "scsi.rom"
+    path: "np2kai/scsi.rom"
+    required: false
+    note: >
+      SCSI controller BIOS ROM (16 KB). For PC-98 SCSI HDD support.
+      The core includes a built-in SCSI BIOS stub as fallback.
+    source_ref: "cbus/scsiio.c:219-231"
+
+  # -- PCI BIOS ROM --
+  # Loaded by pcidev.c:364-382. Tries pci.rom then bank0.bin.
+  # Falls back to built-in PCI BIOS simulation.
+  - name: "pci.rom"
+    path: "np2kai/pci.rom"
+    required: false
+    note: >
+      PCI BIOS ROM (32 KB). For PC-9821 PCI bus emulation.
+      The core also checks bank0.bin as fallback. Without this,
+      the built-in PCI BIOS simulator is used.
+    source_ref: "io/pcidev.c:360-382"
+
+  # -- GPIB BIOS ROM --
+  # Loaded by gpibio.c:327-356.
+  - name: "gpib.rom"
+    path: "np2kai/gpib.rom"
+    required: false
+    note: >
+      GP-IB interface BIOS ROM. Rarely needed, only for GP-IB peripheral
+      emulation.
+    source_ref: "cbus/gpibio.c:327-356"
