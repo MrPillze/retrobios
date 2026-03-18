@@ -3082,3 +3082,11 @@ systems:
     core: quasi88
     manufacturer: NEC
     docs: https://docs.libretro.com/library/quasi88/
+  vircon32:
+    files:
+    - name: Vircon32Bios.v32
+      destination: Vircon32Bios.v32
+      required: true
+    core: vircon32
+    manufacturer: Vircon
+    docs: https://docs.libretro.com/library/vircon32/

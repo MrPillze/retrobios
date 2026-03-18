@@ -260,6 +260,15 @@ class Scraper(BaseScraper):
                 "manufacturer": "NEC",
                 "docs": "https://docs.libretro.com/library/quasi88/",
             },
+            # ref: Vircon32/libretro.c — virtual console, single BIOS
+            "vircon32": {
+                "files": [
+                    {"name": "Vircon32Bios.v32", "destination": "Vircon32Bios.v32", "required": True},
+                ],
+                "core": "vircon32",
+                "manufacturer": "Vircon",
+                "docs": "https://docs.libretro.com/library/vircon32/",
+            },
         }
         for sys_id, sys_data in EXTRA_SYSTEMS.items():
             if sys_id not in systems:
@@ -331,6 +340,11 @@ class Scraper(BaseScraper):
             # docs say PSXONPSP660.bin (uppercase) but core accepts any case
             "sony-playstation": [
                 {"name": "psxonpsp660.bin", "destination": "psxonpsp660.bin", "required": False},
+            ],
+            # minivmac casing — ref: minivmac/src/MYOSGLUE.c
+            # doc says MacII.rom, repo has MacII.ROM — both work on case-insensitive FS
+            "apple-macintosh-ii": [
+                {"name": "MacII.ROM", "destination": "MacII.ROM", "required": True},
             ],
         }
         for sys_id, extra_files in EXTRA_SYSTEM_FILES.items():

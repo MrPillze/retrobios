@@ -195,6 +195,24 @@ shared_groups:
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: "fc4b76a402ba501e6ba6de4b3e8b4273"
+    # Alternative naming from libretro docs (lowercase, _N suffix)
+    # ref: quasi88/src/libretro.c — core accepts both conventions
+    - name: n88_0.rom
+      destination: quasi88/n88_0.rom
+      required: false
+      md5: "e28fe3f520bea594350ea8fb00395370"
+    - name: n88_1.rom
+      destination: quasi88/n88_1.rom
+      required: false
+      md5: "a8e298da7ac947669bcb1ff25cee0a83"
+    - name: n88_2.rom
+      destination: quasi88/n88_2.rom
+      required: false
+      md5: "9d03154fd9abfc28c4e6d4dc705e6e23"
+    - name: n88_3.rom
+      destination: quasi88/n88_3.rom
+      required: false
+      md5: "e1791f8154f1cdf22b576a1a365b6e1f"
 
   # Sinclair ZX Spectrum — Fuse core
   # Fuse expects Pentagon/Scorpion ROMs in "fuse/" subfolder
