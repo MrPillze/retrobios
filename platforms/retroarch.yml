@@ -1238,6 +1238,15 @@ systems:
       md5: db92574caab77a7ec99d4605fd6f2450
       crc32: ad1b7f16
       size: 2097152
+    - name: gc-ntsc-12.bin
+      destination: dolphin-emu/Sys/GC/USA/IPL.bin
+      required: false
+    - name: gc-pal-12.bin
+      destination: dolphin-emu/Sys/GC/EUR/IPL.bin
+      required: false
+    - name: gc-ntsc-12.bin
+      destination: dolphin-emu/Sys/GC/JAP/IPL.bin
+      required: false
     core: dolphin
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/dolphin/

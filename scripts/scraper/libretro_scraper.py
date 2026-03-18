@@ -351,6 +351,16 @@ class Scraper(BaseScraper):
             "sony-playstation": [
                 {"name": "psxonpsp660.bin", "destination": "psxonpsp660.bin", "required": False},
             ],
+            # Dolphin GC BIOS — ref: DolphinLibretro/Boot.cpp:72-73,
+            # BootManager.cpp:200-217, CommonPaths.h:139 GC_IPL="IPL.bin"
+            # Core searches: system/dolphin-emu/Sys/GC/<region>/IPL.bin
+            # System.dat names (gc-ntsc-10.bin etc.) are NOT what Dolphin loads.
+            # We add the correct Dolphin paths pointing to the same files.
+            "nintendo-gamecube": [
+                {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/USA/IPL.bin", "required": False},
+                {"name": "gc-pal-12.bin", "destination": "dolphin-emu/Sys/GC/EUR/IPL.bin", "required": False},
+                {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/JAP/IPL.bin", "required": False},
+            ],
             # minivmac casing — ref: minivmac/src/MYOSGLUE.c
             # doc says MacII.rom, repo has MacII.ROM — both work on case-insensitive FS
             "apple-macintosh-ii": [
@@ -359,10 +369,15 @@ class Scraper(BaseScraper):
         }
         for sys_id, extra_files in EXTRA_SYSTEM_FILES.items():
             if sys_id in systems:
-                existing = {f["name"] for f in systems[sys_id].get("files", [])}
+                existing = {
+                    (f["name"], f.get("destination", f["name"]))
+                    for f in systems[sys_id].get("files", [])
+                }
                 for ef in extra_files:
-                    if ef["name"] not in existing:
+                    key = (ef["name"], ef.get("destination", ef["name"]))
+                    if key not in existing:
                         systems[sys_id]["files"].append(ef)
+                        existing.add(key)
 
         # ep128emu shared group for Enterprise
         if "enterprise-64-128" in systems:
