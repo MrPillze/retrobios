@@ -351,15 +351,21 @@ class Scraper(BaseScraper):
             "sony-playstation": [
                 {"name": "psxonpsp660.bin", "destination": "psxonpsp660.bin", "required": False},
             ],
-            # Dolphin GC BIOS — ref: DolphinLibretro/Boot.cpp:72-73,
+            # Dolphin GC — ref: DolphinLibretro/Boot.cpp:72-73,
             # BootManager.cpp:200-217, CommonPaths.h:139 GC_IPL="IPL.bin"
-            # Core searches: system/dolphin-emu/Sys/GC/<region>/IPL.bin
-            # System.dat names (gc-ntsc-10.bin etc.) are NOT what Dolphin loads.
-            # We add the correct Dolphin paths pointing to the same files.
+            # Core searches system/dolphin-emu/Sys/ for data and BIOS.
+            # System.dat gc-ntsc-*.bin names are NOT what Dolphin loads.
+            # We add the correct Dolphin paths for BIOS + essential firmware.
             "nintendo-gamecube": [
                 {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/USA/IPL.bin", "required": False},
                 {"name": "gc-pal-12.bin", "destination": "dolphin-emu/Sys/GC/EUR/IPL.bin", "required": False},
                 {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/JAP/IPL.bin", "required": False},
+                # DSP firmware — ref: Source/Core/Core/HW/DSPLLE/DSPHost.cpp
+                {"name": "dsp_coef.bin", "destination": "dolphin-emu/Sys/GC/dsp_coef.bin", "required": True},
+                {"name": "dsp_rom.bin", "destination": "dolphin-emu/Sys/GC/dsp_rom.bin", "required": True},
+                # Fonts — ref: Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp
+                {"name": "font_western.bin", "destination": "dolphin-emu/Sys/GC/font_western.bin", "required": False},
+                {"name": "font_japanese.bin", "destination": "dolphin-emu/Sys/GC/font_japanese.bin", "required": False},
             ],
             # minivmac casing — ref: minivmac/src/MYOSGLUE.c
             # doc says MacII.rom, repo has MacII.ROM — both work on case-insensitive FS

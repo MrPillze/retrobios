@@ -1247,6 +1247,18 @@ systems:
     - name: gc-ntsc-12.bin
       destination: dolphin-emu/Sys/GC/JAP/IPL.bin
       required: false
+    - name: dsp_coef.bin
+      destination: dolphin-emu/Sys/GC/dsp_coef.bin
+      required: true
+    - name: dsp_rom.bin
+      destination: dolphin-emu/Sys/GC/dsp_rom.bin
+      required: true
+    - name: font_western.bin
+      destination: dolphin-emu/Sys/GC/font_western.bin
+      required: false
+    - name: font_japanese.bin
+      destination: dolphin-emu/Sys/GC/font_japanese.bin
+      required: false
     core: dolphin
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/dolphin/
