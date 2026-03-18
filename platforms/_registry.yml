@@ -10,6 +10,7 @@ platforms:
   retroarch:
     config: retroarch.yml
     status: active
+    logo: "https://raw.githubusercontent.com/libretro/RetroArch/master/media/retroarch-vector_invader-only.svg"
     scraper: libretro
     source_url: "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"
     source_format: clrmamepro_dat
@@ -20,6 +21,7 @@ platforms:
   batocera:
     config: batocera.yml
     status: active
+    logo: "https://raw.githubusercontent.com/batocera-linux/batocera-emulationstation/master/resources/splash_batocera.svg"
     scraper: batocera
     source_url: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
     source_format: python_dict
@@ -30,6 +32,7 @@ platforms:
   recalbox:
     config: recalbox.yml
     status: active
+    logo: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/svg/recalbox.svg"
     scraper: recalbox
     source_url: "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
     source_format: xml
@@ -40,6 +43,7 @@ platforms:
   retrobat:
     config: retrobat.yml
     status: active
+    logo: "https://raw.githubusercontent.com/RetroBat-Official/retrobat/main/system/resources/retrobat_logo_notext.png"
     scraper: retrobat
     source_url: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json"
     source_format: json
@@ -50,6 +54,7 @@ platforms:
   emudeck:
     config: emudeck.yml
     status: active
+    logo: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/icons/EmuDeck.png"
     scraper: emudeck
     source_url: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
     source_wiki: "https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables/"
@@ -63,6 +68,7 @@ platforms:
   lakka:
     config: lakka.yml
     status: active
+    logo: "https://raw.githubusercontent.com/libretro/retroarch-assets/master/src/xmb/flatui/lakka.svg"
     scraper: libretro
     inherits_from: retroarch
     schedule: weekly
@@ -70,5 +76,6 @@ platforms:
   retropie:
     config: retropie.yml
     status: archived  # Last release: v4.8 (March 2022) - no update in 4 years
+    logo: "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/scriptmodules/system/RetroPie/icon.png"
     scraper: null
     schedule: null

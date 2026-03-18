@@ -107,7 +107,8 @@ def _load_emulator_profiles(emulators_dir: str) -> dict[str, dict]:
 # Home page
 # ---------------------------------------------------------------------------
 
-def generate_home(db: dict, coverages: dict, emulator_count: int) -> str:
+def generate_home(db: dict, coverages: dict, emulator_count: int,
+                   registry: dict | None = None) -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
     ts = _timestamp()
@@ -130,8 +131,10 @@ def generate_home(db: dict, coverages: dict, emulator_count: int) -> str:
         display = cov["platform"]
         total = cov["total"]
         mode = cov["mode"]
+        logo_url = (registry or {}).get(name, {}).get("logo", "")
+        logo_md = f"![{display}]({logo_url}){{ width=24 }} " if logo_url else ""
         lines.append(
-            f"| {display} | {total} | {mode} | "
+            f"| {logo_md}{display} | {total} | {mode} | "
             f"[Download]({RELEASE_URL}) |"
         )
 
@@ -186,16 +189,19 @@ def generate_platform_index(coverages: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_platform_page(name: str, cov: dict) -> str:
+def generate_platform_page(name: str, cov: dict, registry: dict | None = None) -> str:
     config = cov["config"]
     display = cov["platform"]
     mode = cov["mode"]
     pct = _pct(cov["present"], cov["total"])
 
+    logo_url = (registry or {}).get(name, {}).get("logo", "")
+    logo_md = f"![{display}]({logo_url}){{ width=48 align=right }}\n\n" if logo_url else ""
+
     lines = [
         f"# {display} - {SITE_NAME}",
         "",
-        f"**Verification mode:** {mode}",
+        logo_md + f"**Verification mode:** {mode}",
         f"**Coverage:** {cov['present']}/{cov['total']} ({pct})",
         f"**Verified:** {cov['verified']} | **Untested:** {cov['untested']} | **Missing:** {cov['missing']}",
         "",
@@ -708,6 +714,13 @@ def main():
     for d in GENERATED_DIRS:
         (docs / d).mkdir(parents=True, exist_ok=True)
 
+    # Load registry for platform metadata (logos, etc.)
+    registry_path = Path(args.platforms_dir) / "_registry.yml"
+    registry = {}
+    if registry_path.exists():
+        with open(registry_path) as f:
+            registry = (yaml.safe_load(f) or {}).get("platforms", {})
+
     # Load platform configs
     platform_names = [
         p.stem for p in Path(args.platforms_dir).glob("*.yml")
@@ -736,13 +749,13 @@ def main():
 
     # Generate home
     print("Generating home page...")
-    (docs / "index.md").write_text(generate_home(db, coverages, unique_count))
+    (docs / "index.md").write_text(generate_home(db, coverages, unique_count, registry))
 
     # Generate platform pages
     print("Generating platform pages...")
     (docs / "platforms" / "index.md").write_text(generate_platform_index(coverages))
     for name, cov in coverages.items():
-        (docs / "platforms" / f"{name}.md").write_text(generate_platform_page(name, cov))
+        (docs / "platforms" / f"{name}.md").write_text(generate_platform_page(name, cov, registry))
 
     # Generate system pages
     print("Generating system pages...")
