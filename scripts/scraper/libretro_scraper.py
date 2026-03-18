@@ -269,6 +269,15 @@ class Scraper(BaseScraper):
                 "manufacturer": "Vircon",
                 "docs": "https://docs.libretro.com/library/vircon32/",
             },
+            # ref: xrick/src/sysvid.c, xrick/src/data.c — game data archive
+            "xrick": {
+                "files": [
+                    {"name": "data.zip", "destination": "xrick/data.zip", "required": True},
+                ],
+                "core": "xrick",
+                "manufacturer": "Other",
+                "docs": "https://docs.libretro.com/library/xrick/",
+            },
         }
         for sys_id, sys_data in EXTRA_SYSTEMS.items():
             if sys_id not in systems:
@@ -330,6 +339,7 @@ class Scraper(BaseScraper):
             # JollyCV — ref: jollycv/libretro.c
             "coleco-colecovision": [
                 {"name": "BIOS.col", "destination": "BIOS.col", "required": True},
+                {"name": "coleco.rom", "destination": "coleco.rom", "required": True},
                 {"name": "bioscv.rom", "destination": "bioscv.rom", "required": True},
             ],
             # Kronos ST-V — ref: libretro-kronos/libretro/libretro.c

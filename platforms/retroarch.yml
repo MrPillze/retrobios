@@ -361,6 +361,9 @@ systems:
     - name: BIOS.col
       destination: BIOS.col
       required: true
+    - name: coleco.rom
+      destination: coleco.rom
+      required: true
     - name: bioscv.rom
       destination: bioscv.rom
       required: true
@@ -3088,3 +3091,11 @@ systems:
     core: vircon32
     manufacturer: Vircon
     docs: https://docs.libretro.com/library/vircon32/
+  xrick:
+    files:
+    - name: data.zip
+      destination: xrick/data.zip
+      required: true
+    core: xrick
+    manufacturer: Other
+    docs: https://docs.libretro.com/library/xrick/
