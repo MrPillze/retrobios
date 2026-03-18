@@ -111,12 +111,10 @@ nav:
   - xrick: systems/xrick.md
 - Emulators:
   - Overview: emulators/index.md
-  - 00_example: emulators/00_example.md
   - '2048': emulators/2048.md
   - 3DEngine: emulators/3dengine.md
   - EightyOne: emulators/81.md
   - a5200: emulators/a5200.md
-  - advanced_tests: emulators/advanced_tests.md
   - amiarcadia: emulators/amiarcadia.md
   - Anarch: emulators/anarch.md
   - AppleWin: emulators/applewin.md
@@ -276,20 +274,6 @@ nav:
   - Syobon Action: emulators/syobonaction.md
   - TamaLIBretro: emulators/tamalibretro.md
   - TempGBA: emulators/tempgba.md
-  - test: emulators/test.md
-  - test_netplay: emulators/test_netplay.md
-  - testaudio_callback: emulators/testaudio_callback.md
-  - testaudio_no_callback: emulators/testaudio_no_callback.md
-  - testaudio_playback_wav: emulators/testaudio_playback_wav.md
-  - testgl: emulators/testgl.md
-  - testgl_compute_shaders: emulators/testgl_compute_shaders.md
-  - testgl_ff: emulators/testgl_ff.md
-  - testinput_buttontest: emulators/testinput_buttontest.md
-  - testretroluxury: emulators/testretroluxury.md
-  - testsw: emulators/testsw.md
-  - testsw_vram: emulators/testsw_vram.md
-  - testvulkan: emulators/testvulkan.md
-  - testvulkan_async_compute: emulators/testvulkan_async_compute.md
   - TGB Dual: emulators/tgbdual.md
   - Theodore: emulators/theodore.md
   - The Powder Toy: emulators/thepowdertoy.md
@@ -303,7 +287,6 @@ nav:
   - vecx: emulators/vecx.md
   - VeMUlator: emulators/vemulator.md
   - VICE: emulators/vice.md
-  - vidtest: emulators/vidtest.md
   - Vircon32: emulators/vircon32.md
   - Virtual Jaguar: emulators/virtualjaguar.md
   - VirtualXT: emulators/virtualxt.md
@@ -315,4 +298,5 @@ nav:
   - x64sdl: emulators/x64sdl.md
   - Xemu: emulators/xemu.md
   - XRick: emulators/xrick.md
+- Gap Analysis: gaps.md
 - Contributing: contributing.md

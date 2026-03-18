@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import load_database, compute_coverage
 
 SITE_URL = "https://abdess.github.io/retrobios/"
-RELEASE_URL = "https://github.com/Abdess/retrobios/releases/latest"
+RELEASE_URL = "../../releases/latest"
 
 
 def generate_readme(db: dict, platforms_dir: str) -> str:
