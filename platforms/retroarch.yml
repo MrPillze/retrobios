@@ -220,6 +220,33 @@ systems:
     - name: qsound.zip
       destination: qsound.zip
       required: true
+    - name: channelf.zip
+      destination: channelf.zip
+      required: true
+    - name: coleco.zip
+      destination: coleco.zip
+      required: true
+    - name: neocdz.zip
+      destination: neocdz.zip
+      required: true
+    - name: ngp.zip
+      destination: ngp.zip
+      required: true
+    - name: spectrum.zip
+      destination: spectrum.zip
+      required: true
+    - name: spec128.zip
+      destination: spec128.zip
+      required: true
+    - name: spec1282a.zip
+      destination: spec1282a.zip
+      required: true
+    - name: fdsbios.zip
+      destination: fdsbios.zip
+      required: true
+    - name: aes.zip
+      destination: aes.zip
+      required: true
     core: fbneo
     manufacturer: Various
     docs: https://docs.libretro.com/library/fbneo/
@@ -331,6 +358,12 @@ systems:
       md5: 2c66f5911e5b42b8ebe113403548eee7
       crc32: 3aa93ef3
       size: 8192
+    - name: BIOS.col
+      destination: BIOS.col
+      required: true
+    - name: bioscv.rom
+      destination: bioscv.rom
+      required: true
   commodore-amiga:
     files:
     - name: kick33180.A500
@@ -1237,6 +1270,18 @@ systems:
       md5: e45033d9b0fa6b0de071292bba7c9d13
       crc32: 945f9dc9
       size: 262144
+    - name: dsi_bios7.bin
+      destination: dsi_bios7.bin
+      required: true
+    - name: dsi_bios9.bin
+      destination: dsi_bios9.bin
+      required: true
+    - name: dsi_firmware.bin
+      destination: dsi_firmware.bin
+      required: true
+    - name: dsi_nand.bin
+      destination: dsi_nand.bin
+      required: true
     core: desmume
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/desmume/
@@ -1351,6 +1396,9 @@ systems:
       md5: d574d4f9c12f305074798f54c091a8b4
       crc32: ec8a83b9
       size: 256
+    - name: sgb.boot.rom
+      destination: sgb.boot.rom
+      required: false
   nintendo-snes:
     files:
     - name: cx4.data.rom
@@ -1766,6 +1814,9 @@ systems:
       md5: ac4e4b6522e200c0d23d371a8cecbfd3
       crc32: e4d61811
       size: 524288
+    - name: stvbios.zip
+      destination: kronos/stvbios.zip
+      required: true
     core: kronos
     manufacturer: Sega
     docs: https://docs.libretro.com/library/kronos/

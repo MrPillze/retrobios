@@ -268,12 +268,25 @@ class Scraper(BaseScraper):
         # Arcade BIOS present in the repo but absent from System.dat.
         # FBNeo expects them in system/ or system/fbneo/.
         # ref: fbneo/src/burner/libretro/libretro.cpp
+        # ref: fbneo/src/burner/libretro/libretro.cpp — search order:
+        # 1) romset dir 2) system/fbneo/ 3) system/
         EXTRA_ARCADE_FILES = [
             {"name": "namcoc69.zip", "destination": "namcoc69.zip", "required": True},
             {"name": "namcoc70.zip", "destination": "namcoc70.zip", "required": True},
             {"name": "namcoc75.zip", "destination": "namcoc75.zip", "required": True},
             {"name": "msx.zip", "destination": "msx.zip", "required": True},
             {"name": "qsound.zip", "destination": "qsound.zip", "required": True},
+            # FBNeo non-arcade subsystem BIOS (MAME-format ZIPs)
+            # ref: fbneo/src/burn/drv/ per-driver source files
+            {"name": "channelf.zip", "destination": "channelf.zip", "required": True},
+            {"name": "coleco.zip", "destination": "coleco.zip", "required": True},
+            {"name": "neocdz.zip", "destination": "neocdz.zip", "required": True},
+            {"name": "ngp.zip", "destination": "ngp.zip", "required": True},
+            {"name": "spectrum.zip", "destination": "spectrum.zip", "required": True},
+            {"name": "spec128.zip", "destination": "spec128.zip", "required": True},
+            {"name": "spec1282a.zip", "destination": "spec1282a.zip", "required": True},
+            {"name": "fdsbios.zip", "destination": "fdsbios.zip", "required": True},
+            {"name": "aes.zip", "destination": "aes.zip", "required": True},
         ]
         if "arcade" in systems:
             existing = {f["name"] for f in systems["arcade"].get("files", [])}
@@ -290,6 +303,42 @@ class Scraper(BaseScraper):
                     "destination": "dc/segasp.zip",
                     "required": True,
                 })
+
+        # Extra files missing from System.dat for specific systems.
+        # Each traced to the core's source code.
+        EXTRA_SYSTEM_FILES = {
+            # melonDS DS DSi mode — ref: JesseTG/melonds-ds/src/libretro.cpp
+            "nintendo-ds": [
+                {"name": "dsi_bios7.bin", "destination": "dsi_bios7.bin", "required": True},
+                {"name": "dsi_bios9.bin", "destination": "dsi_bios9.bin", "required": True},
+                {"name": "dsi_firmware.bin", "destination": "dsi_firmware.bin", "required": True},
+                {"name": "dsi_nand.bin", "destination": "dsi_nand.bin", "required": True},
+            ],
+            # bsnes SGB naming — ref: bsnes/target-libretro/libretro.cpp
+            "nintendo-sgb": [
+                {"name": "sgb.boot.rom", "destination": "sgb.boot.rom", "required": False},
+            ],
+            # JollyCV — ref: jollycv/libretro.c
+            "coleco-colecovision": [
+                {"name": "BIOS.col", "destination": "BIOS.col", "required": True},
+                {"name": "bioscv.rom", "destination": "bioscv.rom", "required": True},
+            ],
+            # Kronos ST-V — ref: libretro-kronos/libretro/libretro.c
+            "sega-saturn": [
+                {"name": "stvbios.zip", "destination": "kronos/stvbios.zip", "required": True},
+            ],
+            # PCSX ReARMed / Beetle PSX alt BIOS — ref: pcsx_rearmed/libpcsxcore/misc.c
+            # docs say PSXONPSP660.bin (uppercase) but core accepts any case
+            "sony-playstation": [
+                {"name": "psxonpsp660.bin", "destination": "psxonpsp660.bin", "required": False},
+            ],
+        }
+        for sys_id, extra_files in EXTRA_SYSTEM_FILES.items():
+            if sys_id in systems:
+                existing = {f["name"] for f in systems[sys_id].get("files", [])}
+                for ef in extra_files:
+                    if ef["name"] not in existing:
+                        systems[sys_id]["files"].append(ef)
 
         # ep128emu shared group for Enterprise
         if "enterprise-64-128" in systems:
