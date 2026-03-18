@@ -24,7 +24,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_platform_config, md5_composite, resolve_local_file
+from common import compute_hashes, load_database, load_platform_config, md5_composite, resolve_local_file
 
 try:
     import yaml
@@ -44,17 +44,12 @@ MAX_ENTRY_SIZE = 512 * 1024 * 1024  # 512MB
 
 def _verify_file_hash(path: str, expected_sha1: str = "",
                       expected_md5: str = "") -> bool:
-    """Compute and compare hash of a local file."""
     if not expected_sha1 and not expected_md5:
         return True
-    h = hashlib.sha1() if expected_sha1 else hashlib.md5()
-    with open(path, "rb") as f:
-        while True:
-            chunk = f.read(65536)
-            if not chunk:
-                break
-            h.update(chunk)
-    return h.hexdigest() == (expected_sha1 or expected_md5)
+    hashes = compute_hashes(path)
+    if expected_sha1:
+        return hashes["sha1"] == expected_sha1
+    return hashes["md5"] == expected_md5
 
 
 def fetch_large_file(name: str, dest_dir: str = ".cache/large",
@@ -267,26 +262,20 @@ def _load_emulator_extras(
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
-    db_path: str,
+    db: dict,
     bios_dir: str,
     output_dir: str,
     include_extras: bool = False,
     emulators_dir: str = "emulators",
+    zip_contents: dict | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
     Returns the path to the generated ZIP, or None on failure.
     """
     config = load_platform_config(platform_name, platforms_dir)
-    db = load_database(db_path)
-
-    # Only build the expensive ZIP contents index if the platform has zipped_file entries
-    has_zipped = any(
-        fe.get("zipped_file")
-        for sys in config.get("systems", {}).values()
-        for fe in sys.get("files", [])
-    )
-    zip_contents = build_zip_contents_index(db) if has_zipped else {}
+    if zip_contents is None:
+        zip_contents = {}
 
     verification_mode = config.get("verification_mode", "existence")
     platform_display = config.get("platform", platform_name)
@@ -468,6 +457,9 @@ def main():
         parser.error("Specify --platform or --all")
         return
 
+    db = load_database(args.db)
+    zip_contents = build_zip_contents_index(db)
+
     groups = _group_identical_platforms(platforms, args.platforms_dir)
 
     for group_platforms, representative in groups:
@@ -480,8 +472,9 @@ def main():
 
         try:
             zip_path = generate_pack(
-                representative, args.platforms_dir, args.db, args.bios_dir, args.output_dir,
+                representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
                 include_extras=args.include_extras, emulators_dir=args.emulators_dir,
+                zip_contents=zip_contents,
             )
             if zip_path and len(group_platforms) > 1:
                 # Rename ZIP to include all platform names

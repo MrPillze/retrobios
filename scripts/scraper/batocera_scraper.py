@@ -211,28 +211,12 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        # Sort numerically since API returns by commit date, not version
-        import json as _json
+        tag = fetch_github_latest_tag("batocera-linux/batocera.linux", prefix="batocera-")
         batocera_version = ""
-        try:
-            _url = "https://api.github.com/repos/batocera-linux/batocera.linux/tags?per_page=50"
-            _req = urllib.request.Request(_url, headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            })
-            with urllib.request.urlopen(_req, timeout=15) as _resp:
-                _tags = _json.loads(_resp.read())
-            _versions = []
-            for _t in _tags:
-                _name = _t["name"]
-                if _name.startswith("batocera-"):
-                    _num = _name.replace("batocera-", "")
-                    if _num.isdigit():
-                        _versions.append(int(_num))
-            if _versions:
-                batocera_version = str(max(_versions))
-        except (ConnectionError, ValueError, OSError):
-            pass
+        if tag:
+            num = tag.removeprefix("batocera-")
+            if num.isdigit():
+                batocera_version = num
 
         return {
             "platform": "Batocera",

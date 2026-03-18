@@ -54,14 +54,9 @@ def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
                         return Status.OK
 
                     with archive.open(fname) as entry:
-                        h = hashlib.md5()
-                        while True:
-                            block = entry.read(65536)
-                            if not block:
-                                break
-                            h.update(block)
+                        actual = md5sum(entry)
 
-                    if h.hexdigest() == expected_md5:
+                    if actual == expected_md5:
                         return Status.OK
                     else:
                         return Status.UNTESTED
@@ -71,10 +66,13 @@ def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
         return "error"
 
 
-def resolve_to_local_path(file_entry: dict, db: dict) -> str | None:
+def resolve_to_local_path(
+    file_entry: dict,
+    db: dict,
+    zip_contents: dict | None = None,
+) -> tuple[str | None, str]:
     """Find the local file path for a BIOS entry. Delegates to common.resolve_local_file."""
-    path, _ = resolve_local_file(file_entry, db)
-    return path
+    return resolve_local_file(file_entry, db, zip_contents)
 
 
 def verify_entry_existence(file_entry: dict, local_path: str | None) -> dict:
@@ -85,7 +83,11 @@ def verify_entry_existence(file_entry: dict, local_path: str | None) -> dict:
     return {"name": name, "status": Status.MISSING}
 
 
-def verify_entry_md5(file_entry: dict, local_path: str | None) -> dict:
+def verify_entry_md5(
+    file_entry: dict,
+    local_path: str | None,
+    resolve_status: str = "",
+) -> dict:
     """MD5 verification - supports single MD5 (Batocera) and multi-MD5 (Recalbox)."""
     name = file_entry.get("name", "")
     expected_md5 = file_entry.get("md5", "")
@@ -125,6 +127,9 @@ def verify_entry_md5(file_entry: dict, local_path: str | None) -> dict:
     if not md5_list:
         return {"name": name, "status": Status.OK, "path": local_path}
 
+    if resolve_status == "md5_exact":
+        return {"name": name, "status": Status.OK, "path": local_path}
+
     actual_md5 = md5sum(local_path)
 
     # Case-insensitive - Recalbox uses uppercase MD5s
@@ -153,6 +158,26 @@ def verify_entry_md5(file_entry: dict, local_path: str | None) -> dict:
     }
 
 
+def _build_zip_contents_index(db: dict) -> dict:
+    """Build index of {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files."""
+    index: dict[str, str] = {}
+    for sha1, entry in db.get("files", {}).items():
+        path = entry["path"]
+        if not path.endswith(".zip") or not os.path.exists(path):
+            continue
+        try:
+            with zipfile.ZipFile(path, "r") as zf:
+                for info in zf.infolist():
+                    if info.is_dir() or info.file_size > 512 * 1024 * 1024:
+                        continue
+                    data = zf.read(info.filename)
+                    inner_md5 = hashlib.md5(data).hexdigest()
+                    index[inner_md5] = sha1
+        except (zipfile.BadZipFile, OSError):
+            continue
+    return index
+
+
 def verify_platform(config: dict, db: dict) -> dict:
     """Verify all BIOS files for a platform using its verification_mode.
 
@@ -170,13 +195,23 @@ def verify_platform(config: dict, db: dict) -> dict:
     mode = config.get("verification_mode", "existence")
     platform = config.get("platform", "unknown")
 
-    verify_fn = verify_entry_existence if mode == "existence" else verify_entry_md5
+    has_zipped = any(
+        fe.get("zipped_file")
+        for sys in config.get("systems", {}).values()
+        for fe in sys.get("files", [])
+    )
+    zip_contents = _build_zip_contents_index(db) if has_zipped else {}
 
     results = []
     for sys_id, system in config.get("systems", {}).items():
         for file_entry in system.get("files", []):
-            local_path = resolve_to_local_path(file_entry, db)
-            result = verify_fn(file_entry, local_path)
+            local_path, resolve_status = resolve_to_local_path(
+                file_entry, db, zip_contents,
+            )
+            if mode == "existence":
+                result = verify_entry_existence(file_entry, local_path)
+            else:
+                result = verify_entry_md5(file_entry, local_path, resolve_status)
             result["system"] = sys_id
             results.append(result)
 

@@ -262,7 +262,6 @@ def main():
         print(json.dumps(config, indent=2))
         return
 
-    reqs = scraper.fetch_requirements()
     by_system = {}
     for r in reqs:
         by_system.setdefault(r.system, []).append(r)

@@ -45,12 +45,16 @@ def load_database(db_path: str) -> dict:
         return json.load(f)
 
 
-def md5sum(filepath: str | Path) -> str:
-    """Compute MD5 of a file - matches Batocera's md5sum()."""
+def md5sum(source: str | Path | object) -> str:
+    """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
     h = hashlib.md5()
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
+    if hasattr(source, "read"):
+        for chunk in iter(lambda: source.read(65536), b""):
             h.update(chunk)
+    else:
+        with open(source, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
     return h.hexdigest()
 
 
@@ -154,13 +158,13 @@ def resolve_local_file(
             if sha1_match and sha1_match in files_db:
                 path = files_db[sha1_match]["path"]
                 if os.path.exists(path):
-                    return path, "exact"
+                    return path, "md5_exact"
             if len(md5_candidate) < 32:
                 for db_md5, db_sha1 in by_md5.items():
                     if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
                         path = files_db[db_sha1]["path"]
                         if os.path.exists(path):
-                            return path, "exact"
+                            return path, "md5_exact"
 
     # 3. zipped_file content match via pre-built index
     if zipped_file and md5_list and zip_contents:
@@ -215,27 +219,6 @@ def resolve_local_file(
         return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
 
     return None, "not_found"
-
-
-def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
-    """Compute BIOS coverage for a platform using verify logic."""
-    from verify import verify_platform
-    config = load_platform_config(platform_name, platforms_dir)
-    result = verify_platform(config, db)
-    present = result["ok"] + result["untested"]
-    pct = (present / result["total"] * 100) if result["total"] > 0 else 0
-    return {
-        "platform": config.get("platform", platform_name),
-        "total": result["total"],
-        "verified": result["ok"],
-        "untested": result["untested"],
-        "missing": result["missing"],
-        "present": present,
-        "percentage": pct,
-        "mode": config.get("verification_mode", "existence"),
-        "details": result["details"],
-        "config": config,
-    }
 
 
 def safe_extract_zip(zip_path: str, dest_dir: str) -> None:

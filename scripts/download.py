@@ -13,7 +13,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import sys
@@ -23,7 +22,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import safe_extract_zip
+from common import compute_hashes, safe_extract_zip
 
 GITHUB_API = "https://api.github.com"
 REPO = "Abdess/retrobios"
@@ -135,21 +134,15 @@ def verify_files(platform: str, dest_dir: str, release: dict):
         found = False
         for local_file in dest.rglob(name):
             if local_file.is_file():
-                h = hashlib.sha1()
-                with open(local_file, "rb") as f:
-                    while True:
-                        chunk = f.read(65536)
-                        if not chunk:
-                            break
-                        h.update(chunk)
+                local_sha1 = compute_hashes(local_file)["sha1"]
 
-                if h.hexdigest() == sha1:
+                if local_sha1 == sha1:
                     verified += 1
                     found = True
                     break
                 else:
                     mismatched += 1
-                    print(f"  MISMATCH: {name} (expected {sha1[:12]}..., got {h.hexdigest()[:12]}...)")
+                    print(f"  MISMATCH: {name} (expected {sha1[:12]}..., got {local_sha1[:12]}...)")
                     found = True
                     break
 

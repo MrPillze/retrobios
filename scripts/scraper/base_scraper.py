@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import urllib.request
 import urllib.error
 from abc import ABC, abstractmethod
@@ -168,7 +169,6 @@ def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirement
         reqs = scraper.fetch_requirements()
     except (ConnectionError, ValueError) as e:
         print(f"Error: {e}", file=sys.stderr)
-        import sys
         sys.exit(1)
 
     if args.dry_run:

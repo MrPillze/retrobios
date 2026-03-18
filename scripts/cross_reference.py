@@ -25,7 +25,7 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database
+from common import load_database, load_platform_config
 
 DEFAULT_EMULATORS_DIR = "emulators"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -52,8 +52,7 @@ def load_platform_files(platforms_dir: str) -> dict[str, set[str]]:
     for f in sorted(Path(platforms_dir).glob("*.yml")):
         if f.name.startswith("_"):
             continue
-        with open(f) as fh:
-            config = yaml.safe_load(fh) or {}
+        config = load_platform_config(f.stem, platforms_dir)
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 name = fe.get("name", "")
