@@ -28,6 +28,9 @@ bios/Sony/PlayStation 3/PS3UPDAT.PUP
 bios/Sony/PlayStation Vita/PSVUPDAT.PUP
 bios/Sony/PlayStation Vita/PSP2UPDAT.PUP
 
+# Data directories (fetched at build time)
+data/
+
 # Large files stored as GitHub Release assets (additional)
 bios/Arcade/MAME/artwork/snspell.zip
 bios/Arcade/MAME/MAME 0.174 Arcade XML.dat

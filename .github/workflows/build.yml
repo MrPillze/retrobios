@@ -105,6 +105,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Refresh data directories
+        if: steps.rate.outputs.skip != 'true'
+        run: python scripts/refresh_data_dirs.py
+        continue-on-error: true
+
       - name: Build packs
         if: steps.rate.outputs.skip != 'true'
         run: |

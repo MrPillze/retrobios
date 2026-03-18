@@ -60,6 +60,9 @@ jobs:
           python scripts/generate_db.py --bios-dir bios --output database.json
           python scripts/auto_fetch.py --all 2>&1 | tee /tmp/fetch_report.txt || true
 
+      - name: Refresh data directories
+        run: python scripts/refresh_data_dirs.py --force
+
       - name: Deduplicate BIOS files
         run: python scripts/dedup.py
 
