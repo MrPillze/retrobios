@@ -17,6 +17,7 @@ docs/platforms/
 docs/systems/
 docs/emulators/
 docs/contributing.md
+docs/gaps.md
 
 # Large files stored as GitHub Release assets (> 50MB)
 bios/Arcade/Arcade/Firmware.19.0.0.zip

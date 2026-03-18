@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -174,7 +175,8 @@ def generate_platform_index(coverages: dict) -> str:
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
         pct = _pct(cov["present"], cov["total"])
-        status = _status_icon(cov["percentage"])
+        plat_status = cov["config"].get("status", "active")
+        status = "archived" if plat_status == "archived" else _status_icon(cov["percentage"])
         lines.append(
             f"| [{display}]({name}.md) | "
             f"{cov['present']}/{cov['total']} ({pct}) | "
@@ -349,8 +351,8 @@ def generate_emulators_index(profiles: dict) -> str:
     lines = [
         "# Emulators",
         "",
-        "| Engine | Type | Systems | Files | Gaps |",
-        "|--------|------|---------|-------|------|",
+        "| Engine | Type | Systems | Files |",
+        "|--------|------|---------|-------|",
     ]
 
     unique = {k: v for k, v in profiles.items() if v.get("type") != "alias"}
@@ -368,7 +370,7 @@ def generate_emulators_index(profiles: dict) -> str:
 
         lines.append(
             f"| [{emu_name}]({name}.md) | {emu_type} | "
-            f"{sys_str} | {len(files)} | |"
+            f"{sys_str} | {len(files)} |"
         )
 
     if aliases:
@@ -491,11 +493,10 @@ def generate_gap_analysis(
         if not files:
             continue
 
-        systems = profile.get("systems", [])
+        # Collect all files declared by any platform (global check)
         all_platform_names = set()
-        for sys_id in systems:
-            for pname, pfiles in platform_files.items():
-                all_platform_names.update(pfiles)
+        for pfiles in platform_files.values():
+            all_platform_names.update(pfiles)
 
         undeclared = []
         for f in files:
@@ -701,7 +702,6 @@ def main():
     for d in GENERATED_DIRS:
         target = docs / d
         if target.exists():
-            import shutil
             shutil.rmtree(target)
 
     # Ensure output dirs
@@ -721,8 +721,8 @@ def main():
             cov = _compute_coverage(name, args.platforms_dir, db)
             coverages[name] = cov
             print(f"  {cov['platform']}: {cov['present']}/{cov['total']} ({_pct(cov['present'], cov['total'])})")
-        except (FileNotFoundError, KeyError) as e:
-            print(f"  {name}: skipped ({e})")
+        except FileNotFoundError as e:
+            print(f"  {name}: skipped ({e})", file=sys.stderr)
 
     # Load emulator profiles
     print("Loading emulator profiles...")
@@ -770,19 +770,27 @@ def main():
     print("Generating contributing page...")
     (docs / "contributing.md").write_text(generate_contributing())
 
-    # Update mkdocs.yml nav
+    # Update mkdocs.yml nav section only (avoid yaml.dump round-trip mangling quotes)
     print("Updating mkdocs.yml nav...")
+    nav = generate_mkdocs_nav(coverages, manufacturers, profiles)
+    nav_yaml = yaml.dump({"nav": nav}, default_flow_style=False, sort_keys=False, allow_unicode=True)
+
     with open("mkdocs.yml") as f:
-        mkconfig = yaml.safe_load(f)
-    mkconfig["nav"] = generate_mkdocs_nav(coverages, manufacturers, profiles)
+        content = f.read()
+    # Replace or append nav section
+    if "\nnav:" in content:
+        content = content[:content.index("\nnav:") + 1] + nav_yaml
+    else:
+        content += "\n" + nav_yaml
     with open("mkdocs.yml", "w") as f:
-        yaml.dump(mkconfig, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        f.write(content)
 
     total_pages = (
         1  # home
         + 1 + len(coverages)  # platform index + detail
         + 1 + len(manufacturers)  # system index + detail
         + 1 + len(profiles)  # emulator index + detail
+        + 1  # gap analysis
         + 1  # contributing
     )
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")
