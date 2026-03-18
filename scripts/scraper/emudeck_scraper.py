@@ -403,58 +403,8 @@ class Scraper(BaseScraper):
 
 
 def main():
-    import argparse
-    import json
-
-    parser = argparse.ArgumentParser(description="Scrape EmuDeck BIOS requirements")
-    parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--json", action="store_true")
-    parser.add_argument("--output", "-o")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-
-    try:
-        reqs = scraper.fetch_requirements()
-    except (ConnectionError, ValueError) as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-
-    if args.dry_run:
-        by_system: dict[str, list[BiosRequirement]] = {}
-        for req in reqs:
-            by_system.setdefault(req.system, []).append(req)
-
-        for system, files in sorted(by_system.items()):
-            print(f"\n{system} ({len(files)} files):")
-            for f in files:
-                hash_info = f.md5[:12] if f.md5 else "no-hash"
-                print(f"  {f.name} ({hash_info}...)")
-
-        print(f"\nTotal: {len(reqs)} BIOS entries across {len(by_system)} systems")
-        return
-
-    if args.json:
-        config = scraper.generate_platform_yaml()
-        print(json.dumps(config, indent=2))
-        return
-
-    if args.output:
-        try:
-            import yaml
-        except ImportError:
-            print("Error: PyYAML required", file=sys.stderr)
-            sys.exit(1)
-
-        config = scraper.generate_platform_yaml()
-        with open(args.output, "w") as f:
-            yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-        print(f"Written to {args.output}")
-    else:
-        by_system = {}
-        for req in reqs:
-            by_system.setdefault(req.system, []).append(req)
-        print(f"Scraped {len(reqs)} BIOS entries across {len(by_system)} systems")
+    from scripts.scraper.base_scraper import scraper_cli
+    scraper_cli(Scraper, "Scrape emudeck BIOS requirements")
 
 
 if __name__ == "__main__":

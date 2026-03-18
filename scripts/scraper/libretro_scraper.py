@@ -263,60 +263,8 @@ class Scraper(BaseScraper):
 
 
 def main():
-    """CLI entry point for testing."""
-    import argparse
-    import json
-
-    parser = argparse.ArgumentParser(description="Scrape libretro System.dat")
-    parser.add_argument("--dry-run", action="store_true", help="Just show what would be scraped")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    parser.add_argument("--json", action="store_true", help="Output as JSON")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-
-    try:
-        reqs = scraper.fetch_requirements()
-    except (ConnectionError, ValueError) as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-
-    if args.dry_run:
-        by_system = {}
-        for req in reqs:
-            by_system.setdefault(req.system, []).append(req)
-
-        for system, files in sorted(by_system.items()):
-            print(f"\n{system} ({len(files)} files):")
-            for f in files:
-                hash_info = f.sha1[:12] if f.sha1 else f.md5[:12] if f.md5 else "no-hash"
-                print(f"  {f.name} ({f.size or '?'} bytes, {hash_info}...)")
-
-        print(f"\nTotal: {len(reqs)} BIOS files across {len(by_system)} systems")
-        return
-
-    if args.json:
-        config = scraper.generate_platform_yaml()
-        print(json.dumps(config, indent=2))
-        return
-
-    if args.output:
-        try:
-            import yaml
-        except ImportError:
-            print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-            sys.exit(1)
-
-        config = scraper.generate_platform_yaml()
-        with open(args.output, "w") as f:
-            yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-        print(f"Written to {args.output}")
-    else:
-        reqs = scraper.fetch_requirements()
-        by_system = {}
-        for req in reqs:
-            by_system.setdefault(req.system, []).append(req)
-        print(f"Scraped {len(reqs)} BIOS files across {len(by_system)} systems")
+    from scripts.scraper.base_scraper import scraper_cli
+    scraper_cli(Scraper, "Scrape libretro BIOS requirements")
 
 
 if __name__ == "__main__":

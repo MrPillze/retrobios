@@ -135,6 +135,64 @@ def fetch_github_latest_version(repo: str) -> str | None:
         return None
 
 
+def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirements") -> None:
+    """Shared CLI entry point for all scrapers. Eliminates main() boilerplate."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument("--dry-run", action="store_true", help="Show scraped data")
+    parser.add_argument("--output", "-o", help="Output YAML file")
+    parser.add_argument("--json", action="store_true", help="Output as JSON")
+    args = parser.parse_args()
+
+    scraper = scraper_class()
+    try:
+        reqs = scraper.fetch_requirements()
+    except (ConnectionError, ValueError) as e:
+        print(f"Error: {e}", file=sys.stderr)
+        import sys
+        sys.exit(1)
+
+    if args.dry_run:
+        by_system: dict[str, list] = {}
+        for req in reqs:
+            by_system.setdefault(req.system, []).append(req)
+        for system, files in sorted(by_system.items()):
+            req_count = sum(1 for f in files if f.required)
+            opt_count = len(files) - req_count
+            print(f"  {system}: {req_count} required, {opt_count} optional")
+        print(f"\nTotal: {len(reqs)} BIOS entries across {len(by_system)} systems")
+        return
+
+    if args.json:
+        data = [{"name": r.name, "system": r.system, "sha1": r.sha1, "md5": r.md5,
+                 "size": r.size, "required": r.required} for r in reqs]
+        print(json.dumps(data, indent=2))
+        return
+
+    if args.output:
+        # Generate platform YAML
+        import yaml
+        config = {"systems": {}}
+        for req in reqs:
+            sys_id = req.system
+            config["systems"].setdefault(sys_id, {"files": []})
+            entry = {"name": req.name, "destination": req.destination or req.name, "required": req.required}
+            if req.sha1:
+                entry["sha1"] = req.sha1
+            if req.md5:
+                entry["md5"] = req.md5
+            if req.zipped_file:
+                entry["zipped_file"] = req.zipped_file
+            config["systems"][sys_id]["files"].append(entry)
+        with open(args.output, "w") as f:
+            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+        print(f"Written {len(reqs)} entries to {args.output}")
+        return
+
+    print(f"Scraped {len(reqs)} requirements. Use --dry-run, --json, or --output.")
+
+
 def fetch_github_latest_tag(repo: str, prefix: str = "") -> str | None:
     """Fetch the most recent matching tag from a GitHub repo."""
     url = f"https://api.github.com/repos/{repo}/tags?per_page=50"
