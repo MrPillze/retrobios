@@ -321,7 +321,13 @@ def generate_pack(
     config = load_platform_config(platform_name, platforms_dir)
     db = load_database(db_path)
 
-    zip_contents = build_zip_contents_index(db)
+    # Only build the expensive ZIP contents index if the platform has zipped_file entries
+    has_zipped = any(
+        fe.get("zipped_file")
+        for sys in config.get("systems", {}).values()
+        for fe in sys.get("files", [])
+    )
+    zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
     verification_mode = config.get("verification_mode", "existence")
     platform_display = config.get("platform", platform_name)
