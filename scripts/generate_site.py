@@ -208,34 +208,41 @@ def generate_platform_page(name: str, cov: dict) -> str:
         by_system.setdefault(sys_id, []).append(d)
 
     for sys_id, files in sorted(by_system.items()):
+        ok_count = sum(1 for f in files if f["status"] == "ok")
+        total = len(files)
         lines.append(f"## {sys_id}")
+        lines.append(f"")
+        lines.append(f"{ok_count}/{total} verified")
         lines.append("")
-        lines.append("| File | Status | Detail |")
-        lines.append("|------|--------|--------|")
 
-        for f in sorted(files, key=lambda x: x["name"]):
-            status = f["status"]
-            detail = ""
-            if status == "ok":
-                status_display = "OK"
-            elif status == "untested":
-                reason = f.get("reason", "")
-                expected = f.get("expected_md5", "")
-                actual = f.get("actual_md5", "")
-                if reason:
-                    detail = reason
-                elif expected and actual:
-                    detail = f"expected {expected[:12]}... got {actual[:12]}..."
-                status_display = "Untested"
-            elif status == "missing":
-                status_display = "Missing"
-                detail = f.get("expected_md5", "unknown")
-            else:
-                status_display = status
+        # Only show table if there are non-OK entries, otherwise just list filenames
+        non_ok = [f for f in files if f["status"] != "ok"]
+        if non_ok:
+            lines.append("| File | Status | Detail |")
+            lines.append("|------|--------|--------|")
+            for f in sorted(non_ok, key=lambda x: x["name"]):
+                status = f["status"]
+                detail = ""
+                if status == "untested":
+                    reason = f.get("reason", "")
+                    expected = f.get("expected_md5", "")
+                    actual = f.get("actual_md5", "")
+                    detail = reason or (f"expected `{expected[:12]}...` got `{actual[:12]}...`" if expected and actual else "")
+                    status_display = "Untested"
+                elif status == "missing":
+                    status_display = "Missing"
+                    detail = f"Expected: `{f.get('expected_md5', 'unknown')}`"
+                else:
+                    status_display = status
+                lines.append(f"| `{f['name']}` | {status_display} | {detail} |")
+            lines.append("")
 
-            lines.append(f"| `{f['name']}` | {status_display} | {detail} |")
-
-        lines.append("")
+        ok_files = [f for f in files if f["status"] == "ok"]
+        if ok_files:
+            unique_names = sorted(set(f["name"] for f in ok_files))
+            names = ", ".join(f"`{n}`" for n in unique_names)
+            lines.append(f"Files: {names}")
+            lines.append("")
 
     lines.append(f"*Generated on {_timestamp()}*")
     return "\n".join(lines) + "\n"
@@ -395,18 +402,20 @@ def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
     files = profile.get("files", [])
 
     lines = [
-        f"# {display} - {SITE_NAME}",
+        f"# {emu_name} - {SITE_NAME}",
         "",
-        f"**Type:** {emu_type}",
+        f"| | |",
+        f"|---|---|",
+        f"| Type | {emu_type} |",
     ]
     if source:
-        lines.append(f"**Source:** [{source}]({source})")
-    lines.append(f"**Version:** {version}")
-    lines.append(f"**Profiled:** {profiled}")
+        lines.append(f"| Source | [{source}]({source}) |")
+    lines.append(f"| Version | {version} |")
+    lines.append(f"| Profiled | {profiled} |")
     if cores:
-        lines.append(f"**Cores:** {', '.join(str(c) for c in cores)}")
+        lines.append(f"| Cores | {', '.join(str(c) for c in cores)} |")
     if systems:
-        lines.append(f"**Systems:** {', '.join(str(s) for s in systems)}")
+        lines.append(f"| Systems | {', '.join(str(s) for s in systems)} |")
     lines.append("")
 
     if not files:
@@ -416,18 +425,29 @@ def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
             lines.extend(["", str(note)])
     else:
         by_name = db.get("indexes", {}).get("by_name", {})
-        lines.append(f"**{len(files)} files:**")
+        in_repo_count = sum(1 for f in files if f.get("name", "") in by_name)
+        missing_count = len(files) - in_repo_count
+        lines.append(f"**{len(files)} files** ({in_repo_count} in repo, {missing_count} missing)")
         lines.append("")
-        lines.append("| File | Required | In Repo | Source Ref | Note |")
-        lines.append("|------|----------|---------|-----------|------|")
+
+        has_notes = any(f.get("note") for f in files)
+        if has_notes:
+            lines.append("| File | Required | In Repo | Source Ref | Note |")
+            lines.append("|------|----------|---------|-----------|------|")
+        else:
+            lines.append("| File | Required | In Repo | Source Ref |")
+            lines.append("|------|----------|---------|-----------|")
 
         for f in files:
             fname = f.get("name", "")
             required = "yes" if f.get("required") else "no"
             in_repo = "yes" if fname in by_name else "no"
             source_ref = f.get("source_ref", "")
-            note = f.get("note", "")
-            lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} | {note} |")
+            if has_notes:
+                note = f.get("note", "")
+                lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} | {note} |")
+            else:
+                lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} |")
 
     lines.extend(["", f"*Generated on {_timestamp()}*"])
     return "\n".join(lines) + "\n"
