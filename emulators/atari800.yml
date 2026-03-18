@@ -1,6 +1,7 @@
 emulator: Atari800
-type: libretro
+type: standalone + libretro
 source: "https://github.com/libretro/libretro-atari800"
+upstream: "https://github.com/atari800/atari800"
 profiled_date: "2026-03-18"
 core_version: "3.1.0"
 display_name: "Atari - 400/800/600XL/800XL/130XE/5200 (Atari800)"
@@ -80,8 +81,13 @@ files:
     required: false
     size: 10240
     md5: 4177f386a3bac989a981d3fe3388cb6c
+    crc32: 0e86d61d
     note: >
-      Atari 400/800 OS Rev B (NTSC). Preferred over Rev A for 400/800 mode.
+      Atari 400/800 OS Rev B (NTSC). CRC32 0x0e86d61d matches sysrom.c
+      SYSROM_B_NTSC. Preferred over Rev A for 400/800 mode.
+      Note: .info lists md5 a3e8d617c95d08031fe1b20d541434b2 which is a
+      different dump (crc32 3e28a1fe) — both in repo, the CRC32-matched
+      version is the one sysrom.c auto-detects.
     source_ref: "atari800/src/sysrom.c:89, libretro info firmware3"
 
   # -- Atari XL/XE OS --

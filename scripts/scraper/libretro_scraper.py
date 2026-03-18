@@ -416,9 +416,20 @@ class Scraper(BaseScraper):
             "sony-psp": [
                 {"ref": "ppsspp-assets", "destination": "PPSSPP"},
             ],
+            # single buildbot ZIP contains both Databases/ and Machines/
+            # ref: libretro.c:1118-1119 — system_dir/Machines + system_dir/Databases
             "microsoft-msx": [
-                {"ref": "bluemsx-databases", "destination": "Databases"},
-                {"ref": "bluemsx-machines", "destination": "Machines"},
+                {"ref": "bluemsx", "destination": ""},
+            ],
+            # FreeIntv overlays — system/freeintv_overlays/<rom>.png
+            # ref: FreeIntv/src/libretro.c:273 — stbi_load from system dir
+            # ZIP contains FreeIntvTS_Overlays/ subfolder, cache preserves it
+            # pack destination maps cache root to system/freeintv_overlays
+            # so final path is system/freeintv_overlays/FreeIntvTS_Overlays/<rom>.png
+            # but core expects system/freeintv_overlays/<rom>.png
+            # fix: point destination into the subfolder
+            "mattel-intellivision": [
+                {"ref": "freeintv-overlays", "destination": "freeintv_overlays"},
             ],
         }
         for sys_id, data_dirs in SYSTEM_DATA_DIRS.items():

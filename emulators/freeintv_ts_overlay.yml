@@ -26,13 +26,20 @@ notes: |
 
   ROM-specific overlays are optional 370x600 PNG files placed by the user in
   system/freeintv_overlays/<rom_name>.png. These are cosmetic per-game keypad
-  images and are not BIOS files.
+  images loaded via stbi_load() (src/libretro.c:273). Core falls back to
+  embedded default_keypad_image.h if no per-game overlay found.
+  90 overlays available in Assets/Overlays.zip in the core repo.
+  Not on RetroArch buildbot — sourced from core repo via _data_dirs.yml.
 
   BIOS loading is unchanged from the base FreeIntv core. retro_load_game()
   (src/libretro.c:1169-1174) loads exec.bin and grom.bin from the system
   directory with no variation based on overlay mode.
 
 bios_identical_to: freeintv
+
+data_directories:
+  - ref: freeintv-overlays
+    destination: freeintv_overlays
 
 files:
   - name: "exec.bin"

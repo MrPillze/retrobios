@@ -814,6 +814,9 @@ systems:
       md5: 0cd5946c6473e42e8e4c2137785e427f
       crc32: 683a4158
       size: 2048
+    data_directories:
+    - ref: freeintv-overlays
+      destination: freeintv_overlays
   microsoft-msx:
     files:
     - name: CARTS.SHA
@@ -926,10 +929,8 @@ systems:
       Labs
     docs: https://docs.libretro.com/library/bluemsx/
     data_directories:
-    - ref: bluemsx-databases
-      destination: Databases
-    - ref: bluemsx-machines
-      destination: Machines
+    - ref: bluemsx
+      destination: ''
   nec-pc-engine:
     files:
     - name: gecard.pce

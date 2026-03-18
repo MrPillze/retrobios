@@ -1,6 +1,7 @@
 emulator: blueMSX
-type: libretro
+type: standalone + libretro
 source: "https://github.com/libretro/blueMSX-libretro"
+upstream: "http://bluemsx.msxblue.com/"
 profiled_date: "2026-03-18"
 core_version: "SVN"
 display_name: "MSX/SVI/ColecoVision/SG-1000 (blueMSX)"
@@ -51,6 +52,13 @@ notes: |
 
   C-BIOS machines work for cartridge-based games without any copyrighted BIOS.
   For disk/tape support, real BIOS ROMs are required.
+
+data_directories:
+  # 302 files: 296 in Machines/ (200 machine configs + ROMs) + 6 in Databases/
+  # buildbot source: https://buildbot.libretro.com/assets/system/blueMSX.zip
+  # ref: libretro.c:1118-1119 — system_dir/Machines/ + system_dir/Databases/
+  - ref: bluemsx
+    source_ref: "libretro.c:1118-1119"
 
 files:
   # ============================================================

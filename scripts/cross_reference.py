@@ -46,9 +46,10 @@ def load_emulator_profiles(emulators_dir: str) -> dict[str, dict]:
     return profiles
 
 
-def load_platform_files(platforms_dir: str) -> dict[str, set[str]]:
-    """Load all platform configs and collect declared filenames per system."""
+def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    """Load all platform configs and collect declared filenames + data_directories per system."""
     declared = {}
+    platform_data_dirs = {}
     for f in sorted(Path(platforms_dir).glob("*.yml")):
         if f.name.startswith("_"):
             continue
@@ -58,7 +59,11 @@ def load_platform_files(platforms_dir: str) -> dict[str, set[str]]:
                 name = fe.get("name", "")
                 if name:
                     declared.setdefault(sys_id, set()).add(name)
-    return declared
+            for dd in system.get("data_directories", []):
+                ref = dd.get("ref", "")
+                if ref:
+                    platform_data_dirs.setdefault(sys_id, set()).add(ref)
+    return declared, platform_data_dirs
 
 
 def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str, str]) -> bool:
@@ -81,12 +86,15 @@ def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
     db: dict,
+    platform_data_dirs: dict[str, set[str]] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
     Returns a report with gaps (files emulators need but platforms don't list)
-    and coverage stats.
+    and coverage stats. Files covered by matching data_directories between
+    emulator profile and platform config are not reported as gaps.
     """
+    platform_data_dirs = platform_data_dirs or {}
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
     report = {}
@@ -98,6 +106,15 @@ def cross_reference(
         platform_names = set()
         for sys_id in systems:
             platform_names.update(declared.get(sys_id, set()))
+
+        # data_directories: check if the emulator's data_dir refs are provided
+        # by ANY platform for ANY system (not limited to matching system IDs,
+        # since emulator profiles and platforms use different ID conventions)
+        all_plat_dd_refs = set()
+        for dd_set in platform_data_dirs.values():
+            all_plat_dd_refs.update(dd_set)
+        emu_dd_refs = {dd.get("ref", "") for dd in profile.get("data_directories", [])}
+        covered_dd = emu_dd_refs & all_plat_dd_refs
 
         gaps = []
         covered = []
@@ -114,6 +131,9 @@ def cross_reference(
                 continue
 
             in_platform = fname in platform_names
+            # files covered by shared data_directories are effectively in the platform pack
+            if not in_platform and covered_dd:
+                in_platform = True
             in_repo = _find_in_repo(fname, by_name, by_name_lower)
 
             entry = {
@@ -200,9 +220,9 @@ def main():
         print("No emulator profiles found.", file=sys.stderr)
         return
 
-    declared = load_platform_files(args.platforms_dir)
+    declared, plat_data_dirs = load_platform_files(args.platforms_dir)
     db = load_database(args.db)
-    report = cross_reference(profiles, declared, db)
+    report = cross_reference(profiles, declared, db, plat_data_dirs)
 
     if args.json:
         print(json.dumps(report, indent=2))

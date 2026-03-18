@@ -1,38 +1,166 @@
 # Data directory sources for libretro cores.
 # Platforms reference entries by key via data_directories: [{ref: key, destination: path}].
 # Pack generator auto-refreshes from source. Use --offline to skip.
+#
+# Source rules:
+#   - RetroArch/Lakka/RetroPie: use buildbot.libretro.com (official RetroArch channel)
+#     ref: RetroArch/config.def.h DEFAULT_BUILDBOT_ASSETS_SERVER_URL
+#   - Other platforms (Batocera, Recalbox, RetroBat): use their own upstream sources
+#   - for_platforms: restricts which platforms use this entry
+#     if absent, entry is available to all platforms
+#
 # Each entry cites the original emulator source code that requires the directory.
 
 data_directories:
+
+  # =========================================================================
+  # RetroArch buildbot sources (retroarch, lakka, retropie only)
+  # https://buildbot.libretro.com/assets/system/
+  # =========================================================================
+
   # ref: DolphinLibretro/Boot.cpp:72-73 — system/dolphin-emu/Sys/
   dolphin-sys:
-    source_url: "https://github.com/libretro/dolphin/archive/{version}.tar.gz"
-    source_path: "dolphin-{version}/Data/Sys"
-    version: master
+    source_url: "https://buildbot.libretro.com/assets/system/Dolphin.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
     local_cache: data/dolphin-sys
     exclude: [Themes]
     description: "Dolphin system data (GameSettings, DSP, fonts, shaders)"
 
   # ref: ppsspp/ext/native/ui/ui_screen.cpp — system/PPSSPP/
   ppsspp-assets:
-    source_url: "https://github.com/hrydgard/ppsspp/archive/{version}.tar.gz"
-    source_path: "ppsspp-{version}/assets"
-    version: master
+    source_url: "https://buildbot.libretro.com/assets/system/PPSSPP.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
     local_cache: data/ppsspp-assets
     description: "PPSSPP fonts, backgrounds, shaders, lang files"
 
-  # ref: bluemsx-libretro/system/ — system/Databases/
-  bluemsx-databases:
-    source_url: "https://github.com/libretro/blueMSX-libretro/archive/{version}.tar.gz"
-    source_path: "blueMSX-libretro-{version}/system/Databases"
-    version: master
-    local_cache: data/bluemsx-databases
-    description: "blueMSX machine database"
+  # ref: bluemsx-libretro/system/ — system/Databases/ + system/Machines/
+  bluemsx:
+    source_url: "https://buildbot.libretro.com/assets/system/blueMSX.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/bluemsx
+    description: "blueMSX Databases + Machines configs"
 
-  # ref: bluemsx-libretro/system/ — system/Machines/
-  bluemsx-machines:
-    source_url: "https://github.com/libretro/blueMSX-libretro/archive/{version}.tar.gz"
-    source_path: "blueMSX-libretro-{version}/system/Machines"
+  # ref: pcsx2/libretro/main.cpp — system/pcsx2/
+  lrps2:
+    source_url: "https://buildbot.libretro.com/assets/system/LRPS2.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/lrps2
+    description: "LRPS2 GameIndex.yaml + resources"
+
+  # ref: scummvm/backends/platform/libretro — system/scummvm/
+  scummvm:
+    source_url: "https://buildbot.libretro.com/assets/system/ScummVM.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/scummvm
+    description: "ScummVM extra data files (themes, translations, shaders)"
+
+  # ref: nxengine-libretro — system/
+  nxengine:
+    source_url: "https://buildbot.libretro.com/assets/system/NXEngine%20%28Cave%20Story%29.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/nxengine
+    description: "NXEngine Cave Story game data"
+
+  # ref: ecwolf/src/wl_main.cpp — system/ecwolf.pk3
+  ecwolf:
+    source_url: "https://buildbot.libretro.com/assets/system/ECWolf.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/ecwolf
+    description: "ECWolf game engine data"
+
+  # ref: prboom/src/d_main.c — system/prboom.wad
+  prboom:
+    source_url: "https://buildbot.libretro.com/assets/system/PrBoom.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/prboom
+    description: "PrBoom Doom engine data"
+
+  # ref: xrick/src/data.c — system/xrick/data.zip
+  xrick:
+    source_url: "https://buildbot.libretro.com/assets/system/XRick%20%28Rick%20Dangerous%29.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/xrick
+    description: "XRick Rick Dangerous game data"
+
+  # ref: dinothawr/libretro.cpp — system/dinothawr/
+  dinothawr:
+    source_url: "https://buildbot.libretro.com/assets/system/Dinothawr.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/dinothawr
+    description: "Dinothawr game data"
+
+  # ref: qemu — system firmware
+  qemu:
+    source_url: "https://buildbot.libretro.com/assets/system/QEMU.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/qemu
+    description: "QEMU firmware (SeaBIOS, VGA BIOS, OpenSBI, etc.)"
+
+  # ref: cannonball/src/main.cpp — system/
+  cannonball:
+    source_url: "https://buildbot.libretro.com/assets/system/Cannonball%20%28ROMs%20Required%29.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/cannonball
+    description: "Cannonball OutRun engine config"
+
+  # ref: fbneo hiscore.dat — system/fbneo/
+  fbneo-hiscore:
+    source_url: "https://buildbot.libretro.com/assets/system/FinalBurn%20Neo%20%28hiscore%29.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/fbneo-hiscore
+    description: "FinalBurn Neo hiscore database"
+
+  # ref: mame2003/src — system/mame2003/
+  mame2003:
+    source_url: "https://buildbot.libretro.com/assets/system/MAME%202003.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/mame2003
+    description: "MAME 2003 samples + cheat"
+
+  # ref: mame2003-plus — system/mame2003-plus/
+  mame2003-plus:
+    source_url: "https://buildbot.libretro.com/assets/system/MAME%202003-Plus.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/mame2003-plus
+    description: "MAME 2003-Plus samples + cheat + history"
+
+  # =========================================================================
+  # Upstream repo sources (not on buildbot, available to all platforms)
+  # =========================================================================
+
+  # ref: FreeIntv/src/libretro.c:273 — system/freeintv_overlays/<rom>.png
+  # 90 per-game controller overlay PNGs, loaded via stbi_load()
+  # optional: core falls back to embedded default keypad image
+  # freeintv overlays: Assets/Overlays.zip in repo (not a directory)
+  # Already archived in bios/Mattel/Intellivision/freeintv_overlays/
+  # No buildbot source — sourced manually from core repo
+  freeintv-overlays:
+    source_url: "https://github.com/libretro/FreeIntv/raw/{version}/Assets/Overlays.zip"
+    source_type: zip
     version: master
-    local_cache: data/bluemsx-machines
-    description: "blueMSX machine ROM configs"
+    local_cache: data/freeintv-overlays
+    strip_components: 1
+    description: "FreeIntv per-game controller overlay PNGs"
+
+  # ref: dirksimple — system/
+  dirksimple:
+    source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/dirksimple
+    description: "DirkSimple Dragon's Lair engine data"

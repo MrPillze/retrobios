@@ -1,0 +1,122 @@
+emulator: Amiberry
+type: standalone + libretro
+source: "https://github.com/BlitterStudio/amiberry"
+upstream: "https://github.com/tonioni/WinUAE"
+profiled_date: "2026-03-18"
+core_version: "v6.3.4"
+display_name: "Commodore - Amiga (Amiberry)"
+cores: [amiberry]
+systems:
+  - commodore-amiga
+  - commodore-cd32
+  - commodore-cdtv
+
+notes: |
+  Amiberry is an Amiga emulator based on WinUAE, available as both
+  standalone and libretro core. No built-in kickstart fallback — a real
+  Kickstart ROM is required.
+
+  Core option "amiberry_kickstart" selects the ROM file:
+  auto, kick.rom, kick13.rom, kick20.rom, kick31.rom, kick205.rom,
+  kick40068.A1200, kick40068.A4000, cd32.rom, cdtv.rom.
+  "auto" selects based on the model option.
+  ref: BlitterStudio/amiberry/libretro/libretro.cpp:558,621-634
+
+  Standalone mode ships with data/ directory (UI icons, virtual keyboards,
+  floppy sounds, AmigaTopaz.ttf font, gamecontrollerdb.txt). These are
+  compiled into the standalone binary but the libretro core may look for
+  them in the system directory.
+
+files:
+  # --- Required Kickstart ROMs (from .info) ---
+  # ref: BlitterStudio/amiberry/libretro/libretro.cpp:558
+  # ref: WinUAE rommgr.cpp for ROM identification
+
+  - name: kick34005.A500
+    system: commodore-amiga
+    required: true
+    size: 262144
+    crc32: c4f0f55f
+    note: "A500 Kickstart v1.3 rev 34.5"
+    source_ref: "libretro-super/dist/info/amiberry_libretro.info firmware0"
+
+  - name: kick37350.A600
+    system: commodore-amiga
+    required: true
+    size: 524288
+    crc32: 43b0df7b
+    note: "A600 Kickstart v2.05 rev 37.350"
+    source_ref: "amiberry_libretro.info firmware1"
+
+  - name: kick40068.A1200
+    system: commodore-amiga
+    required: true
+    size: 524288
+    crc32: 1483a091
+    note: "A1200 Kickstart v3.1 rev 40.68"
+    source_ref: "amiberry_libretro.info firmware2"
+
+  # --- Optional Kickstart ROMs ---
+
+  - name: kick33180.A500
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: a6ce1636
+    note: "A500 Kickstart v1.2 rev 33.180"
+    source_ref: "amiberry_libretro.info firmware3"
+
+  - name: kick40068.A4000
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: d6bae334
+    note: "A4000 Kickstart v3.1 rev 40.68"
+    source_ref: "amiberry_libretro.info firmware4"
+
+  - name: kick40060.CD32
+    system: commodore-cd32
+    required: false
+    size: 524288
+    crc32: 1e62d4a5
+    note: "CD32 Kickstart v3.1 rev 40.60"
+    source_ref: "amiberry_libretro.info firmware5"
+
+  - name: kick40060.CD32.ext
+    system: commodore-cd32
+    required: false
+    size: 524288
+    crc32: 87746be2
+    note: "CD32 Extended ROM rev 40.60"
+    source_ref: "amiberry_libretro.info firmware6"
+
+  # --- Alternative names accepted by core option ---
+  # these are common user-facing names, same ROMs as above
+
+  - name: kick13.rom
+    system: commodore-amiga
+    required: false
+    note: "alias for kick34005.A500 (v1.3)"
+    source_ref: "libretro.cpp:630"
+
+  - name: kick34005.CDTV
+    system: commodore-cdtv
+    required: false
+    note: "CDTV extended ROM"
+    source_ref: "libretro.cpp:558 cdtv.rom option"
+
+  # --- Standalone data files ---
+
+  - name: AmigaTopaz.ttf
+    system: commodore-amiga
+    required: false
+    mode: standalone
+    note: "Amiga Topaz font for UI rendering"
+    source_ref: "BlitterStudio/amiberry/data/AmigaTopaz.ttf"
+
+  - name: gamecontrollerdb.txt
+    system: commodore-amiga
+    required: false
+    mode: standalone
+    note: "SDL gamepad mapping database"
+    source_ref: "BlitterStudio/amiberry/controllers/gamecontrollerdb.txt"

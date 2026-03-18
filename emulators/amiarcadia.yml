@@ -35,4 +35,8 @@ notes: |
   No BIOS files required. The emulator has no external firmware dependencies.
   Game ROMs are identified by CRC32 for automatic machine configuration.
 
-bios_files: []
+files: []
+
+# closed-source core — cannot verify via source code scan.
+# firmware_count=0 in .info and docs confirm no BIOS needed.
+# signetics 2636/2637 systems have no separate system ROM.

@@ -19,16 +19,16 @@ systems:
 #   Slow BK-0011M     (model 4) - same ROMs as model 3
 #   Terak 8510/a      (model 9)
 #
-# ROM loading (boot.c:83-116):
+# ROM loading (boot.c:84-117):
 #   BK-0010 models use load_rom() which maps ROM into emulated memory at
 #   specific addresses: monitor at 0100000 (8 KB), BASIC/FOCAL at 0120000
 #   (24448-24576 bytes), disk controller at 0160000 (4 KB).
 #   BK-0011M uses load_rom11() which loads into separate ROM buffer arrays.
 #
-# ROM file resolution (libretro.c:1051-1108):
-#   Files are loaded from {system_dir}/bk/{filename} (libretro.c:724-726).
+# ROM file resolution (libretro.c:1051-1094):
+#   Files are loaded from {system_dir}/bk/{filename} (libretro.c:720-728).
 #   If not found with original casing, the loader retries with lowercase
-#   filename (libretro.c:1074-1079).
+#   filename (libretro.c:1071-1081).
 #
 # All ROM files are required for their respective model. The core calls
 # environ_cb(RETRO_ENVIRONMENT_SHUTDOWN) if any ROM file is missing.

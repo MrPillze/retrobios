@@ -388,8 +388,12 @@ def generate_pack(
                 if not ref_key or not data_registry or ref_key not in data_registry:
                     continue
                 entry = data_registry[ref_key]
+                allowed = entry.get("for_platforms")
+                if allowed and platform_name not in allowed:
+                    continue
                 local_path = entry.get("local_cache", "")
                 if not local_path or not os.path.isdir(local_path):
+                    print(f"  WARNING: data directory '{ref_key}' not cached at {local_path} — run refresh_data_dirs.py")
                     continue
                 dd_dest = dd.get("destination", "")
                 dd_prefix = f"{base_dest}/{dd_dest}" if base_dest else dd_dest
