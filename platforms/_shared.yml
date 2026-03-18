@@ -196,6 +196,57 @@ shared_groups:
       required: true
       md5: "fc4b76a402ba501e6ba6de4b3e8b4273"
 
+  # Sinclair ZX Spectrum — Fuse core
+  # Fuse expects Pentagon/Scorpion ROMs in "fuse/" subfolder
+  # ref: fuse-libretro/fuse/settings.c, docs.libretro.com/library/fuse
+  # These files also exist flat for other ZX Spectrum cores.
+  fuse:
+    - name: 128p-0.rom
+      destination: fuse/128p-0.rom
+      required: true
+      sha1: "d07fcdeca892ee80494d286ea9ea5bf3928a1aca"
+      md5: "a249565f03b98d004ee7f019570069cd"
+      size: 16384
+    - name: 128p-1.rom
+      destination: fuse/128p-1.rom
+      required: true
+    - name: trdos.rom
+      destination: fuse/trdos.rom
+      required: true
+      sha1: "21695e3f2a8f796386ce66eea8a246b0ac44810c"
+      md5: "0da70a5d2a0e733398e005b96b7e4ba6"
+      size: 16384
+    - name: gluck.rom
+      destination: fuse/gluck.rom
+      required: true
+      sha1: "015eb96dafb273d4f4512c467e9b43c305fd1bc4"
+      md5: "d5869034604dbfd2c1d54170e874fd0a"
+      size: 16384
+    - name: 256s-0.rom
+      destination: fuse/256s-0.rom
+      required: true
+      sha1: "477114ff0fe1388e0979df1423602b21248164e5"
+      md5: "b9fda5b6a747ff037365b0e2d8c4379a"
+      size: 16384
+    - name: 256s-1.rom
+      destination: fuse/256s-1.rom
+      required: true
+      sha1: "367b5a102fb663beee8e7930b8c4acc219c1f7b3"
+      md5: "643861ad34831b255bf2eb64e8b6ecb8"
+      size: 16384
+    - name: 256s-2.rom
+      destination: fuse/256s-2.rom
+      required: true
+      sha1: "07783ee295274d8ff15d935bfd787c8ac1d54900"
+      md5: "d8ad507b1c915a9acfe0d73957082926"
+      size: 16384
+    - name: 256s-3.rom
+      destination: fuse/256s-3.rom
+      required: true
+      sha1: "33703e97cc93b7edfcc0334b64233cf81b7930db"
+      md5: "ce0723f9bc02f4948c15d3b3230ae831"
+      size: 16384
+
   # Sega Saturn — Kronos core
   # Kronos searches "kronos/" subfolder first, falls back to root
   # ref: libretro-kronos/libretro/libretro.c, docs.libretro.com/library/kronos

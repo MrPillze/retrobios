@@ -303,6 +303,7 @@ class Scraper(BaseScraper):
             "nec-pc-98": ["np2kai"],
             "sharp-x68000": ["keropi"],
             "sega-saturn": ["kronos"],
+            "sinclair-zx-spectrum": ["fuse"],
         }
         for sys_id, groups in SYSTEM_SHARED_GROUPS.items():
             if sys_id in systems:
