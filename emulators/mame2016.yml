@@ -1,6 +1,7 @@
 emulator: MAME 2016
 type: libretro
 source: "https://github.com/libretro/mame2016-libretro"
+logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-18"
 core_version: "0.174"
 display_name: "Arcade (MAME 2016)"

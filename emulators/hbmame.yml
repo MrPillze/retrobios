@@ -1,6 +1,7 @@
 emulator: HBMAME (Homebrew MAME)
 type: libretro
 source: "https://github.com/libretro/hbmame-libretro"
+logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Arcade (HBMAME)"

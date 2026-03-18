@@ -1,6 +1,7 @@
 emulator: Citra / Lime3DS / Azahar
 type: standalone + libretro
 source: "https://github.com/azahar-emu/azahar"
+logo: "https://raw.githubusercontent.com/wheremyfoodat/citra/master/dist/citra.svg"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Citra)"

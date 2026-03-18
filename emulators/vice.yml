@@ -12,6 +12,7 @@ cores:
   - vice_xcbm5x0
   - vice_xscpu64
 source: "https://github.com/libretro/vice-libretro"
+logo: "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/common/vice-logo-black.svg"
 profiled_date: "2026-03-18"
 core_version: "3.9"
 display_name: "Commodore - C64 (VICE x64, fast)"

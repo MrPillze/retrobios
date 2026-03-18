@@ -1,6 +1,7 @@
 emulator: DuckStation
 type: standalone
 source: "https://github.com/stenzek/duckstation"
+logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-18"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (DuckStation)"

@@ -1,6 +1,7 @@
 emulator: Hatari
 type: libretro
 source: "https://github.com/libretro/hatari"
+logo: "https://raw.githubusercontent.com/hatari/hatari/main/share/icons/hicolor/scalable/apps/hatari.svg"
 profiled_date: "2026-03-18"
 core_version: "1.8"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"

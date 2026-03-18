@@ -5,6 +5,7 @@
 emulator: RPCS3
 type: standalone
 source: "https://github.com/RPCS3/rpcs3"
+logo: "https://raw.githubusercontent.com/RPCS3/rpcs3/master/rpcs3/rpcs3.svg"
 profiled_date: "2026-03-18"
 core_version: "0.0.35"
 display_name: "RPCS3 (PS3)"

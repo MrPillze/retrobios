@@ -410,10 +410,13 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     cores = profile.get("cores", [name])
     files = profile.get("files", [])
 
+    logo_url = profile.get("logo", "")
+    logo_md = f"![{emu_name}]({logo_url}){{ width=48 align=right }}\n\n" if logo_url else ""
+
     lines = [
         f"# {emu_name} - {SITE_NAME}",
         "",
-        f"| | |",
+        logo_md + f"| | |",
         f"|---|---|",
         f"| Type | {emu_type} |",
     ]

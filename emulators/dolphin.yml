@@ -1,6 +1,7 @@
 emulator: Dolphin
 type: standalone + libretro
 source: "https://github.com/dolphin-emu/dolphin"
+logo: "https://raw.githubusercontent.com/dolphin-emu/dolphin/master/Data/dolphin-emu.svg"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Dolphin)"

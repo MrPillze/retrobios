@@ -1,6 +1,7 @@
 emulator: DOSBox Pure
 type: libretro
 source: "https://github.com/libretro/dosbox-pure"
+logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure/main/images/logo.png"
 profiled_date: "2026-03-18"
 core_version: "0.9.9"
 display_name: "DOS (DOSBox-Pure)"

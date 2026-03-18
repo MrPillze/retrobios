@@ -5,6 +5,7 @@
 emulator: PPSSPP
 type: standalone
 source: "https://github.com/hrydgard/ppsspp"
+logo: "https://raw.githubusercontent.com/hrydgard/ppsspp/master/icons/icon-512.svg"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Sony - PlayStation Portable (PPSSPP)"

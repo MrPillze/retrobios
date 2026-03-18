@@ -1,6 +1,7 @@
 emulator: MAME 2003-Plus
 type: libretro
 source: "https://github.com/libretro/mame2003-plus-libretro"
+logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-18"
 core_version: "2003-Plus"
 display_name: "Arcade (MAME 2003-Plus)"

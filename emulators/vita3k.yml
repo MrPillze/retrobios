@@ -5,6 +5,7 @@
 emulator: Vita3K
 type: standalone
 source: "https://github.com/Vita3K/Vita3K"
+logo: "https://raw.githubusercontent.com/Vita3K/Vita3K/master/data/image/icon.png"
 profiled_date: "2026-03-18"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"

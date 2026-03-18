@@ -1,6 +1,7 @@
 emulator: mGBA
 type: libretro
 source: "https://github.com/libretro/mgba"
+logo: "https://raw.githubusercontent.com/mgba-emu/mgba/master/res/mgba-256.png"
 profiled_date: "2026-03-18"
 core_version: "0.10-dev"
 display_name: "Nintendo - Game Boy Advance (mGBA)"
