@@ -28,7 +28,7 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_platform_config, md5sum, md5_composite
+from common import load_platform_config, md5sum, md5_composite, resolve_local_file
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -72,78 +72,9 @@ def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
 
 
 def resolve_to_local_path(file_entry: dict, db: dict) -> str | None:
-    """Find the local file path for a BIOS entry using database.json.
-
-    Tries: SHA1 -> MD5 -> name index. Returns the first existing path found.
-    For zipped_file entries, the md5 refers to the inner ROM, not the ZIP
-    container, so MD5-based lookup is skipped to avoid resolving to a
-    standalone ROM file instead of the ZIP.
-    """
-    sha1 = file_entry.get("sha1")
-    md5 = file_entry.get("md5")
-    name = file_entry.get("name", "")
-    has_zipped_file = bool(file_entry.get("zipped_file"))
-    files_db = db.get("files", {})
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
-    by_name = db.get("indexes", {}).get("by_name", {})
-
-    if sha1 and sha1 in files_db:
-        path = files_db[sha1]["path"]
-        if os.path.exists(path):
-            return path
-
-    # Split comma-separated MD5 lists (Recalbox uses multi-hash)
-    md5_candidates = [m.strip().lower() for m in md5.split(",") if m.strip()] if md5 else []
-
-    # Skip MD5 lookup for zipped_file entries: the md5 is for the inner ROM,
-    # not the container ZIP, so matching it would resolve to the wrong file.
-    if not has_zipped_file:
-        for md5_candidate in md5_candidates:
-            if md5_candidate in by_md5:
-                sha1_match = by_md5[md5_candidate]
-                if sha1_match in files_db:
-                    path = files_db[sha1_match]["path"]
-                    if os.path.exists(path):
-                        return path
-
-            # Truncated MD5 (batocera-systems bug: 29 chars instead of 32)
-            if len(md5_candidate) < 32:
-                for db_md5, db_sha1 in by_md5.items():
-                    if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
-                        path = files_db[db_sha1]["path"]
-                        if os.path.exists(path):
-                            return path
-
-    if name in by_name:
-        # Prefer the candidate whose MD5 matches the expected hash
-        candidates = []
-        for match_sha1 in by_name[name]:
-            if match_sha1 in files_db:
-                entry = files_db[match_sha1]
-                path = entry["path"]
-                if os.path.exists(path):
-                    candidates.append((path, entry.get("md5", "")))
-        if candidates:
-            if has_zipped_file:
-                candidates = [(p, m) for p, m in candidates if p.endswith(".zip")]
-            if md5 and not has_zipped_file:
-                md5_lower = md5.lower()
-                for path, db_md5 in candidates:
-                    if db_md5.lower() == md5_lower:
-                        return path
-                # Try composite MD5 for ZIP files (Recalbox uses Zip::Md5Composite)
-                for path, _ in candidates:
-                    if ".zip" in os.path.basename(path):
-                        try:
-                            if md5_composite(path).lower() == md5_lower:
-                                return path
-                        except (zipfile.BadZipFile, OSError):
-                            pass
-            if candidates:
-                primary = [p for p, _ in candidates if "/.variants/" not in p]
-                return primary[0] if primary else candidates[0][0]
-
-    return None
+    """Find the local file path for a BIOS entry. Delegates to common.resolve_local_file."""
+    path, _ = resolve_local_file(file_entry, db)
+    return path
 
 
 def verify_entry_existence(file_entry: dict, local_path: str | None) -> dict:

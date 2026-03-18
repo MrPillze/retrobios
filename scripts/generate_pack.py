@@ -24,7 +24,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_platform_config, md5_composite
+from common import load_database, load_platform_config, md5_composite, resolve_local_file
 
 try:
     import yaml
@@ -100,10 +100,10 @@ def _sanitize_path(raw: str) -> str:
 
 def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                   zip_contents: dict | None = None) -> tuple[str | None, str]:
-    """Resolve a BIOS file to its local path using database.json.
+    """Resolve a BIOS file with storage tiers and release asset fallback.
 
-    Returns (local_path, status) where status is one of:
-    exact, zip_exact, hash_mismatch, external, user_provided, not_found.
+    Wraps common.resolve_local_file() with pack-specific logic for
+    storage tiers (external/user_provided) and large file release assets.
     """
     storage = file_entry.get("storage", "embedded")
     if storage == "user_provided":
@@ -111,90 +111,15 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     if storage == "external":
         return None, "external"
 
-    sha1 = file_entry.get("sha1")
-    md5_raw = file_entry.get("md5", "")
-    name = file_entry.get("name", "")
-    zipped_file = file_entry.get("zipped_file")
-
-    # Recalbox uses comma-separated MD5 lists for accepted variants
-    md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
-
-    if sha1 and sha1 in db.get("files", {}):
-        local_path = db["files"][sha1]["path"]
-        if os.path.exists(local_path):
-            return local_path, "exact"
-
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
-
-    # Skip MD5 direct lookup for zipped_file entries: the md5 is for the inner ROM,
-    # not the container ZIP. Matching it would resolve to the standalone ROM file.
-    if md5_list and not zipped_file:
-        for md5_candidate in md5_list:
-            sha1_from_md5 = by_md5.get(md5_candidate)
-            if sha1_from_md5 and sha1_from_md5 in db["files"]:
-                local_path = db["files"][sha1_from_md5]["path"]
-                if os.path.exists(local_path):
-                    return local_path, "exact"
-
-            # Truncated MD5 match (batocera-systems bug: 29 chars instead of 32)
-            if len(md5_candidate) < 32:
-                for db_md5, db_sha1 in by_md5.items():
-                    if db_md5.startswith(md5_candidate) and db_sha1 in db["files"]:
-                        local_path = db["files"][db_sha1]["path"]
-                        if os.path.exists(local_path):
-                            return local_path, "exact"
-
-    if zipped_file and md5_list and zip_contents:
-        for md5_candidate in md5_list:
-            if md5_candidate in zip_contents:
-                zip_sha1 = zip_contents[md5_candidate]
-                if zip_sha1 in db["files"]:
-                    local_path = db["files"][zip_sha1]["path"]
-                    if os.path.exists(local_path):
-                        return local_path, "zip_exact"
-
-    # No MD5 specified = any local file with that name is acceptable
-    if not md5_list:
-        name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
-        candidates = []
-        for match_sha1 in name_matches:
-            if match_sha1 in db["files"]:
-                local_path = db["files"][match_sha1]["path"]
-                if os.path.exists(local_path):
-                    candidates.append(local_path)
-        if candidates:
-            primary = [p for p in candidates if "/.variants/" not in p]
-            return (primary[0] if primary else candidates[0]), "exact"
-
-    # Name fallback: check md5_composite for ZIPs (Recalbox Zip::Md5Composite)
-    md5_set = set(md5_list)
-    name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
-    candidates = []
-    for match_sha1 in name_matches:
-        if match_sha1 in db["files"]:
-            local_path = db["files"][match_sha1]["path"]
-            if os.path.exists(local_path):
-                candidates.append((local_path, db["files"][match_sha1].get("md5", "")))
-
-    if candidates and md5_set:
-        # Try md5_composite for ZIP files before falling back to hash_mismatch
-        for path, db_md5 in candidates:
-            if ".zip" in os.path.basename(path):
-                try:
-                    composite = md5_composite(path).lower()
-                    if composite in md5_set:
-                        return path, "exact"
-                except (zipfile.BadZipFile, OSError):
-                    pass
-            # Also check direct MD5 match per candidate
-            if db_md5.lower() in md5_set:
-                return path, "exact"
-
-    if candidates:
-        primary = [p for p, _ in candidates if "/.variants/" not in p]
-        return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
+    path, status = resolve_local_file(file_entry, db, zip_contents)
+    if path:
+        return path, status
 
     # Last resort: large files from GitHub release assets
+    name = file_entry.get("name", "")
+    sha1 = file_entry.get("sha1")
+    md5_raw = file_entry.get("md5", "")
+    md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
     first_md5 = md5_list[0] if md5_list else ""
     cached = fetch_large_file(name, expected_sha1=sha1 or "", expected_md5=first_md5)
     if cached:

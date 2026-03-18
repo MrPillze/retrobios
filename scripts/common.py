@@ -117,6 +117,106 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     return config
 
 
+def resolve_local_file(
+    file_entry: dict,
+    db: dict,
+    zip_contents: dict | None = None,
+) -> tuple[str | None, str]:
+    """Resolve a BIOS file to its local path using database.json.
+
+    Single source of truth for file resolution, used by both verify.py
+    and generate_pack.py. Does NOT handle storage tiers (external/user_provided)
+    or release assets - callers handle those.
+
+    Returns (local_path, status) where status is one of:
+    exact, zip_exact, hash_mismatch, not_found.
+    """
+    sha1 = file_entry.get("sha1")
+    md5_raw = file_entry.get("md5", "")
+    name = file_entry.get("name", "")
+    zipped_file = file_entry.get("zipped_file")
+
+    md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
+    files_db = db.get("files", {})
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    by_name = db.get("indexes", {}).get("by_name", {})
+
+    # 1. SHA1 exact match
+    if sha1 and sha1 in files_db:
+        path = files_db[sha1]["path"]
+        if os.path.exists(path):
+            return path, "exact"
+
+    # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
+    if md5_list and not zipped_file:
+        for md5_candidate in md5_list:
+            sha1_match = by_md5.get(md5_candidate)
+            if sha1_match and sha1_match in files_db:
+                path = files_db[sha1_match]["path"]
+                if os.path.exists(path):
+                    return path, "exact"
+            if len(md5_candidate) < 32:
+                for db_md5, db_sha1 in by_md5.items():
+                    if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
+                        path = files_db[db_sha1]["path"]
+                        if os.path.exists(path):
+                            return path, "exact"
+
+    # 3. zipped_file content match via pre-built index
+    if zipped_file and md5_list and zip_contents:
+        for md5_candidate in md5_list:
+            if md5_candidate in zip_contents:
+                zip_sha1 = zip_contents[md5_candidate]
+                if zip_sha1 in files_db:
+                    path = files_db[zip_sha1]["path"]
+                    if os.path.exists(path):
+                        return path, "zip_exact"
+
+    # 4. No MD5 = any file with that name (existence check)
+    if not md5_list:
+        candidates = []
+        for match_sha1 in by_name.get(name, []):
+            if match_sha1 in files_db:
+                path = files_db[match_sha1]["path"]
+                if os.path.exists(path):
+                    candidates.append(path)
+        if candidates:
+            if zipped_file:
+                candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
+            primary = [p for p in candidates if "/.variants/" not in p]
+            if primary or candidates:
+                return (primary[0] if primary else candidates[0]), "exact"
+
+    # 5. Name fallback with md5_composite + direct MD5 per candidate
+    md5_set = set(md5_list)
+    candidates = []
+    for match_sha1 in by_name.get(name, []):
+        if match_sha1 in files_db:
+            entry = files_db[match_sha1]
+            path = entry["path"]
+            if os.path.exists(path):
+                candidates.append((path, entry.get("md5", "")))
+
+    if candidates:
+        if zipped_file:
+            candidates = [(p, m) for p, m in candidates if ".zip" in os.path.basename(p)]
+        if md5_set:
+            for path, db_md5 in candidates:
+                if ".zip" in os.path.basename(path):
+                    try:
+                        composite = md5_composite(path).lower()
+                        if composite in md5_set:
+                            return path, "exact"
+                    except (zipfile.BadZipFile, OSError):
+                        pass
+                if db_md5.lower() in md5_set:
+                    return path, "exact"
+        primary = [p for p, _ in candidates if "/.variants/" not in p]
+        return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
+
+    return None, "not_found"
+
+
 def safe_extract_zip(zip_path: str, dest_dir: str) -> None:
     """Extract a ZIP file safely, preventing zip-slip path traversal."""
     dest = os.path.realpath(dest_dir)
