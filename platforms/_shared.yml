@@ -247,6 +247,40 @@ shared_groups:
       md5: "ce0723f9bc02f4948c15d3b3230ae831"
       size: 16384
 
+  # Enterprise 128 / Videoton TVC — ep128emu core
+  # ep128emu loads ROMs from "ep128emu/rom/" subfolder
+  # ref: ep128emu-core/src/ep128emu_libretro.cpp, docs.libretro.com/library/ep128emu
+  # since v1.1.0 external BIOS is optional (built-in fallback)
+  ep128emu:
+    - name: hun.rom
+      destination: ep128emu/rom/hun.rom
+      required: false
+      md5: "22167938f142c222f40992839aa21a06"
+    - name: exos21.rom
+      destination: ep128emu/rom/exos21.rom
+      required: false
+      md5: "f36f24cbb87745fbd2714e4df881db09"
+    - name: basic21.rom
+      destination: ep128emu/rom/basic21.rom
+      required: false
+      md5: "e972fe42b398c9ff1d93ff014786aec6"
+    - name: exdos13.rom
+      destination: ep128emu/rom/exdos13.rom
+      required: false
+      md5: "ddff70c014d1958dc75378b6c9aab6f8"
+    - name: basic20.rom
+      destination: ep128emu/rom/basic20.rom
+      required: false
+      md5: "8e18edce4a7acb2c33cc0ab18f988482"
+    - name: exos20.rom
+      destination: ep128emu/rom/exos20.rom
+      required: false
+      md5: "5ad3baaad3b5156d6b60b34229a676fb"
+    - name: brd.rom
+      destination: ep128emu/rom/brd.rom
+      required: false
+      md5: "6af0402906944fd134004b85097c8524"
+
   # Sega Saturn — Kronos core
   # Kronos searches "kronos/" subfolder first, falls back to root
   # ref: libretro-kronos/libretro/libretro.c, docs.libretro.com/library/kronos
