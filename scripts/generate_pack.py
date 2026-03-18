@@ -155,19 +155,27 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     # No MD5 specified = any local file with that name is acceptable
     if not md5:
         name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
+        candidates = []
         for match_sha1 in name_matches:
             if match_sha1 in db["files"]:
                 local_path = db["files"][match_sha1]["path"]
                 if os.path.exists(local_path):
-                    return local_path, "exact"
+                    candidates.append(local_path)
+        if candidates:
+            primary = [p for p in candidates if "/.variants/" not in p]
+            return (primary[0] if primary else candidates[0]), "exact"
 
-    # Name fallback (hash mismatch)
+    # Name fallback (hash mismatch) - prefer primary over variants
     name_matches = db.get("indexes", {}).get("by_name", {}).get(name, [])
+    candidates = []
     for match_sha1 in name_matches:
         if match_sha1 in db["files"]:
             local_path = db["files"][match_sha1]["path"]
             if os.path.exists(local_path):
-                return local_path, "hash_mismatch"
+                candidates.append(local_path)
+    if candidates:
+        primary = [p for p in candidates if "/.variants/" not in p]
+        return (primary[0] if primary else candidates[0]), "hash_mismatch"
 
     return None, "not_found"
 
