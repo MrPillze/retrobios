@@ -24,7 +24,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, load_database, load_platform_config, md5_composite, resolve_local_file
+from common import compute_hashes, load_database, load_data_dir_registry, load_platform_config, md5_composite, resolve_local_file
 
 try:
     import yaml
@@ -268,6 +268,7 @@ def generate_pack(
     include_extras: bool = False,
     emulators_dir: str = "emulators",
     zip_contents: dict | None = None,
+    data_registry: dict | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -380,6 +381,29 @@ def generate_pack(
                 extra_count += 1
                 total_files += 1
 
+        # Data directories from _data_dirs.yml
+        for sys_id, system in sorted(config.get("systems", {}).items()):
+            for dd in system.get("data_directories", []):
+                ref_key = dd.get("ref", "")
+                if not ref_key or not data_registry or ref_key not in data_registry:
+                    continue
+                entry = data_registry[ref_key]
+                local_path = entry.get("local_cache", "")
+                if not local_path or not os.path.isdir(local_path):
+                    continue
+                dd_dest = dd.get("destination", "")
+                dd_prefix = f"{base_dest}/{dd_dest}" if base_dest else dd_dest
+                for root, _dirs, filenames in os.walk(local_path):
+                    for fname in filenames:
+                        src = os.path.join(root, fname)
+                        rel = os.path.relpath(src, local_path)
+                        full = f"{dd_prefix}/{rel}"
+                        if full in seen_destinations:
+                            continue
+                        seen_destinations.add(full)
+                        zf.write(src, full)
+                        total_files += 1
+
     if missing_files:
         print(f"  Missing ({len(missing_files)}): {', '.join(missing_files[:10])}")
         if len(missing_files) > 10:
@@ -438,6 +462,10 @@ def main():
     parser.add_argument("--include-extras", action="store_true",
                         help="Include emulator-recommended files not declared by platform")
     parser.add_argument("--emulators-dir", default="emulators")
+    parser.add_argument("--offline", action="store_true",
+                        help="Skip data directory freshness check, use cache only")
+    parser.add_argument("--refresh-data", action="store_true",
+                        help="Force re-download all data directories")
     parser.add_argument("--list", action="store_true", help="List available platforms")
     args = parser.parse_args()
 
@@ -460,6 +488,15 @@ def main():
     db = load_database(args.db)
     zip_contents = build_zip_contents_index(db)
 
+    data_registry = load_data_dir_registry(args.platforms_dir)
+    if data_registry and not args.offline:
+        from refresh_data_dirs import refresh_all, load_registry
+        registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
+        results = refresh_all(registry, force=args.refresh_data)
+        updated = sum(1 for v in results.values() if v)
+        if updated:
+            print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
+
     groups = _group_identical_platforms(platforms, args.platforms_dir)
 
     for group_platforms, representative in groups:
@@ -474,7 +511,7 @@ def main():
             zip_path = generate_pack(
                 representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
                 include_extras=args.include_extras, emulators_dir=args.emulators_dir,
-                zip_contents=zip_contents,
+                zip_contents=zip_contents, data_registry=data_registry,
             )
             if zip_path and len(group_platforms) > 1:
                 # Rename ZIP to include all platform names

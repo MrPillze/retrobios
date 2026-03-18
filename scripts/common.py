@@ -125,6 +125,16 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     return config
 
 
+def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
+    """Load the data directory registry from _data_dirs.yml."""
+    registry_path = os.path.join(platforms_dir, "_data_dirs.yml")
+    if not os.path.exists(registry_path):
+        return {}
+    with open(registry_path) as f:
+        data = yaml.safe_load(f) or {}
+    return data.get("data_directories", {})
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,
