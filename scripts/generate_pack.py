@@ -305,13 +305,14 @@ def generate_pack(
                     full_dest = dest
 
                 dedup_key = full_dest
-                if dedup_key in seen_destinations:
-                    continue
-                seen_destinations.add(dedup_key)
+                already_packed = dedup_key in seen_destinations
 
                 storage = file_entry.get("storage", "embedded")
 
                 if storage == "user_provided":
+                    if already_packed:
+                        continue
+                    seen_destinations.add(dedup_key)
                     instructions = file_entry.get("instructions", "Please provide this file manually.")
                     instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
                     instr_path = f"{base_dest}/{instr_name}" if base_dest else instr_name
@@ -343,13 +344,12 @@ def generate_pack(
                     continue
 
                 if status == "not_found":
-                    missing_files.append(file_entry["name"])
+                    if not already_packed:
+                        missing_files.append(file_entry["name"])
                     continue
 
                 if status == "hash_mismatch":
                     if verification_mode != "existence":
-                        # For zipped_file entries, hash_mismatch is expected
-                        # (container MD5 ≠ inner ROM MD5). Verify inner content.
                         zf_name = file_entry.get("zipped_file")
                         if zf_name and local_path:
                             from verify import check_inside_zip
@@ -359,6 +359,10 @@ def generate_pack(
                                 untested_files.append(file_entry["name"])
                         else:
                             untested_files.append(file_entry["name"])
+
+                if already_packed:
+                    continue
+                seen_destinations.add(dedup_key)
 
                 extract = file_entry.get("extract", False)
                 if extract and local_path.endswith(".zip"):
