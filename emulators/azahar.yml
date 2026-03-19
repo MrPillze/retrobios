@@ -1,28 +1,90 @@
 emulator: Azahar
-type: alias
-alias_of: citra
+type: standalone + libretro
 source: "https://github.com/azahar-emu/azahar"
 upstream: "https://github.com/azahar-emu/azahar"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Azahar)"
+cores: [azahar]
+systems:
+  - nintendo-3ds
 
 notes: |
-  Azahar is the successor to Citra (via Lime3DS). Same codebase, same
-  BIOS/firmware requirements. See emulators/citra.yml for the full file list.
+  Azahar is the successor to Citra (via Lime3DS). Different codebase
+  from libretro/citra — has additional files not in the old Citra.
+  Data dir: azahar-emu (legacy: citra-emu, lime3ds-emu).
+  ref: src/common/common_paths.h:41-47
 
-  Key difference: data directory changed from citra-emu/lime3ds-emu to
-  azahar-emu. Legacy dirs are still scanned as fallback.
-  ref: azahar/src/common/common_paths.h:41-47
+  Key file: keys.txt (NOT aes_keys.txt like libretro/citra).
+  ref: src/common/common_paths.h:83
 
-  Files needed (all optional, HLE fallback for most):
-    sysdata/keys.txt, sysdata/boot9.bin, sysdata/sector0x96.bin,
-    sysdata/shared_font.bin, sysdata/seeddb.bin, sysdata/otp.bin,
-    nand/private/movable.sed, nand/rw/sys/SecureInfo_A,
-    nand/rw/sys/LocalFriendCodeSeed_B
+  Uses RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
+  ref: src/citra_libretro/environment.cpp:194
 
-  .info has firmware_count=0 but core uses RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
-  (src/citra_libretro/environment.cpp:194) to locate system files.
+  .info has firmware_count=0 but core uses system_dir for files.
 
-files: []
-# all files documented in emulators/citra.yml — same codebase
+files:
+  # --- sysdata/ ---
+  - name: keys.txt
+    path: sysdata/keys.txt
+    system: nintendo-3ds
+    required: false
+    note: "AES keys (named keys.txt in Azahar, aes_keys.txt in old Citra)"
+    source_ref: "src/common/common_paths.h:83, src/core/hw/aes/key.cpp:291"
+
+  - name: boot9.bin
+    path: sysdata/boot9.bin
+    system: nintendo-3ds
+    required: false
+    source_ref: "src/common/common_paths.h:84"
+
+  - name: sector0x96.bin
+    path: sysdata/sector0x96.bin
+    system: nintendo-3ds
+    required: false
+    source_ref: "src/common/common_paths.h:85"
+
+  - name: shared_font.bin
+    path: sysdata/shared_font.bin
+    system: nintendo-3ds
+    required: false
+    note: "HLE fallback if missing"
+    source_ref: "src/common/common_paths.h:82"
+
+  - name: seeddb.bin
+    path: sysdata/seeddb.bin
+    system: nintendo-3ds
+    required: false
+    note: "game seed database for 9.6+ titles"
+    source_ref: "src/core/file_sys/seed_db.cpp:15"
+
+  # --- Azahar-only (not in libretro/citra) ---
+  # These require src/core/hw/unique_data.cpp which only exists in Azahar
+
+  - name: otp.bin
+    path: sysdata/otp.bin
+    system: nintendo-3ds
+    required: false
+    note: "OTP data for key derivation. Azahar-only."
+    source_ref: "src/core/hw/unique_data.cpp:214"
+
+  - name: movable.sed
+    path: nand/private/movable.sed
+    system: nintendo-3ds
+    required: false
+    note: "console-unique key seed. Azahar-only."
+    source_ref: "src/core/hw/unique_data.cpp:218"
+
+  - name: SecureInfo_A
+    path: nand/rw/sys/SecureInfo_A
+    system: nintendo-3ds
+    required: false
+    note: "console serial/region. Azahar-only."
+    source_ref: "src/core/hw/unique_data.cpp:206"
+
+  - name: LocalFriendCodeSeed_B
+    path: nand/rw/sys/LocalFriendCodeSeed_B
+    system: nintendo-3ds
+    required: false
+    note: "friend code generation. Azahar-only."
+    source_ref: "src/core/hw/unique_data.cpp:210"

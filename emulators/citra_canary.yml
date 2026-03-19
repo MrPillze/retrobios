@@ -1,0 +1,62 @@
+emulator: Citra Canary
+type: libretro
+source: "https://github.com/libretro/citra"
+upstream: "https://github.com/citra-emu/citra"
+profiled_date: "2026-03-18"
+core_version: "Git"
+display_name: "Nintendo - 3DS (Citra Canary/Experimental)"
+cores: [citra_canary]
+systems:
+  - nintendo-3ds
+
+notes: |
+  Same repo as citra (libretro/citra master branch). Canary = experimental.
+  Data dir: citra-emu (not azahar-emu — this is pre-Azahar Citra).
+  ref: src/common/common_paths.h
+
+  Key file: aes_keys.txt (NOT keys.txt like Azahar).
+  ref: src/common/common_paths.h:68
+
+  Uses RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
+  ref: src/citra_libretro/environment.cpp:149
+
+  Files in sysdata/:
+    aes_keys.txt — AES encryption keys (common_paths.h:68)
+    boot9.bin — ARM9 bootrom (common_paths.h:69)
+    sector0x96.bin — secret NAND sector (common_paths.h:70)
+    shared_font.bin — system shared font, HLE fallback (common_paths.h:67)
+    seeddb.bin — game seed database (file_sys/seed_db.cpp:15)
+
+  NOTE: citra.yml profiles Azahar which uses keys.txt (not aes_keys.txt).
+  This core uses the pre-Azahar naming convention.
+
+files:
+  - name: aes_keys.txt
+    system: nintendo-3ds
+    required: false
+    note: "AES keys (named aes_keys.txt in pre-Azahar Citra)"
+    source_ref: "src/common/common_paths.h:68, src/core/hw/aes/key.cpp"
+
+  - name: boot9.bin
+    system: nintendo-3ds
+    required: false
+    note: "ARM9 bootrom for key derivation"
+    source_ref: "src/common/common_paths.h:69"
+
+  - name: sector0x96.bin
+    system: nintendo-3ds
+    required: false
+    note: "OTP-encrypted NAND sector for key derivation"
+    source_ref: "src/common/common_paths.h:70"
+
+  - name: shared_font.bin
+    system: nintendo-3ds
+    required: false
+    note: "system shared font, HLE fallback if missing"
+    source_ref: "src/common/common_paths.h:67"
+
+  - name: seeddb.bin
+    system: nintendo-3ds
+    required: false
+    note: "game seed database for seed-encrypted games (9.6+ titles)"
+    source_ref: "src/core/file_sys/seed_db.cpp:15"

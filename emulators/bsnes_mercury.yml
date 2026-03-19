@@ -1,0 +1,101 @@
+emulator: bsnes-mercury
+type: libretro
+source: "https://github.com/libretro/bsnes-mercury"
+upstream: "https://github.com/bsnes-emu/bsnes"
+profiled_date: "2026-03-18"
+core_version: "v094 (Mercury)"
+display_name: "Nintendo - SNES / SFC (bsnes-mercury)"
+cores: [bsnes_mercury_accuracy, bsnes_mercury_balanced, bsnes_mercury_performance]
+systems:
+  - nintendo-snes
+  - nintendo-sgb
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+
+notes: |
+  bsnes-mercury is bsnes v094 with Mercury optimizations: HLE for DSP
+  and Hitachi coprocessors, firmware_appended support, overclocking.
+  Three profiles: accuracy, balanced, performance (PPU differs, not firmware).
+  .info says performance has 17 fw (no cx4) but the code compiles CX4 LLE
+  in all profiles — cx4.data.rom works in performance too. The .info is wrong.
+  Core option bsnes_chip_hle (default LLE) controls HLE/LLE at runtime.
+  ref: target-libretro/libretro.cpp altImplementation(), "bsnes_chip_hle"
+
+  Same firmware loading as bsnes2014: system_dir via file::exists +
+  mmapstream. No BS-X auto-load from system_dir (subsystem only).
+  ref: target-libretro/libretro.cpp:245-254
+
+  HLE fallback for DSP1/1B/2/4, Hitachi/CX4, ST010.
+  ref: sfc/cartridge/markup.cpp:351,404,618
+
+  firmware_appended: firmware can be appended to end of ROM file.
+  ref: ananke/heuristics/super-famicom.hpp:83
+
+  SGB boot ROM NOT embedded (sgb.boot.rom from system_dir).
+  CX4 NOT embedded (cx4.data.rom from system_dir).
+
+files:
+  # Same 18 files as bsnes2014 accuracy — see bsnes2014.yml for details
+  # DSP1-4 split (program+data), CX4, ST010-018, sgb.boot.rom
+  - name: dsp1.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1b.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1b.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp2.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp2.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp3.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE — required for SD Gundam GX"
+  - name: dsp3.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp4.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp4.data.rom
+    system: nintendo-snes
+    required: false
+  - name: cx4.data.rom
+    system: nintendo-snes
+    required: false
+    size: 3072
+    note: "HLE available via Mercury — LLE optional"
+    source_ref: "ananke/heuristics/super-famicom.hpp:146"
+  - name: st010.program.rom
+    system: nintendo-snes
+    required: false
+  - name: st010.data.rom
+    system: nintendo-snes
+    required: false
+  - name: st011.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE — required for Hayazashi Nidan Morita Shougi"
+  - name: st011.data.rom
+    system: nintendo-snes
+    required: false
+  - name: st018.program.rom
+    system: nintendo-snes
+    required: false
+  - name: st018.data.rom
+    system: nintendo-snes
+    required: false
+  - name: sgb.boot.rom
+    system: nintendo-sgb
+    required: false
+    size: 256
+    note: "SGB boot ROM. NOT embedded in v094."
+    source_ref: "ananke/heuristics/super-famicom.hpp:133"

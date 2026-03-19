@@ -6,9 +6,24 @@ core_version: "v1.0"
 display_name: "Dinothawr"
 cores: [dinothawr]
 systems: []
+
+notes: |
+  Puzzle game by the libretro team. Push blocks on ice.
+  Game data (TMX levels, sprites, music) needed for the core to work.
+
+  Two loading modes:
+  1. Load dinothawr.game as content (data in content directory)
+  2. supports_no_game=true: loads from system_dir/dinothawr/
+     ref: libretro.cpp:267-271 —
+       game_path_dir = join(system_dir, "/", "dinothawr")
+       game_path = join(game_path_dir, "/", "dinothawr.game")
+
+  Buildbot provides Dinothawr.zip via Core System Files Downloader.
+  ref: buildbot.libretro.com/assets/system/Dinothawr.zip
+
+data_directories:
+  - ref: dinothawr
+    source_ref: "libretro.cpp:270-271"
+
 files: []
-notes: >
-  Puzzle game developed by the libretro team as a reference libretro core.
-  Push blocks on ice to solve puzzles. Game data (maps, sprites, music)
-  ships in the libretro repo and is loaded as content.
-  No BIOS, firmware, or system directory files required.
+# no BIOS/firmware — game data loaded via data_directories or content

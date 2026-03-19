@@ -1,0 +1,114 @@
+emulator: bsnes-hd beta
+type: libretro
+source: "https://github.com/DerKoun/bsnes-hd"
+upstream: "https://github.com/bsnes-emu/bsnes"
+profiled_date: "2026-03-18"
+core_version: "v10.6"
+# .info says v112.v12 but repo shows Version = "10.6", SerializerVersion = "114.2"
+display_name: "Nintendo - SNES / SFC (bsnes-hd beta)"
+cores: [bsnes_hd_beta]
+systems:
+  - nintendo-snes
+  - nintendo-sgb
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+
+notes: |
+  bsnes-hd beta is bsnes ~v114 by DerKoun with widescreen and
+  increased color depth. Same firmware as bsnes v115.
+  repo Version="10.6", SerializerVersion="114.2"
+  ref: bsnes/emulator/emulator.hpp:34,40
+
+  SGB boot ROMs embedded in binary (icd/boot-roms.cpp:1,12).
+  SGB1.sfc/SGB2.sfc are SGB cartridge ROMs (not boot ROMs).
+  HLE available for DSP1/2/4, ST010, CX4 — LLE firmware optional.
+  DSP3, ST011, ST018 have no HLE — LLE firmware required for those.
+
+  ref: bsnes/sfc/coprocessor/icd/boot-roms.cpp:1,12
+  ref: bsnes/sfc/coprocessor/icd/icd.cpp:87,90
+  ref: bsnes/heuristics/super-famicom.cpp:115
+
+files:
+  # Split DSP coprocessor firmware
+  - name: dsp1.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1b.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp1b.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp2.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp2.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp3.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE — required for SD Gundam GX"
+  - name: dsp3.data.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp4.program.rom
+    system: nintendo-snes
+    required: false
+  - name: dsp4.data.rom
+    system: nintendo-snes
+    required: false
+
+  # CX4 (Hitachi)
+  - name: cx4.data.rom
+    system: nintendo-snes
+    required: false
+    size: 3072
+    note: "HLE available — LLE optional for Mega Man X2/X3"
+
+  # Seta coprocessors
+  - name: st010.program.rom
+    system: nintendo-snes
+    required: false
+  - name: st010.data.rom
+    system: nintendo-snes
+    required: false
+  - name: st011.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE — required for Hayazashi Nidan Morita Shougi"
+  - name: st011.data.rom
+    system: nintendo-snes
+    required: false
+  - name: st018.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE — required for Hayazashi Nidan Morita Shougi 2"
+  - name: st018.data.rom
+    system: nintendo-snes
+    required: false
+
+  # SGB cartridge ROMs (NOT boot ROMs — boot ROMs are embedded)
+  # sgb_bios variable set by core option bsnes_sgb_bios (libretro.cpp:280-285)
+  - name: SGB1.sfc
+    system: nintendo-sgb
+    required: false
+    md5: b15ddb15721c657d82c5bab6db982ee9
+    note: "SGB1 cartridge ROM. Boot ROM embedded in icd/boot-roms.cpp:1"
+    source_ref: "libretro.cpp:1022,1040"
+  - name: SGB2.sfc
+    system: nintendo-sgb
+    required: false
+    md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+    note: "SGB2 cartridge ROM. Boot ROM embedded in icd/boot-roms.cpp:12"
+    source_ref: "libretro.cpp:1022,1040"
+
+  # Satellaview BIOS — required for .bs files
+  - name: BS-X.bin
+    system: nintendo-satellaview
+    required: false
+    note: "Satellaview BIOS. Required when loading .bs files. Core returns false if missing."
+    source_ref: "libretro.cpp:1054-1060"

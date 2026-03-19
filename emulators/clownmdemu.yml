@@ -1,6 +1,7 @@
 emulator: ClownMDEmu
-type: libretro
-source: "https://github.com/libretro/clownmdemu-libretro"
+type: standalone + libretro
+source: "https://github.com/Clownacy/clownmdemu-libretro"
+upstream: "https://github.com/Clownacy/clownmdemu"
 profiled_date: "2026-03-18"
 core_version: "Git"
 display_name: "Sega - MD/CD (ClownMDEmu)"

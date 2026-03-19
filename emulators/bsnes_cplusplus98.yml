@@ -1,0 +1,36 @@
+emulator: bsnes C++98
+type: libretro
+source: "https://github.com/libretro/bsnes-libretro-cplusplus98"
+upstream: "https://github.com/bsnes-emu/bsnes"
+profiled_date: "2026-03-18"
+core_version: "v085 (Performance)"
+display_name: "Nintendo - SNES / SFC (bsnes C++98 (v085))"
+cores: [bsnes_cplusplus98]
+systems:
+  - nintendo-snes
+
+notes: |
+  bsnes C++98 is bsnes v085 downgraded to C++98 for old compilers.
+  Performance profile only. is_experimental=true.
+
+  Firmware loading differs from newer bsnes versions:
+  - NEC DSP (dsp1/2/3/4) and Hitachi DSP (cx4) firmware loaded from
+    the SAME DIRECTORY as the ROM, not from system_dir.
+  - Path: dir(interface->path(Slot::Base, ".dsp")) + firmware_name
+    ref: snes/cartridge/markup.cpp:231
+  - interface->path() returns basename + hint
+    ref: snes/libretro/libretro.cpp path() method
+  - Firmware name comes from the game's XML/BML markup (root["firmware"])
+    NOT fixed names like dsp1.program.rom
+  - Files are COMBINED (program+data in one file), not split
+    ref: snes/cartridge/markup.cpp:243-244 reads promsize*3 + dromsize*2
+
+  .info has firmware_count=0 because firmware is loaded from ROM dir,
+  not from system_dir — RetroArch can't pre-populate them.
+
+  The core warns "NEC DSP firmware X is missing" if not found but
+  continues without the coprocessor (games using it won't work).
+
+files: []
+# firmware loaded from ROM directory, not system directory
+# no files to declare for system_dir placement

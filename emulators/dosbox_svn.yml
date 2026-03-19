@@ -1,8 +1,27 @@
-emulator: "dosbox_svn"
-type: alias
-alias_of: "dosbox_core"
-profiled_date: "2026-03-18"
+emulator: DOSBox-SVN
+type: libretro
+source: "https://github.com/libretro/dosbox-svn"
+upstream: "https://sourceforge.net/projects/dosbox/"
+profiled_date: "2026-03-19"
 core_version: "SVN"
 display_name: "DOS (DOSBox-SVN)"
-note: "This core uses the same BIOS/firmware as dosbox_core. See emulators/dosbox_core.yml for details."
+cores: [dosbox_svn]
+systems: [dos]
+notes: |
+  DOSBox-SVN is the same codebase as dosbox_svn_ce but builds with a fake
+  SDL shim (WITH_FAKE_SDL=1) instead of real SDL, for broader platform compat.
+  ref: libretro/Makefile.libretro, libretro/fakesdl/
+
+  No MT-32 emulation — no MUNT bundled, no mt32emu, no FluidSynth, no BASS.
+  The src/midi/munt directory referenced in Makefile.common does not exist.
+  MIDI output is hardware-only via fake SDL stubs.
+  ref: src/gui/midi.cpp
+
+  system_directory is read (libretro.cpp:1399) but only logged, never used
+  to load any files.
+
+  NOT an alias of dosbox_core — completely different MIDI capabilities.
+  dosbox_core has MUNT + FluidSynth + BASSMIDI. This core has none.
+
 files: []
+# No BIOS, firmware, ROMs, or system files of any kind.

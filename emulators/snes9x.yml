@@ -89,7 +89,8 @@ files:
     md5: "fed4d8242cfbed61343d53d48432aced"
     sha1: "604556b2e62860af18db5a77f2956ebc75450020"
     source_ref: "libretro.cpp:1209 (LoadBIOS, 'BS-X.bin'), bsx.cpp:1209-1215 (BSX_LoadBIOS)"
-    notes: "Needed for Satellaview (.bs) game support. Core also accepts BS-X.bios as filename. Without this file, BS-X games will fail to load."
+    aliases: ["BS-X.bios"]
+    notes: "Needed for Satellaview (.bs) game support. Without this file, BS-X games will fail to load."
 
   # -- Sufami Turbo BIOS --
   # Required by: snes9x, snes9x2010

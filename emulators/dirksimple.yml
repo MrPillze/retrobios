@@ -1,8 +1,41 @@
-emulator: "dirksimple"
-type: alias
-alias_of: "daphne"
-profiled_date: "2026-03-18"
+emulator: DirkSimple
+type: standalone + libretro
+source: "https://github.com/icculus/DirkSimple"
+upstream: "https://github.com/icculus/DirkSimple"
+profiled_date: "2026-03-19"
 core_version: "0.2"
 display_name: "Laserdisc arcade game (DirkSimple)"
-note: "This core uses the same BIOS/firmware as daphne. See emulators/daphne.yml for details."
+cores: [dirksimple]
+systems:
+  - laserdisc-arcade
+
+notes: |
+  DirkSimple by Ryan C. Gordon (icculus). Plays laserdisc arcade games
+  via Lua scripts + Ogg Theora video. NOT related to Daphne — completely
+  different architecture.
+
+  Libretro port loads from system_dir/DirkSimple/.
+  ref: dirksimple_libretro.c:782,795 —
+    sysdir from RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+    basedir = sysdir + "/DirkSimple/"
+  DirkSimple_startup(basedir, info->path, ...) at line 798
+
+  Standalone loads from data/ in the binary's directory.
+  ref: README.md — "data directory must be included in same directory as binary"
+
+  Game data in data/games/<gamename>/game.lua + assets (PNG, WAV).
+  User provides the OGV laserdisc video as content.
+
+  Supported games: Dragon's Lair (lair), Cliff Hanger (cliff).
+  10 data files in the repo (game.lua scripts, sprites, sounds).
+
+  Buildbot provides DirkSimple.zip via Core System Files Downloader.
+  ref: buildbot.libretro.com/assets/system/DirkSimple.zip
+
+data_directories:
+  - ref: dirksimple
+    source_ref: "dirksimple_libretro.c:795"
+
 files: []
+# no BIOS/firmware — game data via data_directories
+# user provides OGV video as content

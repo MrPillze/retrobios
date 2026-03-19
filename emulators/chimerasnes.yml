@@ -1,9 +1,29 @@
-emulator: "chimerasnes"
-type: alias
-alias_of: "snes9x"
+emulator: ChimeraSNES
+type: libretro
+source: "https://github.com/jamsilva/chimerasnes"
+upstream: "https://github.com/snes9xgit/snes9x"
+profiled_date: "2026-03-18"
 core_version: ""
 display_name: "Nintendo - SNES / SFC (ChimeraSNES)"
-profiled_date: "2026-03-18"
-display_name: "Nintendo - SNES / SFC (ChimeraSNES)"
-note: "This core uses the same BIOS/firmware as snes9x. See emulators/snes9x.yml for details."
+cores: [chimerasnes]
+systems:
+  - nintendo-snes
+
+notes: |
+  Fork of Snes9x ~2005, optimized for slow hardware.
+  NOT identical to snes9x — different firmware behavior.
+
+  All coprocessor data is HLE with static ROM tables embedded:
+    DSP1: DSP1ROM[1024] in source/dsp1.c:6
+    DSP3: DSP3_DataROM[1024] in source/dsp3.c:7
+  No external DSP/ST/CX4 firmware files needed.
+
+  BS-X: path constructed in source/bsx.c:873 as romdir/BS-X.bios
+  (relative to ROM directory, NOT system_dir). No
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for firmware loading.
+
+  firmware_count absent in .info (= 0). Confirmed in source.
+
 files: []
+# all coprocessors HLE with embedded data
+# BS-X.bios loaded from ROM directory, not system_dir

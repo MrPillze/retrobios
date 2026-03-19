@@ -1,6 +1,7 @@
 emulator: Cannonball
-type: libretro
+type: standalone + libretro
 source: "https://github.com/libretro/cannonball"
+upstream: "https://github.com/djyt/cannonball"
 profiled_date: "2026-03-18"
 core_version: "1.0"
 display_name: "Cannonball"

@@ -57,10 +57,11 @@ files:
   - name: "font.bmp"
     path: "np2kai/font.bmp"
     required: false
+    aliases: ["FONT.ROM", "font.rom", "FONT.BMP"]
     note: >
       PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
-      The core also accepts FONT.ROM (V98 format). Without this file,
-      only basic ASCII characters render correctly using built-in data.
+      Without this file, only basic ASCII characters render correctly using
+      built-in data.
     source_ref: "sdl/libretro/libretro.c:1813, font/fontdata.c:11-14"
 
   # -- Sound BIOS ROM --
@@ -115,8 +116,9 @@ files:
   - name: "2608_rim.wav"
     path: "np2kai/2608_rim.wav"
     required: false
-    note: "YM2608 OPNA rhythm sample: rim shot"
-    source_ref: "sound/rhythmc.c:16"
+    aliases: ["2608_RYM.WAV"]
+    note: "YM2608 OPNA rhythm sample: rim shot. fmgen also accepts 2608_RYM.WAV"
+    source_ref: "sound/rhythmc.c:16, sound/fmgen/fmgen_opna.cpp:1413-1443"
 
   # -- IDE BIOS ROM --
   # Loaded by ideio.c:1913-1931. Tried in order: ide.rom, d8000.rom,
@@ -125,11 +127,10 @@ files:
   - name: "ide.rom"
     path: "np2kai/ide.rom"
     required: false
+    aliases: ["d8000.rom", "bank3.bin", "bios9821.rom"]
     note: >
       IDE controller BIOS ROM (8 KB). Required for real IDE BIOS emulation
-      (HDD boot from IDE). The core also checks d8000.rom, bank3.bin,
-      and bios9821.rom as fallback filenames. Without this, a simulated
-      IDE BIOS is used.
+      (HDD boot from IDE). Without this, a simulated IDE BIOS is used.
     source_ref: "cbus/ideio.c:1913-1931"
 
   # -- SCSI BIOS ROM --
@@ -148,10 +149,10 @@ files:
   - name: "pci.rom"
     path: "np2kai/pci.rom"
     required: false
+    aliases: ["bank0.bin"]
     note: >
       PCI BIOS ROM (32 KB). For PC-9821 PCI bus emulation.
-      The core also checks bank0.bin as fallback. Without this,
-      the built-in PCI BIOS simulator is used.
+      Without this, the built-in PCI BIOS simulator is used.
     source_ref: "io/pcidev.c:360-382"
 
   # -- GPIB BIOS ROM --

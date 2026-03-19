@@ -1,0 +1,120 @@
+emulator: bsnes-jg
+type: libretro
+source: "https://github.com/libretro/bsnes-jg"
+upstream: "https://github.com/libretro/bsnes-jg"
+profiled_date: "2026-03-18"
+core_version: "2.0.0"
+display_name: "Nintendo - SNES / SFC (bsnes-jg)"
+cores: [bsnes-jg]
+systems:
+  - nintendo-snes
+  - nintendo-sgb
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+
+notes: |
+  bsnes-jg is a fork of bsnes v115 by Rupert Carmichael, rewritten for
+  C++ standard library. Coprocessor firmware loaded from system_dir via
+  openFileCallback. SGB boot ROMs and CX4/HitachiDSP data ROM embedded.
+  BML game databases embedded as C++ string literals.
+
+  ref: libretro/libretro.cpp:722 RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+  ref: libretro/libretro.cpp:428-470 firmware path construction (sysdir + filename)
+  ref: src/cartridge.cpp:774-786 openFileCallback for DSP/ST .program.rom/.data.rom
+  ref: src/coprocessor/icd.cpp:249,260 SGB1/SGB2 boot ROMs embedded
+  ref: src/cartridge.cpp:62 HitachiDSP static data ROM embedded (3072 bytes)
+  ref: libretro/libretro.cpp:30-33,410-416 BML databases embedded
+
+files:
+  # SNES coprocessor firmware — loaded from system_dir, all optional
+  # Games using these coprocessors won't work without the firmware
+  # but most SNES games don't use coprocessors
+
+  - name: dsp1.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:428-429"
+
+  - name: dsp1.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:431-432"
+
+  - name: dsp1b.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:434-435"
+
+  - name: dsp1b.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:437-438"
+
+  - name: dsp2.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:440-441"
+
+  - name: dsp2.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:443-444"
+
+  - name: dsp3.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:446-447"
+
+  - name: dsp3.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:450-451"
+
+  - name: dsp4.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp:455"
+
+  - name: dsp4.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st010.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st010.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st011.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st011.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st018.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+  - name: st018.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "libretro/libretro.cpp"
+
+# Embedded (no external file needed):
+#   SGB1BootROM[256] — src/coprocessor/icd.cpp:249
+#   SGB2BootROM[256] — src/coprocessor/icd.cpp:260
+#   hitachidspStaticDataROM[3072] — src/cartridge.cpp:62
+#   boards_bml — libretro/boards_bml.hpp
+#   SuperFamicom_bml — libretro/SuperFamicom_bml.hpp
+#   BSMemory_bml — libretro/BSMemory_bml.hpp
+#   SufamiTurbo_bml — libretro/SufamiTurbo_bml.hpp

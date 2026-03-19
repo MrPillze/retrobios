@@ -161,8 +161,9 @@ files:
 
   - name: "BS-X.bin"
     required: true
-    note: "BS-X Satellaview BIOS ROM. Required for .bs format Satellaview games"
-    source_ref: "target-libretro/libretro.cpp:948, target-libretro/program.cpp:790-799"
+    md5: fed4d8242cfbed61343d53d48432aced
+    note: "BS-X Satellaview BIOS ROM. Required for .bs games. .info md5=fed4d824, repo has 96cf17bf (Rev 1 vs original)"
+    source_ref: "target-libretro/libretro.cpp:948"
 
 notes:
   hle_available: true

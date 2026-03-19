@@ -1,0 +1,122 @@
+emulator: bsnes 2014
+type: libretro
+source: "https://github.com/libretro/bsnes2014"
+upstream: "https://github.com/bsnes-emu/bsnes"
+profiled_date: "2026-03-18"
+core_version: "v094"
+display_name: "Nintendo - SNES / SFC (bsnes 2014)"
+cores: [bsnes2014_accuracy, bsnes2014_balanced, bsnes2014_performance]
+systems:
+  - nintendo-snes
+  - nintendo-sgb
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+
+notes: |
+  bsnes 2014 is based on bsnes v094. Three build profiles:
+  accuracy (dot-based PPU), balanced, performance (scanline PPU).
+  All 3 profiles use the same 18 firmware files. Profiles differ only
+  in PPU implementation (sfc/profile-*.hpp: CPU/SMP/DSP/PPU alternates),
+  not in coprocessor support. CX4/Hitachi compiled in all profiles.
+  .info says performance has 17 (no cx4) — this is wrong, verified in
+  sfc/profile-performance.hpp which only changes CPU/SMP/DSP/PPU.
+
+  Unlike modern bsnes (v115+), v094 does NOT have HLE fallback for
+  coprocessors. CX4 is NOT embedded — cx4.data.rom is required
+  externally. SGB boot ROM is NOT embedded — sgb.boot.rom required.
+
+  Firmware loaded from system_dir via file::exists() + mmapstream.
+  ref: target-libretro/libretro.cpp — penviron(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY)
+  ref: ananke/heuristics/super-famicom.hpp — firmware name definitions
+  ref: ananke/super-famicom.cpp:120 — sgb.boot.rom copy
+
+files:
+  # DSP coprocessor split ROMs (program + data)
+  - name: dsp1.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "ananke/heuristics/super-famicom.hpp:381"
+
+  - name: dsp1.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "ananke/heuristics/super-famicom.hpp:382"
+
+  - name: dsp1b.program.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "ananke/heuristics/super-famicom.hpp:381"
+
+  - name: dsp1b.data.rom
+    system: nintendo-snes
+    required: false
+    source_ref: "ananke/heuristics/super-famicom.hpp:382"
+
+  - name: dsp2.program.rom
+    system: nintendo-snes
+    required: false
+
+  - name: dsp2.data.rom
+    system: nintendo-snes
+    required: false
+
+  - name: dsp3.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE fallback in v094 — required for SD Gundam GX"
+
+  - name: dsp3.data.rom
+    system: nintendo-snes
+    required: false
+
+  - name: dsp4.program.rom
+    system: nintendo-snes
+    required: false
+
+  - name: dsp4.data.rom
+    system: nintendo-snes
+    required: false
+
+  # CX4 (Hitachi) — NOT embedded in v094 unlike bsnes v115+
+  - name: cx4.data.rom
+    system: nintendo-snes
+    required: false
+    size: 3072
+    note: "Capcom CX4 coprocessor data. Required for Mega Man X2/X3. Used in all 3 profiles (.info performance is wrong). NOT embedded in v094."
+    source_ref: "ananke/heuristics/super-famicom.hpp:146"
+
+  # Seta coprocessors
+  - name: st010.program.rom
+    system: nintendo-snes
+    required: false
+
+  - name: st010.data.rom
+    system: nintendo-snes
+    required: false
+
+  - name: st011.program.rom
+    system: nintendo-snes
+    required: false
+    note: "no HLE fallback — required for Hayazashi Nidan Morita Shougi"
+
+  - name: st011.data.rom
+    system: nintendo-snes
+    required: false
+
+  - name: st018.program.rom
+    system: nintendo-snes
+    required: false
+    note: "ARM coprocessor. Required for Hayazashi Nidan Morita Shougi 2"
+    source_ref: "ananke/heuristics/super-famicom.hpp:475-476"
+
+  - name: st018.data.rom
+    system: nintendo-snes
+    required: false
+
+  # SGB boot ROM — NOT embedded in v094 unlike bsnes-jg/v115+
+  - name: sgb.boot.rom
+    system: nintendo-sgb
+    required: false
+    size: 256
+    note: "SGB boot ROM (256 bytes). NOT embedded in v094. Present in all 3 profiles."
+    source_ref: "ananke/heuristics/super-famicom.hpp:133, ananke/super-famicom.cpp:120"

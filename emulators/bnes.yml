@@ -14,16 +14,17 @@ notes: |
   to libretro by Ryphecha. It is a lightweight, accuracy-focused NES core.
 
   The core loads cartridge data entirely through retro_load_game with
-  need_fullpath=false (libretro.cpp:129). ROM data is passed as a memory
-  buffer and parsed by Cartridge::load (cartridge.cpp:18-31), which detects
-  iNES headers (16-byte offset) and delegates to Board::load for mapper setup.
+  need_fullpath=false (libretro/libretro.cpp:129). ROM data is passed as a
+  memory buffer and parsed by Cartridge::load (nes/cartridge/cartridge.cpp:18-31),
+  which detects iNES headers (16-byte offset) and delegates to Board::load.
 
-  The PPU generates its palette from a hardcoded color table in libretro.cpp
-  (lines 20-37) with emphasis factor tables. No external palette file is loaded.
+  The PPU generates its palette from a hardcoded color table in
+  libretro/libretro.cpp:20-37 with emphasis factor tables. No external
+  palette file is loaded.
 
-  System::init (system.cpp:62-66) only sets up the interface pointer and
-  default input devices. No system ROM, BIOS, or firmware is loaded at any
-  stage of initialization or cartridge loading.
+  System::init (nes/system/system.cpp:62-66) only sets up the interface
+  pointer and default input devices. No system ROM, BIOS, or firmware is
+  loaded at any stage of initialization or cartridge loading.
 
   The core does not call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and has no
   file I/O for BIOS or firmware. FDS (Famicom Disk System) is not supported,
@@ -35,11 +36,11 @@ files: []
 
 analysis:
   bios_search:
-    retro_load_game: "libretro.cpp:181-211 - loads cartridge data only, no BIOS"
-    cartridge_load: "cartridge.cpp:18-31 - parses iNES header + ROM data"
-    system_init: "system.cpp:62-66 - sets interface pointer, no ROM loading"
-    system_power: "system.cpp:43-50 - powers subsystems, no file I/O"
-    interface_init: "interface.cpp:17-20 - stores derived pointer, calls system.init"
+    retro_load_game: "libretro/libretro.cpp:181-211 - loads cartridge data only, no BIOS"
+    cartridge_load: "nes/cartridge/cartridge.cpp:18-31 - parses iNES header + ROM data"
+    system_init: "nes/system/system.cpp:62-66 - sets interface pointer, no ROM loading"
+    system_power: "nes/system/system.cpp:43-50 - powers subsystems, no file I/O"
+    interface_init: "nes/interface/interface.cpp - stores derived pointer, calls system.init"
   supported_mappers:
     - NROM
     - SxROM (MMC1)

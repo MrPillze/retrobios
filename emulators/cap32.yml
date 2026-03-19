@@ -1,6 +1,7 @@
 emulator: Caprice32
-type: libretro
+type: standalone + libretro
 source: "https://github.com/libretro/libretro-cap32"
+upstream: "https://github.com/ColinPitrat/caprice32"
 profiled_date: "2026-03-18"
 core_version: "v4.2.0"
 display_name: "Amstrad - CPC/GX4000 (Caprice32)"
@@ -42,7 +43,49 @@ notes: |
   CP/M support loads a pre-built snapshot (cpm.h) into memory via
   snapshot_load_mem() in slots.c:87.
 
-files: []
+files:
+  # Standalone loads from rom_path/ — libretro embeds all as C arrays
+  # ref: ColinPitrat/caprice32/src/cap32.cpp:1006-1007,1159-1171
+  - name: cpc464.rom
+    system: amstrad-cpc
+    required: true
+    mode: standalone
+    size: 32768
+    note: "CPC 464 OS + BASIC 1.0"
+    source_ref: "caprice32/src/cap32.cpp:1006, rom/cpc464.rom"
+  - name: cpc664.rom
+    system: amstrad-cpc
+    required: false
+    mode: standalone
+    size: 32768
+    note: "CPC 664 OS + BASIC 1.0"
+    source_ref: "caprice32/rom/cpc664.rom"
+  - name: cpc6128.rom
+    system: amstrad-cpc
+    required: false
+    mode: standalone
+    size: 32768
+    note: "CPC 6128 OS + BASIC 1.1"
+    source_ref: "caprice32/rom/cpc6128.rom"
+  - name: amsdos.rom
+    system: amstrad-cpc
+    required: false
+    mode: standalone
+    size: 16384
+    note: "AMSDOS disc ROM (sideways slot 7)"
+    source_ref: "caprice32/src/cap32.cpp:1166"
+  - name: system.cpr
+    system: amstrad-cpc
+    required: false
+    mode: standalone
+    note: "CPC+ system cartridge"
+    source_ref: "caprice32/rom/system.cpr"
+  - name: MF2.rom
+    system: amstrad-cpc
+    required: false
+    mode: standalone
+    note: "Multiface 2 ROM"
+    source_ref: "caprice32/rom/MF2.rom"
 
 platform_details:
   bios_mapping:

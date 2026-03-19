@@ -1,25 +1,34 @@
 emulator: ECWolf
-type: libretro
+type: standalone + libretro
 source: "https://github.com/libretro/ecwolf"
-profiled_date: "2026-03-18"
-core_version: ""
-display_name: "Wolfenstein 3D (ECWolf)"
+upstream: "https://bitbucket.org/ecwolf/ecwolf"
+profiled_date: "2026-03-19"
+core_version: "1.4.1"
 display_name: "Wolfenstein 3D (ECWolf)"
 cores: [ecwolf]
 systems: [wolfenstein3d]
 verification: md5
-notes: >
-  Wolfenstein 3D source port. Plays Wolf3D (wl6/wl1), Spear of Destiny (sod/sdm),
-  Super 3D Noah's Ark (n3d), and community pk3 mods. The core requires ecwolf.pk3
-  in the system directory - this is the engine data package built from wadsrc/static/
-  containing IWADINFO definitions, palettes, sprites, map configs, and lump remappers.
-  Game data files (vswap, gamemaps, vgagraph, audiot) are loaded from the content
-  directory, not the system directory. The core auto-detects the game variant by
-  scanning lump contents against IWADINFO MustContain rules. Spear of Destiny
-  mission packs (sd2/sd3) and Mac Wolfenstein variants are also supported.
-  Blake Stone and Rise of the Triad support is flagged as Preview.
-  The SelectGame path searches: content directory, system directory, BaseDataPaths
-  config, then platform-specific paths (Steam, GOG installs on desktop).
+notes: |
+  Wolfenstein 3D source port by Braden Obrzut. Plays Wolf3D (wl6/wl1),
+  Spear of Destiny (sod/sdm), Super 3D Noah's Ark (n3d), and community pk3 mods.
+
+  Requires ecwolf.pk3 — engine data package built from wadsrc/static/.
+  Contains IWADINFO (game detection rules), palettes, sprites, map configs,
+  DECORATE actor definitions, MAPINFO, SNDINFO, fonts, and localization strings.
+  Without this file: "Could not open ecwolf.pk3!" fatal error.
+  ref: version.h:12 (MAIN_PK3), wl_iwad.cpp:642-657 (load + fatal)
+
+  Libretro: ecwolf.pk3 searched in system_dir.
+  ref: libretro/libretro.cpp:831-832 (sysDir passed to SelectGame)
+
+  Standalone: ecwolf.pk3 searched in progdir (binary directory).
+  ref: wl_main.cpp:1289 (progdir passed to SelectGame)
+  Also: INSTALL_PREFIX/share/ecwolf/ on Linux (wl_iwad.cpp:648)
+
+  Game data files (vswap, gamemaps, vgagraph, audiot) loaded from content
+  directory, not system directory. Auto-detects game variant by scanning
+  lump contents against IWADINFO MustContain rules.
+  Blake Stone and Rise of the Triad support flagged as Preview.
 
 files:
   - name: "ecwolf.pk3"
