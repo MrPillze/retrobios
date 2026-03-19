@@ -153,6 +153,8 @@ def resolve_local_file(
     md5_raw = file_entry.get("md5", "")
     name = file_entry.get("name", "")
     zipped_file = file_entry.get("zipped_file")
+    aliases = file_entry.get("aliases", [])
+    names_to_try = [name] + [a for a in aliases if a != name]
 
     md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
     files_db = db.get("files", {})
@@ -180,14 +182,15 @@ def resolve_local_file(
                         if os.path.exists(path):
                             return path, "md5_exact"
 
-    # 3. No MD5 = any file with that name (existence check)
+    # 3. No MD5 = any file with that name or alias (existence check)
     if not md5_list:
         candidates = []
-        for match_sha1 in by_name.get(name, []):
-            if match_sha1 in files_db:
-                path = files_db[match_sha1]["path"]
-                if os.path.exists(path):
-                    candidates.append(path)
+        for try_name in names_to_try:
+            for match_sha1 in by_name.get(try_name, []):
+                if match_sha1 in files_db:
+                    path = files_db[match_sha1]["path"]
+                    if os.path.exists(path) and path not in candidates:
+                        candidates.append(path)
         if candidates:
             if zipped_file:
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
@@ -195,15 +198,18 @@ def resolve_local_file(
             if primary or candidates:
                 return (primary[0] if primary else candidates[0]), "exact"
 
-    # 5. Name fallback with md5_composite + direct MD5 per candidate
+    # 5. Name + alias fallback with md5_composite + direct MD5 per candidate
     md5_set = set(md5_list)
     candidates = []
-    for match_sha1 in by_name.get(name, []):
-        if match_sha1 in files_db:
-            entry = files_db[match_sha1]
-            path = entry["path"]
-            if os.path.exists(path):
-                candidates.append((path, entry.get("md5", "")))
+    seen_paths = set()
+    for try_name in names_to_try:
+        for match_sha1 in by_name.get(try_name, []):
+            if match_sha1 in files_db:
+                entry = files_db[match_sha1]
+                path = entry["path"]
+                if os.path.exists(path) and path not in seen_paths:
+                    seen_paths.add(path)
+                    candidates.append((path, entry.get("md5", "")))
 
     if candidates:
         if zipped_file:

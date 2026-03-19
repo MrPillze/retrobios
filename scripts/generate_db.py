@@ -277,6 +277,37 @@ def _collect_all_aliases(files: dict) -> dict:
     except (ImportError, ConnectionError, OSError):
         pass
 
+    # Collect aliases from emulator YAMLs (aliases field on file entries)
+    emulators_dir = Path("emulators")
+    if emulators_dir.is_dir():
+        try:
+            import yaml
+            for emu_file in emulators_dir.glob("*.yml"):
+                try:
+                    with open(emu_file) as f:
+                        emu_config = yaml.safe_load(f) or {}
+                except (yaml.YAMLError, OSError):
+                    continue
+                for file_entry in emu_config.get("files", []):
+                    entry_aliases = file_entry.get("aliases", [])
+                    if not entry_aliases:
+                        continue
+                    entry_name = file_entry.get("name", "")
+                    sha1 = file_entry.get("sha1", "")
+                    md5 = file_entry.get("md5", "")
+                    matched = None
+                    if sha1 and sha1 in files:
+                        matched = sha1
+                    elif md5 and md5 in md5_to_sha1:
+                        matched = md5_to_sha1[md5]
+                    elif entry_name and entry_name in name_to_sha1:
+                        matched = name_to_sha1[entry_name]
+                    if matched:
+                        for alias_name in entry_aliases:
+                            _add_alias(alias_name, matched)
+        except ImportError:
+            pass
+
     # Identical content named differently across platforms/cores
     KNOWN_ALIAS_GROUPS = [
         # ColecoVision - all these are the same 8KB BIOS

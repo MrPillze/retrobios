@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-18T19:57:34Z",
+  "generated_at": "2026-03-19T07:13:07Z",
   "total_files": 5593,
   "total_size": 4909044289,
   "files": {
@@ -71691,16 +71691,55 @@
       "sony-playstation:8dd7d5296a650fac7319bce665a6a53c": [
         "b05def971d8ec59f346f2d9ac21fb742e3eb6917"
       ],
+      "SCPH5500.bin": [
+        "b05def971d8ec59f346f2d9ac21fb742e3eb6917"
+      ],
+      "SCPH-5500.bin": [
+        "b05def971d8ec59f346f2d9ac21fb742e3eb6917"
+      ],
       "sony-playstation:490f666e1afb15b7362b406ed1cea246": [
         "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
       ],
       "scph7003.bin": [
         "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
       ],
+      "SCPH5501.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "SCPH-5501.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "scph5503.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "SCPH5503.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "SCPH-5503.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "SCPH7003.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
+      "SCPH-7003.bin": [
+        "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
+      ],
       "sony-playstation:32736f17079d0b2b7024407c39bd3050": [
         "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
       ],
       "scph5552.bin": [
+        "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
+      ],
+      "SCPH5502.bin": [
+        "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
+      ],
+      "SCPH-5502.bin": [
+        "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
+      ],
+      "SCPH5552.bin": [
+        "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
+      ],
+      "SCPH-5552.bin": [
         "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0"
       ],
       "sony-playstation:8e4c14f567745eff2f0408c8129f72a6": [
@@ -71742,6 +71781,9 @@
       "sony-playstation:c53ca5908936d412331790f4426c6c33": [
         "96880d1ca92a016ff054be5159bb06fe03cb4e14"
       ],
+      "PSXONPSP660.bin": [
+        "96880d1ca92a016ff054be5159bb06fe03cb4e14"
+      ],
       "sony-playstation:476d68a94ccec3b9c8303bbd1daf2810": [
         "7082bd57141fa0007b3adcd031f7ba23a20108a0"
       ],
@@ -71752,6 +71794,9 @@
         "48f6a9e001e2cb002217107c46fb0459069d1a42"
       ],
       "sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b": [
+        "c40146361eb8cf670b19fdc9759190257803cab7"
+      ],
+      "PS1_ROM.bin": [
         "c40146361eb8cf670b19fdc9759190257803cab7"
       ],
       "sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765": [
@@ -72113,31 +72158,85 @@
       "amiga-os-120.rom": [
         "11f9e62cf299f72184835b7b2a70a16333fc0d88"
       ],
+      "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom": [
+        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      ],
+      "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom": [
+        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      ],
       "amiga-os-130.rom": [
+        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+      ],
+      "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom": [
+        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+      ],
+      "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
       "amiga-os-204.rom": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
+      "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom": [
+        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
+      ],
+      "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom": [
+        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
+      ],
       "amiga-os-310-a600.rom": [
+        "3b7f1493b27e212830f989f26ca76c02049f09ca"
+      ],
+      "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom": [
+        "3b7f1493b27e212830f989f26ca76c02049f09ca"
+      ],
+      "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom": [
         "3b7f1493b27e212830f989f26ca76c02049f09ca"
       ],
       "amiga-ext-130-cdtv.rom": [
         "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
       ],
+      "amiga-os-130-cdtv-ext.rom": [
+        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
+      ],
+      "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom": [
+        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
+      ],
+      "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom": [
+        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
+      ],
       "amiga-os-300-a1200.rom": [
+        "70033828182fffc7ed106e5373a8b89dda76faa5"
+      ],
+      "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A1200)[!].rom": [
         "70033828182fffc7ed106e5373a8b89dda76faa5"
       ],
       "amiga-os-310-a1200.rom": [
         "e21545723fe8374e91342617604f1b3d703094f1"
       ],
+      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom": [
+        "e21545723fe8374e91342617604f1b3d703094f1"
+      ],
+      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom": [
+        "e21545723fe8374e91342617604f1b3d703094f1"
+      ],
       "amiga-os-310-a4000.rom": [
+        "5fe04842d04a489720f0f4bb0e46948199406f49"
+      ],
+      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom": [
         "5fe04842d04a489720f0f4bb0e46948199406f49"
       ],
       "amiga-os-310-cd32.rom": [
         "3525be8887f79b5929e017b42380a79edfee542d"
       ],
+      "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom": [
+        "3525be8887f79b5929e017b42380a79edfee542d"
+      ],
       "amiga-ext-310-cd32.rom": [
+        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+      ],
+      "amiga-os-310-cd32-ext.rom": [
+        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+      ],
+      "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom": [
         "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
       ],
       "custom0.sf2": [
@@ -72244,6 +72343,99 @@
       ],
       "zx48.rom": [
         "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "amiga-os-300-a4000.rom": [
+        "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A4000)[!].rom": [
+        "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      "monit10.rom": [
+        "4e83a94ae5155bbea14d7331a5a8db82457bd5ae"
+      ],
+      "focal10.rom": [
+        "6386e58bc1bba5e76baec9e8a1ca4b99dc3c573f"
+      ],
+      "disk_327.rom": [
+        "28eefbb63047b26e4aec104aeeca74e2f9d0276c"
+      ],
+      "b11m_bos.rom": [
+        "7e9a30e38d7b78981999821640a68a201bb6df01"
+      ],
+      "b11m_ext.rom": [
+        "f087af69044432a1ef2431a72ac06946e32f2dd3"
+      ],
+      "bas11m_0.rom": [
+        "9d76f3eefd64e032c763fa1ebf9cd3d9bd22317a"
+      ],
+      "bas11m_1.rom": [
+        "34fa37599f2f9eb607390ef2458a3c22d87f09a9"
+      ],
+      "terak.rom": [
+        "273a9933b68a290c5aedcd6d69faa7b1d22c0344"
+      ],
+      "upd7801g.bin": [
+        "6e89d1227581c76441a53d605f9e324185f1da33"
+      ],
+      "upd7801g.bios": [
+        "6e89d1227581c76441a53d605f9e324185f1da33"
+      ],
+      "BS-X.bios": [
+        "604556b2e62860af18db5a77f2956ebc75450020"
+      ],
+      "N88_0.ROM": [
+        "d1ae642aed4f0584eeb81ff50180db694e5101d4"
+      ],
+      "n88ext0.rom": [
+        "d1ae642aed4f0584eeb81ff50180db694e5101d4"
+      ],
+      "N88_1.ROM": [
+        "4ae4d37409ff99411a623da9f6a44192170a854e"
+      ],
+      "n88ext1.rom": [
+        "4ae4d37409ff99411a623da9f6a44192170a854e"
+      ],
+      "N88_2.ROM": [
+        "e94278682ef9e9bbb82201f72c50382748dcea2a"
+      ],
+      "n88ext2.rom": [
+        "e94278682ef9e9bbb82201f72c50382748dcea2a"
+      ],
+      "N88_3.ROM": [
+        "af452aed79b072c4d17985830b7c5dca64d4b412"
+      ],
+      "n88ext3.rom": [
+        "af452aed79b072c4d17985830b7c5dca64d4b412"
+      ],
+      "N80.ROM": [
+        "063609dd518c124a4fc9ba35d1bae35771666a34"
+      ],
+      "n80.rom": [
+        "063609dd518c124a4fc9ba35d1bae35771666a34"
+      ],
+      "n88sub.rom": [
+        "8063185d4dd653dd75a68855148c9ee15b71164c"
+      ],
+      "KANJI2.ROM": [
+        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53"
+      ],
+      "kanji2.rom": [
+        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53"
+      ],
+      "N88JISHO.ROM": [
+        "deef0cc2a9734ba891a6d6c022aa70ffc66f783e"
+      ],
+      "JISYO.ROM": [
+        "deef0cc2a9734ba891a6d6c022aa70ffc66f783e"
+      ],
+      "jisyo.rom": [
+        "deef0cc2a9734ba891a6d6c022aa70ffc66f783e"
+      ],
+      "FONT.BMP": [
+        "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
+      ],
+      "2608_RYM.WAV": [
+        "c65592330c9dd84011151daed52f9aec926b7e56"
       ],
       "dmg0_rom.bin": [
         "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
