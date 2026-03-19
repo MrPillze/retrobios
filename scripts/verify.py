@@ -219,10 +219,17 @@ def verify_platform(config: dict, db: dict) -> dict:
     untested = sum(1 for r in results if r["status"] == Status.UNTESTED)
     missing = sum(1 for r in results if r["status"] == Status.MISSING)
 
+    # Count unique files (by system/destination) for reporting
+    unique_files = set()
+    for r in results:
+        dest = r.get("path") or r["name"]
+        unique_files.add(dest)
+
     return {
         "platform": platform,
         "verification_mode": mode,
         "total": len(results),
+        "unique_files": len(unique_files),
         "ok": ok,
         "untested": untested,
         "missing": missing,
@@ -259,11 +266,14 @@ def main():
 
         if not args.json:
             mode = result["verification_mode"]
+            uf = result["unique_files"]
+            total = result["total"]
+            checks_detail = f" ({total - uf} duplicate/inner checks)" if total != uf else ""
             if mode == "existence":
-                print(f"{result['platform']}: {result['ok']}/{result['total']} present, "
+                print(f"{result['platform']}: {uf} files, {result['ok']}/{total} checks present{checks_detail}, "
                       f"{result['missing']} missing [verification: {mode}]")
             else:
-                print(f"{result['platform']}: {result['ok']}/{result['total']} verified, "
+                print(f"{result['platform']}: {uf} files, {result['ok']}/{total} checks verified{checks_detail}, "
                       f"{result['untested']} untested, {result['missing']} missing [verification: {mode}]")
 
                 for d in result["details"]:

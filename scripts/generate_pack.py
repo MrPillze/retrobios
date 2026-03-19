@@ -453,7 +453,10 @@ def generate_pack(
     if verification_mode == "existence":
         print(f"  Generated {zip_path}: {total_files} files ({total_files - extra_count} platform{extras_msg}, {len(missing_files)} missing) [verification: existence]")
     else:
-        print(f"  Generated {zip_path}: {total_files} files, {verified_checks}/{total_checks} checks verified, {len(untested_files)} untested, {len(missing_files)} missing [verification: {verification_mode}]")
+        checks_detail = ""
+        if total_checks != total_files:
+            checks_detail = f" ({total_checks - total_files} duplicate/inner checks)"
+        print(f"  Generated {zip_path}: {total_files} files, {verified_checks}/{total_checks} checks verified{checks_detail}, {len(untested_files)} untested, {len(missing_files)} missing [verification: {verification_mode}]")
     return zip_path
 
 
