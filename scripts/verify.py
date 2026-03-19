@@ -248,7 +248,8 @@ def verify_platform(config: dict, db: dict) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Verify BIOS coverage per platform")
     parser.add_argument("--platform", "-p", help="Platform name")
-    parser.add_argument("--all", action="store_true", help="Verify all platforms")
+    parser.add_argument("--all", action="store_true", help="Verify all active platforms")
+    parser.add_argument("--include-archived", action="store_true", help="Include archived platforms")
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--json", action="store_true", help="JSON output")
@@ -258,7 +259,8 @@ def main():
         db = json.load(f)
 
     if args.all:
-        platforms = [p.stem for p in Path(args.platforms_dir).glob("*.yml") if not p.name.startswith("_")]
+        from list_platforms import list_platforms as _list_platforms
+        platforms = _list_platforms(include_archived=args.include_archived)
     elif args.platform:
         platforms = [args.platform]
     else:
