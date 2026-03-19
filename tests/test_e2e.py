@@ -280,6 +280,30 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "test_emu.yml"), "w") as fh:
             yaml.dump(emu, fh)
 
+        # Emulator with HLE fallback
+        emu_hle = {
+            "emulator": "TestHLE",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "present_req.bin", "required": True, "hle_fallback": True},
+                {"name": "hle_missing.bin", "required": True, "hle_fallback": True},
+                {"name": "no_hle_missing.bin", "required": True, "hle_fallback": False},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_hle.yml"), "w") as fh:
+            yaml.dump(emu_hle, fh)
+
+        # Launcher profile (should be excluded from cross-reference)
+        launcher = {
+            "emulator": "TestLauncher",
+            "type": "launcher",
+            "systems": ["console-a"],
+            "files": [{"name": "launcher_bios.bin", "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "test_launcher.yml"), "w") as fh:
+            yaml.dump(launcher, fh)
+
         # Alias profile (should be skipped)
         alias = {"emulator": "TestAlias", "type": "alias", "alias_of": "test_emu", "files": []}
         with open(os.path.join(self.emulators_dir, "test_alias.yml"), "w") as fh:
@@ -454,6 +478,46 @@ class TestE2E(unittest.TestCase):
         names = {u["name"] for u in undeclared}
         # dd_covered.bin from TestEmuDD should NOT appear (data_dir match)
         self.assertNotIn("dd_covered.bin", names)
+
+    def test_44_cross_ref_skips_launchers(self):
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        names = {u["name"] for u in undeclared}
+        # launcher_bios.bin from TestLauncher should NOT appear
+        self.assertNotIn("launcher_bios.bin", names)
+
+    def test_45_hle_fallback_downgrades_severity(self):
+        """Missing file with hle_fallback=true → INFO severity, not CRITICAL."""
+        from verify import compute_severity, Severity
+        # required + missing + NO HLE = CRITICAL
+        sev = compute_severity("missing", True, "md5", hle_fallback=False)
+        self.assertEqual(sev, Severity.CRITICAL)
+        # required + missing + HLE = INFO
+        sev = compute_severity("missing", True, "md5", hle_fallback=True)
+        self.assertEqual(sev, Severity.INFO)
+        # required + missing + HLE + existence mode = INFO
+        sev = compute_severity("missing", True, "existence", hle_fallback=True)
+        self.assertEqual(sev, Severity.INFO)
+
+    def test_46_hle_index_built_from_emulator_profiles(self):
+        """verify_platform reads hle_fallback from emulator profiles."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        # present_req.bin has hle_fallback: true in TestHLE profile
+        for d in result["details"]:
+            if d["name"] == "present_req.bin":
+                self.assertTrue(d.get("hle_fallback", False))
+                break
+
+    def test_47_cross_ref_shows_hle_on_undeclared(self):
+        """Undeclared files include hle_fallback from emulator profile."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        hle_files = {u["name"] for u in undeclared if u.get("hle_fallback")}
+        self.assertIn("hle_missing.bin", hle_files)
 
     def test_50_platform_grouping_identical(self):
         groups = group_identical_platforms(

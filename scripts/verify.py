@@ -150,16 +150,23 @@ def verify_entry_md5(
 # Severity mapping per platform
 # ---------------------------------------------------------------------------
 
-def compute_severity(status: str, required: bool, mode: str) -> str:
-    """Map (status, required, verification_mode) → severity.
+def compute_severity(
+    status: str, required: bool, mode: str, hle_fallback: bool = False,
+) -> str:
+    """Map (status, required, verification_mode, hle_fallback) → severity.
 
-    Based on native platform behavior:
+    Based on native platform behavior + emulator HLE capability:
     - RetroArch (existence): required+missing = warning, optional+missing = info
-    - Batocera (md5): no required distinction — all equal (batocera-systems has no mandatory field)
-    - Recalbox (md5): mandatory+missing = critical, optional+missing = warning (Bios.cpp:109-130)
+    - Batocera (md5): no required distinction (batocera-systems has no mandatory field)
+    - Recalbox (md5): mandatory+missing = critical, optional+missing = warning
+    - hle_fallback: core works without this file via HLE → always INFO when missing
     """
     if status == Status.OK:
         return Severity.OK
+
+    # HLE fallback: core works without this file regardless of platform requirement
+    if hle_fallback and status == Status.MISSING:
+        return Severity.INFO
 
     if mode == "existence":
         if status == Status.MISSING:
@@ -170,7 +177,7 @@ def compute_severity(status: str, required: bool, mode: str) -> str:
     if status == Status.MISSING:
         return Severity.CRITICAL if required else Severity.WARNING
     if status == Status.UNTESTED:
-        return Severity.WARNING if required else Severity.WARNING
+        return Severity.WARNING
     return Severity.OK
 
 
@@ -213,6 +220,9 @@ def find_undeclared_files(
     undeclared = []
     seen = set()
     for emu_name, profile in sorted(profiles.items()):
+        # Skip launchers — they don't use system_dir for BIOS
+        if profile.get("type") == "launcher":
+            continue
         emu_systems = set(profile.get("systems", []))
         # Only check emulators whose systems overlap with this platform
         if not emu_systems & platform_systems:
@@ -240,6 +250,7 @@ def find_undeclared_files(
                 "emulator": profile.get("emulator", emu_name),
                 "name": fname,
                 "required": f.get("required", False),
+                "hle_fallback": f.get("hle_fallback", False),
                 "in_repo": in_repo,
                 "note": f.get("note", ""),
             })
@@ -267,6 +278,14 @@ def verify_platform(
     )
     zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
+    # Build HLE index from emulator profiles: {filename: True} if any core has HLE for it
+    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+    hle_index: dict[str, bool] = {}
+    for profile in profiles.values():
+        for f in profile.get("files", []):
+            if f.get("hle_fallback"):
+                hle_index[f.get("name", "")] = True
+
     # Per-entry results
     details = []
     # Per-destination aggregation
@@ -284,6 +303,7 @@ def verify_platform(
             else:
                 result = verify_entry_md5(file_entry, local_path, resolve_status)
             result["system"] = sys_id
+            result["hle_fallback"] = hle_index.get(file_entry.get("name", ""), False)
             details.append(result)
 
             # Aggregate by destination
@@ -296,7 +316,8 @@ def verify_platform(
             if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
                 file_status[dest] = cur
                 file_required[dest] = required
-            sev = compute_severity(cur, required, mode)
+            hle = hle_index.get(file_entry.get("name", ""), False)
+            sev = compute_severity(cur, required, mode, hle)
             prev_sev = file_severity.get(dest)
             if prev_sev is None or _SEVERITY_ORDER.get(sev, 0) > _SEVERITY_ORDER.get(prev_sev, 0):
                 file_severity[dest] = sev
@@ -362,8 +383,9 @@ def print_platform_result(result: dict, group: list[str]) -> None:
                 continue
             seen_details.add(key)
             req = "required" if d.get("required", True) else "optional"
+            hle = ", HLE available" if d.get("hle_fallback") else ""
             reason = d.get("reason", "")
-            print(f"  UNTESTED ({req}): {key} — {reason}")
+            print(f"  UNTESTED ({req}{hle}): {key} — {reason}")
     for d in result["details"]:
         if d["status"] == Status.MISSING:
             key = f"{d['system']}/{d['name']}"
@@ -371,7 +393,8 @@ def print_platform_result(result: dict, group: list[str]) -> None:
                 continue
             seen_details.add(key)
             req = "required" if d.get("required", True) else "optional"
-            print(f"  MISSING ({req}): {key}")
+            hle = ", HLE available" if d.get("hle_fallback") else ""
+            print(f"  MISSING ({req}{hle}): {key}")
 
     # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])
