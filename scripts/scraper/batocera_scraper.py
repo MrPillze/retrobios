@@ -9,10 +9,12 @@ Hash: MD5 primary
 from __future__ import annotations
 
 import ast
+import json
 import re
 import sys
 import urllib.request
 import urllib.error
+from pathlib import Path
 
 import yaml
 
@@ -91,6 +93,32 @@ SYSTEM_SLUG_MAP = {
     "videopac": "philips-videopac",
     "pokemini": "nintendo-pokemon-mini",
 }
+
+
+_MD5_RE = re.compile(r'^[a-fA-F0-9]+$')
+
+
+def _load_md5_index() -> dict[str, str]:
+    """Load by_md5 index from database.json for prefix resolution."""
+    db_path = Path(__file__).resolve().parents[2] / "database.json"
+    if not db_path.exists():
+        return {}
+    with open(db_path) as f:
+        db = json.load(f)
+    return db.get("indexes", {}).get("by_md5", {})
+
+
+def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
+    """Resolve a truncated MD5 to its full 32-char version via prefix match."""
+    if not md5 or len(md5) == 32:
+        return md5
+    if not _MD5_RE.match(md5):
+        return md5
+    matches = [k for k in md5_index if k.startswith(md5)]
+    if len(matches) == 1:
+        print(f"  fixed truncated md5: {md5} -> {matches[0]}", file=sys.stderr)
+        return matches[0]
+    return md5
 
 
 class Scraper(BaseScraper):
@@ -204,6 +232,7 @@ class Scraper(BaseScraper):
 
         systems = self._extract_systems_dict(raw)
         requirements = []
+        md5_index = _load_md5_index()
 
         for sys_key, sys_data in systems.items():
             system_slug = SYSTEM_SLUG_MAP.get(sys_key, sys_key)
@@ -211,7 +240,7 @@ class Scraper(BaseScraper):
 
             for bios in bios_files:
                 file_path = bios.get("file", "")
-                md5 = bios.get("md5", "")
+                md5 = _resolve_truncated_md5(bios.get("md5", ""), md5_index)
                 zipped_file = bios.get("zippedFile", "")
 
                 if file_path.startswith("bios/"):

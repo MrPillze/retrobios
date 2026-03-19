@@ -3184,7 +3184,7 @@ systems:
     - name: zx48.rom
       destination: zx48.rom
       required: true
-      md5: 4c42a2f075212361c3117015b107f
+      md5: 4c42a2f075212361c3117015b107ff68
     - name: ep64.zip
       destination: ep64.zip
       required: true
