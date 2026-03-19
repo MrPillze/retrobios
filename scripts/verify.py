@@ -228,10 +228,6 @@ def find_undeclared_files(
         if not emu_systems & platform_systems:
             continue
 
-        # Skip if emulator's data_directories cover the files
-        emu_dd = {dd.get("ref", "") for dd in profile.get("data_directories", [])}
-        covered_by_dd = bool(emu_dd & declared_dd)
-
         for f in profile.get("files", []):
             fname = f.get("name", "")
             if not fname or fname in seen:
@@ -240,8 +236,6 @@ def find_undeclared_files(
             if f.get("mode") == "standalone":
                 continue
             if fname in declared_names:
-                continue
-            if covered_by_dd:
                 continue
 
             in_repo = fname in by_name or fname.rsplit("/", 1)[-1] in by_name
@@ -381,6 +375,11 @@ def verify_platform(
     for s in file_severity.values():
         counts[s] = counts.get(s, 0) + 1
 
+    # Count by file status (ok/untested/missing)
+    status_counts: dict[str, int] = {}
+    for s in file_status.values():
+        status_counts[s] = status_counts.get(s, 0) + 1
+
     # Cross-reference undeclared files
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
     exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles)
@@ -390,6 +389,7 @@ def verify_platform(
         "verification_mode": mode,
         "total_files": len(file_status),
         "severity_counts": counts,
+        "status_counts": status_counts,
         "undeclared_files": undeclared,
         "exclusion_notes": exclusions,
         "details": details,

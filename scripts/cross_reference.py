@@ -93,15 +93,6 @@ def cross_reference(
         for sys_id in systems:
             platform_names.update(declared.get(sys_id, set()))
 
-        # data_directories: check if the emulator's data_dir refs are provided
-        # by ANY platform for ANY system (not limited to matching system IDs,
-        # since emulator profiles and platforms use different ID conventions)
-        all_plat_dd_refs = set()
-        for dd_set in platform_data_dirs.values():
-            all_plat_dd_refs.update(dd_set)
-        emu_dd_refs = {dd.get("ref", "") for dd in profile.get("data_directories", [])}
-        covered_dd = emu_dd_refs & all_plat_dd_refs
-
         gaps = []
         covered = []
         for f in emu_files:
@@ -117,9 +108,6 @@ def cross_reference(
                 continue
 
             in_platform = fname in platform_names
-            # files covered by shared data_directories are effectively in the platform pack
-            if not in_platform and covered_dd:
-                in_platform = True
             in_repo = _find_in_repo(fname, by_name, by_name_lower)
 
             entry = {

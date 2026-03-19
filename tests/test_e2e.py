@@ -471,13 +471,13 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         self.assertNotIn("test_alias", profiles)
 
-    def test_43_cross_ref_data_dir_suppresses_gaps(self):
+    def test_43_cross_ref_data_dir_does_not_suppress_files(self):
         config = load_platform_config("test_md5", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
         names = {u["name"] for u in undeclared}
-        # dd_covered.bin from TestEmuDD should NOT appear (data_dir match)
-        self.assertNotIn("dd_covered.bin", names)
+        # dd_covered.bin is a file entry, not data_dir content — still undeclared
+        self.assertIn("dd_covered.bin", names)
 
     def test_44_cross_ref_skips_launchers(self):
         config = load_platform_config("test_existence", self.platforms_dir)

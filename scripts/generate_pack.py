@@ -54,7 +54,8 @@ def _verify_file_hash(path: str, expected_sha1: str = "",
     hashes = compute_hashes(path)
     if expected_sha1:
         return hashes["sha1"] == expected_sha1
-    return hashes["md5"] == expected_md5
+    md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+    return hashes["md5"].lower() in md5_list
 
 
 def fetch_large_file(name: str, dest_dir: str = ".cache/large",
@@ -94,7 +95,7 @@ def fetch_large_file(name: str, dest_dir: str = ".cache/large",
 def _sanitize_path(raw: str) -> str:
     """Strip path traversal components from a relative path."""
     raw = raw.replace("\\", "/")
-    parts = [p for p in raw.split("/") if p and p != ".."]
+    parts = [p for p in raw.split("/") if p and p not in ("..", ".")]
     return "/".join(parts)
 
 
@@ -299,9 +300,12 @@ def generate_pack(
                                 _extract_zip_to_archive(tmp_path, full_dest, zf)
                             else:
                                 zf.write(tmp_path, full_dest)
+                            seen_destinations.add(dedup_key)
+                            file_status.setdefault(dedup_key, "ok")
                             total_files += 1
                         else:
                             missing_files.append(file_entry["name"])
+                            file_status[dedup_key] = "missing"
                     finally:
                         if os.path.exists(tmp_path):
                             os.unlink(tmp_path)
@@ -316,16 +320,26 @@ def generate_pack(
                 if status == "hash_mismatch" and verification_mode != "existence":
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
-                        inner_md5 = file_entry.get("md5", "")
-                        inner_result = check_inside_zip(local_path, zf_name, inner_md5)
-                        if inner_result == "ok":
+                        inner_md5_raw = file_entry.get("md5", "")
+                        inner_md5_list = (
+                            [m.strip() for m in inner_md5_raw.split(",") if m.strip()]
+                            if inner_md5_raw else [""]
+                        )
+                        zip_ok = False
+                        last_result = "not_in_zip"
+                        for md5_candidate in inner_md5_list:
+                            last_result = check_inside_zip(local_path, zf_name, md5_candidate)
+                            if last_result == "ok":
+                                zip_ok = True
+                                break
+                        if zip_ok:
                             file_status.setdefault(dedup_key, "ok")
-                        elif inner_result == "not_in_zip":
+                        elif last_result == "not_in_zip":
                             file_status[dedup_key] = "untested"
                             file_reasons[dedup_key] = f"{zf_name} not found inside ZIP"
-                        elif inner_result == "error":
+                        elif last_result == "error":
                             file_status[dedup_key] = "untested"
-                            file_reasons[dedup_key] = f"cannot read ZIP"
+                            file_reasons[dedup_key] = "cannot read ZIP"
                         else:
                             file_status[dedup_key] = "untested"
                             file_reasons[dedup_key] = f"{zf_name} MD5 mismatch inside ZIP"

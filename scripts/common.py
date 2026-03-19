@@ -58,19 +58,28 @@ def md5sum(source: str | Path | object) -> str:
     return h.hexdigest()
 
 
+_md5_composite_cache: dict[str, str] = {}
+
+
 def md5_composite(filepath: str | Path) -> str:
     """Compute composite MD5 of a ZIP - matches Recalbox's Zip::Md5Composite().
 
     Sorts filenames alphabetically, reads each file's contents in order,
     feeds everything into a single MD5 hasher. The result is independent
-    of ZIP compression level or metadata.
+    of ZIP compression level or metadata. Results are cached per path.
     """
+    key = str(filepath)
+    cached = _md5_composite_cache.get(key)
+    if cached is not None:
+        return cached
     with zipfile.ZipFile(filepath) as zf:
         names = sorted(n for n in zf.namelist() if not n.endswith("/"))
         h = hashlib.md5()
         for name in names:
             h.update(zf.read(name))
-        return h.hexdigest()
+        result = h.hexdigest()
+    _md5_composite_cache[key] = result
+    return result
 
 
 def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -> dict:

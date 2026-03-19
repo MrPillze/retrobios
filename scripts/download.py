@@ -233,7 +233,8 @@ Examples:
         sys.exit(1)
 
     import tempfile
-    zip_path = os.path.join(tempfile.gettempdir(), asset["name"])
+    fd, zip_path = tempfile.mkstemp(suffix=".zip")
+    os.close(fd)
 
     print(f"Downloading {asset['name']} ({asset['size']:,} bytes)...")
     download_file(asset["browser_download_url"], zip_path, asset["size"])

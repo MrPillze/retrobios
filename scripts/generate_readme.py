@@ -24,14 +24,19 @@ from verify import verify_platform
 def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
     config = load_platform_config(platform_name, platforms_dir)
     result = verify_platform(config, db)
-    present = result["ok"] + result["untested"]
-    pct = (present / result["total"] * 100) if result["total"] > 0 else 0
+    sc = result.get("status_counts", {})
+    ok = sc.get("ok", 0)
+    untested = sc.get("untested", 0)
+    missing = sc.get("missing", 0)
+    total = result["total_files"]
+    present = ok + untested
+    pct = (present / total * 100) if total > 0 else 0
     return {
         "platform": config.get("platform", platform_name),
-        "total": result["total"],
-        "verified": result["ok"],
-        "untested": result["untested"],
-        "missing": result["missing"],
+        "total": total,
+        "verified": ok,
+        "untested": untested,
+        "missing": missing,
         "present": present,
         "percentage": pct,
         "mode": config.get("verification_mode", "existence"),

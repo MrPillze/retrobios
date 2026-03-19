@@ -120,7 +120,8 @@ def _is_safe_tar_member(member: tarfile.TarInfo, dest: Path) -> bool:
     if member.name.startswith("/") or ".." in member.name.split("/"):
         return False
     resolved = (dest / member.name).resolve()
-    if not str(resolved).startswith(str(dest.resolve())):
+    dest_str = str(dest.resolve()) + os.sep
+    if not str(resolved).startswith(dest_str) and str(resolved) != str(dest.resolve()):
         return False
     return True
 
