@@ -53,7 +53,7 @@ def _verify_file_hash(path: str, expected_sha1: str = "",
         return True
     hashes = compute_hashes(path)
     if expected_sha1:
-        return hashes["sha1"] == expected_sha1
+        return hashes["sha1"].lower() == expected_sha1.lower()
     md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
     return hashes["md5"].lower() in md5_list
 

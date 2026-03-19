@@ -81,8 +81,10 @@ def find_missing(config: dict, db: dict) -> list[dict]:
             found = False
             if sha1 and sha1 in db.get("files", {}):
                 found = True
-            elif md5 and md5 in db.get("indexes", {}).get("by_md5", {}):
-                found = True
+            elif md5:
+                by_md5 = db.get("indexes", {}).get("by_md5", {})
+                md5_list = [m.strip() for m in md5.split(",") if m.strip()]
+                found = any(m in by_md5 for m in md5_list)
 
             if not found:
                 missing.append({

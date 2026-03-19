@@ -421,8 +421,9 @@ def print_platform_result(result: dict, group: list[str]) -> None:
         else:
             parts = [f"{ok_count}/{total} present"]
     else:
-        untested = c.get(Severity.WARNING, 0)
-        missing = c.get(Severity.CRITICAL, 0)
+        sc = result.get("status_counts", {})
+        untested = sc.get(Status.UNTESTED, 0)
+        missing = sc.get(Status.MISSING, 0)
         parts = [f"{ok_count}/{total} OK"]
         if untested:
             parts.append(f"{untested} untested")

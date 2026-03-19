@@ -1,8 +1,55 @@
-emulator: "fbalpha2012_cps3"
-type: alias
-alias_of: "fbneo"
-profiled_date: "2026-03-18"
+emulator: "FB Alpha 2012 CPS-3"
+type: frozen_snapshot
+source: "https://github.com/libretro/fbalpha2012_cps3"
+upstream: "https://www.fbalpha.com"
+profiled_date: "2026-03-19"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012 CPS-3)"
-note: "This core uses the same BIOS/firmware as fbneo. See emulators/fbneo.yml for details."
+cores:
+  - fbalpha2012_cps3
+systems:
+  - cps3
+
+notes: |
+  Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), CPS-3 only.
+  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
+  Exists for RAM-constrained platforms. Most users should use FBNeo.
+
+  CPS-3 uses a Hitachi SH-2 CPU with per-game, per-region BIOS ROMs.
+  Each BIOS is a 512 KB (0x080000) 29F400 flash chip dump, region-locked.
+  BIOS ROMs are marked BRF_ESS | BRF_BIOS in the ROM definitions.
+
+  BIOS is loaded into RomBios (cps3run.cpp:1048-1064), byte-swapped to
+  little-endian, then decrypted via cps3_decrypt_bios() (cps3run.cpp:255).
+  The SH-2 boots from BIOS, which initializes hardware and loads the game
+  program from simulated flash/CD-ROM.
+
+  BIOS files are INSIDE the game ROM set ZIP (arcade standard), not separate
+  system directory files. Each game variant has its own region BIOS.
+
+  Unique BIOS ROMs across all ROM sets (CRC32 from source):
+    sfiii_usa.29f400.u2           0xfb172a8e  SF3: New Generation (USA)
+    sfiii_japan.29f400.u2         0x74205250  SF3: New Generation (Japan)
+    sfiii_hispanic.29f400.u2      0xd2b3cd48  SF3: New Generation (Hispanic)
+    sfiii_asia_nocd.29f400.u2     0x73e32463  SF3: New Generation (Asia NoCD)
+    sfiii2_usa.29f400.u2          0x75dd72e0  SF3: 2nd Impact (USA)
+    sfiii2_japan.29f400.u2        0xfaea0a3e  SF3: 2nd Impact (Japan)
+    sfiii2_asia_nocd.29f400.u2    0xfd297c0d  SF3: 2nd Impact (Asia NoCD)
+    sfiii3_euro.29f400.u2         0x30bbf293  SF3: 3rd Strike (Euro)
+    sfiii3_usa.29f400.u2          0xecc545c1  SF3: 3rd Strike (USA)
+    sfiii3_japan_nocd.29f400.u2   0x1edc6366  SF3: 3rd Strike (Japan NoCD)
+    jojo_usa.29f400.u2            0x8d40f7be  JoJo's Venture (USA)
+    jojo_japan.29f400.u2          0x02778f60  JoJo's Venture (Japan)
+    jojo_asia_nocd.29f400.u2      0x05b4f953  JoJo's Venture (Asia NoCD)
+    jojoba_japan.29f400.u2        0x3085478c  JoJo's Bizarre Adventure (Japan)
+    jojoba_japan_nocd.29f400.u2   0x4dab19f5  JoJo's Bizarre Adventure (Japan NoCD)
+    jojoba_euro_nocd.29f400.u2    0x1ee2d679  JoJo's Bizarre Adventure (Euro NoCD)
+    redearth_euro.29f400.u2       0x02e0f336  Red Earth (Euro)
+    warzard_japan.29f400.u2       0xf8e2f0c6  Warzard (Japan)
+
+  18 unique BIOS ROMs, all 512 KB, all region-specific.
+  These are arcade ROM set components, not user-supplied BIOS files.
+
 files: []
+
+exclusion_note: "CPS-3 BIOS ROMs (SH-2 flash, 18 variants) are part of each game's ROM set ZIP archive, not standalone system files. Users obtain them as part of the arcade ROM set, not separately."

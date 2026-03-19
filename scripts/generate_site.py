@@ -797,7 +797,7 @@ def main():
     # Replace nav section (everything from \nnav: to the next top-level key or EOF)
     import re
     if "\nnav:" in content:
-        content = re.sub(r'\nnav:.*', '\n' + nav_yaml.rstrip(), content, count=1, flags=re.DOTALL)
+        content = re.sub(r'\nnav:\n(?:[ \t]+.*\n?)*', '\n' + nav_yaml, content, count=1)
     else:
         content += "\n" + nav_yaml
     with open("mkdocs.yml", "w") as f:

@@ -1,8 +1,59 @@
-emulator: "fbalpha2012_neogeo"
-type: alias
-alias_of: "fbneo"
-profiled_date: "2026-03-18"
+emulator: "FB Alpha 2012 Neo Geo"
+type: frozen_snapshot
+source: "https://github.com/libretro/fbalpha2012_neogeo"
+upstream: "https://www.fbalpha.com"
+profiled_date: "2026-03-19"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012 Neo Geo)"
-note: "This core uses the same BIOS/firmware as fbneo. See emulators/fbneo.yml for details."
+cores:
+  - fbalpha2012_neogeo
+systems:
+  - neogeo
+
+notes: |
+  Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), Neo Geo only.
+  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
+  Exists for RAM-constrained platforms. Most users should use FBNeo.
+
+  Neo Geo requires a BIOS ROM set (neogeo.zip) placed alongside game ROMs.
+  The BIOS set contains ~35 variants (d_neogeo.cpp:903-968), all BRF_BIOS:
+
+  68K main BIOS (BRF_SELECT, one active at a time):
+    asia-s3.rom       0x91b64be3  MVS Asia/Europe ver. 6 (default)
+    sp-s2.sp1         0x9036d879  MVS Asia/Europe ver. 5
+    sp-s.sp1          0xc7f2fa45  MVS Asia/Europe ver. 3 (4 slot)
+    sp-u2.sp1         0xe72943de  MVS USA ver. 5 (2 slot)
+    sp-e.sp1          0x2723a5b5  MVS USA ver. 5 (6 slot)
+    vs-bios.rom       0xf0e8f27d  MVS Japan ver. 6
+    sp-j2.sp1         0xacede59c  MVS Japan ver. 5
+    sp1.jipan.1024    0x9fb0abe4  MVS Japan ver. 3 (4 slot)
+    sp-45.sp1         0x03cc9f6a  NEO-MVH MV1C (512 KB)
+    japan-j3.bin      0xdff6d41f  MVS Japan (J3)
+    neo-po.bin        0x16d0c132  AES Japan
+    neo-epo.bin       0xd27a71f1  AES Asia
+    neodebug.bin      0x698ebb7d  Development Kit
+    sp-1v1_3db8c.bin  0x162f0ebe  Deck ver. 6 (Git Ver 1.3)
+    uni-bios_4_0.rom  0xa7aab458  Universe BIOS 4.0
+    (+ Universe BIOS 1.0-3.3, 15 versions)
+    neopen.sp1        0xcb915e76  NeoOpen BIOS v0.1 beta
+
+  System ROMs (always required):
+    sm1.sm1           0x94416d67  Z80 BIOS (sound program)
+    sfix.sfix         0xc2ea0cfd  Text layer tiles (fix layer)
+    000-lo.lo         0x5a86cff2  Zoom table
+
+  Special sets:
+    236-bios.sp1      0x853e6b96  Trackball BIOS
+    sp-4x.sp1         0xb4590283  PCB BIOS
+    spj.sp1           0x148dd727  PCB BIOS (Japan)
+    neocd.bin          0xdf9de490  Neo Geo CD BIOS
+
+  neogeo.zip is a parent ROM set, loaded from g_rom_dir alongside game ZIPs.
+  g_system_dir is set (libretro.cpp:3016) but never used for file loading.
+
+  The .info note "BIOS files must be inside the ROM directory" is accurate here:
+  neogeo.zip must be in the same directory as game ROM ZIPs.
+
 files: []
+
+exclusion_note: "Neo Geo BIOS is a parent ROM set (neogeo.zip) placed in the ROM directory alongside game ZIPs. Not a system directory file — follows arcade ROM set convention."

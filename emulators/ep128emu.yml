@@ -135,12 +135,14 @@ files:
 
   - name: exdos14isdos10uk.rom
     path: ep128emu/roms/exdos14isdos10uk.rom
+    md5: f91c4a507cc6895bdd9c43df4f021df3
     required: false
     hle_fallback: true
     system: enterprise-128
     has_builtin: true
+    size: 32768
     note: "EXDOS 1.4 + IS-DOS 1.0 (UK). Used for IS-DOS disk mode instead of exdos13.rom."
-    source_ref: "core/core.cpp:295-298"
+    source_ref: "core/core.cpp:253, roms/roms.hpp:30104 (built-in data, MD5 verified)"
 
   # ============================================================
   # Enterprise 64/128 - file I/O and extensions
@@ -183,12 +185,14 @@ files:
 
   - name: epdos16f.rom
     path: ep128emu/roms/epdos16f.rom
+    md5: 6593dff00ab32a4b1fc084674ededf2b
     required: false
     hle_fallback: true
     system: enterprise-128
     has_builtin: true
+    size: 32768
     note: "EP-DOS 1.6f. Provides HFONT and CLKOFF for Hungarian locale. 32K across segments 0x06-0x07."
-    source_ref: "core/core.cpp:252-255"
+    source_ref: "core/core.cpp:236-237, roms/roms.hpp:43780 (built-in data, MD5 verified)"
 
   - name: brd.rom
     path: ep128emu/roms/brd.rom
@@ -200,25 +204,9 @@ files:
     note: "German (BRD) language extension. Auto-loaded when content locale is German."
     source_ref: "core/core.cpp:260-261"
 
-  # ============================================================
-  # Enterprise 64/128 - optional extras (in .info, not in source)
-  # ============================================================
-
-  - name: epd19hft.rom
-    path: ep128emu/roms/epd19hft.rom
-    md5: 12cfc9c7e48c8a16c2e09edbd926d467
-    required: false
-    system: enterprise-128
-    note: "EP-DOS 1.9 with Hungarian font. Listed in .info file as optional firmware."
-    source_ref: "ep128emu_core_libretro.info:firmware8"
-
-  - name: zt19hfnt.rom
-    path: ep128emu/roms/zt19hfnt.rom
-    md5: 653daaf7b9b29c2c4e577f489580f247
-    required: false
-    system: enterprise-128
-    note: "ZozoTools 1.9 with Hungarian font. Listed in .info file as optional firmware."
-    source_ref: "ep128emu_core_libretro.info:firmware9"
+  # epd19hft.rom and zt19hfnt.rom: listed in .info (firmware8, firmware9) but
+  # NOT referenced in core source code and NOT in builtin_rom map (roms.hpp:46516-46538).
+  # The core never loads these files. Excluded from profile to avoid misleading users.
 
   # ============================================================
   # Videoton TVC

@@ -21,13 +21,15 @@ import json
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 
 def run(cmd: list[str], label: str) -> tuple[bool, str]:
     """Run a command. Returns (success, captured_output)."""
     print(f"\n--- {label} ---", flush=True)
     start = time.monotonic()
-    result = subprocess.run(cmd, capture_output=True, text=True, cwd=".")
+    repo_root = str(Path(__file__).resolve().parent.parent)
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=repo_root)
     elapsed = time.monotonic() - start
 
     output = result.stdout

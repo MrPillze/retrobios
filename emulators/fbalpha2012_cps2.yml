@@ -1,8 +1,42 @@
-emulator: "fbalpha2012_cps2"
-type: alias
-alias_of: "fbneo"
-profiled_date: "2026-03-18"
+emulator: "FB Alpha 2012 CPS-2"
+type: frozen_snapshot
+source: "https://github.com/libretro/fbalpha2012_cps2"
+upstream: "https://www.fbalpha.com"
+profiled_date: "2026-03-19"
 core_version: "v0.2.97.28"
 display_name: "Arcade (FB Alpha 2012 CPS-2)"
-note: "This core uses the same BIOS/firmware as fbneo. See emulators/fbneo.yml for details."
+cores:
+  - fbalpha2012_cps2
+systems:
+  - cps2
+
+notes: |
+  Frozen snapshot of Final Burn Alpha v0.2.97.28 (circa 2012), CPS-2 only.
+  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
+  Exists for RAM-constrained platforms (3DS, embedded). Most users should use FBNeo.
+
+  CPS-2 has no system BIOS. Each game's ROM set is self-contained:
+  68000 program ROMs + Z80 sound program + GFX ROMs + QSound samples.
+
+  QSound is emulated in software (qs_c.c:QscInit, panning table + DSP emulation).
+  No external QSound DSP ROM (dl-1425.bin) needed — unlike MAME, FBA emulates
+  the QSound chip directly without requiring the DSP program ROM.
+
+  Z80 sound program loaded from game ROM set into CpsZRom buffer (cps.c:451,
+  BurnLoadRom). QSound samples loaded into CpsQSam. All from the game ZIP.
+
+  Board PLDs (buf1, ioa1, prg2, rom1) referenced via A_BOARD_QSOUND_PLDS
+  macro, all marked BRF_OPT. GAL/PAL dumps for hardware preservation only.
+  Zero BRF_BIOS entries in entire codebase.
+
+  ROM path: ROMs loaded from content directory (g_rom_dir, libretro.cpp).
+  g_system_dir is set (line 988) but never used for any file loading.
+
+  The .info note "BIOS files must be inside the ROM directory" is misleading —
+  there are no BIOS files for CPS-2. Generic note across all FBA cores.
+
+  need_fullpath=true, block_extract=true, extensions=zip.
+
 files: []
+
+exclusion_note: "CPS-2 arcade hardware has no system BIOS. QSound DSP emulated in software (qs_c.c). Each game ROM set is self-contained."

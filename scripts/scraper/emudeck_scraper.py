@@ -227,8 +227,10 @@ class Scraper(BaseScraper):
                 continue
             system = FUNCTION_HASH_MAP[func_name]
             func_start = func_match.start()
-            remaining = script[func_start:]
-            local_match = _RE_LOCAL_HASHES.search(remaining)
+            next_func = _RE_FUNC.search(script, func_match.end())
+            func_end = next_func.start() if next_func else len(script)
+            func_body = script[func_start:func_end]
+            local_match = _RE_LOCAL_HASHES.search(func_body)
             if local_match:
                 hashes_raw = local_match.group(1)
                 hashes = [h.strip() for h in hashes_raw.split() if h.strip()]

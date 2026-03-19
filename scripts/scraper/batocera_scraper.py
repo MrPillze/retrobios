@@ -101,14 +101,26 @@ class Scraper(BaseScraper):
         start = match.start() + raw[match.start():].index("{")
         depth = 0
         i = start
+        in_str = False
+        str_ch = None
         while i < len(raw):
-            if raw[i] == "{":
+            ch = raw[i]
+            if in_str:
+                if ch == '\\':
+                    i += 2
+                    continue
+                if ch == str_ch:
+                    in_str = False
+            elif ch in ('"', "'"):
+                in_str = True
+                str_ch = ch
+            elif ch == "{":
                 depth += 1
-            elif raw[i] == "}":
+            elif ch == "}":
                 depth -= 1
                 if depth == 0:
                     break
-            elif raw[i] == "#":
+            elif ch == "#":
                 while i < len(raw) and raw[i] != "\n":
                     i += 1
             i += 1
@@ -120,10 +132,15 @@ class Scraper(BaseScraper):
             in_string = False
             string_char = None
             clean = []
-            for j, ch in enumerate(line):
-                if ch in ('"', "'") and j > 0 and line[j - 1] == '\\':
+            j = 0
+            while j < len(line):
+                ch = line[j]
+                if ch == '\\' and j + 1 < len(line):
                     clean.append(ch)
-                elif ch in ('"', "'") and not in_string:
+                    clean.append(line[j + 1])
+                    j += 2
+                    continue
+                if ch in ('"', "'") and not in_string:
                     in_string = True
                     string_char = ch
                     clean.append(ch)
@@ -134,6 +151,7 @@ class Scraper(BaseScraper):
                     break
                 else:
                     clean.append(ch)
+                j += 1
             lines.append("".join(clean))
 
         clean_dict_str = "\n".join(lines)

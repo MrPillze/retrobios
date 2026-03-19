@@ -174,14 +174,17 @@ def validate_file(
     else:
         result.add_warning("File not referenced in any platform config - needs manual review")
 
-    if filepath.startswith("bios/"):
-        parts = filepath.split("/")
+    normalized = os.path.normpath(filepath)
+    if os.path.islink(filepath):
+        result.add_check(False, "Symlinks are not allowed")
+    elif normalized.startswith("bios" + os.sep):
+        parts = normalized.split(os.sep)
         if len(parts) >= 4:
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
         else:
             result.add_warning("File should be in bios/Manufacturer/Console/ structure")
     else:
-        result.add_warning(f"File is not under bios/ directory")
+        result.add_warning("File is not under bios/ directory")
 
     if name_known and not sha1_known and not md5_known:
         result.add_info(
