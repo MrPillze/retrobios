@@ -41,6 +41,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.04"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     source_ref: "midi_mt32.cpp:55"
@@ -48,6 +49,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     source_ref: "midi_mt32.cpp:55"
@@ -55,6 +57,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     source_ref: "midi_mt32.cpp:55"
@@ -62,6 +65,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     source_ref: "midi_mt32.cpp:55, dosbox_core_libretro.info:firmware0"
@@ -70,6 +74,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     source_ref: "midi_mt32.cpp:55"
@@ -79,6 +84,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.03 (new MT-32)"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     source_ref: "midi_mt32.cpp:55"
@@ -86,6 +92,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.04"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     source_ref: "midi_mt32.cpp:55"
@@ -93,6 +100,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.06"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     source_ref: "midi_mt32.cpp:55"
@@ -100,6 +108,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.07"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     source_ref: "midi_mt32.cpp:55"
@@ -110,6 +119,7 @@ files:
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.00"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     source_ref: "midi_mt32.cpp:53"
@@ -117,6 +127,7 @@ files:
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     source_ref: "midi_mt32.cpp:53, dosbox_core_libretro.info:firmware2"
@@ -127,6 +138,7 @@ files:
   - name: "MT32_PCM.ROM"
     description: "MT-32 PCM ROM"
     required: false
+    hle_fallback: true
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     source_ref: "midi_mt32.cpp:66, dosbox_core_libretro.info:firmware1"
@@ -135,6 +147,7 @@ files:
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
     required: false
+    hle_fallback: true
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     source_ref: "midi_mt32.cpp:64, dosbox_core_libretro.info:firmware3"
@@ -148,6 +161,7 @@ files:
   - name: "CM32LN_CONTROL.ROM"
     description: "CM-32LN/CM-500/LAPC-N Control v1.00"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     mode: standalone
@@ -162,6 +176,7 @@ files:
   - name: "MT-32 Control v1.04 half A"
     description: "MT-32 Control v1.04 split (Mux0)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
     mode: standalone
@@ -170,6 +185,7 @@ files:
   - name: "MT-32 Control v1.04 half B"
     description: "MT-32 Control v1.04 split (Mux1)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
     mode: standalone
@@ -178,6 +194,7 @@ files:
   - name: "MT-32 Control v1.05 half A"
     description: "MT-32 Control v1.05 split (Mux0)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
     mode: standalone
@@ -186,6 +203,7 @@ files:
   - name: "MT-32 Control v1.05 half B"
     description: "MT-32 Control v1.05 split (Mux1)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
     mode: standalone
@@ -194,6 +212,7 @@ files:
   - name: "MT-32 Control v1.06 half A"
     description: "MT-32 Control v1.06 split (Mux0)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
     mode: standalone
@@ -202,6 +221,7 @@ files:
   - name: "MT-32 Control v1.06 half B"
     description: "MT-32 Control v1.06 split (Mux1)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "bf4f15666bc46679579498386704893b630c1171"
     mode: standalone
@@ -210,6 +230,7 @@ files:
   - name: "MT-32 Control v1.07 half A"
     description: "MT-32 Control v1.07 split (Mux0)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
     mode: standalone
@@ -218,6 +239,7 @@ files:
   - name: "MT-32 Control v1.07 half B"
     description: "MT-32 Control v1.07 split (Mux1)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
     mode: standalone
@@ -226,6 +248,7 @@ files:
   - name: "MT-32 Control BlueRidge half A"
     description: "MT-32 Control BlueRidge split (Mux0)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
     mode: standalone
@@ -234,6 +257,7 @@ files:
   - name: "MT-32 Control BlueRidge half B"
     description: "MT-32 Control BlueRidge split (Mux1)"
     required: false
+    hle_fallback: true
     size: 32768
     sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
     mode: standalone
@@ -242,6 +266,7 @@ files:
   - name: "MT-32 PCM ROM low half"
     description: "MT-32 PCM ROM first half (262144 bytes)"
     required: false
+    hle_fallback: true
     size: 262144
     sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
     mode: standalone
@@ -250,6 +275,7 @@ files:
   - name: "MT-32 PCM ROM high half"
     description: "MT-32 PCM ROM second half (262144 bytes)"
     required: false
+    hle_fallback: true
     size: 262144
     sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
     mode: standalone
@@ -258,6 +284,7 @@ files:
   - name: "CM-32L PCM ROM high half"
     description: "CM-32L/CM-64/LAPC-I PCM upper half (524288 bytes)"
     required: false
+    hle_fallback: true
     size: 524288
     sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
     mode: standalone
@@ -271,36 +298,42 @@ files:
   - name: "libbass.so"
     description: "BASS audio library (Linux)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:238, dosbox_core_libretro.info:firmware4"
     notes: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbassmidi.so"
     description: "BASSMIDI addon library (Linux)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:239, dosbox_core_libretro.info:firmware5"
     notes: "proprietary library from un4seen.com, not a ROM"
 
   - name: "bass.dll"
     description: "BASS audio library (Windows)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:232, dosbox_core_libretro.info:firmware6"
     notes: "proprietary library from un4seen.com, not a ROM"
 
   - name: "bassmidi.dll"
     description: "BASSMIDI addon library (Windows)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:233, dosbox_core_libretro.info:firmware7"
     notes: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbass.dylib"
     description: "BASS audio library (macOS)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:235, dosbox_core_libretro.info:firmware8"
     notes: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbassmidi.dylib"
     description: "BASSMIDI addon library (macOS)"
     required: false
+    hle_fallback: true
     source_ref: "midi_bassmidi.cpp:236, dosbox_core_libretro.info:firmware9"
     notes: "proprietary library from un4seen.com, not a ROM"
 

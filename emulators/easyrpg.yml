@@ -67,6 +67,7 @@ files:
   - name: "easyrpg.soundfont"
     path: "easyrpg.soundfont"
     required: false
+    hle_fallback: true
     source_ref: "decoder_fluidsynth.cpp:125, scene_logo.cpp:261"
     note: >
       General MIDI soundfont (SF2 format) for MIDI music playback. Many RPG
@@ -82,6 +83,7 @@ files:
   - name: "wildmidi.cfg"
     path: "wildmidi.cfg"
     required: false
+    hle_fallback: true
     source_ref: "decoder_wildmidi.cpp:103-104"
     note: >
       WildMidi configuration file pointing to GUS patch sets for MIDI
@@ -96,6 +98,7 @@ files:
   - name: "RPG Maker 2000 RTP"
     path: "rtp/2000/"
     required: false
+    hle_fallback: true
     type: directory
     source_ref: "filefinder_rtp.cpp:73-74"
     note: >
@@ -114,6 +117,7 @@ files:
   - name: "RPG Maker 2003 RTP"
     path: "rtp/2003/"
     required: false
+    hle_fallback: true
     type: directory
     source_ref: "filefinder_rtp.cpp:73-74"
     note: >

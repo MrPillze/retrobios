@@ -42,6 +42,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.04"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     source_ref: "mt32emu.h:5112,5129"
@@ -49,6 +50,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     source_ref: "mt32emu.h:5113,5130"
@@ -56,6 +58,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     source_ref: "mt32emu.h:5114,5131"
@@ -63,6 +66,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     source_ref: "mt32emu.h:5115,5132"
@@ -70,6 +74,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     source_ref: "mt32emu.h:5116,5133"
@@ -79,6 +84,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.03 (new MT-32)"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     source_ref: "mt32emu.h:5118,5135"
@@ -86,6 +92,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.04"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     source_ref: "mt32emu.h:5119,5136"
@@ -93,6 +100,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.06"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     source_ref: "mt32emu.h:5120,5137"
@@ -100,6 +108,7 @@ files:
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.07"
     required: false
+    hle_fallback: true
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     source_ref: "mt32emu.h:5121,5138"
@@ -109,6 +118,7 @@ files:
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.00"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     source_ref: "mt32emu.h:5122,5139"
@@ -116,6 +126,7 @@ files:
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     source_ref: "mt32emu.h:5123,5140"
@@ -125,6 +136,7 @@ files:
   - name: "CM32LN_CONTROL.ROM"
     description: "CM-32LN/CM-500/LAPC-N Control v1.00"
     required: false
+    hle_fallback: true
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     source_ref: "mt32emu.h:5124,5141"
@@ -134,6 +146,7 @@ files:
   - name: "MT32_PCM.ROM"
     description: "MT-32 PCM ROM"
     required: false
+    hle_fallback: true
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     source_ref: "mt32emu.h:5126,5143"
@@ -142,6 +155,7 @@ files:
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
     required: false
+    hle_fallback: true
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     source_ref: "mt32emu.h:5127,5144"
@@ -152,6 +166,7 @@ files:
   - name: "DOSBOX.SF2"
     description: "General MIDI SoundFont (any .sf2/.sf3 accepted)"
     required: false
+    hle_fallback: true
     source_ref: "dosbox_pure_libretro.cpp:1375,2760"
     notes: >
       Any .SF2 or .SF3 file in the system directory works. The core lists all

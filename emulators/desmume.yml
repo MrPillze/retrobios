@@ -24,6 +24,7 @@ files:
     system: nintendo-ds
     description: "ARM7 BIOS"
     required: false
+    hle_fallback: true
     size: 16384
     source_ref: "desmume/src/NDSSystem.cpp:2178-2182, frontend/libretro/libretro.cpp:763"
     notes: "HLE fallback covers all SWI calls; native file needed for firmware boot and SWI-from-BIOS accuracy"
@@ -32,6 +33,7 @@ files:
     system: nintendo-ds
     description: "ARM9 BIOS"
     required: false
+    hle_fallback: true
     size: 4096
     source_ref: "desmume/src/NDSSystem.cpp:2236-2239, frontend/libretro/libretro.cpp:764"
     notes: "HLE fallback covers all SWI calls; native file needed for firmware boot and logo comparison (Pal Park)"
@@ -40,5 +42,6 @@ files:
     system: nintendo-ds
     description: "NDS firmware image"
     required: false
+    hle_fallback: true
     source_ref: "desmume/src/NDSSystem.cpp:2653-2655, frontend/libretro/libretro.cpp:765"
     notes: "Dummy firmware generated when absent; native firmware needed for boot animation, wifi config, user settings"

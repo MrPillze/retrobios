@@ -32,6 +32,7 @@ files:
   - name: dmg_boot.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     mode: standalone
     size: 256
     note: "Original Nintendo DMG boot ROM"
@@ -40,6 +41,7 @@ files:
   - name: sgb_boot.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     mode: standalone
     size: 256
     note: "Super Game Boy boot ROM"
@@ -48,6 +50,7 @@ files:
   - name: dmg_bootix.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     mode: standalone
     size: 256
     note: "Open-source DMG boot ROM from Bootix (default)"
@@ -56,6 +59,7 @@ files:
   - name: mgb_bootix.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     mode: standalone
     size: 256
     note: "Open-source MGB (Pocket) boot ROM from Bootix"
@@ -64,6 +68,7 @@ files:
   - name: cgb_boot.bin
     system: nintendo-gbc
     required: false
+    hle_fallback: true
     mode: standalone
     size: 2304
     note: "Original Nintendo CGB boot ROM"
@@ -72,6 +77,7 @@ files:
   - name: cgb_boytacean.bin
     system: nintendo-gbc
     required: false
+    hle_fallback: true
     mode: standalone
     size: 2304
     note: "Custom open-source CGB boot ROM (default)"
@@ -80,6 +86,7 @@ files:
   - name: dmg_pyboy.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     mode: standalone
     note: "PyBoy DMG boot ROM variant (in res/boot/, not embedded in data.rs)"
     source_ref: "res/boot/dmg_pyboy.bin"
@@ -87,6 +94,7 @@ files:
   - name: cgb_pyboy.bin
     system: nintendo-gbc
     required: false
+    hle_fallback: true
     mode: standalone
     note: "PyBoy CGB boot ROM variant (in res/boot/, not embedded in data.rs)"
     source_ref: "res/boot/cgb_pyboy.bin"

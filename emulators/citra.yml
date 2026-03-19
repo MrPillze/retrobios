@@ -46,6 +46,7 @@ files:
     path: "sysdata/shared_font.bin"
     description: "System shared font"
     required: false
+    hle_fallback: true
     source_ref: "src/common/common_paths.h:67"
     notes: "HLE fallback if missing"
 
