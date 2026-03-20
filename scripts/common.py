@@ -244,8 +244,24 @@ def resolve_local_file(
                         pass
                 if db_md5.lower() in md5_set:
                     return path, "exact"
-        primary = [p for p, _ in candidates if "/.variants/" not in p]
-        return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
+        # When zipped_file is set, only accept candidates that contain it
+        if zipped_file:
+            valid = []
+            for path, m in candidates:
+                try:
+                    with zipfile.ZipFile(path) as zf:
+                        inner_names = {n.casefold() for n in zf.namelist()}
+                        if zipped_file.casefold() in inner_names:
+                            valid.append((path, m))
+                except (zipfile.BadZipFile, OSError):
+                    pass
+            if valid:
+                primary = [p for p, _ in valid if "/.variants/" not in p]
+                return (primary[0] if primary else valid[0][0]), "hash_mismatch"
+            # No candidate contains the zipped_file — fall through to step 5
+        else:
+            primary = [p for p, _ in candidates if "/.variants/" not in p]
+            return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
 
     # 5. zipped_file content match via pre-built index (last resort:
     # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
