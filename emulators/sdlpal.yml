@@ -47,6 +47,7 @@ files:
   # ================================================================
 
   - name: "abc.mkf"
+    category: game_data
     path: "sdlpal/abc.mkf"
     required: true
     source_ref: "util.c:734, battle.c:879, global.c:55"
@@ -55,6 +56,7 @@ files:
       and character animations.
 
   - name: "ball.mkf"
+    category: game_data
     path: "sdlpal/ball.mkf"
     required: true
     source_ref: "util.c:734, global.c:177"
@@ -62,6 +64,7 @@ files:
       Ball/magic effect graphics archive.
 
   - name: "data.mkf"
+    category: game_data
     path: "sdlpal/data.mkf"
     required: true
     source_ref: "util.c:734, global.c:178"
@@ -69,6 +72,7 @@ files:
       Core game data archive containing scripts, events, and game logic.
 
   - name: "f.mkf"
+    category: game_data
     path: "sdlpal/f.mkf"
     required: true
     source_ref: "util.c:734, global.c:179"
@@ -76,6 +80,7 @@ files:
       Face/portrait graphics archive for character dialog.
 
   - name: "fbp.mkf"
+    category: game_data
     path: "sdlpal/fbp.mkf"
     required: true
     source_ref: "util.c:735, global.c:175"
@@ -83,6 +88,7 @@ files:
       Full-screen background picture archive (cutscenes, title screen).
 
   - name: "fire.mkf"
+    category: game_data
     path: "sdlpal/fire.mkf"
     required: true
     source_ref: "util.c:735, global.c:180"
@@ -90,6 +96,7 @@ files:
       Fire/spell effect graphics archive.
 
   - name: "gop.mkf"
+    category: game_data
     path: "sdlpal/gop.mkf"
     required: true
     source_ref: "util.c:735, res.c:234"
@@ -97,6 +104,7 @@ files:
       GOP (game object palette/graphics) archive.
 
   - name: "map.mkf"
+    category: game_data
     path: "sdlpal/map.mkf"
     required: true
     source_ref: "util.c:735, res.c:233, global.c:55"
@@ -104,6 +112,7 @@ files:
       Map tile and layout data archive for all game locations.
 
   - name: "mgo.mkf"
+    category: game_data
     path: "sdlpal/mgo.mkf"
     required: true
     source_ref: "util.c:736, global.c:176"
@@ -111,6 +120,7 @@ files:
       Map graphic object (sprite overlay) archive.
 
   - name: "pat.mkf"
+    category: game_data
     path: "sdlpal/pat.mkf"
     required: true
     source_ref: "util.c:736, palette.c:53"
@@ -118,6 +128,7 @@ files:
       Palette data archive for color management.
 
   - name: "rgm.mkf"
+    category: game_data
     path: "sdlpal/rgm.mkf"
     required: true
     source_ref: "util.c:736, global.c:181"
@@ -125,6 +136,7 @@ files:
       RGM graphics archive.
 
   - name: "rng.mkf"
+    category: game_data
     path: "sdlpal/rng.mkf"
     required: true
     source_ref: "util.c:736, rngplay.c:402"
@@ -132,6 +144,7 @@ files:
       RNG animation/cutscene sequence archive.
 
   - name: "sss.mkf"
+    category: game_data
     path: "sdlpal/sss.mkf"
     required: true
     source_ref: "util.c:737, global.c:182"
@@ -144,6 +157,7 @@ files:
   # ================================================================
 
   - name: "word.dat"
+    category: game_data
     path: "sdlpal/word.dat"
     required: true
     source_ref: "util.c:741, text.c:719, global.c:197"
@@ -152,6 +166,7 @@ files:
       strings. Either word.dat or m.msg is needed depending on game version.
 
   - name: "m.msg"
+    category: game_data
     path: "sdlpal/m.msg"
     required: false
     source_ref: "util.c:740"
@@ -166,6 +181,7 @@ files:
   # ================================================================
 
   - name: "voc.mkf"
+    category: game_data
     path: "sdlpal/voc.mkf"
     required: false
     source_ref: "util.c:743, sound.c:969"
@@ -174,6 +190,7 @@ files:
       sounds.mkf is needed for sound effects.
 
   - name: "sounds.mkf"
+    category: game_data
     path: "sdlpal/sounds.mkf"
     required: false
     source_ref: "util.c:743, sound.c:964"
@@ -187,6 +204,7 @@ files:
   # ================================================================
 
   - name: "midi.mkf"
+    category: game_data
     path: "sdlpal/midi.mkf"
     required: false
     source_ref: "util.c:744, midi.c:78, midi_tsf.c:68"
@@ -194,6 +212,7 @@ files:
       MIDI music archive. Used when Music type is set to MIDI.
 
   - name: "mus.mkf"
+    category: game_data
     path: "sdlpal/mus.mkf"
     required: false
     source_ref: "util.c:744, audio.c:305"

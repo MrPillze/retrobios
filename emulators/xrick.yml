@@ -49,6 +49,7 @@ notes: |
 
 files:
   - name: "xrick/data.zip"
+    category: game_data
     system: rick-dangerous
     description: "Rick Dangerous sound data (29 WAV files: sfx and music tracks)"
     required: true

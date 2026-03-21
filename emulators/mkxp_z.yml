@@ -76,6 +76,7 @@ files:
   # ================================================================
 
   - name: "RPG Maker XP RTP (Standard)"
+    category: game_data
     path: "mkxp-z/RTP/Standard/"
     required: false
     type: directory
@@ -93,6 +94,7 @@ files:
   # ================================================================
 
   - name: "RPG Maker VX RTP (RPGVX)"
+    category: game_data
     path: "mkxp-z/RTP/RPGVX/"
     required: false
     type: directory
@@ -109,6 +111,7 @@ files:
   # ================================================================
 
   - name: "RPG Maker VX Ace RTP (RPGVXAce)"
+    category: game_data
     path: "mkxp-z/RTP/RPGVXAce/"
     required: false
     type: directory

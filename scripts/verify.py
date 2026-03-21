@@ -241,6 +241,7 @@ def find_undeclared_files(
                 "name": fname,
                 "required": f.get("required", False),
                 "hle_fallback": f.get("hle_fallback", False),
+                "category": f.get("category", "bios"),
                 "in_repo": in_repo,
                 "note": f.get("note", ""),
             })
@@ -454,11 +455,14 @@ def print_platform_result(result: dict, group: list[str]) -> None:
     # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])
     if undeclared:
-        req_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"] and not u.get("hle_fallback")]
-        req_hle_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"] and u.get("hle_fallback")]
-        req_in_repo = [u for u in undeclared if u["required"] and u["in_repo"]]
-        opt_in_repo = [u for u in undeclared if not u["required"] and u["in_repo"]]
-        opt_not_in_repo = [u for u in undeclared if not u["required"] and not u["in_repo"]]
+        bios_files = [u for u in undeclared if u.get("category", "bios") == "bios"]
+        game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
+
+        req_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and not u.get("hle_fallback")]
+        req_hle_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and u.get("hle_fallback")]
+        req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
+        opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
+        opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
 
         summary_parts = []
         if req_not_in_repo:
@@ -471,9 +475,16 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             summary_parts.append(f"{len(opt_in_repo)} optional in repo")
         if opt_not_in_repo:
             summary_parts.append(f"{len(opt_not_in_repo)} optional NOT in repo")
+        if game_data:
+            gd_missing = [u for u in game_data if not u["in_repo"]]
+            gd_present = [u for u in game_data if u["in_repo"]]
+            if gd_missing:
+                summary_parts.append(f"{len(gd_missing)} game_data NOT in repo")
+            if gd_present:
+                summary_parts.append(f"{len(gd_present)} game_data in repo")
         print(f"  Core gaps: {len(undeclared)} undeclared ({', '.join(summary_parts)})")
 
-        # Show critical gaps (required + no HLE + not in repo)
+        # Show critical gaps (required bios + no HLE + not in repo)
         for u in req_not_in_repo:
             print(f"    {u['emulator']} → {u['name']} (required, NOT in repo)")
         # Show required with HLE (core works but not ideal)

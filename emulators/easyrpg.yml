@@ -65,6 +65,7 @@ files:
   # ================================================================
 
   - name: "easyrpg.soundfont"
+    category: game_data
     path: "easyrpg.soundfont"
     required: false
     hle_fallback: true
@@ -81,6 +82,7 @@ files:
   # ================================================================
 
   - name: "wildmidi.cfg"
+    category: game_data
     path: "wildmidi.cfg"
     required: false
     hle_fallback: true
@@ -96,6 +98,7 @@ files:
   # ================================================================
 
   - name: "RPG Maker 2000 RTP"
+    category: game_data
     path: "rtp/2000/"
     required: false
     hle_fallback: true
@@ -115,6 +118,7 @@ files:
   # ================================================================
 
   - name: "RPG Maker 2003 RTP"
+    category: game_data
     path: "rtp/2003/"
     required: false
     hle_fallback: true

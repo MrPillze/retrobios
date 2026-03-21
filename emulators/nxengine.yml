@@ -43,6 +43,7 @@ notes: |
 
 files:
   - name: "Doukutsu.exe"
+    category: game_data
     system: cave-story
     description: "Cave Story freeware executable (data source for music, sfx, bitmaps, wavetable)"
     required: true
@@ -53,6 +54,7 @@ files:
     notes: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable.dat from this binary at each launch."
 
   - name: "data/npc.tbl"
+    category: game_data
     system: cave-story
     description: "NPC attribute table (entity behavior flags, HP, damage, display rect offsets)"
     required: true
@@ -60,6 +62,7 @@ files:
     notes: "Located in system/nxengine/data/. The core uses this file to verify the data directory is present."
 
   - name: "data/"
+    category: game_data
     system: cave-story
     description: "Full game asset directory tree (399 files: sprites, NPC sheets, stage maps, scripts, backgrounds)"
     required: true

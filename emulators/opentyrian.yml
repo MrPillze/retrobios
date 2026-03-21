@@ -70,48 +70,56 @@ files:
   # Core data files (required, loaded unconditionally at init)
   # -----------------------------------------------------------
   - name: "tyrian.shp"
+    category: game_data
     system: tyrian
     description: "Main shape tables (12 sprite banks: fonts, interface, options, game sprites)"
     required: true
     source_ref: "sprite.c:669-722 (JE_loadMainShapeTables)"
 
   - name: "palette.dat"
+    category: game_data
     system: tyrian
     description: "Color palette data (all palettes used by the game)"
     required: true
     source_ref: "palette.c:45 (JE_loadPals)"
 
   - name: "tyrian.hdt"
+    category: game_data
     system: tyrian
     description: "Help and item data (weapons, ships, shields, enemies, help text)"
     required: true
     source_ref: "episodes.c:60 (JE_loadItemDat), helptext.c:184 (JE_loadHelpText)"
 
   - name: "tyrian.pic"
+    category: game_data
     system: tyrian
     description: "Picture data (menu backgrounds, cutscene images)"
     required: true
     source_ref: "picload.c:32 (JE_loadPic)"
 
   - name: "tyrian.cdt"
+    category: game_data
     system: tyrian
     description: "Credits text (encrypted pascal strings)"
     required: true
     source_ref: "mainint.c:2002 (JE_drawCredits)"
 
   - name: "tyrian.snd"
+    category: game_data
     system: tyrian
     description: "Sound effects"
     required: true
     source_ref: "nortsong.c:112, opentyr.c:333 (JE_loadSndFile)"
 
   - name: "voices.snd"
+    category: game_data
     system: tyrian
     description: "Voice samples"
     required: true
     source_ref: "nortsong.c:134, opentyr.c:333 (JE_loadSndFile)"
 
   - name: "music.mus"
+    category: game_data
     system: tyrian
     description: "Music data (all game tracks)"
     required: true
@@ -121,90 +129,105 @@ files:
   # Episode level files (episode 1 required, 2-5 optional)
   # -----------------------------------------------------------
   - name: "tyrian1.lvl"
+    category: game_data
     system: tyrian
     description: "Episode 1 level data (also used as data directory detection marker)"
     required: true
     source_ref: "file.c:51 (data_dir probe), episodes.c:274 (JE_scanForEpisodes)"
 
   - name: "levels1.dat"
+    category: game_data
     system: tyrian
     description: "Episode 1 level definitions"
     required: true
     source_ref: "episodes.c:263 (JE_initEpisode), tyrian2.c:2434"
 
   - name: "cubetxt1.dat"
+    category: game_data
     system: tyrian
     description: "Episode 1 datacube text (in-game story lore)"
     required: true
     source_ref: "episodes.c:262 (JE_initEpisode), game_menu.c:1723"
 
   - name: "tyrian2.lvl"
+    category: game_data
     system: tyrian
     description: "Episode 2 level data"
     required: false
     source_ref: "episodes.c:274"
 
   - name: "levels2.dat"
+    category: game_data
     system: tyrian
     description: "Episode 2 level definitions"
     required: false
     source_ref: "episodes.c:263"
 
   - name: "cubetxt2.dat"
+    category: game_data
     system: tyrian
     description: "Episode 2 datacube text"
     required: false
     source_ref: "episodes.c:262"
 
   - name: "tyrian3.lvl"
+    category: game_data
     system: tyrian
     description: "Episode 3 level data"
     required: false
     source_ref: "episodes.c:274"
 
   - name: "levels3.dat"
+    category: game_data
     system: tyrian
     description: "Episode 3 level definitions"
     required: false
     source_ref: "episodes.c:263"
 
   - name: "cubetxt3.dat"
+    category: game_data
     system: tyrian
     description: "Episode 3 datacube text"
     required: false
     source_ref: "episodes.c:262"
 
   - name: "tyrian4.lvl"
+    category: game_data
     system: tyrian
     description: "Episode 4 level data"
     required: false
     source_ref: "episodes.c:274"
 
   - name: "levels4.dat"
+    category: game_data
     system: tyrian
     description: "Episode 4 level definitions"
     required: false
     source_ref: "episodes.c:263"
 
   - name: "cubetxt4.dat"
+    category: game_data
     system: tyrian
     description: "Episode 4 datacube text"
     required: false
     source_ref: "episodes.c:262"
 
   - name: "tyrian5.lvl"
+    category: game_data
     system: tyrian
     description: "Episode 5 level data"
     required: false
     source_ref: "episodes.c:274"
 
   - name: "levels5.dat"
+    category: game_data
     system: tyrian
     description: "Episode 5 level definitions"
     required: false
     source_ref: "episodes.c:263"
 
   - name: "cubetxt5.dat"
+    category: game_data
     system: tyrian
     description: "Episode 5 datacube text"
     required: false
@@ -214,180 +237,210 @@ files:
   # Shape data files (loaded per-level, character from lookup)
   # -----------------------------------------------------------
   - name: "shapes2.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '2')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes3.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '3')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes4.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '4')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes5.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '5')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes7.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '7')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes8.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '8')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes9.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '9')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapes0.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character '0')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesa.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'A')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesb.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'B')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesc.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'C')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesd.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'D')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapese.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'E')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesf.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'F')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesg.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'G')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesh.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'H')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesi.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'I')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesj.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'J')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesk.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'K')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesl.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'L')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesm.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'M')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesn.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'N')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapeso.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'O')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesp.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'P')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesq.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'Q')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesr.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'R')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapess.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'S')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapest.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'T')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesu.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'U')"
     required: false
     source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
 
   - name: "shapesv.dat"
+    category: game_data
     system: tyrian
     description: "Level tileset shapes (character 'V')"
     required: false
@@ -397,18 +450,21 @@ files:
   # Compressed shape files (newshX.shp, loaded per-level)
   # -----------------------------------------------------------
   - name: "newsh1.shp"
+    category: game_data
     system: tyrian
     description: "Compressed sprites (arrows, mouse cursor)"
     required: false
     source_ref: "mainint.c:493,884,1462 (JE_loadCompShapes '1')"
 
   - name: "newsh6.shp"
+    category: game_data
     system: tyrian
     description: "Compressed sprites (explosions)"
     required: false
     source_ref: "tyrian2.c:771 (JE_loadCompShapes '6')"
 
   - name: "newsh~.shp"
+    category: game_data
     system: tyrian
     description: "Compressed sprites (destruct mode)"
     required: false
@@ -418,60 +474,70 @@ files:
   # Optional / special mode files
   # -----------------------------------------------------------
   - name: "tyrianc.shp"
+    category: game_data
     system: tyrian
     description: "Christmas mode shape tables (replaces tyrian.shp at Xmas)"
     required: false
     source_ref: "opentyr.c:301-309"
 
   - name: "voicesc.snd"
+    category: game_data
     system: tyrian
     description: "Christmas mode voice samples (replaces voices.snd at Xmas)"
     required: false
     source_ref: "opentyr.c:301,333"
 
   - name: "tyrend.anm"
+    category: game_data
     system: tyrian
     description: "Ending animation sequence"
     required: false
     source_ref: "tyrian2.c:2473 (JE_playAnim)"
 
   - name: "tshp2.pcx"
+    category: game_data
     system: tyrian
     description: "Additional ship graphics (PCX image)"
     required: false
     source_ref: "tyrian2.c:2757, pcxload.c:25-29"
 
   - name: "estsc.shp"
+    category: game_data
     system: tyrian
     description: "Ending sequence character sprites"
     required: false
     source_ref: "mainint.c:1995 (load_sprites_file EXTRA_SHAPES)"
 
   - name: "demo.1"
+    category: game_data
     system: tyrian
     description: "Demo replay file 1"
     required: false
     source_ref: "mainint.c:1781-1786"
 
   - name: "demo.2"
+    category: game_data
     system: tyrian
     description: "Demo replay file 2"
     required: false
     source_ref: "mainint.c:1781-1786"
 
   - name: "demo.3"
+    category: game_data
     system: tyrian
     description: "Demo replay file 3"
     required: false
     source_ref: "mainint.c:1781-1786"
 
   - name: "demo.4"
+    category: game_data
     system: tyrian
     description: "Demo replay file 4"
     required: false
     source_ref: "mainint.c:1781-1786"
 
   - name: "demo.5"
+    category: game_data
     system: tyrian
     description: "Demo replay file 5"
     required: false
