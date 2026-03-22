@@ -77,10 +77,23 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
                     "crc32": cached["crc32"],
                 }
                 sha1 = hashes["sha1"]
+                is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path
                 if sha1 in files:
-                    if sha1 not in aliases:
-                        aliases[sha1] = []
-                    aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
+                    existing_is_variant = "/.variants/" in files[sha1]["path"]
+                    if existing_is_variant and not is_variant:
+                        if sha1 not in aliases:
+                            aliases[sha1] = []
+                        aliases[sha1].append({"name": files[sha1]["name"], "path": files[sha1]["path"]})
+                        files[sha1] = {
+                            "path": rel_path,
+                            "name": _canonical_name(filepath),
+                            "size": size,
+                            **hashes,
+                        }
+                    else:
+                        if sha1 not in aliases:
+                            aliases[sha1] = []
+                        aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
                 else:
                     entry = {
                         "path": rel_path,
@@ -94,10 +107,24 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
 
         hashes = compute_hashes(filepath)
         sha1 = hashes["sha1"]
+        is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path
         if sha1 in files:
-            if sha1 not in aliases:
-                aliases[sha1] = []
-            aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
+            existing_is_variant = "/.variants/" in files[sha1]["path"]
+            if existing_is_variant and not is_variant:
+                # Non-variant file should be primary over .variants/ file
+                if sha1 not in aliases:
+                    aliases[sha1] = []
+                aliases[sha1].append({"name": files[sha1]["name"], "path": files[sha1]["path"]})
+                files[sha1] = {
+                    "path": rel_path,
+                    "name": _canonical_name(filepath),
+                    "size": size,
+                    **hashes,
+                }
+            else:
+                if sha1 not in aliases:
+                    aliases[sha1] = []
+                aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
         else:
             entry = {
                 "path": rel_path,
@@ -111,11 +138,25 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
     return files, aliases, new_cache
 
 
+def _path_suffix(rel_path: str) -> str:
+    """Extract the path suffix after bios/Manufacturer/Console/.
+
+    bios/Nintendo/GameCube/GC/USA/IPL.bin → GC/USA/IPL.bin
+    bios/Sony/PlayStation/scph5501.bin → scph5501.bin
+    """
+    parts = rel_path.replace("\\", "/").split("/")
+    # Skip: bios / Manufacturer / Console (3 segments)
+    if len(parts) > 3 and parts[0] == "bios":
+        return "/".join(parts[3:])
+    return parts[-1]
+
+
 def build_indexes(files: dict, aliases: dict) -> dict:
     """Build secondary indexes for fast lookup."""
     by_md5 = {}
     by_name = {}
     by_crc32 = {}
+    by_path_suffix = {}
 
     for sha1, entry in files.items():
         by_md5[entry["md5"]] = sha1
@@ -127,6 +168,14 @@ def build_indexes(files: dict, aliases: dict) -> dict:
 
         by_crc32[entry["crc32"]] = sha1
 
+        # Path suffix index for regional variant resolution
+        suffix = _path_suffix(entry["path"])
+        if suffix != name:
+            # Only index when suffix adds info beyond the filename
+            if suffix not in by_path_suffix:
+                by_path_suffix[suffix] = []
+            by_path_suffix[suffix].append(sha1)
+
     # Add alias names to by_name index (aliases have different filenames for same SHA1)
     for sha1, alias_list in aliases.items():
         for alias in alias_list:
@@ -135,11 +184,19 @@ def build_indexes(files: dict, aliases: dict) -> dict:
                 by_name[name] = []
             if sha1 not in by_name[name]:
                 by_name[name].append(sha1)
+            # Also index alias paths in by_path_suffix
+            suffix = _path_suffix(alias["path"])
+            if suffix != name:
+                if suffix not in by_path_suffix:
+                    by_path_suffix[suffix] = []
+                if sha1 not in by_path_suffix[suffix]:
+                    by_path_suffix[suffix].append(sha1)
 
     return {
         "by_md5": by_md5,
         "by_name": by_name,
         "by_crc32": by_crc32,
+        "by_path_suffix": by_path_suffix,
     }
 
 

@@ -1,9 +1,12 @@
 emulator: Handy
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-handy"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "0.95"
 display_name: "Atari - Lynx (Handy)"
+cores:
+  - handy
 systems: [atari-lynx]
 
 notes: |
@@ -36,8 +39,7 @@ files:
     required: false
     hle_fallback: true
     size: 512
-    md5: "fcd403db69f54290b51035d82f835e7b"
-    sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
     crc32: "0d973c9d"
+    validation: [size, crc32]
     source_ref: "rom.h:48-49 (ROM_SIZE=0x200, ROM_CRC32=0xD973C9D), rom.cpp:76-128 (CRom constructor), libretro.cpp:1231-1258 (bios path + CSystem init)"
     notes: "Validated by CRC32 at load time. If invalid or missing, core uses HLE fallback (system.cpp HLE_BIOS_* functions). Games work without it but the real boot ROM provides accurate startup timing."

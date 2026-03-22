@@ -158,12 +158,17 @@ def resolve_local_file(
     file_entry: dict,
     db: dict,
     zip_contents: dict | None = None,
+    dest_hint: str = "",
 ) -> tuple[str | None, str]:
     """Resolve a BIOS file to its local path using database.json.
 
     Single source of truth for file resolution, used by both verify.py
     and generate_pack.py. Does NOT handle storage tiers (external/user_provided)
     or release assets - callers handle those.
+
+    dest_hint: optional destination path (e.g., "GC/USA/IPL.bin") used to
+    disambiguate when multiple files share the same name. Matched against
+    the by_path_suffix index built from the repo's directory structure.
 
     Returns (local_path, status) where status is one of:
     exact, zip_exact, hash_mismatch, not_found.
@@ -179,6 +184,15 @@ def resolve_local_file(
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
+    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+
+    # 0. Path suffix exact match (for regional variants with same filename)
+    if dest_hint and by_path_suffix:
+        for match_sha1 in by_path_suffix.get(dest_hint, []):
+            if match_sha1 in files_db:
+                path = files_db[match_sha1]["path"]
+                if os.path.exists(path):
+                    return path, "exact"
 
     # 1. SHA1 exact match
     if sha1 and sha1 in files_db:

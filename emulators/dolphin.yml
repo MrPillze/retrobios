@@ -14,6 +14,15 @@ systems: [nintendo-gamecube, nintendo-wii]
 #   Standalone: User/GC/ and User/Wii/
 #   Libretro (RetroArch): system/dolphin-emu/GC/ and system/dolphin-emu/Wii/
 
+pack_structure:
+  libretro: "dolphin-emu"
+  standalone: ""
+
+data_directories:
+  - ref: dolphin-sys
+    destination: "Sys"
+    source_ref: "Source/Core/Common/CommonPaths.h:128-141"
+
 files:
   # -- GameCube IPL (Boot ROM) --
   # Region-specific, placed in GC/<region>/IPL.bin

@@ -100,7 +100,8 @@ def _sanitize_path(raw: str) -> str:
 
 
 def resolve_file(file_entry: dict, db: dict, bios_dir: str,
-                  zip_contents: dict | None = None) -> tuple[str | None, str]:
+                  zip_contents: dict | None = None,
+                  dest_hint: str = "") -> tuple[str | None, str]:
     """Resolve a BIOS file with storage tiers and release asset fallback.
 
     Wraps common.resolve_local_file() with pack-specific logic for
@@ -112,7 +113,8 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     if storage == "external":
         return None, "external"
 
-    path, status = resolve_local_file(file_entry, db, zip_contents)
+    path, status = resolve_local_file(file_entry, db, zip_contents,
+                                      dest_hint=dest_hint)
     if path:
         return path, status
 
@@ -466,6 +468,334 @@ def _extract_zip_to_archive(source_zip: str, dest_prefix: str, target_zf: zipfil
             target_zf.writestr(target_path, data)
 
 
+# ---------------------------------------------------------------------------
+# Emulator/system mode pack generation
+# ---------------------------------------------------------------------------
+
+def _filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
+    """Filter file entries by libretro/standalone mode."""
+    result = []
+    for f in files:
+        fmode = f.get("mode", "")
+        if standalone and fmode == "libretro":
+            continue
+        if not standalone and fmode == "standalone":
+            continue
+        result.append(f)
+    return result
+
+
+def _resolve_destination(file_entry: dict, pack_structure: dict | None,
+                         standalone: bool) -> str:
+    """Resolve the ZIP destination path for a file entry."""
+    # 1. standalone_path override
+    if standalone and file_entry.get("standalone_path"):
+        rel = file_entry["standalone_path"]
+    # 2. path field
+    elif file_entry.get("path"):
+        rel = file_entry["path"]
+    # 3. name fallback
+    else:
+        rel = file_entry.get("name", "")
+
+    rel = _sanitize_path(rel)
+
+    # Prepend pack_structure prefix
+    if pack_structure:
+        mode_key = "standalone" if standalone else "libretro"
+        prefix = pack_structure.get(mode_key, "")
+        if prefix:
+            rel = f"{prefix}/{rel}"
+
+    return rel
+
+
+def generate_emulator_pack(
+    profile_names: list[str],
+    emulators_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    standalone: bool = False,
+    zip_contents: dict | None = None,
+) -> str | None:
+    """Generate a ZIP pack for specific emulator profiles."""
+    all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+    if zip_contents is None:
+        zip_contents = build_zip_contents_index(db)
+
+    # Resolve and validate profile names
+    selected: list[tuple[str, dict]] = []
+    for name in profile_names:
+        if name not in all_profiles:
+            available = sorted(k for k, v in all_profiles.items()
+                               if v.get("type") not in ("alias", "test"))
+            print(f"Error: emulator '{name}' not found", file=sys.stderr)
+            print(f"Available: {', '.join(available[:10])}...", file=sys.stderr)
+            return None
+        p = all_profiles[name]
+        if p.get("type") == "alias":
+            alias_of = p.get("alias_of", "?")
+            print(f"Error: {name} is an alias of {alias_of} — use --emulator {alias_of}",
+                  file=sys.stderr)
+            return None
+        if p.get("type") == "launcher":
+            print(f"Error: {name} is a launcher — use the emulator it launches",
+                  file=sys.stderr)
+            return None
+        ptype = p.get("type", "libretro")
+        if standalone and "standalone" not in ptype:
+            print(f"Error: {name} ({ptype}) does not support --standalone",
+                  file=sys.stderr)
+            return None
+        selected.append((name, p))
+
+    # ZIP naming
+    display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
+    zip_name = "_".join(display_names) + "_BIOS_Pack.zip"
+    zip_path = os.path.join(output_dir, zip_name)
+    os.makedirs(output_dir, exist_ok=True)
+
+    total_files = 0
+    missing_files = []
+    seen_destinations: set[str] = set()
+    seen_lower: set[str] = set()
+    seen_hashes: set[str] = set()  # SHA1 dedup for same file, different path
+    data_dir_notices: list[str] = []
+    data_registry = load_data_dir_registry(
+        os.path.join(os.path.dirname(__file__), "..", "platforms")
+    )
+
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+        for emu_name, profile in sorted(selected):
+            pack_structure = profile.get("pack_structure")
+            files = _filter_files_by_mode(profile.get("files", []), standalone)
+            for dd in profile.get("data_directories", []):
+                ref_key = dd.get("ref", "")
+                if not ref_key or not data_registry or ref_key not in data_registry:
+                    if ref_key:
+                        data_dir_notices.append(ref_key)
+                    continue
+                entry = data_registry[ref_key]
+                local_cache = entry.get("local_cache", "")
+                if not local_cache or not os.path.isdir(local_cache):
+                    data_dir_notices.append(ref_key)
+                    continue
+                dd_dest = dd.get("destination", "")
+                if pack_structure:
+                    mode_key = "standalone" if standalone else "libretro"
+                    prefix = pack_structure.get(mode_key, "")
+                    if prefix:
+                        dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
+                for root, _dirs, filenames in os.walk(local_cache):
+                    for fname in filenames:
+                        src = os.path.join(root, fname)
+                        rel = os.path.relpath(src, local_cache)
+                        full = f"{dd_dest}/{rel}" if dd_dest else rel
+                        if full.lower() in seen_lower:
+                            continue
+                        seen_destinations.add(full)
+                        seen_lower.add(full.lower())
+                        zf.write(src, full)
+                        total_files += 1
+
+            if not files:
+                print(f"  No files needed for {profile.get('emulator', emu_name)}")
+                continue
+
+            # Collect archives as atomic units
+            archives: set[str] = set()
+            for fe in files:
+                archive = fe.get("archive")
+                if archive:
+                    archives.add(archive)
+
+            # Pack archives as units
+            for archive_name in sorted(archives):
+                archive_dest = _sanitize_path(archive_name)
+                if pack_structure:
+                    mode_key = "standalone" if standalone else "libretro"
+                    prefix = pack_structure.get(mode_key, "")
+                    if prefix:
+                        archive_dest = f"{prefix}/{archive_dest}"
+
+                if archive_dest.lower() in seen_lower:
+                    continue
+
+                archive_entry = {"name": archive_name}
+                local_path, status = resolve_file(archive_entry, db, bios_dir, zip_contents)
+                if local_path and status not in ("not_found",):
+                    zf.write(local_path, archive_dest)
+                    seen_destinations.add(archive_dest)
+                    seen_lower.add(archive_dest.lower())
+                    total_files += 1
+                else:
+                    missing_files.append(archive_name)
+
+            # Pack individual files (skip archived ones)
+            for fe in files:
+                if fe.get("archive"):
+                    continue
+
+                dest = _resolve_destination(fe, pack_structure, standalone)
+                if not dest:
+                    continue
+
+                if dest.lower() in seen_lower:
+                    continue
+
+                storage = fe.get("storage", "embedded")
+                if storage == "user_provided":
+                    seen_destinations.add(dest)
+                    seen_lower.add(dest.lower())
+                    instr = fe.get("instructions", "Please provide this file manually.")
+                    instr_name = f"INSTRUCTIONS_{fe['name']}.txt"
+                    zf.writestr(instr_name, f"File needed: {fe['name']}\n\n{instr}\n")
+                    total_files += 1
+                    continue
+
+                dest_hint = fe.get("path", "")
+                local_path, status = resolve_file(fe, db, bios_dir, zip_contents,
+                                                  dest_hint=dest_hint)
+
+                if status == "external":
+                    file_ext = os.path.splitext(fe["name"])[1] or ""
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp:
+                        tmp_path = tmp.name
+                    try:
+                        if download_external(fe, tmp_path):
+                            zf.write(tmp_path, dest)
+                            seen_destinations.add(dest)
+                            seen_lower.add(dest.lower())
+                            total_files += 1
+                        else:
+                            missing_files.append(fe["name"])
+                    finally:
+                        if os.path.exists(tmp_path):
+                            os.unlink(tmp_path)
+                    continue
+
+                if status in ("not_found", "user_provided"):
+                    missing_files.append(fe["name"])
+                    continue
+
+                # SHA1 dedup: skip if same physical file AND same destination
+                # (but allow same file to be packed under different destinations,
+                # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
+                if local_path:
+                    real = os.path.realpath(local_path)
+                    dedup_key_hash = f"{real}:{dest}"
+                    if dedup_key_hash in seen_hashes:
+                        continue
+                    seen_hashes.add(dedup_key_hash)
+
+                zf.write(local_path, dest)
+                seen_destinations.add(dest)
+                seen_lower.add(dest.lower())
+                total_files += 1
+
+    # Remove empty ZIP (no files packed and no missing = nothing to ship)
+    if total_files == 0 and not missing_files:
+        os.unlink(zip_path)
+
+    # Report
+    label = " + ".join(p.get("emulator", n) for n, p in selected)
+    missing_count = len(missing_files)
+    ok_count = total_files
+    parts = [f"{ok_count} files packed"]
+    if missing_count:
+        parts.append(f"{missing_count} missing")
+    print(f"  {zip_path}: {', '.join(parts)}")
+    for name in missing_files:
+        print(f"  MISSING: {name}")
+    for ref in sorted(set(data_dir_notices)):
+        print(f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)")
+
+    return zip_path if total_files > 0 or missing_files else None
+
+
+def generate_system_pack(
+    system_ids: list[str],
+    emulators_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    standalone: bool = False,
+    zip_contents: dict | None = None,
+) -> str | None:
+    """Generate a ZIP pack for all emulators supporting given system IDs."""
+    profiles = load_emulator_profiles(emulators_dir)
+    matching = []
+    for name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias", "test"):
+            continue
+        emu_systems = set(profile.get("systems", []))
+        if emu_systems & set(system_ids):
+            ptype = profile.get("type", "libretro")
+            if standalone and "standalone" not in ptype:
+                continue
+            matching.append(name)
+
+    if not matching:
+        all_systems: set[str] = set()
+        for p in profiles.values():
+            all_systems.update(p.get("systems", []))
+        if standalone:
+            print(f"No standalone emulators found for system(s): {', '.join(system_ids)}",
+                  file=sys.stderr)
+        else:
+            print(f"No emulators found for system(s): {', '.join(system_ids)}",
+                  file=sys.stderr)
+        print(f"Available systems: {', '.join(sorted(all_systems)[:20])}...",
+              file=sys.stderr)
+        return None
+
+    # Use system-based ZIP name
+    sys_display = "_".join(
+        "_".join(w.title() for w in sid.split("-")) for sid in system_ids
+    )
+    result = generate_emulator_pack(
+        matching, emulators_dir, db, bios_dir, output_dir,
+        standalone, zip_contents,
+    )
+    if result:
+        # Rename to system-based name
+        new_name = f"{sys_display}_BIOS_Pack.zip"
+        new_path = os.path.join(output_dir, new_name)
+        if new_path != result:
+            os.rename(result, new_path)
+            result = new_path
+    return result
+
+
+def _list_emulators_pack(emulators_dir: str) -> None:
+    """Print available emulator profiles for pack generation."""
+    profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+    for name in sorted(profiles):
+        p = profiles[name]
+        if p.get("type") in ("alias", "test"):
+            continue
+        display = p.get("emulator", name)
+        ptype = p.get("type", "libretro")
+        systems = ", ".join(p.get("systems", [])[:3])
+        more = "..." if len(p.get("systems", [])) > 3 else ""
+        print(f"  {name:30s} {display:40s} [{ptype}] {systems}{more}")
+
+
+def _list_systems_pack(emulators_dir: str) -> None:
+    """Print available system IDs with emulator count."""
+    profiles = load_emulator_profiles(emulators_dir)
+    system_emus: dict[str, list[str]] = {}
+    for name, p in profiles.items():
+        if p.get("type") in ("alias", "test", "launcher"):
+            continue
+        for sys_id in p.get("systems", []):
+            system_emus.setdefault(sys_id, []).append(name)
+    for sys_id in sorted(system_emus):
+        count = len(system_emus[sys_id])
+        print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
+
+
 def list_platforms(platforms_dir: str) -> list[str]:
     """List available platform names from YAML files."""
     platforms = []
@@ -480,12 +810,16 @@ def main():
     parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
     parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
     parser.add_argument("--all", action="store_true", help="Generate packs for all active platforms")
+    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
+    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
+    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
+    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
+    parser.add_argument("--list-systems", action="store_true", help="List available systems")
     parser.add_argument("--include-archived", action="store_true", help="Include archived platforms")
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
     parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
     parser.add_argument("--output-dir", "-o", default=DEFAULT_OUTPUT_DIR)
-    # --include-extras is now a no-op: core requirements are always included
     parser.add_argument("--include-extras", action="store_true",
                         help="(no-op) Core requirements are always included")
     parser.add_argument("--emulators-dir", default="emulators")
@@ -501,7 +835,48 @@ def main():
         for p in platforms:
             print(p)
         return
+    if args.list_emulators:
+        _list_emulators_pack(args.emulators_dir)
+        return
+    if args.list_systems:
+        _list_systems_pack(args.emulators_dir)
+        return
 
+    # Mutual exclusion
+    modes = sum(1 for x in (args.platform, args.all, args.emulator, args.system) if x)
+    if modes == 0:
+        parser.error("Specify --platform, --all, --emulator, or --system")
+    if modes > 1:
+        parser.error("--platform, --all, --emulator, and --system are mutually exclusive")
+    if args.standalone and not (args.emulator or args.system):
+        parser.error("--standalone requires --emulator or --system")
+
+    db = load_database(args.db)
+    zip_contents = build_zip_contents_index(db)
+
+    # Emulator mode
+    if args.emulator:
+        names = [n.strip() for n in args.emulator.split(",") if n.strip()]
+        result = generate_emulator_pack(
+            names, args.emulators_dir, db, args.bios_dir, args.output_dir,
+            args.standalone, zip_contents,
+        )
+        if not result:
+            sys.exit(1)
+        return
+
+    # System mode
+    if args.system:
+        system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+        result = generate_system_pack(
+            system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
+            args.standalone, zip_contents,
+        )
+        if not result:
+            sys.exit(1)
+        return
+
+    # Platform mode (existing)
     if args.all:
         sys.path.insert(0, os.path.dirname(__file__))
         from list_platforms import list_platforms as _list_active
@@ -511,9 +886,6 @@ def main():
     else:
         parser.error("Specify --platform or --all")
         return
-
-    db = load_database(args.db)
-    zip_contents = build_zip_contents_index(db)
 
     data_registry = load_data_dir_registry(args.platforms_dir)
     if data_registry and not args.offline:
@@ -543,7 +915,6 @@ def main():
                 emu_profiles=emu_profiles,
             )
             if zip_path and len(group_platforms) > 1:
-                # Rename ZIP to include all platform names
                 names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
                 combined_filename = "_".join(n.replace(" ", "") for n in names) + "_BIOS_Pack.zip"
                 new_path = os.path.join(os.path.dirname(zip_path), combined_filename)

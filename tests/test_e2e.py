@@ -33,7 +33,11 @@ from common import (
     load_emulator_profiles, load_platform_config, md5_composite, md5sum,
     resolve_local_file, resolve_platform_cores,
 )
-from verify import Severity, Status, verify_platform, find_undeclared_files, find_exclusion_notes
+from verify import (
+    Severity, Status, verify_platform, find_undeclared_files, find_exclusion_notes,
+    _build_validation_index, check_file_validation, verify_emulator,
+    _filter_files_by_mode, _effective_validation_label,
+)
 
 
 def _h(data: bytes) -> dict:
@@ -71,6 +75,13 @@ class TestE2E(unittest.TestCase):
         self._make_file("no_md5.bin", b"NO_MD5_CHECK")
         self._make_file("truncated.bin", b"BATOCERA_TRUNCATED")
         self._make_file("alias_target.bin", b"ALIAS_FILE_DATA")
+        self._make_file("leading_zero_crc.bin", b"LEADING_ZERO_CRC_12")  # crc32=0179e92e
+
+        # Regional variant files (same name, different content, in subdirs)
+        os.makedirs(os.path.join(self.bios_dir, "TestConsole", "USA"), exist_ok=True)
+        os.makedirs(os.path.join(self.bios_dir, "TestConsole", "EUR"), exist_ok=True)
+        self._make_file("BIOS.bin", b"BIOS_USA_CONTENT", subdir="TestConsole/USA")
+        self._make_file("BIOS.bin", b"BIOS_EUR_CONTENT", subdir="TestConsole/EUR")
 
         # .variants/ file (should be deprioritized)
         variants_dir = os.path.join(self.bios_dir, ".variants")
@@ -149,9 +160,16 @@ class TestE2E(unittest.TestCase):
         # Add alias name to by_name
         alias_sha1 = self.files["alias_target.bin"]["sha1"]
         by_name.setdefault("alias_alt.bin", []).append(alias_sha1)
+        # Build by_path_suffix for regional variant resolution
+        by_path_suffix = {}
+        for key, info in self.files.items():
+            if "/" in key:
+                # key is subdir/name, suffix is the subdir path
+                by_path_suffix.setdefault(key, []).append(info["sha1"])
         return {
             "files": files_db,
-            "indexes": {"by_md5": by_md5, "by_name": by_name, "by_crc32": {}},
+            "indexes": {"by_md5": by_md5, "by_name": by_name, "by_crc32": {},
+                        "by_path_suffix": by_path_suffix},
         }
 
     # ---------------------------------------------------------------
@@ -321,6 +339,41 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "test_emu_dd.yml"), "w") as fh:
             yaml.dump(emu_dd, fh)
+
+        # Emulator with validation checks (size, crc32)
+        emu_val = {
+            "emulator": "TestValidation",
+            "type": "libretro",
+            "systems": ["console-a", "sys-md5"],
+            "files": [
+                # Size validation — correct size (16 bytes = len(b"PRESENT_REQUIRED"))
+                {"name": "present_req.bin", "required": True,
+                 "validation": ["size"], "size": 16},
+                # Size validation — wrong expected size
+                {"name": "present_opt.bin", "required": False,
+                 "validation": ["size"], "size": 9999},
+                # CRC32 validation — correct crc32
+                {"name": "correct_hash.bin", "required": True,
+                 "validation": ["crc32"], "crc32": "91d0b1d3"},
+                # CRC32 validation — wrong crc32
+                {"name": "no_md5.bin", "required": False,
+                 "validation": ["crc32"], "crc32": "deadbeef"},
+                # CRC32 starting with '0' (regression: lstrip("0x") bug)
+                {"name": "leading_zero_crc.bin", "required": True,
+                 "validation": ["crc32"], "crc32": "0179e92e"},
+                # MD5 validation — correct md5
+                {"name": "correct_hash.bin", "required": True,
+                 "validation": ["md5"], "md5": "4a8db431e3b1a1acacec60e3424c4ce8"},
+                # SHA1 validation — correct sha1
+                {"name": "correct_hash.bin", "required": True,
+                 "validation": ["sha1"], "sha1": "a2ab6c95c5bbd191b9e87e8f4e85205a47be5764"},
+                # MD5 validation — wrong md5
+                {"name": "alias_target.bin", "required": False,
+                 "validation": ["md5"], "md5": "0000000000000000000000000000dead"},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_validation.yml"), "w") as fh:
+            yaml.dump(emu_val, fh)
 
     # ---------------------------------------------------------------
     # THE TEST — one method per feature area, all using same fixtures
@@ -639,6 +692,277 @@ class TestE2E(unittest.TestCase):
         notes = find_exclusion_notes(config, self.emulators_dir, profiles)
         emu_names = [n["emulator"] for n in notes]
         self.assertIn("DeSmuME 2015", emu_names)
+
+
+    def test_70_validation_index_built(self):
+        """Validation index extracts checks from emulator profiles."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        self.assertIn("present_req.bin", index)
+        self.assertIn("size", index["present_req.bin"]["checks"])
+        self.assertEqual(index["present_req.bin"]["size"], 16)
+        self.assertIn("correct_hash.bin", index)
+        self.assertIn("crc32", index["correct_hash.bin"]["checks"])
+
+    def test_71_validation_size_pass(self):
+        """File with correct size passes validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["present_req.bin"]["path"]
+        reason = check_file_validation(path, "present_req.bin", index)
+        self.assertIsNone(reason)
+
+    def test_72_validation_size_fail(self):
+        """File with wrong size fails validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["present_opt.bin"]["path"]
+        reason = check_file_validation(path, "present_opt.bin", index)
+        self.assertIsNotNone(reason)
+        self.assertIn("size mismatch", reason)
+
+    def test_73_validation_crc32_pass(self):
+        """File with correct CRC32 passes validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["correct_hash.bin"]["path"]
+        reason = check_file_validation(path, "correct_hash.bin", index)
+        self.assertIsNone(reason)
+
+    def test_74_validation_crc32_fail(self):
+        """File with wrong CRC32 fails validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["no_md5.bin"]["path"]
+        reason = check_file_validation(path, "no_md5.bin", index)
+        self.assertIsNotNone(reason)
+        self.assertIn("crc32 mismatch", reason)
+
+    def test_75_validation_applied_in_existence_mode(self):
+        """Existence platform downgrades OK to UNTESTED when validation fails."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        # present_opt.bin exists but has wrong expected size → UNTESTED
+        for d in result["details"]:
+            if d["name"] == "present_opt.bin":
+                self.assertEqual(d["status"], Status.UNTESTED)
+                self.assertIn("size mismatch", d.get("reason", ""))
+                break
+        else:
+            self.fail("present_opt.bin not found in details")
+
+    def test_77_validation_crc32_leading_zero(self):
+        """CRC32 starting with '0' must not be truncated (lstrip regression)."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["leading_zero_crc.bin"]["path"]
+        reason = check_file_validation(path, "leading_zero_crc.bin", index)
+        self.assertIsNone(reason)
+
+    def test_78_validation_conflict_raises(self):
+        """Conflicting size/crc32 from two profiles raises ValueError."""
+        profiles = {
+            "emu_a": {
+                "type": "libretro", "files": [
+                    {"name": "shared.bin", "validation": ["size"], "size": 512},
+                ],
+            },
+            "emu_b": {
+                "type": "libretro", "files": [
+                    {"name": "shared.bin", "validation": ["size"], "size": 1024},
+                ],
+            },
+        }
+        with self.assertRaises(ValueError) as ctx:
+            _build_validation_index(profiles)
+        self.assertIn("validation conflict", str(ctx.exception))
+        self.assertIn("shared.bin", str(ctx.exception))
+
+    def test_79_validation_md5_pass(self):
+        """File with correct MD5 passes validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["correct_hash.bin"]["path"]
+        reason = check_file_validation(path, "correct_hash.bin", index)
+        self.assertIsNone(reason)
+
+    def test_80_validation_md5_fail(self):
+        """File with wrong MD5 fails validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["alias_target.bin"]["path"]
+        reason = check_file_validation(path, "alias_target.bin", index)
+        self.assertIsNotNone(reason)
+        self.assertIn("md5 mismatch", reason)
+
+    def test_81_validation_index_has_md5_sha1(self):
+        """Validation index stores md5 and sha1 when declared."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        self.assertIn("md5", index["correct_hash.bin"]["checks"])
+        self.assertIn("sha1", index["correct_hash.bin"]["checks"])
+        self.assertIsNotNone(index["correct_hash.bin"]["md5"])
+        self.assertIsNotNone(index["correct_hash.bin"]["sha1"])
+
+    def test_76_validation_no_effect_when_no_field(self):
+        """Files without validation field are unaffected."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        # wrong_hash.bin has no validation in any profile
+        path = self.files["wrong_hash.bin"]["path"]
+        reason = check_file_validation(path, "wrong_hash.bin", index)
+        self.assertIsNone(reason)
+
+
+    # ---------------------------------------------------------------
+    # Emulator/system mode verification
+    # ---------------------------------------------------------------
+
+    def test_90_verify_emulator_basic(self):
+        """verify_emulator returns correct counts for a profile with mixed present/missing."""
+        result = verify_emulator(["test_emu"], self.emulators_dir, self.db)
+        self.assertIn("test_emu", result["emulators"])
+        # present_req.bin and alias_target.bin are present, others missing
+        self.assertGreater(result["total_files"], 0)
+        self.assertGreater(result["severity_counts"][Severity.OK], 0)
+
+    def test_91_verify_emulator_standalone_filters(self):
+        """Standalone mode includes mode:standalone files, excludes mode:libretro."""
+        result_lr = verify_emulator(["test_emu"], self.emulators_dir, self.db, standalone=False)
+        result_sa = verify_emulator(["test_emu"], self.emulators_dir, self.db, standalone=True)
+        lr_names = {d["name"] for d in result_lr["details"]}
+        sa_names = {d["name"] for d in result_sa["details"]}
+        # standalone_only.bin should be in standalone, not libretro
+        self.assertNotIn("standalone_only.bin", lr_names)
+        self.assertIn("standalone_only.bin", sa_names)
+
+    def test_102_resolve_dest_hint_disambiguates(self):
+        """dest_hint resolves regional variants with same name to distinct files."""
+        usa_path, usa_status = resolve_local_file(
+            {"name": "BIOS.bin"}, self.db, dest_hint="TestConsole/USA/BIOS.bin",
+        )
+        eur_path, eur_status = resolve_local_file(
+            {"name": "BIOS.bin"}, self.db, dest_hint="TestConsole/EUR/BIOS.bin",
+        )
+        self.assertIsNotNone(usa_path)
+        self.assertIsNotNone(eur_path)
+        self.assertEqual(usa_status, "exact")
+        self.assertEqual(eur_status, "exact")
+        # Must be DIFFERENT files
+        self.assertNotEqual(usa_path, eur_path)
+        # Verify content
+        with open(usa_path, "rb") as f:
+            self.assertEqual(f.read(), b"BIOS_USA_CONTENT")
+        with open(eur_path, "rb") as f:
+            self.assertEqual(f.read(), b"BIOS_EUR_CONTENT")
+
+    def test_103_resolve_dest_hint_fallback_to_name(self):
+        """Without dest_hint, falls back to by_name (first candidate)."""
+        path, status = resolve_local_file({"name": "BIOS.bin"}, self.db)
+        self.assertIsNotNone(path)
+        # Still finds something (first candidate by name)
+
+    def test_92_verify_emulator_libretro_only_rejects_standalone(self):
+        """Libretro-only profile rejects --standalone."""
+        with self.assertRaises(SystemExit):
+            verify_emulator(["test_hle"], self.emulators_dir, self.db, standalone=True)
+
+    def test_92b_verify_emulator_game_type_rejects_standalone(self):
+        """Game-type profile rejects --standalone."""
+        game = {"emulator": "TestGame", "type": "game", "systems": ["console-a"], "files": []}
+        with open(os.path.join(self.emulators_dir, "test_game.yml"), "w") as fh:
+            yaml.dump(game, fh)
+        with self.assertRaises(SystemExit):
+            verify_emulator(["test_game"], self.emulators_dir, self.db, standalone=True)
+
+    def test_93_verify_emulator_alias_rejected(self):
+        """Alias profile produces error with redirect message."""
+        with self.assertRaises(SystemExit):
+            verify_emulator(["test_alias"], self.emulators_dir, self.db)
+
+    def test_94_verify_emulator_launcher_rejected(self):
+        """Launcher profile produces error."""
+        with self.assertRaises(SystemExit):
+            verify_emulator(["test_launcher"], self.emulators_dir, self.db)
+
+    def test_95_verify_emulator_validation_applied(self):
+        """Emulator mode applies validation checks as primary verification."""
+        result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
+        # present_opt.bin has wrong size → UNTESTED
+        for d in result["details"]:
+            if d["name"] == "present_opt.bin":
+                self.assertEqual(d["status"], Status.UNTESTED)
+                self.assertIn("size mismatch", d.get("reason", ""))
+                break
+        else:
+            self.fail("present_opt.bin not found in details")
+
+    def test_96_verify_emulator_multi(self):
+        """Multi-emulator verify aggregates files."""
+        result = verify_emulator(
+            ["test_emu", "test_hle"], self.emulators_dir, self.db,
+        )
+        self.assertEqual(len(result["emulators"]), 2)
+        all_names = {d["name"] for d in result["details"]}
+        # Files from both profiles
+        self.assertIn("present_req.bin", all_names)
+        self.assertIn("hle_missing.bin", all_names)
+
+    def test_97_verify_emulator_data_dir_notice(self):
+        """Emulator with data_directories reports notice."""
+        result = verify_emulator(["test_emu"], self.emulators_dir, self.db)
+        self.assertIn("test-data-dir", result.get("data_dir_notices", []))
+
+    def test_98_verify_emulator_validation_label(self):
+        """Validation label reflects the checks used."""
+        result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
+        # test_validation has crc32, md5, sha1, size → all listed
+        self.assertEqual(result["verification_mode"], "crc32+md5+sha1+size")
+
+    def test_99_filter_files_by_mode(self):
+        """_filter_files_by_mode correctly filters standalone/libretro."""
+        files = [
+            {"name": "a.bin"},                         # no mode → both
+            {"name": "b.bin", "mode": "libretro"},     # libretro only
+            {"name": "c.bin", "mode": "standalone"},   # standalone only
+            {"name": "d.bin", "mode": "both"},         # explicit both
+        ]
+        lr = _filter_files_by_mode(files, standalone=False)
+        sa = _filter_files_by_mode(files, standalone=True)
+        lr_names = {f["name"] for f in lr}
+        sa_names = {f["name"] for f in sa}
+        self.assertEqual(lr_names, {"a.bin", "b.bin", "d.bin"})
+        self.assertEqual(sa_names, {"a.bin", "c.bin", "d.bin"})
+
+    def test_100_verify_emulator_empty_profile(self):
+        """Profile with files:[] produces note, not error."""
+        empty = {
+            "emulator": "TestEmpty", "type": "libretro",
+            "systems": ["console-a"], "files": [],
+            "exclusion_note": "Code never loads BIOS",
+        }
+        with open(os.path.join(self.emulators_dir, "test_empty.yml"), "w") as fh:
+            yaml.dump(empty, fh)
+        result = verify_emulator(["test_empty"], self.emulators_dir, self.db)
+        # Should have a note entry, not crash
+        self.assertEqual(result["total_files"], 0)
+        notes = [d for d in result["details"] if d.get("note")]
+        self.assertTrue(len(notes) > 0)
+
+    def test_101_verify_emulator_severity_missing_required(self):
+        """Missing required file in emulator mode → WARNING severity."""
+        result = verify_emulator(["test_emu"], self.emulators_dir, self.db)
+        # undeclared_req.bin is required and missing
+        for d in result["details"]:
+            if d["name"] == "undeclared_req.bin":
+                self.assertEqual(d["status"], Status.MISSING)
+                self.assertTrue(d["required"])
+                break
+        else:
+            self.fail("undeclared_req.bin not found")
+        # Severity should be WARNING (existence mode base)
+        self.assertGreater(result["severity_counts"][Severity.WARNING], 0)
 
 
 if __name__ == "__main__":

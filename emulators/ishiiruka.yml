@@ -1,10 +1,13 @@
 emulator: Ishiiruka
 type: libretro
+core_classification: enhanced_fork
 source: "https://github.com/libretro/ishiiruka"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/Tinob/Ishiiruka"
+profiled_date: "2026-03-21"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Ishiiruka)"
-fork_of: Dolphin
+cores:
+  - ishiiruka
 systems: [nintendo-gamecube, nintendo-wii]
 
 # Ishiiruka is a performance-focused Dolphin fork with custom GPU backends.
@@ -18,6 +21,11 @@ systems: [nintendo-gamecube, nintendo-wii]
 # Same as dolphin_libretro - uses "dolphin-emu" subdirectory, not "ishiiruka".
 
 # Core options use "ishiiruka_" prefix (ishiiruka_dsp_hle, ishiiruka_efb_scale, etc.)
+
+data_directories:
+  - ref: dolphin-sys
+    destination: "dolphin-emu/Sys"
+    source_ref: "Source/Core/Common/CommonPaths.h:115"
 
 files:
   # -- GameCube IPL (Boot ROM) --

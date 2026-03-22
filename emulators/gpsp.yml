@@ -1,7 +1,9 @@
 emulator: gpSP
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/gpsp"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/BASLQC/gPSP"
+profiled_date: "2026-03-21"
 core_version: "Git"
 display_name: "Nintendo - Game Boy Advance (gpSP)"
 cores:
@@ -35,6 +37,9 @@ notes: |
   precise SWI behavior or BIOS checksum verification. The built-in BIOS
   works for the vast majority of the GBA library.
 
+  Upstream (Exophase v0.9) required the official BIOS with no fallback.
+  The built-in open-source BIOS is a libretro port addition.
+
 files:
   # -------------------------------------------------------
   # Game Boy Advance - BIOS (optional, built-in fallback)
@@ -44,6 +49,7 @@ files:
     required: false
     hle_fallback: true
     size: 16384  # 16 KB (0x4000)
+    validation: [size]
     note: "Official GBA BIOS. Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot logo."
     source_ref: "libretro/libretro.c:1111"
 

@@ -35,9 +35,10 @@ except ImportError:
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    build_zip_contents_index, check_inside_zip, group_identical_platforms,
-    load_emulator_profiles, load_platform_config, md5sum, md5_composite,
-    resolve_local_file, resolve_platform_cores,
+    build_zip_contents_index, check_inside_zip, compute_hashes,
+    group_identical_platforms, load_data_dir_registry,
+    load_emulator_profiles, load_platform_config,
+    md5sum, md5_composite, resolve_local_file, resolve_platform_cores,
 )
 
 DEFAULT_DB = "database.json"
@@ -67,16 +68,156 @@ _SEVERITY_ORDER = {Severity.OK: 0, Severity.INFO: 1, Severity.WARNING: 2, Severi
 
 
 # ---------------------------------------------------------------------------
+# Emulator-level validation (size, crc32 checks from emulator profiles)
+# ---------------------------------------------------------------------------
+
+def _parse_validation(validation: list | dict | None) -> list[str]:
+    """Extract the validation check list from a file's validation field.
+
+    Handles both simple list and divergent (core/upstream) dict forms.
+    For dicts, uses the ``core`` key since RetroArch users run the core.
+    """
+    if validation is None:
+        return []
+    if isinstance(validation, list):
+        return validation
+    if isinstance(validation, dict):
+        return validation.get("core", [])
+    return []
+
+
+def _build_validation_index(profiles: dict) -> dict[str, dict]:
+    """Build per-filename validation rules from emulator profiles.
+
+    Returns {filename: {"checks": [str], "size": int|None, "crc32": str|None,
+    "md5": str|None, "sha1": str|None}}.
+    When multiple emulators reference the same file, merges checks (union).
+    Raises ValueError if two profiles declare conflicting values for
+    the same filename (indicates a profile bug).
+    """
+    index: dict[str, dict] = {}
+    # Track which emulator set each value, for conflict reporting
+    sources: dict[str, dict[str, str]] = {}
+    for emu_name, profile in profiles.items():
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        for f in profile.get("files", []):
+            fname = f.get("name", "")
+            if not fname:
+                continue
+            checks = _parse_validation(f.get("validation"))
+            if not checks:
+                continue
+            if fname not in index:
+                index[fname] = {
+                    "checks": set(), "size": None,
+                    "crc32": None, "md5": None, "sha1": None,
+                }
+                sources[fname] = {}
+            index[fname]["checks"].update(checks)
+            if "size" in checks and f.get("size") is not None:
+                new_size = f["size"]
+                prev_size = index[fname]["size"]
+                if prev_size is not None and prev_size != new_size:
+                    prev_emu = sources[fname].get("size", "?")
+                    raise ValueError(
+                        f"validation conflict for '{fname}': "
+                        f"size={prev_size} ({prev_emu}) vs size={new_size} ({emu_name})"
+                    )
+                index[fname]["size"] = new_size
+                sources[fname]["size"] = emu_name
+            if "crc32" in checks and f.get("crc32"):
+                new_crc = f["crc32"].lower()
+                if new_crc.startswith("0x"):
+                    new_crc = new_crc[2:]
+                prev_crc = index[fname]["crc32"]
+                if prev_crc is not None:
+                    norm_prev = prev_crc.lower()
+                    if norm_prev.startswith("0x"):
+                        norm_prev = norm_prev[2:]
+                    if norm_prev != new_crc:
+                        prev_emu = sources[fname].get("crc32", "?")
+                        raise ValueError(
+                            f"validation conflict for '{fname}': "
+                            f"crc32={prev_crc} ({prev_emu}) vs crc32={f['crc32']} ({emu_name})"
+                        )
+                index[fname]["crc32"] = f["crc32"]
+                sources[fname]["crc32"] = emu_name
+            for hash_type in ("md5", "sha1"):
+                if hash_type in checks and f.get(hash_type):
+                    new_hash = f[hash_type].lower()
+                    prev_hash = index[fname][hash_type]
+                    if prev_hash is not None and prev_hash.lower() != new_hash:
+                        prev_emu = sources[fname].get(hash_type, "?")
+                        raise ValueError(
+                            f"validation conflict for '{fname}': "
+                            f"{hash_type}={prev_hash} ({prev_emu}) vs "
+                            f"{hash_type}={f[hash_type]} ({emu_name})"
+                        )
+                    index[fname][hash_type] = f[hash_type]
+                    sources[fname][hash_type] = emu_name
+    # Convert sets to sorted lists for determinism
+    for v in index.values():
+        v["checks"] = sorted(v["checks"])
+    return index
+
+
+def check_file_validation(
+    local_path: str, filename: str, validation_index: dict[str, dict],
+) -> str | None:
+    """Check emulator-level validation (size, crc32, md5, sha1) on a resolved file.
+
+    Returns None if all checks pass or no validation applies.
+    Returns a reason string if a check fails.
+    """
+    entry = validation_index.get(filename)
+    if not entry:
+        return None
+    checks = entry["checks"]
+    if "size" in checks and entry["size"] is not None:
+        actual_size = os.path.getsize(local_path)
+        if actual_size != entry["size"]:
+            return f"size mismatch: expected {entry['size']}, got {actual_size}"
+    # Hash checks — compute once, reuse
+    need_hashes = any(
+        h in checks and entry.get(h) for h in ("crc32", "md5", "sha1")
+    )
+    if need_hashes:
+        hashes = compute_hashes(local_path)
+        if "crc32" in checks and entry["crc32"]:
+            expected_crc = entry["crc32"].lower()
+            if expected_crc.startswith("0x"):
+                expected_crc = expected_crc[2:]
+            if hashes["crc32"].lower() != expected_crc:
+                return f"crc32 mismatch: expected {entry['crc32']}, got {hashes['crc32']}"
+        if "md5" in checks and entry["md5"]:
+            if hashes["md5"].lower() != entry["md5"].lower():
+                return f"md5 mismatch: expected {entry['md5']}, got {hashes['md5']}"
+        if "sha1" in checks and entry["sha1"]:
+            if hashes["sha1"].lower() != entry["sha1"].lower():
+                return f"sha1 mismatch: expected {entry['sha1']}, got {hashes['sha1']}"
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Verification functions
 # ---------------------------------------------------------------------------
 
-def verify_entry_existence(file_entry: dict, local_path: str | None) -> dict:
+def verify_entry_existence(
+    file_entry: dict, local_path: str | None,
+    validation_index: dict[str, dict] | None = None,
+) -> dict:
     """RetroArch verification: path_is_valid() — file exists = OK."""
     name = file_entry.get("name", "")
     required = file_entry.get("required", True)
-    if local_path:
-        return {"name": name, "status": Status.OK, "required": required}
-    return {"name": name, "status": Status.MISSING, "required": required}
+    if not local_path:
+        return {"name": name, "status": Status.MISSING, "required": required}
+    if validation_index:
+        reason = check_file_validation(local_path, name, validation_index)
+        if reason:
+            return {"name": name, "status": Status.UNTESTED, "required": required,
+                    "path": local_path, "reason": reason}
+    return {"name": name, "status": Status.OK, "required": required}
 
 
 def verify_entry_md5(
@@ -325,13 +466,14 @@ def verify_platform(
     )
     zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
-    # Build HLE index from emulator profiles: {filename: True} if any core has HLE for it
+    # Build HLE + validation indexes from emulator profiles
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
     hle_index: dict[str, bool] = {}
     for profile in profiles.values():
         for f in profile.get("files", []):
             if f.get("hle_fallback"):
                 hle_index[f.get("name", "")] = True
+    validation_index = _build_validation_index(profiles)
 
     # Per-entry results
     details = []
@@ -346,9 +488,18 @@ def verify_platform(
                 file_entry, db, zip_contents,
             )
             if mode == "existence":
-                result = verify_entry_existence(file_entry, local_path)
+                result = verify_entry_existence(
+                    file_entry, local_path, validation_index,
+                )
             else:
                 result = verify_entry_md5(file_entry, local_path, resolve_status)
+                # Apply emulator-level validation on top of MD5 check
+                if result["status"] == Status.OK and local_path and validation_index:
+                    fname = file_entry.get("name", "")
+                    reason = check_file_validation(local_path, fname, validation_index)
+                    if reason:
+                        result["status"] = Status.UNTESTED
+                        result["reason"] = reason
             result["system"] = sys_id
             result["hle_fallback"] = hle_index.get(file_entry.get("name", ""), False)
             details.append(result)
@@ -504,10 +655,328 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
 
 
+# ---------------------------------------------------------------------------
+# Emulator/system mode verification
+# ---------------------------------------------------------------------------
+
+def _filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
+    """Filter file entries by libretro/standalone mode."""
+    result = []
+    for f in files:
+        fmode = f.get("mode", "")
+        if standalone and fmode == "libretro":
+            continue
+        if not standalone and fmode == "standalone":
+            continue
+        result.append(f)
+    return result
+
+
+def _effective_validation_label(details: list[dict], validation_index: dict) -> str:
+    """Determine the bracket label for the report.
+
+    Returns the union of all check types used, e.g. [crc32+existence+size].
+    """
+    all_checks: set[str] = set()
+    has_files = False
+    for d in details:
+        fname = d.get("name", "")
+        if d.get("note"):
+            continue  # skip informational entries (empty profiles)
+        has_files = True
+        entry = validation_index.get(fname)
+        if entry:
+            all_checks.update(entry["checks"])
+        else:
+            all_checks.add("existence")
+    if not has_files:
+        return "existence"
+    return "+".join(sorted(all_checks))
+
+
+def verify_emulator(
+    profile_names: list[str],
+    emulators_dir: str,
+    db: dict,
+    standalone: bool = False,
+) -> dict:
+    """Verify files for specific emulator profiles."""
+    profiles = load_emulator_profiles(emulators_dir)
+    zip_contents = build_zip_contents_index(db)
+
+    # Also load aliases for redirect messages
+    all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+
+    # Resolve profile names, reject alias/launcher
+    selected: list[tuple[str, dict]] = []
+    for name in profile_names:
+        if name not in all_profiles:
+            available = sorted(k for k, v in all_profiles.items()
+                               if v.get("type") not in ("alias", "test"))
+            print(f"Error: emulator '{name}' not found", file=sys.stderr)
+            print(f"Available: {', '.join(available[:10])}...", file=sys.stderr)
+            sys.exit(1)
+        p = all_profiles[name]
+        if p.get("type") == "alias":
+            alias_of = p.get("alias_of", "?")
+            print(f"Error: {name} is an alias of {alias_of} — use --emulator {alias_of}",
+                  file=sys.stderr)
+            sys.exit(1)
+        if p.get("type") == "launcher":
+            print(f"Error: {name} is a launcher — use the emulator it launches",
+                  file=sys.stderr)
+            sys.exit(1)
+        # Check standalone capability
+        ptype = p.get("type", "libretro")
+        if standalone and "standalone" not in ptype:
+            print(f"Error: {name} ({ptype}) does not support --standalone",
+                  file=sys.stderr)
+            sys.exit(1)
+        selected.append((name, p))
+
+    # Build validation index from selected profiles only
+    selected_profiles = {n: p for n, p in selected}
+    validation_index = _build_validation_index(selected_profiles)
+    data_registry = load_data_dir_registry(
+        os.path.join(os.path.dirname(__file__), "..", "platforms")
+    )
+
+    details = []
+    file_status: dict[str, str] = {}
+    file_severity: dict[str, str] = {}
+    data_dir_notices: list[str] = []
+
+    for emu_name, profile in selected:
+        files = _filter_files_by_mode(profile.get("files", []), standalone)
+
+        # Check data directories (only notice if not cached)
+        for dd in profile.get("data_directories", []):
+            ref = dd.get("ref", "")
+            if not ref:
+                continue
+            if data_registry and ref in data_registry:
+                cache_path = data_registry[ref].get("local_cache", "")
+                if cache_path and os.path.isdir(cache_path):
+                    continue  # cached, no notice needed
+            data_dir_notices.append(ref)
+
+        if not files:
+            details.append({
+                "name": f"({emu_name})", "status": Status.OK,
+                "required": False, "system": "",
+                "note": f"No files needed for {profile.get('emulator', emu_name)}",
+            })
+            continue
+
+        # Verify archives as units (e.g., neogeo.zip, aes.zip)
+        seen_archives: set[str] = set()
+        for file_entry in files:
+            archive = file_entry.get("archive")
+            if archive and archive not in seen_archives:
+                seen_archives.add(archive)
+                archive_entry = {"name": archive}
+                local_path, _ = resolve_local_file(archive_entry, db, zip_contents)
+                required = any(
+                    f.get("archive") == archive and f.get("required", True)
+                    for f in files
+                )
+                if local_path:
+                    result = {"name": archive, "status": Status.OK,
+                              "required": required, "path": local_path}
+                else:
+                    result = {"name": archive, "status": Status.MISSING,
+                              "required": required}
+                result["system"] = file_entry.get("system", "")
+                result["hle_fallback"] = False
+                details.append(result)
+                dest = archive
+                cur = result["status"]
+                prev = file_status.get(dest)
+                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
+                    file_status[dest] = cur
+                sev = compute_severity(cur, required, "existence", False)
+                prev_sev = file_severity.get(dest)
+                if prev_sev is None or _SEVERITY_ORDER.get(sev, 0) > _SEVERITY_ORDER.get(prev_sev, 0):
+                    file_severity[dest] = sev
+
+        for file_entry in files:
+            # Skip archived files (verified as archive units above)
+            if file_entry.get("archive"):
+                continue
+
+            dest_hint = file_entry.get("path", "")
+            local_path, resolve_status = resolve_local_file(
+                file_entry, db, zip_contents, dest_hint=dest_hint,
+            )
+            name = file_entry.get("name", "")
+            required = file_entry.get("required", True)
+            hle = file_entry.get("hle_fallback", False)
+
+            if not local_path:
+                result = {"name": name, "status": Status.MISSING, "required": required}
+            else:
+                # Apply emulator validation
+                reason = check_file_validation(local_path, name, validation_index)
+                if reason:
+                    result = {"name": name, "status": Status.UNTESTED,
+                              "required": required, "path": local_path,
+                              "reason": reason}
+                else:
+                    result = {"name": name, "status": Status.OK,
+                              "required": required, "path": local_path}
+
+            result["system"] = file_entry.get("system", "")
+            result["hle_fallback"] = hle
+            details.append(result)
+
+            # Aggregate by destination (path if available, else name)
+            dest = file_entry.get("path", "") or name
+            cur = result["status"]
+            prev = file_status.get(dest)
+            if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
+                file_status[dest] = cur
+            sev = compute_severity(cur, required, "existence", hle)
+            prev_sev = file_severity.get(dest)
+            if prev_sev is None or _SEVERITY_ORDER.get(sev, 0) > _SEVERITY_ORDER.get(prev_sev, 0):
+                file_severity[dest] = sev
+
+    counts = {Severity.OK: 0, Severity.INFO: 0, Severity.WARNING: 0, Severity.CRITICAL: 0}
+    for s in file_severity.values():
+        counts[s] = counts.get(s, 0) + 1
+    status_counts: dict[str, int] = {}
+    for s in file_status.values():
+        status_counts[s] = status_counts.get(s, 0) + 1
+
+    label = _effective_validation_label(details, validation_index)
+
+    return {
+        "emulators": [n for n, _ in selected],
+        "verification_mode": label,
+        "total_files": len(file_status),
+        "severity_counts": counts,
+        "status_counts": status_counts,
+        "details": details,
+        "data_dir_notices": sorted(set(data_dir_notices)),
+    }
+
+
+def verify_system(
+    system_ids: list[str],
+    emulators_dir: str,
+    db: dict,
+    standalone: bool = False,
+) -> dict:
+    """Verify files for all emulators supporting given system IDs."""
+    profiles = load_emulator_profiles(emulators_dir)
+    matching = []
+    for name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias", "test"):
+            continue
+        emu_systems = set(profile.get("systems", []))
+        if emu_systems & set(system_ids):
+            ptype = profile.get("type", "libretro")
+            if standalone and "standalone" not in ptype:
+                continue  # skip non-standalone in standalone mode
+            matching.append(name)
+
+    if not matching:
+        all_systems: set[str] = set()
+        for p in profiles.values():
+            all_systems.update(p.get("systems", []))
+        if standalone:
+            print(f"No standalone emulators found for system(s): {', '.join(system_ids)}",
+                  file=sys.stderr)
+        else:
+            print(f"No emulators found for system(s): {', '.join(system_ids)}",
+                  file=sys.stderr)
+        print(f"Available systems: {', '.join(sorted(all_systems)[:20])}...",
+              file=sys.stderr)
+        sys.exit(1)
+
+    return verify_emulator(matching, emulators_dir, db, standalone)
+
+
+def print_emulator_result(result: dict) -> None:
+    """Print verification result for emulator/system mode."""
+    label = " + ".join(result["emulators"])
+    mode = result["verification_mode"]
+    total = result["total_files"]
+    c = result["severity_counts"]
+    ok_count = c[Severity.OK]
+
+    sc = result.get("status_counts", {})
+    untested = sc.get(Status.UNTESTED, 0)
+    missing = sc.get(Status.MISSING, 0)
+    parts = [f"{ok_count}/{total} OK"]
+    if untested:
+        parts.append(f"{untested} untested")
+    if missing:
+        parts.append(f"{missing} missing")
+    print(f"{label}: {', '.join(parts)} [{mode}]")
+
+    seen = set()
+    for d in result["details"]:
+        if d["status"] == Status.UNTESTED:
+            if d["name"] in seen:
+                continue
+            seen.add(d["name"])
+            req = "required" if d.get("required", True) else "optional"
+            hle = ", HLE available" if d.get("hle_fallback") else ""
+            reason = d.get("reason", "")
+            print(f"  UNTESTED ({req}{hle}): {d['name']} — {reason}")
+    for d in result["details"]:
+        if d["status"] == Status.MISSING:
+            if d["name"] in seen:
+                continue
+            seen.add(d["name"])
+            req = "required" if d.get("required", True) else "optional"
+            hle = ", HLE available" if d.get("hle_fallback") else ""
+            print(f"  MISSING ({req}{hle}): {d['name']}")
+    for d in result["details"]:
+        if d.get("note"):
+            print(f"  {d['note']}")
+
+    for ref in result.get("data_dir_notices", []):
+        print(f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)")
+
+
+def _list_emulators(emulators_dir: str) -> None:
+    """Print available emulator profiles."""
+    profiles = load_emulator_profiles(emulators_dir)
+    for name in sorted(profiles):
+        p = profiles[name]
+        if p.get("type") in ("alias", "test"):
+            continue
+        display = p.get("emulator", name)
+        ptype = p.get("type", "libretro")
+        systems = ", ".join(p.get("systems", [])[:3])
+        more = "..." if len(p.get("systems", [])) > 3 else ""
+        print(f"  {name:30s} {display:40s} [{ptype}] {systems}{more}")
+
+
+def _list_systems(emulators_dir: str) -> None:
+    """Print available system IDs with emulator count."""
+    profiles = load_emulator_profiles(emulators_dir)
+    system_emus: dict[str, list[str]] = {}
+    for name, p in profiles.items():
+        if p.get("type") in ("alias", "test", "launcher"):
+            continue
+        for sys_id in p.get("systems", []):
+            system_emus.setdefault(sys_id, []).append(name)
+    for sys_id in sorted(system_emus):
+        count = len(system_emus[sys_id])
+        print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", help="Platform name")
     parser.add_argument("--all", action="store_true", help="Verify all active platforms")
+    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
+    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
+    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
+    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
+    parser.add_argument("--list-systems", action="store_true", help="List available systems")
     parser.add_argument("--include-archived", action="store_true")
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
@@ -515,9 +984,48 @@ def main():
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
 
+    if args.list_emulators:
+        _list_emulators(args.emulators_dir)
+        return
+    if args.list_systems:
+        _list_systems(args.emulators_dir)
+        return
+
+    # Mutual exclusion
+    modes = sum(1 for x in (args.platform, args.all, args.emulator, args.system) if x)
+    if modes == 0:
+        parser.error("Specify --platform, --all, --emulator, or --system")
+    if modes > 1:
+        parser.error("--platform, --all, --emulator, and --system are mutually exclusive")
+    if args.standalone and not (args.emulator or args.system):
+        parser.error("--standalone requires --emulator or --system")
+
     with open(args.db) as f:
         db = json.load(f)
 
+    # Emulator mode
+    if args.emulator:
+        names = [n.strip() for n in args.emulator.split(",") if n.strip()]
+        result = verify_emulator(names, args.emulators_dir, db, args.standalone)
+        if args.json:
+            result["details"] = [d for d in result["details"] if d["status"] != Status.OK]
+            print(json.dumps(result, indent=2))
+        else:
+            print_emulator_result(result)
+        return
+
+    # System mode
+    if args.system:
+        system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+        result = verify_system(system_ids, args.emulators_dir, db, args.standalone)
+        if args.json:
+            result["details"] = [d for d in result["details"] if d["status"] != Status.OK]
+            print(json.dumps(result, indent=2))
+        else:
+            print_emulator_result(result)
+        return
+
+    # Platform mode (existing)
     if args.all:
         from list_platforms import list_platforms as _list_platforms
         platforms = _list_platforms(include_archived=args.include_archived)
