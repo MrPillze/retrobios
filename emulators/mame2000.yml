@@ -1,8 +1,76 @@
-emulator: "mame2000"
-type: alias
-alias_of: "mame2003_plus"
-profiled_date: "2026-03-18"
+emulator: MAME 2000
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/mame2000-libretro"
+upstream: "https://www.mamedev.org"
+profiled_date: "2026-03-22"
 core_version: "0.37b5"
 display_name: "Arcade (MAME 2000)"
-note: "This core uses the same BIOS/firmware as mame2003_plus. See emulators/mame2003_plus.yml for details."
-files: []
+
+cores:
+  - mame2000
+
+systems:
+  - snk-neogeo-mvs
+  - deco-cassette
+
+notes: |
+  Frozen snapshot of MAME 0.37b5 via iMAME4All (David Valdeita). Fastest and
+  least accurate MAME core. Supports ~2000 arcade games from the 0.37b5 ROM set.
+
+  BIOS handling follows MAME 0.37b5 conventions. Shared BIOS files are packaged
+  as parent ROM ZIPs (e.g. neogeo.zip) and placed in the ROM directory alongside
+  game ROMs. The core searches only the ROM directory for ROMs and BIOS sets.
+
+  Samples (per-game WAV files) are loaded from system_dir/mame2000/samples/.
+  They provide sound effects for certain games and are optional.
+
+  hiscore.dat and cheat.dat are loaded from the ROM directory (not system_dir).
+  Both are bundled in the repo's metadata/ directory.
+
+files:
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/hiscore.c:18,252-254"
+    note: "high score definitions, loaded from ROM directory"
+
+  - name: cheat.dat
+    required: false
+    category: game_data
+    source_ref: "src/cheat.c:210,618,830-831"
+    note: "cheat definitions, loaded from ROM directory, cheats disabled by default"
+
+  - name: neogeo.zip
+    required: true
+    category: bios_zip
+    system: snk-neogeo-mvs
+    source_ref: "src/drivers/neogeo.c:4499-4508"
+    contents:
+      - name: neo-geo.rom
+        description: 68K BIOS
+        size: 131072
+        crc32: "9036d879"
+      - name: ng-sm1.rom
+        description: Z80 sound BIOS
+        size: 131072
+        crc32: "97cf998b"
+      - name: ng-sfix.rom
+        description: fix layer tiles
+        size: 131072
+        crc32: "354029fc"
+
+  - name: decocass.zip
+    required: true
+    category: bios_zip
+    system: deco-cassette
+    source_ref: "src/drivers/btime.c:1996-2005"
+    contents:
+      - name: rms8.cpu
+        description: 6502 BIOS
+        size: 4096
+        crc32: "23d929b7"
+      - name: rms8.snd
+        description: audio CPU
+        size: 2048
+        crc32: "b66b2c2a"
