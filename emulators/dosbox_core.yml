@@ -1,43 +1,31 @@
 emulator: DOSBox-core
-type: standalone + libretro
+type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/dosbox-core"
-upstream: "https://github.com/dosbox-staging/dosbox-staging"
-profiled_date: "2026-03-19"
+upstream: "https://sourceforge.net/projects/dosbox/"
+profiled_date: "2026-03-23"
 core_version: "SVN"
 display_name: "DOS (DOSBox-core)"
 cores: [dosbox_core]
 systems: [dos]
-verification: sha1
 notes: |
   No BIOS required. MT-32 and SoundFont support is optional for MIDI music.
-
-  Libretro mode:
-    MT-32 ROMs loaded by exact filename from system directory.
-    mt32.romdir = system_dir (libretro.cpp:652). CM-32L is default type.
-    ref: src/gui/midi_mt32.cpp:35,51-66
-    FluidSynth reads .sf2/.sf3/.dls/.gig from system/soundfonts/.
-    ref: libretro/src/libretro.cpp:1086-1097
-    BASSMIDI reads .sf2/.sfz from system/soundfonts/, requires BASS +
-    BASSMIDI shared libs in system dir (dlopen'd at runtime).
-    ref: libretro/src/midi_bassmidi.cpp:232-254
-    .info declares firmware_count=10 (4 ROMs + 6 BASS libs).
-
-  Standalone mode (DOSBox Staging):
-    MT-32 ROMs identified by SHA1 hash (MUNT), not filename. Any file in
-    mt32-roms/ dir scanned and matched. Split ROM pairs supported (_a+_b).
-    ref: dosbox-staging src/midi/mt32.cpp:109-148 (ROM defs), 470-484 (dir scan)
-    Default dir: config_dir/mt32-roms/ (dosbox.h:173)
-    Models: MT-32 v1.04-1.07, BlueRidge, v2.03-2.07, CM-32L v1.00-1.02, CM-32LN v1.00
-    Sound Canvas (SC-55/SC-155/SC-88) emulation with soundcanvas-roms/ dir.
-    ref: src/midi/soundcanvas.cpp, dosbox.h:174
-    SoundFonts in config_dir/soundfonts/ (dosbox.h:175)
-    ref: src/midi/fluidsynth.cpp:68-69,211
+  MT-32 ROMs loaded by exact filename from system directory.
+  mt32.romdir = system_dir (libretro.cpp:652). CM-32L is default type.
+  ref: src/gui/midi_mt32.cpp:35,51-66
+  MUNT identifies ROMs by SHA1+size (ROMInfo.cpp:171-180).
+  FluidSynth reads .sf2/.sf3/.dls/.gig from system/soundfonts/.
+  ref: libretro/src/libretro.cpp:1086-1097
+  BASSMIDI reads .sf2/.sfz from system/soundfonts/, requires BASS +
+  BASSMIDI shared libs in system dir (dlopen'd at runtime).
+  ref: libretro/src/midi_bassmidi.cpp:232-254
+  .info declares firmware_count=10 (4 ROMs + 6 BASS libs).
 
 files:
   # -- MT-32 Control ROM --
-  # The core only loads MT32_CONTROL.ROM (not versioned filenames).
-  # Any v1.x control ROM (64 KB) works. The .info references v1.07.
+  # The core loads MT32_CONTROL.ROM (or CM32L_CONTROL.ROM if mt32.type=cm32l).
+  # MUNT validates the file by SHA1+size against its known ROM database.
+  # Any recognized control ROM works regardless of filename.
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.04"
@@ -45,7 +33,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:58"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
@@ -53,7 +41,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:61"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
@@ -61,7 +49,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:64"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
@@ -69,7 +57,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
-    source_ref: "midi_mt32.cpp:55, dosbox_core_libretro.info:firmware0"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:67, dosbox_core_libretro.info:firmware0"
     notes: "version referenced in .info file (md5: 5626206284b22c2734f3e9efefcd2675)"
 
   - name: "MT32_CONTROL.ROM"
@@ -78,17 +66,9 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:70"
 
   # -- MT-32 v2.x Control ROMs (128 KB) --
-
-  - name: "MT32_CONTROL.ROM"
-    description: "MT-32 Control v2.03 (new MT-32)"
-    required: false
-    hle_fallback: true
-    size: 131072
-    sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
-    source_ref: "midi_mt32.cpp:55"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.04"
@@ -96,7 +76,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:72"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.06"
@@ -104,7 +84,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:73"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.07"
@@ -112,7 +92,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
-    source_ref: "midi_mt32.cpp:55"
+    source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:74"
 
   # -- CM-32L / LAPC-I Control ROMs (64 KB) --
   # Loaded when mt32.type = "cm32l" (the default).
@@ -123,7 +103,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
-    source_ref: "midi_mt32.cpp:53"
+    source_ref: "midi_mt32.cpp:53, ROMInfo.cpp:75"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
@@ -131,8 +111,17 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
-    source_ref: "midi_mt32.cpp:53, dosbox_core_libretro.info:firmware2"
+    source_ref: "midi_mt32.cpp:53, ROMInfo.cpp:76, dosbox_core_libretro.info:firmware2"
     notes: "version referenced in .info file (md5: bfff32b6144c1d706109accb6e6b1113)"
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32LN/CM-500/LAPC-N Control v1.00"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    source_ref: "midi_mt32.cpp:53, ROMInfo.cpp:77"
+    notes: "MUNT recognizes this ROM when named CM32L_CONTROL.ROM"
 
   # -- PCM ROMs --
 
@@ -142,7 +131,7 @@ files:
     hle_fallback: true
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
-    source_ref: "midi_mt32.cpp:66, dosbox_core_libretro.info:firmware1"
+    source_ref: "midi_mt32.cpp:66, ROMInfo.cpp:81, dosbox_core_libretro.info:firmware1"
     notes: "pairs with any MT-32 v1.x control ROM (md5: 89e42e386e82e0cacb4a2704a03706ca)"
 
   - name: "CM32L_PCM.ROM"
@@ -151,146 +140,8 @@ files:
     hle_fallback: true
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
-    source_ref: "midi_mt32.cpp:64, dosbox_core_libretro.info:firmware3"
+    source_ref: "midi_mt32.cpp:64, ROMInfo.cpp:85, dosbox_core_libretro.info:firmware3"
     notes: "pairs with MT-32 v2.x or CM-32L control ROMs (md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4)"
-
-  # -- CM-32LN / CM-500 / LAPC-N Control ROM (standalone) --
-  # Supported by MUNT (ROMInfo.cpp:77) but dosbox-core libretro only loads
-  # MT32_CONTROL.ROM or CM32L_CONTROL.ROM by exact name. Standalone DOSBox
-  # Staging identifies this ROM by SHA1 hash scan.
-
-  - name: "CM32LN_CONTROL.ROM"
-    description: "CM-32LN/CM-500/LAPC-N Control v1.00"
-    required: false
-    hle_fallback: true
-    size: 65536
-    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:77, dosbox-staging src/midi/mt32.cpp:145,242"
-
-  # -- Split ROM pairs (standalone mode) --
-  # MUNT supports split Control ROMs (_a + _b, 32KB each, interleaved) and
-  # split PCM ROMs (_l + _h, half-size each, appended).
-  # Only useful in standalone mode with SHA1 scan. Libretro mode needs full ROMs.
-  # ref: ROMInfo.cpp:56-70 (control splits), 79-84 (PCM splits)
-
-  - name: "MT-32 Control v1.04 half A"
-    description: "MT-32 Control v1.04 split (Mux0)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:56"
-
-  - name: "MT-32 Control v1.04 half B"
-    description: "MT-32 Control v1.04 split (Mux1)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:57"
-
-  - name: "MT-32 Control v1.05 half A"
-    description: "MT-32 Control v1.05 split (Mux0)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:59"
-
-  - name: "MT-32 Control v1.05 half B"
-    description: "MT-32 Control v1.05 split (Mux1)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:60"
-
-  - name: "MT-32 Control v1.06 half A"
-    description: "MT-32 Control v1.06 split (Mux0)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:62"
-
-  - name: "MT-32 Control v1.06 half B"
-    description: "MT-32 Control v1.06 split (Mux1)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "bf4f15666bc46679579498386704893b630c1171"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:63"
-
-  - name: "MT-32 Control v1.07 half A"
-    description: "MT-32 Control v1.07 split (Mux0)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:65"
-
-  - name: "MT-32 Control v1.07 half B"
-    description: "MT-32 Control v1.07 split (Mux1)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:66"
-
-  - name: "MT-32 Control BlueRidge half A"
-    description: "MT-32 Control BlueRidge split (Mux0)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:68"
-
-  - name: "MT-32 Control BlueRidge half B"
-    description: "MT-32 Control BlueRidge split (Mux1)"
-    required: false
-    hle_fallback: true
-    size: 32768
-    sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:69"
-
-  - name: "MT-32 PCM ROM low half"
-    description: "MT-32 PCM ROM first half (262144 bytes)"
-    required: false
-    hle_fallback: true
-    size: 262144
-    sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:79"
-
-  - name: "MT-32 PCM ROM high half"
-    description: "MT-32 PCM ROM second half (262144 bytes)"
-    required: false
-    hle_fallback: true
-    size: 262144
-    sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
-    mode: standalone
-    source_ref: "ROMInfo.cpp:80"
-
-  - name: "CM-32L PCM ROM high half"
-    description: "CM-32L/CM-64/LAPC-I PCM upper half (524288 bytes)"
-    required: false
-    hle_fallback: true
-    size: 524288
-    sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
-    mode: standalone
-    note: "lower half is identical to full MT-32 PCM ROM"
-    source_ref: "ROMInfo.cpp:84"
 
   # -- BASS shared libraries (BASSMIDI driver) --
   # Downloaded from https://www.un4seen.com, placed in system directory.
