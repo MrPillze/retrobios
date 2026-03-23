@@ -1,5 +1,6 @@
 emulator: DOSBox-core
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/libretro/dosbox-core"
 upstream: "https://github.com/dosbox-staging/dosbox-staging"
 profiled_date: "2026-03-19"

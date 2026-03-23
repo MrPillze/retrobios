@@ -1,7 +1,9 @@
 emulator: Craft
 type: game
+core_classification: pure_libretro
 source: "https://github.com/libretro/Craft"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/fogleman/Craft"
+profiled_date: "2026-03-23"
 core_version: "v1"
 display_name: "Minecraft (Craft)"
 cores: [craft]
@@ -9,6 +11,8 @@ systems: []
 files: []
 notes: >
   Libretro port of Craft, a simple Minecraft clone by Michael Fogleman.
-  Procedurally generates a voxel world with basic block placement and removal.
-  All textures and shaders are compiled into the binary.
-  No content file, BIOS, or system directory files required.
+  All textures, fonts, and shaders are embedded in the binary (header arrays).
+  Upstream loads textures from external PNG files; libretro port compiles them in.
+  Uses system directory only for craft.db/auth.db (core-generated save data).
+  Source has zero fopen calls. .info declares no firmware.
+source_ref: "libretro/libretro.c, src/main.c:2680-2698, src/main.c:3315-3345"

@@ -1,7 +1,8 @@
 emulator: DirectXBox
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-directxbox"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "alpha"
 display_name: "Microsoft - Xbox (DirectXbox)"
 cores:
@@ -41,16 +42,18 @@ files:
   - name: "mcpx_1.0.bin"
     path: "mcpx_1.0.bin"
     size: 512
+    validation: [size]
     required: true
     note: >
       Xbox MCPX ROM (secret boot ROM on the southbridge). Contains the initial
       boot vector that loads the flash BIOS. Overlaid at the last 512 bytes of
       the 16 MB flash region (0xFFFFFE00-0xFFFFFFFF). Only needed for retail
       machine types; Debug and Chihiro skip this file.
-    source_ref: "src/xbox.cpp:186-206, src/libretro/libretro.cpp:202"
+    source_ref: "src/xbox.cpp:186-207, src/libretro/libretro.cpp:202"
 
   - name: "cromwell_1024.bin"
     path: "cromwell_1024.bin"
+    validation: [size]
     required: true
     note: >
       Cromwell open-source Xbox BIOS (1024 KB variant). Loaded as the flash ROM
@@ -58,7 +61,7 @@ files:
       multiple of 0x10000. This is the only BIOS that currently boots in the
       emulator. The Microsoft retail BIOS (xbox-3944.bin) is referenced in
       commented-out code but does not work yet.
-    source_ref: "src/xbox.cpp:143-178, src/libretro/libretro.cpp:203-204"
+    source_ref: "src/xbox.cpp:143-178, src/libretro/libretro.cpp:203"
 
 notes:
   status: >

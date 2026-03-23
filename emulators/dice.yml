@@ -1,7 +1,9 @@
 emulator: DICE
 type: libretro
+core_classification: community_fork
 source: "https://github.com/mittonk/dice-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://sourceforge.net/projects/dice/"
+profiled_date: "2026-03-23"
 core_version: "v0.4.2"
 display_name: "Arcade (DICE)"
 cores:
@@ -10,50 +12,14 @@ systems:
   - discrete-arcade
 
 notes: |
-  DICE (Discrete Integrated Circuit Emulator) emulates early arcade hardware
-  built entirely from discrete logic components, with no CPU. dice-libretro is
-  a libretro port by Ken Mitton, based on upstream DICE by Adam B.
+  Discrete Integrated Circuit Emulator. Emulates early arcade hardware built
+  from discrete logic components with no CPU. Libretro port by Ken Mitton,
+  based on upstream DICE by Adam B.
 
-  No BIOS or firmware files required. The .info file declares firmware_count = 0.
-
-  Games fall into two categories:
-    - ROM-based: shipped as MAME-style ZIP archives (filename matters).
-      The core loads the ZIP passed by the frontend and matches individual ROM
-      chips by CRC32 (chips/rom.cpp:41-218, RomDesc::get_data). If a chip's
-      CRC does not match, the core walks all entries in the archive looking for
-      a CRC match or alt_crc match.
-    - ROM-less: games like Pong, Breakout, Rebound whose original PCBs had no
-      ROM at all. These use .dmy dummy launcher files (empty placeholders) to
-      tell RetroArch which game to start.
-
-  retro_get_system_info (libretro.cpp:122-137) sets need_fullpath = true,
-  block_extract = true, valid_extensions = "zip|dmy|k1|a1|6c|c6|d2|s1|f4|a4|
-  1da|da1|C4|4c|4d|d7|d4". The unusual extensions are raw ROM chip dumps for
-  individual games (e.g. .k1 for antiaircraft, .a1 for attack).
-
-  dice.cpp:42-66 strips any "#inner.rom" suffix from the path (for ROM
-  managers that expose zip contents) and passes the zip path to
-  RomDesc::set_zip_filename.
-
-  retro_init (libretro.cpp:50-63) retrieves RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
-  but uses it only for the retro_base_directory variable, not for loading any
-  system files.
-
-  Games with ROMs (10 titles):
-    antiaircraft.zip  - 1 ROM chip (k1)
-    attack.zip        - 6 ROM chips (a1, b1, c1, d1, j6, k6), each with alt_crc
-    cleansweep.zip    - 3 ROM chips (6c, d7, k3)
-    crashnscore.zip   - 6 ROM chips (d2, e2, f6, f7, p6, p7)
-    indy4.zip         - 4 ROM chips (s1, s2, c1, c2)
-    jetfighter.zip    - 6 ROM chips (a4, j1, j5, k5, m1, r5)
-    sharkjaws.zip     - 2 ROM chips (1da/da1, 1db/db1)
-    steeplechase.zip  - 2 ROM chips (C4, D4); bugle ROM c8 dump missing
-    stuntcycle.zip    - 2 ROM chips (4d, 1fh)
-    wipeout.zip       - 2 ROM chips (d4, g7)
-
-  ROM-less games (11 titles, use .dmy dummy files):
-    breakout, crossfire, gotcha, hiway, pinpong, pong, pongdoubles,
-    quadrapong, rebound, spacerace, tvbasketball
+  Games load as MAME-style ZIP archives matched by CRC32 per ROM chip
+  (chips/rom.cpp:41-218). ROM-less games (Pong, Breakout, etc.) use .dmy
+  dummy launcher files. The system directory is retrieved but never used
+  for file loading (libretro.cpp:60-62).
 
 files: []
 

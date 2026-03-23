@@ -1,7 +1,9 @@
 emulator: CrocoDS
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/libretro-crocods"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/redbug26/crocods-core"
+profiled_date: "2026-03-23"
 core_version: "v1"
 display_name: "Amstrad - CPC (CrocoDS)"
 cores:

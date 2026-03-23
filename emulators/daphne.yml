@@ -1,60 +1,28 @@
 emulator: Daphne
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/libretro/daphne"
-upstream: "https://github.com/DirtBagXon/hypseus-singe"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/mirror/daphne-emu"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Arcade (Daphne)"
+cores:
+  - daphne
 systems:
   - arcade-laserdisc
 
 notes: |
-  Daphne is a LaserDisc arcade game emulator ported to libretro. It emulates
-  classic full-motion video arcade games like Dragon's Lair, Space Ace,
-  Cliff Hanger, and others that used LaserDisc players for video output.
-
-  The core does NOT require any shared system BIOS or firmware files.
-  The libretro-core-info file (daphne_libretro.info) declares no firmware.
-
+  LaserDisc arcade game emulator. Port of Daphne 1.0 (Matt Ownby) to libretro.
   Each game loads its own arcade ROM set from a ZIP file named after the game
-  short name (e.g. lair.zip, cliff.zip, bega.zip). ROM files are individual
-  arcade chip dumps loaded via the rom_def struct in each game class
-  (daphne-1.0-src/game/*.cpp). CRC32 verification is performed at load time
-  (game.cpp:769-778).
-
-  Content loading path (libretro.cpp:546-637):
-    1. User points RetroArch to a .zip file (e.g. /Daphne/roms/lair.zip)
-    2. The core strips the path to derive:
-       - rom_name: game short name (e.g. "lair"), lowercased
-       - rom_path: parent directory
-    3. A home_dir is set to rom_path/.. (one level up from roms/)
-    4. Additional data is expected relative to home_dir:
-       - roms/    -> game ROM ZIPs
-       - framefile/ -> frame description files (.txt)
-       - sound/   -> sound samples
-       - ram/     -> SRAM saves
-       - pics/    -> overlay graphics
-
-  Expected directory layout:
-    Daphne/
-      roms/lair.zip
-      roms/cliff.zip
-      framefile/lair.txt
-      framefile/cliff.txt
-      sound/lair/   (optional, game-specific samples)
-
-  Supported games include (from README.md and libretro.cpp):
-    lair (Dragon's Lair), ace (Space Ace), cliff (Cliff Hanger),
-    bega (Bega's Battle), badlands (Badlands), esh (Esh's Aurunmilla),
-    interstellar, mach3, sdq (Super Don Quix-ote), tq (Thayer's Quest),
-    astron, galaxy, cobra, roadblaster, gpworld, lair2 (Dragon's Lair II),
-    and many ROM revision variants.
-
-  The core is marked experimental. Savestates, cheats, and disk control are
-  not supported. Requires full file path (retro_load_game uses path, not
-  data buffer).
+  (e.g. lair.zip). ROMs are loaded from a content-relative directory structure
+  (homedir/roms/) with CRC32 verification (game.cpp:767-781). The core never
+  accesses the RetroArch system directory. Additional per-game data (framefiles,
+  sound samples, overlay BMPs) is also loaded relative to the content directory.
 
 files: []
-  # No shared BIOS or firmware files. All ROMs are per-game arcade chip
-  # dumps distributed inside game-named ZIP archives. These are game content,
-  # not system files managed by retroarch_system.
+
+exclusion_note: >
+  .info declares no firmware (firmware_count absent). Code confirmed: the core
+  never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. All files (ROM ZIPs,
+  framefiles, sound, pics) load from the content directory via g_homedir
+  (libretro.cpp:1153, set to rom_path/..). No shared system BIOS or firmware.

@@ -1,8 +1,9 @@
 emulator: Cruzes
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples/tree/master/tests/cruzes"
-profiled_date: "2026-03-18"
-core_version: "v1.0"
+profiled_date: "2026-03-23"
+core_version: "0.1"
 display_name: "Cruzes"
 cores:
   - cruzes
@@ -10,24 +11,21 @@ systems:
   - game
 
 notes: |
-  Cruzes is an unfinished Picross puzzle game implemented as a libretro core,
-  part of the libretro-samples repository. It is not an emulator -- it is a
-  standalone game that runs directly within RetroArch.
+  Unfinished Picross puzzle game, part of the libretro-samples repository.
+  No separate upstream -- written directly for the libretro API.
 
-  The core sets supports_no_game to true (cruzes.c:772) and valid_extensions
-  to an empty string (cruzes.c:749). The puzzle grid is hardcoded in
-  retro_init (cruzes.c:706-717) via a string literal passed to load_challenge.
+  supports_no_game true (cruzes.c:772), valid_extensions "" (cruzes.c:749).
+  Puzzle grid hardcoded in retro_init (cruzes.c:706-717) via load_challenge.
+  retro_load_game (cruzes.c:728-732) sets pixel format and returns true.
+  No file I/O, no RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY call.
 
-  retro_load_game (cruzes.c:728-732) only sets the pixel format to RGB565
-  and returns true. It never reads from the game_info pointer, never calls
-  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, and never opens any file from disk.
-
-  The font data (Carlito-Regular.ttf) is converted to C header files at build
-  time by the ttf2c tool (font10.h, font16.h, font24.h) and compiled in.
-
-  No external BIOS, firmware, or system files are needed.
+  Font data (Carlito-Regular.ttf) compiled in via ttf2c (font10.h, font16.h,
+  font24.h).
 
 files: []
+
+exclusion_note: >
+  Game core with no external file dependencies. All assets compiled in.
 
 analysis:
   file_loading: none
