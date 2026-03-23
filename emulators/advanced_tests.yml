@@ -1,7 +1,9 @@
 emulator: advanced_tests
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-22"
 core_version: "v1"
 display_name: "Test Core - Advanced Test"
 cores:
@@ -9,11 +11,9 @@ cores:
 systems: []
 
 notes: |
-  Advanced test core from libretro-samples. Exercises extended libretro API
-  features: subsystems, memory descriptors, serialization, multi-disk control,
-  and other optional environment callbacks. Used by frontend developers to
-  validate their implementations.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  Test core for frontend developers. Exercises video output, audio sync,
+  input polling, and serialization. All data (font, CRC32 table) is embedded
+  in the binary. No external files needed.
+  source_ref: tests/test_advanced/libretro-test.c
 
 files: []

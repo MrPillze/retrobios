@@ -1,45 +1,38 @@
 emulator: b2
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/zoltanvb/b2-libretro"
 upstream: "https://github.com/tom-seddon/b2"
-profiled_date: "2026-03-18"
-core_version: "v0.1"
+profiled_date: "2026-03-23"
+core_version: "v0.4"
 display_name: "Acorn - BBC Micro (b2)"
 cores: [b2]
 systems:
   - bbc-micro-b
   - bbc-micro-bplus
   - bbc-master-128
-  - bbc-master-compact
 
 notes: |
-  b2 is a BBC Micro emulator by Tom Seddon. Libretro port by Zoltan Balogh.
+  Libretro port by Zoltan Balogh of Tom Seddon's b2 BBC Micro emulator.
+  is_experimental=true in .info.
   ref: zoltanvb/b2-libretro, tom-seddon/b2
 
-  Standalone: loads ROMs from etc/roms/ via GetAssetPath().
+  Standalone loads ROMs from etc/roms/ via GetAssetPath() + LoadFile().
   ref: tom-seddon/b2/src/b2/roms.cpp:9-10
 
-  Libretro port (experimental): GetAssetPath stubbed in
-  src/libretro/adapters.cpp to return relative paths. LoadFile also
-  stubbed (returns false). ROM loading mechanism unclear — the 256 ROM
-  files are in the repo but the stub suggests they may not load at runtime.
-  is_experimental=true in .info.
-  ref: zoltanvb/b2-libretro/src/libretro/adapters.cpp
+  Libretro port embeds all ROMs as hex arrays in src/libretro/roms.hpp.
+  create_core() loads OS and sideways ROMs from static machine_types[] arrays.
+  GetAssetPath() and LoadFile() are stubbed — no file I/O at runtime.
+  ref: zoltanvb/b2-libretro/src/libretro/roms.hpp
+  ref: zoltanvb/b2-libretro/src/libretro/core.cpp:274-304
+  ref: zoltanvb/b2-libretro/src/libretro/adapters.cpp:74-78
 
-  256 ROM files in etc/roms/ cover: BBC Model B (OS 1.20, BASIC II),
-  Model B+ (B+MOS), Master 128 (MOS 3.20, 3.50), Master Compact
-  (MOS 5.00, 5.10, I5.10C/Olivetti), parasite processors (65C102 TUBE,
-  6502 TUBE), disc interfaces (Acorn 1770, Watford, Opus).
-
-  All ROMs ship with both standalone and libretro repos.
-  No external BIOS files needed by the user for either mode.
+  9 machine types: B/Acorn 1770, B/Watford DDB2, B/Watford DDB3,
+  B/Opus 1770, B/Opus Challenger 256K, B/Opus Challenger 512K,
+  B+, B+128, Master 128 (MOS 3.20).
+  Master 3.50, Master Turbo, Master Compact not yet implemented.
+  ref: zoltanvb/b2-libretro/src/libretro/core.h:117
 
 files: []
-# 256 ROMs bundled in repo etc/roms/ — not loaded from system dir
-# standalone loads via GetAssetPath("roms", path) -> etc/roms/
-# libretro port has LoadFile stubbed — ROM loading mechanism TBD
-# is_experimental=true, core may not fully function
-
-# closed-source analysis note: core binary on buildbot contains
-# "Retro ROM DIRECTORY" and "system_dir" strings but LoadFile stub
-# returns false. needs further investigation when port matures.
+# all ROMs embedded in binary via roms.hpp — no external files needed
+# .info firmware_count=0 matches code reality

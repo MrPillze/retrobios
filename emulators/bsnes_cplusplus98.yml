@@ -1,36 +1,36 @@
 emulator: bsnes C++98
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/bsnes-libretro-cplusplus98"
-upstream: "https://github.com/bsnes-emu/bsnes"
-profiled_date: "2026-03-18"
+upstream: "https://byuu.org/"
+profiled_date: "2026-03-23"
 core_version: "v085 (Performance)"
 display_name: "Nintendo - SNES / SFC (bsnes C++98 (v085))"
 cores: [bsnes_cplusplus98]
 systems:
   - nintendo-snes
+  - nintendo-sufami-turbo
+  - nintendo-satellaview
 
 notes: |
-  bsnes C++98 is bsnes v085 downgraded to C++98 for old compilers.
+  Frozen snapshot of bsnes v085 downgraded to C++98 for old compilers (PS3).
   Performance profile only. is_experimental=true.
 
-  Firmware loading differs from newer bsnes versions:
-  - NEC DSP (dsp1/2/3/4) and Hitachi DSP (cx4) firmware loaded from
-    the SAME DIRECTORY as the ROM, not from system_dir.
-  - Path: dir(interface->path(Slot::Base, ".dsp")) + firmware_name
-    ref: snes/cartridge/markup.cpp:231
-  - interface->path() returns basename + hint
-    ref: snes/libretro/libretro.cpp path() method
-  - Firmware name comes from the game's XML/BML markup (root["firmware"])
-    NOT fixed names like dsp1.program.rom
-  - Files are COMBINED (program+data in one file), not split
-    ref: snes/cartridge/markup.cpp:243-244 reads promsize*3 + dromsize*2
+  NEC DSP and Hitachi DSP firmware loaded from the ROM directory, not
+  system_dir. Path: dir(interface->path(Slot::Base, ".dsp")) + firmware_name
+  from game XML markup. interface->path() returns ROM basename + hint.
+  ref: snes/cartridge/markup.cpp parse_markup_necdsp, parse_markup_hitachidsp
+  ref: snes/libretro/libretro.cpp Interface::path()
 
-  .info has firmware_count=0 because firmware is loaded from ROM dir,
-  not from system_dir — RetroArch can't pre-populate them.
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY is never called.
+  No file I/O targets system_dir anywhere in the codebase.
 
-  The core warns "NEC DSP firmware X is missing" if not found but
-  continues without the coprocessor (games using it won't work).
+  Core continues without DSP firmware but coprocessor games won't function.
+
+exclusion_note: >
+  firmware_count=0 in .info is correct. DSP firmware (NEC uPD7725/uPD96050,
+  Hitachi CX4) is loaded from the ROM directory via game XML markup, not from
+  system_dir. RetroArch cannot pre-populate firmware in the ROM directory.
+  Upstream byuu.org is defunct; this libretro port is the preserved v085 code.
 
 files: []
-# firmware loaded from ROM directory, not system directory
-# no files to declare for system_dir placement

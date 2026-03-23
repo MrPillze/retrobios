@@ -1,8 +1,9 @@
 emulator: CDi 2015
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2015-libretro"
-upstream: "https://github.com/mamedev/mame"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/mamedev/mame/tree/mame0160"
+profiled_date: "2026-03-23"
 core_version: "0.160"
 display_name: "Philips CDi (CDi 2015)"
 cores: [cdi2015]
@@ -10,26 +11,23 @@ systems:
   - philips-cdi
 
 notes: |
-  MAME 0.160 compiled with SUBTARGET=cdi (CDi driver only).
-  ref: libretro-super/rules.d/core-rules.sh — SUBTARGET=cdi
-  source: libretro/mame2015-libretro
-
-  Loads cdimono1.zip from system_dir.
-  ref: src/osd/retro/retromain.c:1989 —
-    sprintf(tmp_dir, "%s%ccdimono1.zip", retro_system_directory, slash)
-  If not found as ZIP, falls back to system_dir as rompath.
-  ref: src/osd/retro/retromain.c:1991
-
-  ROM_START(cdimono1) in src/mame/drivers/cdi.c:421 defines:
-    cdi200.rom (0x80000, CRC 279683ca, SHA1 53360a1f21ddac952e95306ced64186a3fc0b93e)
-    cdic.bin (MCU, undumped)
-    slave.bin (MCU, undumped)
-
-  The ZIP contains the MAME romset for cdimono1 — user provides it.
+  MAME 0.160 compiled with SUBTARGET=cdi, only cdimono1 driver.
+  Checks cdimono1.zip existence in system_dir, then game dir. Returns -2 if missing.
+  cdic.bin and slave.bin are undumped 68HC05 MCUs (NO_DUMP), not in the ZIP.
 
 files:
   - name: cdimono1.zip
     system: philips-cdi
     required: true
-    note: "MAME cdimono1 romset ZIP. Contains cdi200.rom + MCU dumps."
+    category: bios_zip
     source_ref: "src/osd/retro/retromain.c:1989, src/mame/drivers/cdi.c:421"
+    validation: [crc32, sha1]
+    contents:
+      - name: cdi200.rom
+        description: Magnavox CD-i 200 BIOS (default)
+        size: 524288
+        crc32: 40c4e6b9
+      - name: cdi220b.rom
+        description: Philips CD-i 220 F2 BIOS (alternate)
+        size: 524288
+        crc32: 279683ca

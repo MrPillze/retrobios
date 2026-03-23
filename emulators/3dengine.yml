@@ -1,14 +1,14 @@
 emulator: 3DEngine
 type: utility
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-3dengine"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/libretro-3dengine"
+profiled_date: "2026-03-22"
 core_version: "v1"
 display_name: "Test Core - 3D Engine"
 cores: [3dengine]
 systems: []
 files: []
 notes: >
-  Tech demo rendering a 3D scene using software rasterization.
-  Demonstrates libretro hardware-accelerated rendering capabilities.
-  Self-contained core with all geometry and textures built in.
-  No content file, BIOS, or system directory files required.
+  Tech demo for libretro hardware-accelerated rendering (OpenGL/ES).
+  Loads .obj 3D models as content. No system directory files required.

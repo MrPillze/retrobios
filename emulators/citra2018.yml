@@ -1,8 +1,9 @@
 emulator: Citra 2018
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/citra2018"
 upstream: "https://github.com/citra-emu/citra"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Citra 2018)"
 cores: [citra2018]
@@ -10,35 +11,25 @@ systems:
   - nintendo-3ds
 
 notes: |
-  Citra 2018 is a 2018 snapshot of the Citra 3DS emulator.
-  Older than current Azahar/Citra — fewer firmware files.
-  Data dir: citra-emu (not azahar-emu).
-  ref: src/common/common_paths.h:24
+  Frozen 2018 snapshot of the Citra 3DS emulator.
+  Loads files from {system_dir}/Citra/sysdata/.
+  ref: src/citra_libretro/citra_libretro.cpp:317, src/common/common_paths.h:24
 
-  Uses RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
-  ref: src/citra_libretro/environment.cpp:107
+  Embedded open-source replacement font in archive_ncch.cpp.
+  ref: src/core/file_sys/archive_ncch.cpp:134-146
 
-  Loads from sysdata/:
-    aes_keys.txt (not keys.txt like current Citra)
-    shared_font.bin
-  ref: src/core/hw/aes/key.cpp:72-73, src/core/hle/service/apt/apt.cpp:174
-
-  Does NOT load (added in later versions):
-    boot9.bin, sector0x96.bin, seeddb.bin, otp.bin,
-    movable.sed, SecureInfo_A, LocalFriendCodeSeed_B
-
-  firmware_count absent in .info (= 0). Files are optional (HLE).
+  firmware_count absent in .info (= 0). Both files are optional.
 
 files:
   - name: aes_keys.txt
     system: nintendo-3ds
     required: false
-    note: "AES encryption keys (named aes_keys.txt, not keys.txt like current Citra)"
-    source_ref: "src/core/hw/aes/key.cpp:72-73"
+    note: "AES encryption keys for decrypting 3DS content"
+    source_ref: "src/core/hw/aes/key.cpp:72-76"
 
   - name: shared_font.bin
     system: nintendo-3ds
     required: false
     hle_fallback: true
-    note: "system shared font, HLE fallback if missing"
-    source_ref: "src/core/hle/service/apt/apt.cpp:174"
+    note: "system shared font, falls back to embedded open-source replacement"
+    source_ref: "src/core/hle/service/apt/apt.cpp:168-183"

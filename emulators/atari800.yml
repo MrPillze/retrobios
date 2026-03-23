@@ -1,10 +1,12 @@
 emulator: Atari800
 type: standalone + libretro
+core_classification: official_port
 source: "https://github.com/libretro/libretro-atari800"
 upstream: "https://github.com/atari800/atari800"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "3.1.0"
 display_name: "Atari - 400/800/600XL/800XL/130XE/5200 (Atari800)"
+cores: [atari800]
 systems: [atari-400, atari-800, atari-800xl, atari-130xe, atari-5200, atari-xegs]
 
 # Atari800 emulates the Atari 8-bit family (400/800/XL/XE) and the 5200 console.
@@ -36,10 +38,12 @@ files:
     hle_fallback: true
     size: 2048
     md5: 281f20ea4320404ec820fb7ec0693b38
+    aliases: [atari5200.rom, atar5200.rom, 5200.bin, atari_5200.rom]
+    validation: [crc32]
     note: >
       Atari 5200 BIOS (original). Mapped at $F800-$FFFF.
       Altirra 5200 OS is used when this file is absent.
-    source_ref: "atari800/src/sysrom.c:101, libretro info firmware0"
+    source_ref: "atari800/src/sysrom.c:101-102,254-255"
 
   # -- Atari BASIC ROM --
   # Atari BASIC interpreter (8 KB). Three known revisions:
@@ -54,10 +58,12 @@ files:
     hle_fallback: true
     size: 8192
     md5: 0bac0c6a50104045d902df4503a4c30b
+    aliases: [ataribasic.rom, basic.rom, atari_basic.rom]
+    validation: [crc32]
     note: >
       Atari BASIC Rev C. Required for 400/800 software that needs BASIC.
       Altirra BASIC is used as fallback. Enable via core option atari800_opt2.
-    source_ref: "atari800/src/sysrom.c:103-105, libretro info firmware1"
+    source_ref: "atari800/src/sysrom.c:103-105,256"
 
   # -- Atari 400/800 OS A --
   # Original Atari 400/800 OS (10 KB). Two known CRC32 values:
@@ -70,10 +76,12 @@ files:
     hle_fallback: true
     size: 10240
     md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+    aliases: [atari_osa.rom, atari_os_a.rom]
+    validation: [crc32]
     note: >
       Atari 400/800 OS Rev A. Altirra OS 800 is used as fallback.
       Auto-select order: OS B NTSC, OS A NTSC, OS A PAL, custom, Altirra.
-    source_ref: "atari800/src/sysrom.c:87-89, libretro info firmware2"
+    source_ref: "atari800/src/sysrom.c:87-88,250"
 
   # -- Atari 400/800 OS B --
   # OS revision B (10 KB), NTSC: CRC32 0x0e86d61d
@@ -86,13 +94,15 @@ files:
     size: 10240
     md5: 4177f386a3bac989a981d3fe3388cb6c
     crc32: 0e86d61d
+    aliases: [atari_osb.rom, atari_os_b.rom]
+    validation: [crc32]
     note: >
       Atari 400/800 OS Rev B (NTSC). CRC32 0x0e86d61d matches sysrom.c
       SYSROM_B_NTSC. Preferred over Rev A for 400/800 mode.
       Note: .info lists md5 a3e8d617c95d08031fe1b20d541434b2 which is a
-      different dump (crc32 3e28a1fe) — both in repo, the CRC32-matched
+      different dump (crc32 3e28a1fe) -- both in repo, the CRC32-matched
       version is the one sysrom.c auto-detects.
-    source_ref: "atari800/src/sysrom.c:89, libretro info firmware3"
+    source_ref: "atari800/src/sysrom.c:89,251"
 
   # -- Atari XL/XE OS --
   # XL/XE OS (16 KB). Many revisions known by CRC32 in sysrom.c:
@@ -108,10 +118,12 @@ files:
     hle_fallback: true
     size: 16384
     md5: 06daac977823773a3eea3422fd26a703
+    aliases: [atarixlxe.rom, atari_xlxe.rom, atari_xl_xe.rom]
+    validation: [crc32]
     note: >
       Atari XL/XE OS. Used for 800XL, 130XE, and XEGS modes.
       Altirra XL OS is used as fallback.
-    source_ref: "atari800/src/sysrom.c:90-99, libretro info firmware4"
+    source_ref: "atari800/src/sysrom.c:90-99,253"
 
   # -- Atari XL/XE/XEGS OS v4 (BB01R4) --
   # XEGS-specific OS revision BB01R4 (16 KB), CRC32: 0x1eaf4002
@@ -123,9 +135,10 @@ files:
     hle_fallback: true
     size: 16384
     md5: b7a2a04677d34f069eeb643d5238bf86
+    validation: [crc32]
     note: >
       Atari XEGS OS Rev 4 (BB01R4). Preferred OS for XEGS machine mode.
-    source_ref: "atari800/src/sysrom.c:98, libretro info firmware5"
+    source_ref: "atari800/src/sysrom.c:98"
 
   # -- XEGS Missile Command built-in game --
   # The XEGS had Missile Command in ROM (8 KB), CRC32: 0xbdca01fb
@@ -136,10 +149,11 @@ files:
     required: false
     size: 8192
     md5: d7eb37aec6960cba36bc500e0e5d00bc
+    validation: [crc32]
     note: >
       XEGS built-in Missile Command ROM. Only used in XEGS machine mode.
       No built-in replacement exists for this ROM.
-    source_ref: "atari800/src/sysrom.c:106, libretro info firmware6"
+    source_ref: "atari800/src/sysrom.c:106"
 
 # Known ROM revisions from sysrom.c (CRC32 identifiers):
 #

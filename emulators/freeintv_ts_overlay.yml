@@ -1,39 +1,28 @@
 emulator: "FreeIntv (Touchscreen Overlay)"
-type: libretro
-source: "https://github.com/libretro/FreeIntv"
-profiled_date: "2026-03-18"
-core_version: "v2025.11.1"
-display_name: "Mattel Intellivision (FreeIntvTSOverlay)"
+type: alias
+core_classification: alias
+source: "https://github.com/jcarr71/FreeIntvTSOverlay"
+upstream: "https://github.com/libretro/FreeIntv"
+profiled_date: "2026-03-22"
+core_version: "1.2"
+display_name: "Mattel - Intellivision (FreeIntvTSOverlay)"
 cores:
   - freeintv
 systems:
   - intellivision
 
 notes: |
-  Same repo and core as FreeIntv. The touchscreen overlay feature is a
-  compile-time option within the same codebase, not a separate core. The
-  library_name is "freeintv" (src/libretro.c:1413), identical to the
-  non-overlay build.
+  Alias of FreeIntv. The jcarr71/FreeIntvTSOverlay fork is 100% identical
+  to libretro/FreeIntv (zero diff). Jason Carr's overlay work was merged
+  upstream. The Makefile produces freeintv_libretro (TARGET_NAME = freeintv),
+  and library_name is "freeintv" (src/libretro.c:1413).
 
-  The overlay system adds an onscreen interactive keypad for touchscreen
-  and mouse input. It is toggled via core option freeintv_multiscreen_overlay
-  (src/libretro_core_options.h:82-85). When enabled, the display splits into
-  game + keypad side-by-side (multi-screen mode).
-
-  Visual assets (controller base frame, banner, default keypad image) are
-  compiled into the binary from C headers: banner.h, keypad_frame_graphic.h,
-  default_keypad_image.h. These are NOT files the user needs to provide.
-
-  ROM-specific overlays are optional 370x600 PNG files placed by the user in
-  system/freeintv_overlays/<rom_name>.png. These are cosmetic per-game keypad
-  images loaded via stbi_load() (src/libretro.c:273). Core falls back to
-  embedded default_keypad_image.h if no per-game overlay found.
-  90 overlays available in Assets/Overlays.zip in the core repo.
-  Not on RetroArch buildbot — sourced from core repo via _data_dirs.yml.
-
-  BIOS loading is unchanged from the base FreeIntv core. retro_load_game()
-  (src/libretro.c:1169-1174) loads exec.bin and grom.bin from the system
-  directory with no variation based on overlay mode.
+  The FreeIntvTSOverlay_libretro.info in libretro-core-info has errors:
+  wrong overlay directory (claims FreeIntvTS_Overlays, code uses
+  freeintv_overlays), wrong dimensions (claims 300x670, code uses 370x600),
+  phantom external PNG files (controller_base.png, default.png,
+  button_swapscreen.png are either embedded in C headers or nonexistent),
+  and firmware1 key typos (uses firmware0_path/firmware0_opt).
 
 bios_identical_to: freeintv
 
@@ -47,7 +36,7 @@ files:
     required: true
     size: 8192
     md5: 62e761035cb657903761800f4437b8af
-    note: "Executive ROM. Same file as base FreeIntv."
+    note: "Executive ROM."
     source_ref: "src/intv.c:47-71, src/libretro.c:1169"
 
   - name: "grom.bin"
@@ -55,5 +44,5 @@ files:
     required: true
     size: 2048
     md5: 0cd5946c6473e42e8e4c2137785e427f
-    note: "Graphics ROM. Same file as base FreeIntv."
+    note: "Graphics ROM."
     source_ref: "src/intv.c:73-98, src/libretro.c:1173"

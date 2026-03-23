@@ -1,8 +1,10 @@
 emulator: AppleWin
 type: libretro
+core_classification: community_fork
 source: "https://github.com/audetto/AppleWin"
-profiled_date: "2026-03-18"
-core_version: "1.30.21.0"
+upstream: "https://github.com/AppleWin/AppleWin"
+profiled_date: "2026-03-23"
+core_version: "1.31.0.1"
 display_name: "Apple II (AppleWin)"
 cores:
   - applewin

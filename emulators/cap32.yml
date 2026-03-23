@@ -1,8 +1,9 @@
 emulator: Caprice32
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-cap32"
 upstream: "https://github.com/ColinPitrat/caprice32"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "v4.2.0"
 display_name: "Amstrad - CPC/GX4000 (Caprice32)"
 cores:
@@ -78,14 +79,16 @@ files:
     system: amstrad-cpc
     required: false
     mode: standalone
+    size: 131156
     note: "CPC+ system cartridge"
     source_ref: "caprice32/rom/system.cpr"
   - name: MF2.rom
     system: amstrad-cpc
     required: false
     mode: standalone
+    size: 8192
     note: "Multiface 2 ROM"
-    source_ref: "caprice32/rom/MF2.rom"
+    source_ref: "caprice32/rom/MF2.rom, caprice32/src/cap32.cpp:1244-1263"
 
 platform_details:
   bios_mapping:

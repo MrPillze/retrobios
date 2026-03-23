@@ -1,10 +1,13 @@
 emulator: Cannonball
-type: standalone + libretro
+type: game
+core_classification: game_engine
 source: "https://github.com/libretro/cannonball"
 upstream: "https://github.com/djyt/cannonball"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "1.0"
 display_name: "Cannonball"
+cores:
+  - cannonball
 systems:
   - sega-outrun
 
@@ -26,8 +29,8 @@ notes: |
   demand when the "Japanese Tracks" core option is enabled.
 
   Two optional widescreen tilemap patches are loaded from a res/ subdirectory
-  (src/main/engine/omusic.cpp:42-51). These are Cannonball-specific data files
-  shipped with the core, not original arcade ROMs.
+  (src/main/engine/omusic.cpp:42-51). These are Cannonball-specific data files,
+  not original arcade ROMs.
 
   The fixed PCM sample variant (opr-10188.71f) replaces opr-10188.71 when the
   "Fix Broken Samples" core option is enabled.
@@ -38,33 +41,42 @@ files:
   # -------------------------------------------------------
   - name: "epr-10381a.132"
     system: sega-outrun
+    category: game_data
     required: true
-    size: 65536  # 0x10000
+    size: 65536
     crc32: "be8c412b"
-    note: "Master 68K, high byte, upper bank (Rev A alternate)"
+    validation: [crc32]
+    aliases: [epr-10381b.132]
+    note: "Master 68K, high byte, upper bank"
     source_ref: "src/main/roms.cpp:29"
 
   - name: "epr-10383b.117"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "10a2014a"
+    validation: [crc32]
     note: "Master 68K, low byte, upper bank"
     source_ref: "src/main/roms.cpp:38"
 
   - name: "epr-10380b.133"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "1f6cadad"
+    validation: [crc32]
     note: "Master 68K, high byte, lower bank"
     source_ref: "src/main/roms.cpp:39"
 
   - name: "epr-10382b.118"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "c4c3fa1a"
+    validation: [crc32]
     note: "Master 68K, low byte, lower bank"
     source_ref: "src/main/roms.cpp:40"
 
@@ -73,33 +85,41 @@ files:
   # -------------------------------------------------------
   - name: "epr-10327a.76"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "e28a5baf"
+    validation: [crc32]
     note: "Slave 68K, high byte, lower bank"
     source_ref: "src/main/roms.cpp:44"
 
   - name: "epr-10329a.58"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "da131c81"
+    validation: [crc32]
     note: "Slave 68K, low byte, lower bank"
     source_ref: "src/main/roms.cpp:45"
 
   - name: "epr-10328a.75"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "d5ec5e5d"
+    validation: [crc32]
     note: "Slave 68K, high byte, upper bank"
     source_ref: "src/main/roms.cpp:46"
 
   - name: "epr-10330a.57"
     system: sega-outrun
+    category: game_data
     required: true
     size: 65536
     crc32: "ba9ec82a"
+    validation: [crc32]
     note: "Slave 68K, low byte, upper bank"
     source_ref: "src/main/roms.cpp:47"
 
@@ -108,49 +128,61 @@ files:
   # -------------------------------------------------------
   - name: "opr-10268.99"
     system: sega-outrun
+    category: game_data
     required: true
-    size: 32768  # 0x8000
+    size: 32768
     crc32: "95344b04"
+    validation: [crc32]
     note: "Tile ROM bank 0"
     source_ref: "src/main/roms.cpp:51"
 
   - name: "opr-10232.102"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "776ba1eb"
+    validation: [crc32]
     note: "Tile ROM bank 1"
     source_ref: "src/main/roms.cpp:52"
 
   - name: "opr-10267.100"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "a85bb823"
+    validation: [crc32]
     note: "Tile ROM bank 2"
     source_ref: "src/main/roms.cpp:53"
 
   - name: "opr-10231.103"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "8908bcbf"
+    validation: [crc32]
     note: "Tile ROM bank 3"
     source_ref: "src/main/roms.cpp:54"
 
   - name: "opr-10266.101"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "9f6f1a74"
+    validation: [crc32]
     note: "Tile ROM bank 4"
     source_ref: "src/main/roms.cpp:55"
 
   - name: "opr-10230.104"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "686f5e50"
+    validation: [crc32]
     note: "Tile ROM bank 5"
     source_ref: "src/main/roms.cpp:56"
 
@@ -159,17 +191,21 @@ files:
   # -------------------------------------------------------
   - name: "opr-10185.11"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "22794426"
+    validation: [crc32]
     note: "Road ROM, layer 1"
     source_ref: "src/main/roms.cpp:60"
 
   - name: "opr-10186.47"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "22794426"
+    validation: [crc32]
     note: "Road ROM, layer 2 (identical to opr-10185.11)"
     source_ref: "src/main/roms.cpp:61"
 
@@ -178,65 +214,81 @@ files:
   # -------------------------------------------------------
   - name: "mpr-10371.9"
     system: sega-outrun
+    category: game_data
     required: true
-    size: 131072  # 0x20000
+    size: 131072
     crc32: "7cc86208"
+    validation: [crc32]
     note: "Sprite ROM, bank 0 byte 0"
     source_ref: "src/main/roms.cpp:65"
 
   - name: "mpr-10373.10"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "b0d26ac9"
+    validation: [crc32]
     note: "Sprite ROM, bank 0 byte 1"
     source_ref: "src/main/roms.cpp:66"
 
   - name: "mpr-10375.11"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "59b60bd7"
+    validation: [crc32]
     note: "Sprite ROM, bank 0 byte 2"
     source_ref: "src/main/roms.cpp:67"
 
   - name: "mpr-10377.12"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "17a1b04a"
+    validation: [crc32]
     note: "Sprite ROM, bank 0 byte 3"
     source_ref: "src/main/roms.cpp:68"
 
   - name: "mpr-10372.13"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "b557078c"
+    validation: [crc32]
     note: "Sprite ROM, bank 1 byte 0"
     source_ref: "src/main/roms.cpp:69"
 
   - name: "mpr-10374.14"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "8051e517"
+    validation: [crc32]
     note: "Sprite ROM, bank 1 byte 1"
     source_ref: "src/main/roms.cpp:70"
 
   - name: "mpr-10376.15"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "f3b8f318"
+    validation: [crc32]
     note: "Sprite ROM, bank 1 byte 2"
     source_ref: "src/main/roms.cpp:71"
 
   - name: "mpr-10378.16"
     system: sega-outrun
+    category: game_data
     required: true
     size: 131072
     crc32: "a1062984"
+    validation: [crc32]
     note: "Sprite ROM, bank 1 byte 3"
     source_ref: "src/main/roms.cpp:72"
 
@@ -245,9 +297,11 @@ files:
   # -------------------------------------------------------
   - name: "epr-10187.88"
     system: sega-outrun
+    category: game_data
     required: true
-    size: 65536  # 0x10000
+    size: 32768
     crc32: "a10abaa9"
+    validation: [crc32]
     note: "Z80 sound program"
     source_ref: "src/main/roms.cpp:76"
 
@@ -256,134 +310,173 @@ files:
   # -------------------------------------------------------
   - name: "opr-10193.66"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "bcd10dde"
+    validation: [crc32]
     note: "PCM sample bank 0"
     source_ref: "src/main/roms.cpp:80"
 
   - name: "opr-10192.67"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "770f1270"
+    validation: [crc32]
     note: "PCM sample bank 1"
     source_ref: "src/main/roms.cpp:81"
 
   - name: "opr-10191.68"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "20a284ab"
+    validation: [crc32]
     note: "PCM sample bank 2"
     source_ref: "src/main/roms.cpp:82"
 
   - name: "opr-10190.69"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "7cab70e2"
+    validation: [crc32]
     note: "PCM sample bank 3"
     source_ref: "src/main/roms.cpp:83"
 
   - name: "opr-10189.70"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "01366b54"
+    validation: [crc32]
     note: "PCM sample bank 4"
     source_ref: "src/main/roms.cpp:84"
 
   - name: "opr-10188.71"
     system: sega-outrun
+    category: game_data
     required: true
     size: 32768
     crc32: "bad30ad9"
+    validation: [crc32]
     note: "PCM sample bank 5"
     source_ref: "src/main/roms.cpp:85"
 
   # -------------------------------------------------------
-  # Alternate / optional ROMs
+  # Optional: fixed PCM sample
   # -------------------------------------------------------
-  - name: "epr-10381b.132"
-    system: sega-outrun
-    required: false
-    size: 65536
-    crc32: "be8c412b"
-    note: "Master 68K, Rev B alternate filename for epr-10381a.132"
-    source_ref: "src/main/roms.cpp:34"
-
   - name: "opr-10188.71f"
     system: sega-outrun
+    category: game_data
     required: false
     size: 32768
     crc32: "37598616"
+    validation: [crc32]
     note: "PCM sample bank 5, fixed version (replaces opr-10188.71)"
     source_ref: "src/main/roms.cpp:123"
+
+  # -------------------------------------------------------
+  # Optional: widescreen tilemap patches
+  # -------------------------------------------------------
+  - name: "res/tilemap.bin"
+    system: sega-outrun
+    category: game_data
+    required: false
+    note: "Widescreen tilemap patch, Cannonball-specific"
+    source_ref: "src/main/engine/omusic.cpp:42-44"
+
+  - name: "res/tilepatch.bin"
+    system: sega-outrun
+    category: game_data
+    required: false
+    note: "Widescreen tile patch, Cannonball-specific"
+    source_ref: "src/main/engine/omusic.cpp:49-51"
 
   # -------------------------------------------------------
   # Japanese ROM variants (loaded when jap option enabled)
   # -------------------------------------------------------
   - name: "epr-10380.133"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "e339e87a"
+    validation: [crc32]
     note: "Master 68K Japan, high byte, lower bank"
     source_ref: "src/main/roms.cpp:104"
 
   - name: "epr-10382.118"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "65248dd5"
+    validation: [crc32]
     note: "Master 68K Japan, low byte, lower bank"
     source_ref: "src/main/roms.cpp:105"
 
   - name: "epr-10381.132"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "be8c412b"
+    validation: [crc32]
     note: "Master 68K Japan, high byte, upper bank"
     source_ref: "src/main/roms.cpp:106"
 
   - name: "epr-10383.117"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "dcc586e7"
+    validation: [crc32]
     note: "Master 68K Japan, low byte, upper bank"
     source_ref: "src/main/roms.cpp:107"
 
   - name: "epr-10327.76"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "da99d855"
+    validation: [crc32]
     note: "Slave 68K Japan, high byte, lower bank"
     source_ref: "src/main/roms.cpp:110"
 
   - name: "epr-10329.58"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "fe0fa5e2"
+    validation: [crc32]
     note: "Slave 68K Japan, low byte, lower bank"
     source_ref: "src/main/roms.cpp:111"
 
   - name: "epr-10328.75"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "3c0e9a7f"
+    validation: [crc32]
     note: "Slave 68K Japan, high byte, upper bank"
     source_ref: "src/main/roms.cpp:112"
 
   - name: "epr-10330.57"
     system: sega-outrun
+    category: game_data
     required: false
     size: 65536
     crc32: "59786e99"
+    validation: [crc32]
     note: "Slave 68K Japan, low byte, upper bank"
     source_ref: "src/main/roms.cpp:113"

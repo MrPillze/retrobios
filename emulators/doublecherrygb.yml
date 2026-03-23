@@ -1,8 +1,10 @@
 emulator: DoubleCherryGB
 type: libretro
+core_classification: enhanced_fork
 source: "https://github.com/TimOelrichs/doublecherryGB-libretro"
-profiled_date: "2026-03-18"
-core_version: "v0.17.0"
+upstream: "https://github.com/libertyernie/tgbdual"
+profiled_date: "2026-03-22"
+core_version: "v0.18.1"
 display_name: "Nintendo - Game Boy / Color (DoubleCherryGB)"
 cores:
   - DoubleCherryGB
@@ -11,23 +13,13 @@ systems:
   - nintendo-gbc
 
 notes: |
-  DoubleCherryGB is a Game Boy / Game Boy Color emulator forked from TGB Dual
-  by GIGO and Hii. It adds multi-Game Boy emulation with virtual link cable
-  support for up to 16 players, DMG-07 4-Player Adapter emulation, and
-  built-in Pokemon distribution events.
+  Game Boy / Game Boy Color emulator forked from TGB Dual (Hii, 2000-2004)
+  via the libretro port tgbdual. Adds multi-Game Boy emulation with link
+  cable support for up to 16 players, DMG-07 4-Player Adapter emulation,
+  infrared peripherals, and built-in Pokemon distribution events.
 
-  No BIOS or boot ROM files are required or supported. The core does not
-  call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for firmware loading and does
-  not attempt to open any files from the system directory.
-
-  In cpu.cpp:82, the program counter is initialized to 0x100 (post-boot ROM
-  entry point), and cpu::reset() sets all registers to their post-boot
-  values directly (AF=0x01B0 for DMG, 0x11B0 for CGB). This means the
-  core completely bypasses the boot ROM sequence via HLE register setup.
-
-  The .info file at libretro-core-info confirms no firmware entries.
-
-  Supported extensions: gb, dmg, gbc, cgb, sgb.
-  Library version: v0.18.0.
+  No boot ROM support. cpu::reset() sets PC=0x100 and post-boot register
+  values directly (AF=0x01B0 DMG, 0x11B0 CGB). The core does not access
+  the system directory and loads no external firmware files.
 
 files: []

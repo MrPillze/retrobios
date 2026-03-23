@@ -1,7 +1,9 @@
 emulator: bnes
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/bnes-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/Alcaro/bsnes-gc"
+profiled_date: "2026-03-23"
 core_version: "v083"
 display_name: "Nintendo - NES / Famicom (bnes)"
 cores:
@@ -10,27 +12,13 @@ systems:
   - nes
 
 notes: |
-  bnes is a NES emulator based on byuu's bNES/higan v083 NES module, ported
-  to libretro by Ryphecha. It is a lightweight, accuracy-focused NES core.
-
-  The core loads cartridge data entirely through retro_load_game with
-  need_fullpath=false (libretro/libretro.cpp:129). ROM data is passed as a
-  memory buffer and parsed by Cartridge::load (nes/cartridge/cartridge.cpp:18-31),
-  which detects iNES headers (16-byte offset) and delegates to Board::load.
-
-  The PPU generates its palette from a hardcoded color table in
-  libretro/libretro.cpp:20-37 with emphasis factor tables. No external
-  palette file is loaded.
-
-  System::init (nes/system/system.cpp:62-66) only sets up the interface
-  pointer and default input devices. No system ROM, BIOS, or firmware is
-  loaded at any stage of initialization or cartridge loading.
-
-  The core does not call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and has no
-  file I/O for BIOS or firmware. FDS (Famicom Disk System) is not supported,
-  so disksys.rom is not needed.
-
-  No external BIOS or firmware files are needed.
+  Frozen libretro port of byuu's higan v083 NES module by Ryphecha. Experimental,
+  not maintained. ROM data passed via retro_load_game memory buffer
+  (libretro/libretro.cpp:181-184). Cartridge::load parses iNES headers and
+  delegates to Board::load (nes/cartridge/cartridge.cpp:18-31). System::init sets
+  up the interface pointer and default input devices (nes/system/system.cpp:62-66).
+  No system directory access. No FDS support. Palette hardcoded
+  (libretro/libretro.cpp:20-37). .info declares no firmware (firmware_count absent).
 
 files: []
 
@@ -40,24 +28,7 @@ analysis:
     cartridge_load: "nes/cartridge/cartridge.cpp:18-31 - parses iNES header + ROM data"
     system_init: "nes/system/system.cpp:62-66 - sets interface pointer, no ROM loading"
     system_power: "nes/system/system.cpp:43-50 - powers subsystems, no file I/O"
-    interface_init: "nes/interface/interface.cpp - stores derived pointer, calls system.init"
-  supported_mappers:
-    - NROM
-    - SxROM (MMC1)
-    - UxROM
-    - CNROM
-    - TxROM (MMC3)
-    - ExROM (MMC5)
-    - AxROM
-    - BnROM
-    - GxROM
-    - PxROM (MMC4)
-    - FxROM (MMC4)
-    - Bandai FCG
-    - Konami VRC4
-    - Konami VRC6
-    - Konami VRC7
-    - Sunsoft 5B
+    interface_init: "nes/interface/interface.cpp:17-20 - stores derived pointer, calls system.init"
   fds_support: false
   filesystem_access: false
   system_directory_used: false

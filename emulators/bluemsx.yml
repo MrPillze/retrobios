@@ -1,8 +1,9 @@
 emulator: blueMSX
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/libretro/blueMSX-libretro"
 upstream: "http://bluemsx.msxblue.com/"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "SVN"
 display_name: "MSX/SVI/ColecoVision/SG-1000 (blueMSX)"
 cores:
@@ -393,8 +394,9 @@ files:
     path: "Machines/Shared Roms/FMPAC.rom"
     size: 65536
     required: false
-    note: "FM-PAC cartridge ROM (YM2413 FM synthesis). Loaded as expansion cartridge by MegaromCartridge.c."
-    source_ref: "Src/Memory/MegaromCartridge.c:290"
+    hle_fallback: true
+    note: "FM-PAC cartridge ROM (YM2413 FM synthesis). If missing, core uses built-in minimal ROM stub."
+    source_ref: "Src/Memory/MegaromCartridge.c:289-305"
 
   - name: XBASIC2.rom
     path: "Machines/Shared Roms/XBASIC2.rom"
@@ -647,6 +649,30 @@ files:
     required: false
     bundled: true
     note: "MSX system ROM database. Bundled with core."
+
+  - name: colecodb.xml
+    path: "Databases/colecodb.xml"
+    required: false
+    bundled: true
+    note: "ColecoVision ROM database. Bundled with core."
+
+  - name: msxcaswavdb.xml
+    path: "Databases/msxcaswavdb.xml"
+    required: false
+    bundled: true
+    note: "MSX cassette/WAV media database. Bundled with core."
+
+  - name: segadb.xml
+    path: "Databases/segadb.xml"
+    required: false
+    bundled: true
+    note: "Sega SG-1000/SC-3000/SF-7000 ROM database. Bundled with core."
+
+  - name: svidb.xml
+    path: "Databases/svidb.xml"
+    required: false
+    bundled: true
+    note: "Spectravideo SVI ROM database. Bundled with core."
 
 # Machine count: 170+ machine configurations covering dozens of regional MSX
 # variants from manufacturers like Panasonic, Sony, Philips, Yamaha, Sanyo,

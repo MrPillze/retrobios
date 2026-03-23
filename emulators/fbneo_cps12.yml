@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-22"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo) (CPS-1 / CPS-2)"
 cores:
@@ -25,8 +25,7 @@ notes: |
   Board PLDs (buf1, ioa1, prg1/prg2, rom1, sou1) are BRF_OPT — GAL/PAL
   dumps for hardware preservation, never loaded by the emulator.
 
-  CPS-1/CPS-2 have no system BIOS. hiscore.dat enables persistent high
-  scores across all arcade games.
+  hiscore.dat enables persistent high scores across all arcade games.
 
   ROM path: game ZIPs loaded from content directory.
   system/fbneo/ used for hiscore.dat, samples, cheats, blend files, IPS patches.

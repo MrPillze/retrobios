@@ -1,10 +1,13 @@
 emulator: bsnes
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/bsnes-libretro"
+upstream: "https://github.com/bsnes-emu/bsnes"
 logo: "https://raw.githubusercontent.com/bsnes-emu/bsnes/master/bsnes/target-bsnes/resource/bsnes.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "115"
 display_name: "Nintendo - SNES / SFC (bsnes)"
+cores: [bsnes]
 systems: [nintendo-snes, nintendo-super-game-boy, nintendo-satellaview]
 
 # bsnes supports HLE for DSP1/DSP1B/DSP2/DSP4, ST010, and Cx4.
@@ -172,8 +175,7 @@ files:
 
   - name: "BS-X.bin"
     required: true
-    md5: fed4d8242cfbed61343d53d48432aced
-    note: "BS-X Satellaview BIOS ROM. Required for .bs games. .info md5=fed4d824, repo has 96cf17bf (Rev 1 vs original)"
+    note: "BS-X Satellaview BIOS ROM. Required for .bs games"
     source_ref: "target-libretro/libretro.cpp:948"
 
 notes:

@@ -1,29 +1,47 @@
 emulator: ChimeraSNES
 type: libretro
+core_classification: community_fork
 source: "https://github.com/jamsilva/chimerasnes"
 upstream: "https://github.com/snes9xgit/snes9x"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: ""
 display_name: "Nintendo - SNES / SFC (ChimeraSNES)"
 cores: [chimerasnes]
 systems:
   - nintendo-snes
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
 
 notes: |
-  Fork of Snes9x ~2005, optimized for slow hardware.
-  NOT identical to snes9x — different firmware behavior.
+  Based on multiple snes9x forks (uosnes, snes9x2005), optimized for slow hardware.
+  All coprocessor data (DSP1-4, CX4, SuperFX, SA-1, SPC7110, OBC1) is HLE with
+  embedded ROM tables. No external coprocessor firmware needed.
+  BS-X BIOS loading controlled by core option chimerasnes_bsx_bios (default: skip).
+  retro_load_game_special() returns false (no subsystem support).
+  .info firmware_count absent (= 0), under-declares: code loads 2 files.
 
-  All coprocessor data is HLE with static ROM tables embedded:
-    DSP1: DSP1ROM[1024] in source/dsp1.c:6
-    DSP3: DSP3_DataROM[1024] in source/dsp3.c:7
-  No external DSP/ST/CX4 firmware files needed.
+files:
+  - name: "BS-X.bin"
+    system: nintendo-satellaview
+    description: "Satellaview BS-X BIOS"
+    required: false
+    size: 1048576
+    source_ref: "source/bsx.c:857-882"
+    aliases: ["BS-X.bios"]
+    validation: [size]
+    notes: |
+      Loaded by BSX_LoadBIOS() from system_dir when core option
+      chimerasnes_bsx_bios is set to 'load' (default: skip).
+      Tries BS-X.bin first, then BS-X.bios as fallback.
+      Size must be BIOS_SIZE (0x100000). Many BS-X games run without it.
 
-  BS-X: path constructed in source/bsx.c:873 as romdir/BS-X.bios
-  (relative to ROM directory, NOT system_dir). No
-  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for firmware loading.
-
-  firmware_count absent in .info (= 0). Confirmed in source.
-
-files: []
-# all coprocessors HLE with embedded data
-# BS-X.bios loaded from ROM directory, not system_dir
+  - name: "STBIOS.bin"
+    system: nintendo-sufami-turbo
+    description: "Sufami Turbo BIOS"
+    required: true
+    size: 262144
+    source_ref: "source/memmap.c:275-289"
+    notes: |
+      Loaded by LoadSFTBIOS() from system_dir when Sufami Turbo game
+      detected (BANDAI SFC-ADX header at ROM offset 0, memmap.c:833).
+      Reads 0x40000 bytes into Memory.ROM. No validation performed.
