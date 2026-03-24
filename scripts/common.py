@@ -292,7 +292,36 @@ def resolve_local_file(
                     if os.path.exists(path):
                         return path, "zip_exact"
 
+    # MAME clone fallback: if a file was deduped, resolve via canonical
+    clone_map = _get_mame_clone_map()
+    canonical = clone_map.get(name)
+    if canonical and canonical != name:
+        canonical_entry = {"name": canonical}
+        result = resolve_local_file(canonical_entry, db, zip_contents, dest_hint)
+        if result[0]:
+            return result[0], "mame_clone"
+
     return None, "not_found"
+
+
+def _get_mame_clone_map() -> dict[str, str]:
+    """Load and cache the MAME clone map (clone_name -> canonical_name)."""
+    if not hasattr(_get_mame_clone_map, "_cache"):
+        clone_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "_mame_clones.json",
+        )
+        if os.path.exists(clone_path):
+            import json as _json
+            with open(clone_path) as f:
+                data = _json.load(f)
+            _get_mame_clone_map._cache = {}
+            for canonical, info in data.items():
+                for clone in info.get("clones", []):
+                    _get_mame_clone_map._cache[clone] = canonical
+        else:
+            _get_mame_clone_map._cache = {}
+    return _get_mame_clone_map._cache
 
 
 def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:

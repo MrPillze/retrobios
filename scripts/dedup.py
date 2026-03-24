@@ -170,7 +170,11 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
             if dry_run:
                 print(f"  WOULD REMOVE: {dup}")
             else:
-                os.remove(dup)
+                try:
+                    os.remove(dup)
+                except OSError as e:
+                    print(f"  WARNING: cannot remove {dup}: {e}")
+                    continue
                 # Clean up empty .variants/ directories
                 parent = os.path.dirname(dup)
                 if os.path.basename(parent) == ".variants" and not os.listdir(parent):
@@ -204,7 +208,7 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
 
     # Write MAME clone mapping
     if mame_clones:
-        clone_path = os.path.join(bios_dir, "_mame_clones.json")
+        clone_path = "_mame_clones.json"
         if dry_run:
             print(f"\nWould write MAME clone map: {clone_path}")
             print(f"  {len(mame_clones)} canonical ZIPs with "
