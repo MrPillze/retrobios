@@ -111,21 +111,27 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             if fname not in index:
                 index[fname] = {
                     "checks": set(), "size": None,
+                    "min_size": None, "max_size": None,
                     "crc32": None, "md5": None, "sha1": None,
                 }
                 sources[fname] = {}
             index[fname]["checks"].update(checks)
-            if "size" in checks and f.get("size") is not None:
-                new_size = f["size"]
-                prev_size = index[fname]["size"]
-                if prev_size is not None and prev_size != new_size:
-                    prev_emu = sources[fname].get("size", "?")
-                    raise ValueError(
-                        f"validation conflict for '{fname}': "
-                        f"size={prev_size} ({prev_emu}) vs size={new_size} ({emu_name})"
-                    )
-                index[fname]["size"] = new_size
-                sources[fname]["size"] = emu_name
+            if "size" in checks:
+                if f.get("size") is not None:
+                    new_size = f["size"]
+                    prev_size = index[fname]["size"]
+                    if prev_size is not None and prev_size != new_size:
+                        prev_emu = sources[fname].get("size", "?")
+                        raise ValueError(
+                            f"validation conflict for '{fname}': "
+                            f"size={prev_size} ({prev_emu}) vs size={new_size} ({emu_name})"
+                        )
+                    index[fname]["size"] = new_size
+                    sources[fname]["size"] = emu_name
+                if f.get("min_size") is not None:
+                    index[fname]["min_size"] = f["min_size"]
+                if f.get("max_size") is not None:
+                    index[fname]["max_size"] = f["max_size"]
             if "crc32" in checks and f.get("crc32"):
                 new_crc = f["crc32"].lower()
                 if new_crc.startswith("0x"):
@@ -174,10 +180,14 @@ def check_file_validation(
     if not entry:
         return None
     checks = entry["checks"]
-    if "size" in checks and entry["size"] is not None:
+    if "size" in checks:
         actual_size = os.path.getsize(local_path)
-        if actual_size != entry["size"]:
+        if entry["size"] is not None and actual_size != entry["size"]:
             return f"size mismatch: expected {entry['size']}, got {actual_size}"
+        if entry["min_size"] is not None and actual_size < entry["min_size"]:
+            return f"size too small: min {entry['min_size']}, got {actual_size}"
+        if entry["max_size"] is not None and actual_size > entry["max_size"]:
+            return f"size too large: max {entry['max_size']}, got {actual_size}"
     # Hash checks — compute once, reuse
     need_hashes = any(
         h in checks and entry.get(h) for h in ("crc32", "md5", "sha1")
