@@ -255,6 +255,12 @@ def generate_pack(
     file_status: dict[str, str] = {}
     file_reasons: dict[str, str] = {}
 
+    # Build emulator-level validation index (same as verify.py)
+    from verify import _build_validation_index
+    validation_index = {}
+    if emu_profiles:
+        validation_index = _build_validation_index(emu_profiles)
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for sys_id, system in sorted(config.get("systems", {}).items()):
             for file_entry in system.get("files", []):
@@ -355,6 +361,22 @@ def generate_pack(
                         file_reasons[dedup_key] = "hash mismatch"
                 else:
                     file_status.setdefault(dedup_key, "ok")
+
+                # Emulator-level validation (matches verify.py behavior)
+                # In existence mode: validation is informational (warning, not downgrade)
+                # In md5 mode: validation downgrades OK to UNTESTED
+                if (file_status.get(dedup_key) == "ok"
+                        and local_path and validation_index):
+                    from verify import check_file_validation
+                    fname = file_entry.get("name", "")
+                    reason = check_file_validation(local_path, fname, validation_index)
+                    if reason:
+                        if verification_mode == "existence":
+                            # Existence mode: file present = OK, validation is extra info
+                            file_reasons.setdefault(dedup_key, reason)
+                        else:
+                            file_status[dedup_key] = "untested"
+                            file_reasons[dedup_key] = reason
 
                 if already_packed:
                     continue
