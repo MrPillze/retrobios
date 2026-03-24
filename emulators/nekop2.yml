@@ -1,8 +1,149 @@
-emulator: "nekop2"
-type: alias
-alias_of: "np2kai"
-profiled_date: "2026-03-18"
+emulator: nekop2
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/libretro-meowPC98"
+upstream: "https://np2.yui.ne.jp (dead; source preserved in libretro repo)"
+profiled_date: "2026-03-24"
 core_version: "0.86"
 display_name: "NEC - PC-98 (Neko Project II)"
-note: "This core uses the same BIOS/firmware as np2kai. See emulators/np2kai.yml for details."
-files: []
+cores: [nekop2]
+systems: [pc-98]
+
+# Neko Project II (NP2) by Yui, ported to libretro by meepingsnesroms.
+# PC-9801/9821 emulator (80286/IA-32 CPU). All files load from <system>/np2/.
+# The libretro shim sets np2cfg.biospath to "<system>/np2/" and
+# file_setcd() to the same path (libretro/libretro.c:856-864,196).
+#
+# BIOS_SIMULATE is hardcoded (bios/bios.c:26), so the core always has
+# a built-in BIOS simulator and ITF ROM is never loaded from disk.
+# Font data falls back to built-in 8x8 tables. Sound ROM falls back
+# to a 9-byte stub. IDE/SCSI/SASI all have built-in stubs.
+#
+# This is NOT the same core as np2kai. Different repo, different
+# feature set (no fmgen, no IDE/PCI/GPIB ROM loading, no itf.rom).
+# BIOS path is np2/, not np2kai/.
+#
+# .info declares firmware_count=0, which is misleading — the core
+# loads multiple BIOS/font/sound files but all have built-in fallbacks.
+
+files:
+  # -- Main BIOS ROM --
+  # Loaded in bios/bios.c:232-235 via getbiospath(). 96 KB (0x18000)
+  # mapped at 0xe8000. Without this, the built-in BIOS simulator
+  # (nosyscode + BIOS_SIMULATE) is used.
+  - name: "bios.rom"
+    path: "np2/bios.rom"
+    required: false
+    hle_fallback: true
+    note: >
+      PC-9801 system BIOS ROM (96 KB). The core boots without it using
+      the built-in BIOS simulator, but some software requires the real BIOS.
+    source_ref: "bios/bios.c:232-235, common/strres.c:53"
+
+  # -- PC-9821 extension BIOS --
+  # Loaded in bios/bios.c:262-266 via getbiospath(). 8 KB (0x2000)
+  # at 0xd8000. Only compiled when SUPPORT_PC9821 is defined
+  # (libretro/compiler.h:169).
+  - name: "bios9821.rom"
+    path: "np2/bios9821.rom"
+    required: false
+    note: >
+      PC-9821 extension BIOS ROM (8 KB). For PC-9821 mode support.
+      Mapped at 0xd8000.
+    source_ref: "bios/bios.c:262-266, libretro/compiler.h:169"
+
+  # -- Font file --
+  # Set in libretro.c:862 as "<system>/np2/font.bmp".
+  # font_load() in font/font.c:113 determines type by extension:
+  # .bmp = PC98 format, FONT.ROM = V98 format.
+  # Without any font file, built-in fontdata_8 provides 8x8 ASCII only.
+  - name: "font.bmp"
+    path: "np2/font.bmp"
+    required: false
+    hle_fallback: true
+    aliases: ["FONT.ROM"]
+    note: >
+      PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
+      Without this, only basic ASCII renders using built-in 8x8 data.
+      FONT.ROM (V98 format) is also accepted.
+    source_ref: "libretro/libretro.c:862, font/font.c:113, font/fontdata.c:12"
+
+  # -- Sound BIOS ROM --
+  # Loaded by soundrom_load() via loadsoundrom() in sound/soundrom.c:21-55.
+  # Filename built as "sound" + optional board name + ".rom".
+  # Board-specific variants: sound26.rom (PC-9801-26K), sound86.rom (86),
+  # sound118.rom (118), soundSPB.rom (Speak Board), sound14.rom (14).
+  # The code tries the board-specific name first, falls back to sound.rom.
+  # 16 KB (0x4000). Fallback: 9-byte defsoundrom stub.
+  - name: "sound.rom"
+    path: "np2/sound.rom"
+    required: false
+    hle_fallback: true
+    note: >
+      FM sound board BIOS ROM (16 KB). The core tries board-specific
+      variants first (sound26.rom, sound86.rom, sound118.rom, soundSPB.rom,
+      sound14.rom) then falls back to sound.rom.
+    source_ref: "sound/soundrom.c:15-16,21-55,65-78"
+
+  # -- YM2608 OPNA rhythm samples --
+  # Loaded by rhythm_load() in sound/rhythmc.c:60-71 via getbiospath().
+  # No fmgen engine in this core — only lowercase filenames are used.
+  - name: "2608_bd.wav"
+    path: "np2/2608_bd.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: bass drum"
+    source_ref: "sound/rhythmc.c:11,60-71"
+
+  - name: "2608_sd.wav"
+    path: "np2/2608_sd.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: snare drum"
+    source_ref: "sound/rhythmc.c:12"
+
+  - name: "2608_top.wav"
+    path: "np2/2608_top.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: top cymbal"
+    source_ref: "sound/rhythmc.c:13"
+
+  - name: "2608_hh.wav"
+    path: "np2/2608_hh.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: hi-hat"
+    source_ref: "sound/rhythmc.c:14"
+
+  - name: "2608_tom.wav"
+    path: "np2/2608_tom.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: tom"
+    source_ref: "sound/rhythmc.c:15"
+
+  - name: "2608_rim.wav"
+    path: "np2/2608_rim.wav"
+    required: false
+    note: "YM2608 OPNA rhythm sample: rim shot"
+    source_ref: "sound/rhythmc.c:16"
+
+  # -- SCSI controller BIOS --
+  # Loaded in cbus/scsiio.c:219 via file_open_rb_c(). 16 KB (0x4000).
+  # Falls back to built-in scsibios[] stub.
+  - name: "scsi.rom"
+    path: "np2/scsi.rom"
+    required: false
+    hle_fallback: true
+    note: >
+      SCSI controller BIOS ROM (16 KB). The core includes a built-in
+      SCSI BIOS stub as fallback.
+    source_ref: "cbus/scsiio.c:208-233"
+
+  # -- SASI controller BIOS --
+  # Loaded in cbus/sasiio.c:453 via file_open_rb_c(). 4 KB (0x1000).
+  # Falls back to built-in sasibios[] stub.
+  - name: "sasi.rom"
+    path: "np2/sasi.rom"
+    required: false
+    hle_fallback: true
+    note: >
+      SASI controller BIOS ROM (4 KB). The core includes a built-in
+      SASI BIOS stub as fallback.
+    source_ref: "cbus/sasiio.c:442-465"

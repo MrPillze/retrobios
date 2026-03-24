@@ -1,40 +1,36 @@
 emulator: Nestopia UE
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/nestopia"
+upstream: "https://gitlab.com/jgemu/nestopia"
 logo: "https://raw.githubusercontent.com/0ldsk00l/nestopia/master/icons/svg/nestopia.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-24"
 core_version: "1.53.1"
 display_name: "Nintendo - NES / Famicom (Nestopia)"
+cores: [nestopia]
 systems: [nintendo-nes, nintendo-fds]
 
 notes: |
-  Nestopia UE (Undead Edition) is a cycle-accurate NES/Famicom emulator.
-  NES cartridge games need no BIOS. Famicom Disk System games require
-  the FDS BIOS ROM (disksys.rom, 8 KB) loaded from the system directory.
-  The core validates the BIOS via CRC32 against two known dumps:
-  standard Famicom (0x5E607DCF) and Twin Famicom (0x4DF24A6C).
-  An unknown BIOS triggers a warning but still loads.
+  Nestopia UE is a cycle-accurate NES/Famicom emulator. The libretro port
+  tracks the upstream Nestopia JG project. NES cartridge games need no BIOS.
+  Famicom Disk System games require disksys.rom (8 KB FDS BIOS) in the
+  system directory. The core validates the BIOS via CRC32 against two known
+  dumps: standard Famicom (0x5E607DCF) and Twin Famicom (0x4DF24A6C). An
+  unknown BIOS triggers a warning but still loads.
 
-  NstDatabase.xml is an optional game database used for region autodetection,
-  aspect ratio selection, and 4-player adapter recognition. A copy is baked
-  into the core binary (libretro/nstdatabase.hpp) and used as fallback when
-  no external file is found. Placing a newer NstDatabase.xml in the system
-  directory overrides the built-in copy.
+  NstDatabase.xml is an optional game database for region autodetection,
+  mapper selection, and 4-player adapter recognition. A copy is baked into
+  the core binary (libretro/nstdatabase.hpp) as fallback. The upstream
+  Nestopia JG requires this file; the libretro port makes it optional.
 
-  An optional custom palette file (custom.pal, 192 bytes, 64 RGB triplets)
-  overrides the built-in palettes when the nestopia_palette core option is
-  set to Custom. The core ships with 10+ built-in palettes (Royaltea,
-  Smooth FBx, etc.) so the external file is rarely needed.
+  An optional custom palette file (custom.pal, 64 RGB triplets) overrides
+  built-in palettes when the nestopia_palette core option is set to Custom.
+  The libretro port embeds all named palettes (Royaltea, Smooth FBx, etc.)
+  that the upstream loads from external .pal files.
 
-  Audio samples for specific games can be placed in system/nestopia/samples/
-  as numbered .wav files (e.g., 00.wav, 01.wav). This is used for Famicom
-  expansion audio in a few titles.
-
-  Game Genie is handled as cheat code decoding (software), not via a ROM file.
-
-  File path construction: libretro/libretro.cpp retro_load_game() joins the
-  system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY) with each
-  filename directly - no subdirectories.
+  Five Famicom games use external ADPCM audio samples placed in
+  system/nestopia/samples/{game}/ as numbered .wav files. These originate
+  from MAME sample ZIPs. Games function without them but miss some audio.
 
 files:
   # --- Famicom Disk System BIOS (required for FDS games) ---
@@ -43,6 +39,7 @@ files:
     description: "FDS BIOS ROM"
     required: true
     size: 8192
+    validation: [crc32]
     md5: "ca30b50f880eb660a320674ed365ef7a"
     sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
     source_ref: "libretro/libretro.cpp:1608-1634 (FDS load), source/core/NstFds.cpp:61-131 (Bios class, CRC32 validation)"
@@ -54,11 +51,8 @@ files:
     description: "Nestopia game database for region and mapper autodetection"
     required: false
     hle_fallback: true
-    size: 1022369
-    md5: "0ee6cbdc6f5c96ce9c8aa5edb59066f4"
-    sha1: ~
     source_ref: "libretro/libretro.cpp:1561-1586 (database load), libretro/nstdatabase.hpp (baked-in fallback)"
-    notes: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional. Hash is for the upstream copy shipped with the core repo."
+    notes: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional."
 
   # --- Custom palette (optional, core option nestopia_palette = Custom) ---
   - name: "custom.pal"
@@ -67,7 +61,41 @@ files:
     required: false
     hle_fallback: true
     size: 192
-    md5: ~
-    sha1: ~
     source_ref: "libretro/libretro.cpp:1540-1559 (palette load)"
-    notes: "64 RGB triplets (64 x 3 bytes = 192 bytes). Only loaded when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette if not found. Multiple valid palettes exist so no single canonical hash."
+    notes: "64 RGB triplets (64 x 3 bytes = 192 bytes). Loaded unconditionally at startup; applied only when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette. Multiple valid palettes exist so no canonical hash."
+
+  # --- ADPCM audio samples (optional, game-specific) ---
+  - name: "nestopia/samples/moepro/"
+    system: nintendo-nes
+    description: "Moero Pro Yakyuu audio samples (16 .wav files, 00.wav-15.wav)"
+    required: false
+    category: game_data
+    source_ref: "libretro/libretro.cpp:142-180 (load_wav), libretro/libretro.cpp:247 (LOAD_SAMPLE_MOERO_PRO_YAKYUU callback), source/core/NstSoundPlayer.hpp:53 (16 samples)"
+
+  - name: "nestopia/samples/moepro88/"
+    system: nintendo-nes
+    description: "Moero Pro Yakyuu '88 audio samples (20 .wav files, 00.wav-19.wav)"
+    required: false
+    category: game_data
+    source_ref: "libretro/libretro.cpp:142-180 (load_wav), libretro/libretro.cpp:249 (LOAD_SAMPLE_MOERO_PRO_YAKYUU_88 callback), source/core/NstSoundPlayer.hpp:54 (20 samples)"
+
+  - name: "nestopia/samples/mptennis/"
+    system: nintendo-nes
+    description: "Moero Pro Tennis audio samples (19 .wav files, 00.wav-18.wav)"
+    required: false
+    category: game_data
+    source_ref: "libretro/libretro.cpp:142-180 (load_wav), libretro/libretro.cpp:251 (LOAD_SAMPLE_MOERO_PRO_TENNIS callback), source/core/NstSoundPlayer.hpp:55 (19 samples)"
+
+  - name: "nestopia/samples/terao/"
+    system: nintendo-nes
+    description: "Terao no Dosukoi Oozumou audio samples (6 .wav files, 00.wav-05.wav)"
+    required: false
+    category: game_data
+    source_ref: "libretro/libretro.cpp:142-180 (load_wav), libretro/libretro.cpp:253 (LOAD_SAMPLE_TERAO_NO_DOSUKOI_OOZUMOU callback), source/core/NstSoundPlayer.hpp:56 (6 samples)"
+
+  - name: "nestopia/samples/ftaerobi/"
+    system: nintendo-nes
+    description: "Aerobics Studio audio samples (8 .wav files, 00.wav-07.wav)"
+    required: false
+    category: game_data
+    source_ref: "libretro/libretro.cpp:142-180 (load_wav), libretro/libretro.cpp:255 (LOAD_SAMPLE_AEROBICS_STUDIO callback), source/core/NstSoundPlayer.hpp:57 (8 samples)"

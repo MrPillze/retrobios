@@ -185,6 +185,7 @@ class Scraper(BaseScraper):
     """Scraper for EmuDeck checkBIOS.sh and CSV cheat sheets."""
 
     def __init__(self, checkbios_url: str = CHECKBIOS_URL, csv_base_url: str = CSV_BASE_URL):
+        super().__init__(url=checkbios_url)
         self.checkbios_url = checkbios_url
         self.csv_base_url = csv_base_url
         self._raw_script: str | None = None

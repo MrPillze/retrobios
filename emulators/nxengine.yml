@@ -1,45 +1,38 @@
 emulator: NXEngine
 type: libretro
+core_classification: game_engine
 source: "https://github.com/libretro/nxengine-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/Rox64/NXEngine"
+profiled_date: "2026-03-24"
 core_version: "1.0.0.6"
 display_name: "Cave Story (NXEngine)"
+cores: [nxengine]
 systems: [cave-story]
 
 notes: |
   NXEngine is an open-source reimplementation of the Cave Story (Doukutsu
-  Monogatari) engine by Studio Pixel. It is not an emulator but a source port
-  that loads the original freeware game data directly.
+  Monogatari) engine by Studio Pixel, authored by Caitlin Shaw. It is not
+  an emulator but a source port that loads the original freeware game data.
 
-  The core requires the original freeware Cave Story distribution placed in
-  {system_dir}/nxengine/. When launched without a content file, it looks for
-  Doukutsu.exe at that path (libretro.cpp:254-259). When launched with a .exe
-  content file, it uses the parent directory of that file instead
-  (libretro.cpp:244).
+  The core requires the freeware Cave Story distribution placed in
+  {system_dir}/nxengine/. When launched without content, it looks for
+  Doukutsu.exe there (libretro.cpp:254-259). When launched with a .exe
+  content file, it uses the parent directory of that file (libretro.cpp:237).
 
-  At startup (main.cpp:66-90), the core opens Doukutsu.exe and extracts from
-  it: ORG music files (extractorg.c), PXT sound effects (extractpxt.c), stage
-  tile attributes (extractstages.c), bitmap graphics, and the wavetable
-  (cachefiles.c:484). These are kept in memory, not written to disk.
+  At startup (main.cpp:75-90), the core opens Doukutsu.exe and extracts:
+  ORG music (extractorg.c), PXT sound effects (extractpxt.c), stage tile
+  attributes (extractstages.c), 18 credit BMPs + pixel.bmp (endpic/),
+  and the wavetable (cachefiles.c:464-485). All kept in memory.
 
-  The data/ directory must exist alongside Doukutsu.exe with the full game
-  asset tree: 30 root-level files (sprites, backgrounds, script tables),
-  36 NPC sprite sheets in data/Npc/, and 333 stage files in data/Stage/
-  (maps .pxm, tile attributes .pxa, entity lists .pxe, scripts .tsc, and
-  tileset images via Prt*.pbm). The core verifies data/ exists by checking
-  for data/npc.tbl (main.cpp:47-63).
+  The data/ directory (399 files from the freeware release) is loaded into
+  an in-memory cache at init (cachefiles.c:38-439, 497-540). All subsequent
+  file access goes through this cache. The core verifies data/ by checking
+  for data/npc.tbl (main.cpp:47-58).
 
-  The core also reads endpic/ bitmaps for ending sequences, extracted from
-  Doukutsu.exe at runtime (cachefiles.c:460-484).
+  The font is compiled-in (bitmap_font.h). The upstream standalone version
+  uses font.ttf via SDL_ttf.
 
-  All required files ship in the datafiles/ directory of the libretro repo
-  itself, since Cave Story is freeware. No separate BIOS or firmware is
-  needed. The entire freeware distribution is the "system" requirement.
-
-  sprites.sif has a compiled-in fallback (sprites_sif.h) and is the only
-  data file that can be missing without a fatal error (cachefiles.c:515-521).
-
-  Valid content extension: .exe (retro_get_system_info, libretro.cpp:96).
+  Valid content extension: .exe (libretro.cpp:109).
 
 files:
   - name: "Doukutsu.exe"
@@ -51,20 +44,37 @@ files:
     md5: "38695d3d69d7a0ada8178072dad4c58b"
     sha1: "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf"
     source_ref: "main.cpp:77-78 (opened for extraction), libretro.cpp:258 (existence check)"
-    notes: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable.dat from this binary at each launch."
-
-  - name: "data/npc.tbl"
-    category: game_data
-    system: cave-story
-    description: "NPC attribute table (entity behavior flags, HP, damage, display rect offsets)"
-    required: true
-    source_ref: "main.cpp:50 (existence check for data/ directory validation)"
-    notes: "Located in system/nxengine/data/. The core uses this file to verify the data directory is present."
+    notes: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable from this binary at each launch."
 
   - name: "data/"
     category: game_data
     system: cave-story
     description: "Full game asset directory tree (399 files: sprites, NPC sheets, stage maps, scripts, backgrounds)"
     required: true
-    source_ref: "cachefiles.c:38-480 (complete file list loaded at init)"
+    source_ref: "cachefiles.c:38-439 (filenames[] array loaded at init)"
     notes: "Must contain root assets (Arms.pbm, MyChar.pbm, etc.), Npc/ (36 sprite sheets), and Stage/ (333 map/script/tileset files). All files from the original freeware release."
+
+  - name: "data/npc.tbl"
+    category: game_data
+    system: cave-story
+    description: "NPC attribute table (entity behavior flags, HP, damage, display rect offsets)"
+    required: true
+    source_ref: "main.cpp:50 (existence check for data/ directory), ai/ai.cpp:56-59 (loaded for NPC properties)"
+    notes: "Located in system/nxengine/data/. Used to validate data directory presence and to load NPC behavior attributes."
+
+  - name: "data/sprites.sif"
+    category: game_data
+    system: cave-story
+    description: "Sprite information file (sprite positions, sizes, animation data)"
+    required: false
+    hle_fallback: true
+    source_ref: "cachefiles.c:101 (in filenames[]), cachefiles.c:515-521 (compiled-in fallback from sprites_sif.h)"
+    notes: "Not shipped in the freeware distribution. If missing, the core uses a compiled-in copy (sprites_sif.h)."
+
+  - name: "tilekey.dat"
+    category: game_data
+    system: cave-story
+    description: "Tile attribute lookup table (maps tile codes to collision/behavior attributes)"
+    required: false
+    source_ref: "map.cpp:290-303 (loaded at init, hardcoded default if missing)"
+    notes: "Not part of the freeware distribution. Generated by the standalone NXEngine extraction tool. The libretro core has hardcoded defaults in map.cpp:30."

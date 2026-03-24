@@ -198,11 +198,22 @@ def _download_and_extract(
                             shutil.copyfileobj(src, dst)
                     file_count += 1
 
-        # atomic swap: remove old cache, move new into place
-        if cache_dir.exists():
-            shutil.rmtree(cache_dir)
+        # atomic swap: rename old before moving new into place
         cache_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.move(str(extract_dir), str(cache_dir))
+        old_cache = cache_dir.with_suffix(".old")
+        if cache_dir.exists():
+            if old_cache.exists():
+                shutil.rmtree(old_cache)
+            cache_dir.rename(old_cache)
+        try:
+            shutil.move(str(extract_dir), str(cache_dir))
+        except OSError:
+            # Restore old cache on failure
+            if old_cache.exists() and not cache_dir.exists():
+                old_cache.rename(cache_dir)
+            raise
+        if old_cache.exists():
+            shutil.rmtree(old_cache)
 
     return file_count
 

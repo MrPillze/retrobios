@@ -194,6 +194,7 @@ class Scraper(BaseScraper):
     """Scraper for libretro-core-info firmware declarations."""
 
     def __init__(self):
+        super().__init__()
         self._info_files: dict[str, dict] | None = None
 
     def _fetch_info_list(self) -> list[str]:

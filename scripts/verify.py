@@ -35,13 +35,12 @@ except ImportError:
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    build_zip_contents_index, check_inside_zip, compute_hashes,
-    group_identical_platforms, load_data_dir_registry,
-    load_emulator_profiles, load_platform_config,
+    _build_validation_index, build_zip_contents_index, check_file_validation,
+    check_inside_zip, compute_hashes, filter_files_by_mode,
+    group_identical_platforms, list_emulator_profiles, list_system_ids,
+    load_data_dir_registry, load_emulator_profiles, load_platform_config,
     md5sum, md5_composite, resolve_local_file, resolve_platform_cores,
 )
-from crypto_verify import check_crypto_validation
-
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_EMULATORS_DIR = "emulators"
@@ -66,173 +65,6 @@ class Severity:
 
 _STATUS_ORDER = {Status.OK: 0, Status.UNTESTED: 1, Status.MISSING: 2}
 _SEVERITY_ORDER = {Severity.OK: 0, Severity.INFO: 1, Severity.WARNING: 2, Severity.CRITICAL: 3}
-
-
-# ---------------------------------------------------------------------------
-# Emulator-level validation (size, crc32 checks from emulator profiles)
-# ---------------------------------------------------------------------------
-
-def _parse_validation(validation: list | dict | None) -> list[str]:
-    """Extract the validation check list from a file's validation field.
-
-    Handles both simple list and divergent (core/upstream) dict forms.
-    For dicts, uses the ``core`` key since RetroArch users run the core.
-    """
-    if validation is None:
-        return []
-    if isinstance(validation, list):
-        return validation
-    if isinstance(validation, dict):
-        return validation.get("core", [])
-    return []
-
-
-# Validation types that require console-specific cryptographic keys.
-# verify.py cannot reproduce these — size checks still apply if combined.
-_CRYPTO_CHECKS = frozenset({"signature", "crypto"})
-
-# All reproducible validation types.
-_HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
-
-
-def _build_validation_index(profiles: dict) -> dict[str, dict]:
-    """Build per-filename validation rules from emulator profiles.
-
-    Returns {filename: {"checks": [str], "size": int|None, "min_size": int|None,
-    "max_size": int|None, "crc32": str|None, "md5": str|None, "sha1": str|None,
-    "adler32": str|None, "crypto_only": [str]}}.
-
-    ``crypto_only`` lists validation types we cannot reproduce (signature, crypto)
-    so callers can report them as non-verifiable rather than silently skipping.
-
-    When multiple emulators reference the same file, merges checks (union).
-    Raises ValueError if two profiles declare conflicting values.
-    """
-    index: dict[str, dict] = {}
-    sources: dict[str, dict[str, str]] = {}
-    for emu_name, profile in profiles.items():
-        if profile.get("type") in ("launcher", "alias"):
-            continue
-        for f in profile.get("files", []):
-            fname = f.get("name", "")
-            if not fname:
-                continue
-            checks = _parse_validation(f.get("validation"))
-            if not checks:
-                continue
-            if fname not in index:
-                index[fname] = {
-                    "checks": set(), "sizes": set(),
-                    "min_size": None, "max_size": None,
-                    "crc32": set(), "md5": set(), "sha1": set(), "sha256": set(),
-                    "adler32": set(), "crypto_only": set(),
-                }
-                sources[fname] = {}
-            index[fname]["checks"].update(checks)
-            # Track non-reproducible crypto checks
-            index[fname]["crypto_only"].update(
-                c for c in checks if c in _CRYPTO_CHECKS
-            )
-            # Size checks
-            if "size" in checks:
-                if f.get("size") is not None:
-                    index[fname]["sizes"].add(f["size"])
-                if f.get("min_size") is not None:
-                    cur = index[fname]["min_size"]
-                    index[fname]["min_size"] = min(cur, f["min_size"]) if cur is not None else f["min_size"]
-                if f.get("max_size") is not None:
-                    cur = index[fname]["max_size"]
-                    index[fname]["max_size"] = max(cur, f["max_size"]) if cur is not None else f["max_size"]
-            # Hash checks — collect all accepted hashes as sets (multiple valid
-            # versions of the same file, e.g. MT-32 ROM versions)
-            if "crc32" in checks and f.get("crc32"):
-                norm = f["crc32"].lower()
-                if norm.startswith("0x"):
-                    norm = norm[2:]
-                index[fname]["crc32"].add(norm)
-            for hash_type in ("md5", "sha1", "sha256"):
-                if hash_type in checks and f.get(hash_type):
-                    index[fname][hash_type].add(f[hash_type].lower())
-            # Adler32 — stored as known_hash_adler32 field (not in validation: list
-            # for Dolphin, but support it in both forms for future profiles)
-            adler_val = f.get("known_hash_adler32") or f.get("adler32")
-            if adler_val:
-                norm = adler_val.lower()
-                if norm.startswith("0x"):
-                    norm = norm[2:]
-                index[fname]["adler32"].add(norm)
-    # Convert sets to sorted tuples/lists for determinism
-    for v in index.values():
-        v["checks"] = sorted(v["checks"])
-        v["crypto_only"] = sorted(v["crypto_only"])
-        # Keep hash sets as frozensets for O(1) lookup in check_file_validation
-    return index
-
-
-def check_file_validation(
-    local_path: str, filename: str, validation_index: dict[str, dict],
-    bios_dir: str = "bios",
-) -> str | None:
-    """Check emulator-level validation on a resolved file.
-
-    Supports: size (exact/min/max), crc32, md5, sha1, adler32,
-    signature (RSA-2048 PKCS1v15 SHA256), crypto (AES-128-CBC + SHA256).
-
-    Returns None if all checks pass or no validation applies.
-    Returns a reason string if a check fails.
-    """
-    entry = validation_index.get(filename)
-    if not entry:
-        return None
-    checks = entry["checks"]
-
-    # Size checks — sizes is a set of accepted values
-    if "size" in checks:
-        actual_size = os.path.getsize(local_path)
-        if entry["sizes"] and actual_size not in entry["sizes"]:
-            expected = ",".join(str(s) for s in sorted(entry["sizes"]))
-            return f"size mismatch: got {actual_size}, accepted [{expected}]"
-        if entry["min_size"] is not None and actual_size < entry["min_size"]:
-            return f"size too small: min {entry['min_size']}, got {actual_size}"
-        if entry["max_size"] is not None and actual_size > entry["max_size"]:
-            return f"size too large: max {entry['max_size']}, got {actual_size}"
-
-    # Hash checks — compute once, reuse for all hash types.
-    # Each hash field is a set of accepted values (multiple valid ROM versions).
-    need_hashes = (
-        any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256"))
-        or entry.get("adler32")
-    )
-    if need_hashes:
-        hashes = compute_hashes(local_path)
-        if "crc32" in checks and entry["crc32"]:
-            if hashes["crc32"].lower() not in entry["crc32"]:
-                expected = ",".join(sorted(entry["crc32"]))
-                return f"crc32 mismatch: got {hashes['crc32']}, accepted [{expected}]"
-        if "md5" in checks and entry["md5"]:
-            if hashes["md5"].lower() not in entry["md5"]:
-                expected = ",".join(sorted(entry["md5"]))
-                return f"md5 mismatch: got {hashes['md5']}, accepted [{expected}]"
-        if "sha1" in checks and entry["sha1"]:
-            if hashes["sha1"].lower() not in entry["sha1"]:
-                expected = ",".join(sorted(entry["sha1"]))
-                return f"sha1 mismatch: got {hashes['sha1']}, accepted [{expected}]"
-        if "sha256" in checks and entry["sha256"]:
-            if hashes["sha256"].lower() not in entry["sha256"]:
-                expected = ",".join(sorted(entry["sha256"]))
-                return f"sha256 mismatch: got {hashes['sha256']}, accepted [{expected}]"
-        if entry["adler32"]:
-            if hashes["adler32"].lower() not in entry["adler32"]:
-                expected = ",".join(sorted(entry["adler32"]))
-                return f"adler32 mismatch: got 0x{hashes['adler32']}, accepted [{expected}]"
-
-    # Signature/crypto checks (3DS RSA, AES)
-    if entry["crypto_only"]:
-        crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
-        if crypto_reason:
-            return crypto_reason
-
-    return None
 
 
 # ---------------------------------------------------------------------------
@@ -269,7 +101,7 @@ def verify_entry_md5(
     base = {"name": name, "required": required}
 
     if expected_md5 and "," in expected_md5:
-        md5_list = [m.strip() for m in expected_md5.split(",") if m.strip()]
+        md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
     else:
         md5_list = [expected_md5] if expected_md5 else []
 
@@ -695,19 +527,6 @@ def print_platform_result(result: dict, group: list[str]) -> None:
 # Emulator/system mode verification
 # ---------------------------------------------------------------------------
 
-def _filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
-    """Filter file entries by libretro/standalone mode."""
-    result = []
-    for f in files:
-        fmode = f.get("mode", "")
-        if standalone and fmode == "libretro":
-            continue
-        if not standalone and fmode == "standalone":
-            continue
-        result.append(f)
-    return result
-
-
 def _effective_validation_label(details: list[dict], validation_index: dict) -> str:
     """Determine the bracket label for the report.
 
@@ -783,7 +602,7 @@ def verify_emulator(
     data_dir_notices: list[str] = []
 
     for emu_name, profile in selected:
-        files = _filter_files_by_mode(profile.get("files", []), standalone)
+        files = filter_files_by_mode(profile.get("files", []), standalone)
 
         # Check data directories (only notice if not cached)
         for dd in profile.get("data_directories", []):
@@ -976,34 +795,6 @@ def print_emulator_result(result: dict) -> None:
         print(f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)")
 
 
-def _list_emulators(emulators_dir: str) -> None:
-    """Print available emulator profiles."""
-    profiles = load_emulator_profiles(emulators_dir)
-    for name in sorted(profiles):
-        p = profiles[name]
-        if p.get("type") in ("alias", "test"):
-            continue
-        display = p.get("emulator", name)
-        ptype = p.get("type", "libretro")
-        systems = ", ".join(p.get("systems", [])[:3])
-        more = "..." if len(p.get("systems", [])) > 3 else ""
-        print(f"  {name:30s} {display:40s} [{ptype}] {systems}{more}")
-
-
-def _list_systems(emulators_dir: str) -> None:
-    """Print available system IDs with emulator count."""
-    profiles = load_emulator_profiles(emulators_dir)
-    system_emus: dict[str, list[str]] = {}
-    for name, p in profiles.items():
-        if p.get("type") in ("alias", "test", "launcher"):
-            continue
-        for sys_id in p.get("systems", []):
-            system_emus.setdefault(sys_id, []).append(name)
-    for sys_id in sorted(system_emus):
-        count = len(system_emus[sys_id])
-        print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
-
-
 def main():
     parser = argparse.ArgumentParser(description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", help="Platform name")
@@ -1021,10 +812,10 @@ def main():
     args = parser.parse_args()
 
     if args.list_emulators:
-        _list_emulators(args.emulators_dir)
+        list_emulator_profiles(args.emulators_dir)
         return
     if args.list_systems:
-        _list_systems(args.emulators_dir)
+        list_system_ids(args.emulators_dir)
         return
 
     # Mutual exclusion

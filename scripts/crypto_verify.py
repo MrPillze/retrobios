@@ -19,6 +19,7 @@ from __future__ import annotations
 import hashlib
 import struct
 import subprocess
+from collections.abc import Callable
 from pathlib import Path
 
 
@@ -418,7 +419,7 @@ def verify_otp(
 # ---------------------------------------------------------------------------
 
 # Map from (filename, validation_type) to verification function
-_CRYPTO_VERIFIERS: dict[str, callable] = {
+_CRYPTO_VERIFIERS: dict[str, Callable] = {
     "SecureInfo_A": verify_secure_info_a,
     "LocalFriendCodeSeed_B": verify_local_friend_code_seed_b,
     "movable.sed": verify_movable_sed,

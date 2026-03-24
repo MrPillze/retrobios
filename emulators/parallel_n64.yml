@@ -1,16 +1,33 @@
 emulator: "ParaLLEl N64"
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/parallel-n64"
+upstream: "https://github.com/mupen64plus/mupen64plus-core"
 profiled_date: "2026-03-24"
 core_version: "2.0-rc2"
 display_name: "Nintendo - Nintendo 64 (ParaLLEl N64)"
 systems: [nintendo-64, nintendo-64dd]
 cores: [parallel_n64, parallel_n64_debug]
 
-# Needs full source-verified profiling. Minimal profile based on known file paths.
-
 files:
   - name: "64DD_IPL.bin"
     path: "64DD_IPL.bin"
     required: false
-    note: "64DD IPL ROM. Only needed for N64 Disk Drive games"
+    description: "64DD IPL ROM"
+    note: "Only loaded when a 64DD disk image (.ndd) is present via subsystem API. Core fails to load disk games without it."
+    source_ref: "libretro/libretro.c:576-623"
+
+notes:
+  hle_available: true
+  hle_note: >
+    PIF boot ROM is fully HLE'd (pifbootrom/pifbootrom.c:57). CIC
+    challenge/response handled in software (n64_cic_nus_6105.c). No BIOS
+    files needed for standard cartridge games.
+  dd_note: >
+    64DD IPL ROM loaded from system_dir/64DD_IPL.bin when disk_data is
+    present. Loaded via fopen with no hash or size validation.
+  divergence_note: >
+    Fork of mupen64plus-core with significant divergence. Includes legacy
+    GPU plugins (Glide64, glN64, Rice, angrylion) and ParaLLEl-RDP/RSP.
+    Uses flat path 64DD_IPL.bin unlike mupen64plus-next which uses
+    Mupen64plus/IPL.n64 subdirectory.

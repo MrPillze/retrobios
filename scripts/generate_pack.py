@@ -25,10 +25,11 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    build_zip_contents_index, check_inside_zip, compute_hashes,
-    group_identical_platforms, load_database, load_data_dir_registry,
-    load_emulator_profiles, load_platform_config, md5_composite,
-    resolve_local_file,
+    _build_validation_index, build_zip_contents_index, check_file_validation,
+    check_inside_zip, compute_hashes, filter_files_by_mode,
+    group_identical_platforms, list_emulator_profiles, list_system_ids,
+    load_database, load_data_dir_registry, load_emulator_profiles,
+    load_platform_config, md5_composite, resolve_local_file,
 )
 from deterministic_zip import rebuild_zip_deterministic
 
@@ -256,7 +257,6 @@ def generate_pack(
     file_reasons: dict[str, str] = {}
 
     # Build emulator-level validation index (same as verify.py)
-    from verify import _build_validation_index
     validation_index = {}
     if emu_profiles:
         validation_index = _build_validation_index(emu_profiles)
@@ -367,7 +367,6 @@ def generate_pack(
                 # In md5 mode: validation downgrades OK to UNTESTED
                 if (file_status.get(dedup_key) == "ok"
                         and local_path and validation_index):
-                    from verify import check_file_validation
                     fname = file_entry.get("name", "")
                     reason = check_file_validation(local_path, fname, validation_index)
                     if reason:
@@ -523,19 +522,6 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
 # Emulator/system mode pack generation
 # ---------------------------------------------------------------------------
 
-def _filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
-    """Filter file entries by libretro/standalone mode."""
-    result = []
-    for f in files:
-        fmode = f.get("mode", "")
-        if standalone and fmode == "libretro":
-            continue
-        if not standalone and fmode == "standalone":
-            continue
-        result.append(f)
-    return result
-
-
 def _resolve_destination(file_entry: dict, pack_structure: dict | None,
                          standalone: bool) -> str:
     """Resolve the ZIP destination path for a file entry."""
@@ -620,7 +606,7 @@ def generate_emulator_pack(
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for emu_name, profile in sorted(selected):
             pack_structure = profile.get("pack_structure")
-            files = _filter_files_by_mode(profile.get("files", []), standalone)
+            files = filter_files_by_mode(profile.get("files", []), standalone)
             for dd in profile.get("data_directories", []):
                 ref_key = dd.get("ref", "")
                 if not ref_key or not data_registry or ref_key not in data_registry:
@@ -825,34 +811,6 @@ def generate_system_pack(
     return result
 
 
-def _list_emulators_pack(emulators_dir: str) -> None:
-    """Print available emulator profiles for pack generation."""
-    profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
-    for name in sorted(profiles):
-        p = profiles[name]
-        if p.get("type") in ("alias", "test"):
-            continue
-        display = p.get("emulator", name)
-        ptype = p.get("type", "libretro")
-        systems = ", ".join(p.get("systems", [])[:3])
-        more = "..." if len(p.get("systems", [])) > 3 else ""
-        print(f"  {name:30s} {display:40s} [{ptype}] {systems}{more}")
-
-
-def _list_systems_pack(emulators_dir: str) -> None:
-    """Print available system IDs with emulator count."""
-    profiles = load_emulator_profiles(emulators_dir)
-    system_emus: dict[str, list[str]] = {}
-    for name, p in profiles.items():
-        if p.get("type") in ("alias", "test", "launcher"):
-            continue
-        for sys_id in p.get("systems", []):
-            system_emus.setdefault(sys_id, []).append(name)
-    for sys_id in sorted(system_emus):
-        count = len(system_emus[sys_id])
-        print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
-
-
 def list_platforms(platforms_dir: str) -> list[str]:
     """List available platform names from YAML files."""
     platforms = []
@@ -893,10 +851,10 @@ def main():
             print(p)
         return
     if args.list_emulators:
-        _list_emulators_pack(args.emulators_dir)
+        list_emulator_profiles(args.emulators_dir)
         return
     if args.list_systems:
-        _list_systems_pack(args.emulators_dir)
+        list_system_ids(args.emulators_dir)
         return
 
     # Mutual exclusion
@@ -1022,10 +980,15 @@ def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
             if name.startswith("INSTRUCTIONS_") or name == "manifest.json":
                 continue
             with zf.open(info) as f:
-                data = f.read()
-            sha1 = hashlib.sha1(data).hexdigest()
-            md5 = hashlib.md5(data).hexdigest()
-            size = len(data)
+                sha1_h = hashlib.sha1()
+                md5_h = hashlib.md5()
+                size = 0
+                for chunk in iter(lambda: f.read(65536), b""):
+                    sha1_h.update(chunk)
+                    md5_h.update(chunk)
+                    size += len(chunk)
+            sha1 = sha1_h.hexdigest()
+            md5 = md5_h.hexdigest()
 
             # Look up in database: files_db keyed by SHA1
             db_entry = files_db.get(sha1)
@@ -1080,25 +1043,33 @@ def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
 
 def inject_manifest(zip_path: str, manifest: dict) -> None:
     """Inject manifest.json into an existing ZIP pack."""
-    import tempfile as _tempfile
     manifest_json = json.dumps(manifest, indent=2, ensure_ascii=False)
 
-    # ZipFile doesn't support appending to existing entries,
-    # so we rebuild with the manifest added
-    tmp_fd, tmp_path = _tempfile.mkstemp(suffix=".zip", dir=os.path.dirname(zip_path))
-    os.close(tmp_fd)
-    try:
-        with zipfile.ZipFile(zip_path, "r") as src, \
-             zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as dst:
-            for item in src.infolist():
-                if item.filename == "manifest.json":
-                    continue  # replace existing
-                dst.writestr(item, src.read(item.filename))
-            dst.writestr("manifest.json", manifest_json)
-        os.replace(tmp_path, zip_path)
-    except Exception:
-        os.unlink(tmp_path)
-        raise
+    # Check if manifest already exists
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        has_manifest = "manifest.json" in zf.namelist()
+
+    if not has_manifest:
+        # Fast path: append directly
+        with zipfile.ZipFile(zip_path, "a") as zf:
+            zf.writestr("manifest.json", manifest_json)
+    else:
+        # Rebuild to replace existing manifest
+        import tempfile as _tempfile
+        tmp_fd, tmp_path = _tempfile.mkstemp(suffix=".zip", dir=os.path.dirname(zip_path))
+        os.close(tmp_fd)
+        try:
+            with zipfile.ZipFile(zip_path, "r") as src, \
+                 zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as dst:
+                for item in src.infolist():
+                    if item.filename == "manifest.json":
+                        continue
+                    dst.writestr(item, src.read(item.filename))
+                dst.writestr("manifest.json", manifest_json)
+            os.replace(tmp_path, zip_path)
+        except (OSError, zipfile.BadZipFile):
+            os.unlink(tmp_path)
+            raise
 
 
 def generate_sha256sums(output_dir: str) -> str | None:

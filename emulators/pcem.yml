@@ -1,17 +1,45 @@
 emulator: PCem
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-pcem"
-profiled_date: "2026-03-18"
-core_version: "SVN"
+upstream: "https://github.com/sarah-walker-pcem/pcem"
+profiled_date: "2026-03-24"
+core_version: "v11 (PCem-mooch, based on PCem v10.1)"
 display_name: "PC (PCem)"
-systems: [ibm-pc, ibm-xt, ibm-at, ibm-pcjr, ibm-ps1, tandy-1000]
+cores: [pcem]
+systems:
+  - ibm-pc
+  - ibm-xt
+  - ibm-at
+  - ibm-pcjr
+  - ibm-ps1
+  - tandy-1000
 
-# PCem (PC Emulator) emulates IBM PC compatibles from 8088 through Pentium.
-# All ROMs are loaded relative to the core's system directory via romfopen()
-# which prepends pcempath (= RetroArch system dir) to the path.
-# Each machine model requires its own BIOS ROM set under roms/<machine>/.
-# Video card ROMs are separate and only needed for the selected GPU.
-# The font ROM (mda.rom) is always loaded at startup.
+notes:
+  rom_structure: >
+    All ROM files are loaded relative to the RetroArch system directory via
+    romfopen(). Machine BIOS ROMs go in roms/<machine_name>/ subdirectories.
+    Video card ROMs go directly in roms/ (or roms/<card>/ for some).
+    Which ROMs are needed depends on the selected machine model and video card.
+  minimum_requirement: >
+    At minimum, mda.rom (font) and one machine BIOS set are required.
+    The video card ROM for the selected GPU is also needed unless the machine
+    has built-in video (PCjr, Tandy, Amstrad, Acer 386SX, PS/1).
+  libretro_version: >
+    The libretro port is PCem-mooch v11, a community fork based on PCem v10.1.
+    Upstream PCem has evolved to v17 with many more machines and devices.
+  nvr_files: >
+    NVR files are CMOS/NVRAM templates providing pre-configured BIOS settings.
+    Shipped with the PCem distribution. Without them the BIOS starts with blank
+    CMOS (user must manually configure). The emulator also writes these back on
+    shutdown.
+  runtime_state: >
+    The emulator creates additional state files during operation: ATI EEPROM
+    (ati18800.nvr, ati28800.nvr, mach64.nvr), Intel flash (dmi.bin, escd.bin
+    per Pentium machine). These are emulator-generated and not included here.
+  info_divergence: >
+    The .info declares zero firmware (no firmware_count field). The core
+    actually loads 89+ ROM files plus NVR/EEPROM templates.
 
 files:
   # ========================================================
@@ -150,14 +178,18 @@ files:
   - name: "Tandy 1000 SL/2 BIOS low"
     path: "roms/tandy1000sl2/8079047.hu1"
     required: false
-    note: "Tandy 1000 SL/2 BIOS low chip. Paired with 8079048.hu2."
-    source_ref: "src/mem.c:180"
+    note: >
+      Tandy 1000 SL/2 BIOS low chip. Paired with 8079048.hu2.
+      Also loaded by tandy_rom.c for full bank-switched ROM (512 KB).
+    source_ref: "src/mem.c:180, src/tandy_rom.c:58"
 
   - name: "Tandy 1000 SL/2 BIOS high"
     path: "roms/tandy1000sl2/8079048.hu2"
     required: false
-    note: "Tandy 1000 SL/2 BIOS high chip. Paired with 8079047.hu1."
-    source_ref: "src/mem.c:181"
+    note: >
+      Tandy 1000 SL/2 BIOS high chip. Paired with 8079047.hu1.
+      Also loaded by tandy_rom.c for full bank-switched ROM (512 KB).
+    source_ref: "src/mem.c:181, src/tandy_rom.c:59"
 
   # ========================================================
   # MACHINE BIOS ROMs - Amstrad / Sinclair
@@ -360,7 +392,7 @@ files:
   - name: "Acer 386SX BIOS"
     path: "roms/acer386/acer386.bin"
     required: false
-    note: "Acer 386SX/25N BIOS (64 KB). Also requires oti067.bin video ROM."
+    note: "Acer 386SX/25N BIOS (64 KB)."
     source_ref: "src/mem.c:353-356"
 
   - name: "Acer 386SX OTI-067 video BIOS"
@@ -634,8 +666,8 @@ files:
     path: "roms/mach64gx/bios.bin"
     required: false
     note: >
-      ATI Graphics Pro Turbo (Mach64 GX) video BIOS. Also used by the
-      Cirrus Logic CL-GD5429 init path (likely a copy/paste in the source).
+      ATI Graphics Pro Turbo (Mach64 GX) video BIOS. Also loaded by the
+      Cirrus Logic init path (copy/paste in source).
     source_ref: "src/vid_ati_mach64.c:2341, src/vid_cirrus.c:2324"
 
   - name: "Cirrus Logic CL-GD5429 BIOS"
@@ -696,16 +728,224 @@ files:
     note: "NE2000 ISA Ethernet boot ROM (64 KB)."
     source_ref: "src/ne2000.c:1701"
 
-notes:
-  rom_structure: >
-    All ROM files are loaded relative to the RetroArch system directory.
-    Machine BIOS ROMs go in roms/<machine_name>/ subdirectories.
-    Video card ROMs go directly in roms/ (or roms/<card>/ for some).
-    Which ROMs are needed depends on the selected machine model and video card.
-  minimum_requirement: >
-    At minimum, the mda.rom font and one machine BIOS set are required.
-    The video card ROM for the selected GPU is also needed unless the machine
-    has built-in video (PCjr, Tandy, Amstrad, Acer 386SX, PS/1).
-  libretro_version: >
-    Based on PCem v10.1. The libretro port is quite old and may not match
-    current standalone PCem/86Box ROM paths.
+  # ========================================================
+  # NVR/CMOS TEMPLATES (shipped with PCem distribution)
+  # Pre-configured BIOS settings. The emulator loads these on
+  # startup and writes back on shutdown. Without them the BIOS
+  # starts with blank CMOS settings.
+  # ========================================================
+  - name: "NVR: Amstrad PC1512"
+    path: "pc1512.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Amstrad PC1512."
+    source_ref: "src/nvr.c:390"
+
+  - name: "NVR: Amstrad PC1640"
+    path: "pc1640.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Amstrad PC1640."
+    source_ref: "src/nvr.c:391"
+
+  - name: "NVR: Sinclair PC200"
+    path: "pc200.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Sinclair PC200."
+    source_ref: "src/nvr.c:392"
+
+  - name: "NVR: Amstrad PC2086"
+    path: "pc2086.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Amstrad PC2086."
+    source_ref: "src/nvr.c:393"
+
+  - name: "NVR: Amstrad PC3086"
+    path: "pc3086.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Amstrad PC3086."
+    source_ref: "src/nvr.c:394"
+
+  - name: "NVR: IBM AT"
+    path: "at.nvr"
+    required: false
+    note: "CMOS/NVRAM template for IBM AT."
+    source_ref: "src/nvr.c:395"
+
+  - name: "NVR: IBM PS/1 model 2011"
+    path: "ibmps1_2011.nvr"
+    required: false
+    note: "CMOS/NVRAM template for IBM PS/1 model 2011."
+    source_ref: "src/nvr.c:396"
+
+  - name: "NVR: Commodore PC 30 III"
+    path: "cmdpc30.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Commodore PC 30 III."
+    source_ref: "src/nvr.c:397"
+
+  - name: "NVR: AMI 286"
+    path: "ami286.nvr"
+    required: false
+    note: "CMOS/NVRAM template for AMI 286 clone."
+    source_ref: "src/nvr.c:398"
+
+  - name: "NVR: Dell System 200"
+    path: "dell200.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Dell System 200."
+    source_ref: "src/nvr.c:399"
+
+  - name: "NVR: IBM AT 386"
+    path: "at386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for IBM AT 386."
+    source_ref: "src/nvr.c:400"
+
+  - name: "NVR: Compaq Deskpro 386"
+    path: "deskpro386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Compaq Deskpro 386."
+    source_ref: "src/nvr.c:401"
+
+  - name: "NVR: Acer 386SX"
+    path: "acer386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Acer 386SX/25N."
+    source_ref: "src/nvr.c:402"
+
+  - name: "NVR: Amstrad MegaPC"
+    path: "megapc.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Amstrad MegaPC."
+    source_ref: "src/nvr.c:403"
+
+  - name: "NVR: AMI 386"
+    path: "ami386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for AMI 386 clone."
+    source_ref: "src/nvr.c:404"
+
+  - name: "NVR: AMI 486"
+    path: "ami486.nvr"
+    required: false
+    note: "CMOS/NVRAM template for AMI 486 clone."
+    source_ref: "src/nvr.c:405"
+
+  - name: "NVR: AMI WinBIOS 486"
+    path: "win486.nvr"
+    required: false
+    note: "CMOS/NVRAM template for AMI WinBIOS 486."
+    source_ref: "src/nvr.c:406"
+
+  - name: "NVR: HOT-433 PCI 486"
+    path: "hot-433.nvr"
+    required: false
+    note: "CMOS/NVRAM template for HOT-433 PCI 486."
+    source_ref: "src/nvr.c:407"
+
+  - name: "NVR: Award SiS 496"
+    path: "sis496.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Award SiS 496/497."
+    source_ref: "src/nvr.c:408"
+
+  - name: "NVR: Award 430VX"
+    path: "430vx.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Award 430VX PCI."
+    source_ref: "src/nvr.c:409"
+
+  - name: "NVR: Intel Premiere/PCI (Batman)"
+    path: "revenge.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Intel Premiere/PCI."
+    source_ref: "src/nvr.c:410"
+
+  - name: "NVR: Intel Advanced/EV (Endeavor)"
+    path: "endeavor.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Intel Advanced/EV."
+    source_ref: "src/nvr.c:411"
+
+  - name: "NVR: Phoenix 386"
+    path: "px386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Phoenix 386 clone."
+    source_ref: "src/nvr.c:412"
+
+  - name: "NVR: DTK 386"
+    path: "dtk386.nvr"
+    required: false
+    note: "CMOS/NVRAM template for DTK 386SX clone."
+    source_ref: "src/nvr.c:413"
+
+  - name: "NVR: DTK 486"
+    path: "dtk486.nvr"
+    required: false
+    note: "CMOS/NVRAM template for DTK 486."
+    source_ref: "src/nvr.c:414"
+
+  - name: "NVR: Rise R418"
+    path: "r418.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Rise Computer R418."
+    source_ref: "src/nvr.c:415"
+
+  - name: "NVR: Intel Premiere/PCI II (Plato)"
+    path: "plato.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Intel Premiere/PCI II."
+    source_ref: "src/nvr.c:416"
+
+  - name: "NVR: PC Partner MB500N"
+    path: "mb500n.nvr"
+    required: false
+    note: "CMOS/NVRAM template for PC Partner MB500N."
+    source_ref: "src/nvr.c:417"
+
+  - name: "NVR: Acer M3A"
+    path: "acerm3a.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Acer M3A."
+    source_ref: "src/nvr.c:418"
+
+  - name: "NVR: Acer V35N"
+    path: "acerv35n.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Acer V35N."
+    source_ref: "src/nvr.c:419"
+
+  - name: "NVR: ASUS P/I-P55T2P4"
+    path: "p55t2p4.nvr"
+    required: false
+    note: "CMOS/NVRAM template for ASUS P/I-P55T2P4."
+    source_ref: "src/nvr.c:420"
+
+  - name: "NVR: Epox P55-VA"
+    path: "p55va.nvr"
+    required: false
+    note: "CMOS/NVRAM template for Epox P55-VA."
+    source_ref: "src/nvr.c:421"
+
+  # ========================================================
+  # EEPROM TEMPLATES (shipped with upstream PCem)
+  # Persistent settings for Tandy EEPROM and AdLib Gold.
+  # Loaded on startup, saved on shutdown. Without them the
+  # hardware starts with blank/default configuration.
+  # ========================================================
+  - name: "Tandy 1000 HX EEPROM"
+    path: "tandy1000hx.bin"
+    required: false
+    note: "Tandy 1000 HX EEPROM state (128 bytes). Initializes to zeros if absent."
+    source_ref: "src/tandy_eeprom.c:128"
+
+  - name: "Tandy 1000 SL/2 EEPROM"
+    path: "tandy1000sl2.bin"
+    required: false
+    note: "Tandy 1000 SL/2 EEPROM state (128 bytes). Initializes to zeros if absent."
+    source_ref: "src/tandy_eeprom.c:131"
+
+  - name: "AdLib Gold EEPROM"
+    path: "nvr/adgold.bin"
+    required: false
+    note: "AdLib Gold sound card EEPROM state (24 bytes). Initializes to defaults if absent."
+    source_ref: "src/sound_adlibgold.c:789"

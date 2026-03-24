@@ -1,7 +1,9 @@
 emulator: ONScripter
 type: libretro
+core_classification: community_fork
 source: "https://github.com/iyzsong/onscripter-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/ogapee/onscripter"
+profiled_date: "2026-03-24"
 core_version: "0.3"
 display_name: "ONScripter"
 cores:
@@ -10,30 +12,18 @@ systems:
   - onscripter
 
 notes: |
-  ONScripter is a clone of NScripter, a Japanese visual novel engine by
-  Naoki Takahashi. The libretro port by iyzsong wraps the upstream engine
-  (ogapee/onscripter, tag 20230825) with an SDL-to-libretro shim layer.
+  Clone of NScripter, a Japanese visual novel engine. The libretro port
+  wraps upstream ogapee/onscripter (tag 20230825) via an SDL-to-libretro
+  shim.
 
-  No BIOS or system files are required. The .info file declares no
-  firmware entries and the core never calls
-  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
+  No system files required. The .info declares no firmware. The core
+  never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. All files
+  (scripts, fonts, archives, config) are loaded from the game directory
+  via archive_path (libretro.cpp:120-121, ScriptHandler.cpp:148-161).
 
-  Game content is loaded directly from the archive path containing the
-  script file. The core opens txt, dat, ___, or ons script files via
-  ONScripter::openScript() and reads all game assets (graphics, audio,
-  fonts) from the same directory.
+  default.ttf, registry.txt, dll.txt are per-game assets shipped with
+  each visual novel, not system-level files.
 
-  The engine looks for a font file named default.ttf in the game
-  directory. This is a per-game asset shipped with each visual novel,
-  not a system-level file managed by RetroArch.
-
-  Dependencies (bundled at build time via Guix): freetype, libjpeg,
-  libogg, libvorbis, libmad, bzip2, SDL (shimmed to libretro).
-
-  The core is marked is_experimental = true. It does not support
-  save states (retro_serialize_size returns 0).
-
-  Supported script formats: .txt, .dat, .___, .ons
-  needs_fullpath = true, block_extract = false.
+  Experimental core. No save state support (retro_serialize_size = 0).
 
 files: []

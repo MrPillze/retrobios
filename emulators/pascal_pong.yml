@@ -1,13 +1,14 @@
 emulator: Pascal Pong
 type: game
-source: "https://github.com/libretro/libretro-pong"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/libretro/pascal-pong-libretro"
+upstream: "https://github.com/libretro/pascal-pong-libretro"
+profiled_date: "2026-03-24"
 core_version: "v1.0"
 display_name: "PascalPong"
 cores: [pascal_pong]
 systems: []
 files: []
 notes: >
-  Pong clone written in Pascal as a libretro core demonstration.
-  Self-contained with all rendering done programmatically.
-  No content file, BIOS, or system directory files required.
+  Pong clone written in Pascal for libretro. Self-contained,
+  all assets embedded in the binary. No external files loaded.

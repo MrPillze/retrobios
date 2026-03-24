@@ -1,7 +1,9 @@
 emulator: PokeMini
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/PokeMini"
-profiled_date: "2026-03-18"
+upstream: "https://sourceforge.net/projects/pokemini/"
+profiled_date: "2026-03-24"
 core_version: "v0.60"
 display_name: "Nintendo - Pokemon Mini (PokeMini)"
 cores:
@@ -56,8 +58,6 @@ files:
     required: false
     hle_fallback: true
     size: 4096
-    md5: "1e4fb124a3a886865acb574f388c803d"
-    sha1: "daad4113713ed776fbd47727762bca81ba74915f"
     source_ref: "source/PokeMini.c:189-206 (PokeMini_LoadBIOSFile), libretro/libretro.c:565 (path)"
     notes: "Mapped at $000000-$000FFF (4 KB). Read via Hardware.c:144-145. Falls back to embedded FreeBIOS if missing."
 

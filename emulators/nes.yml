@@ -1,0 +1,17 @@
+emulator: nes
+type: libretro
+core_classification: community_fork
+source: "https://github.com/rz5/nes"
+upstream: "https://git.9front.org/plan9front/plan9front (sys/src/games/nes/)"
+profiled_date: "2026-03-24"
+core_version: "1.0"
+display_name: "Nintendo - NES / Famicom (nes)"
+cores: [nes]
+systems: [nintendo-nes]
+files: []
+notes: >
+  Port of aiju's NES emulator from 9front (Plan 9) to libretro by rz5.
+  Minimal emulator supporting mappers 0 (NROM), 1 (MMC1), 2 (UxROM),
+  3 (CNROM), 4 (MMC3), 7 (AxROM). Palette hardcoded in ppu.c.
+  No BIOS or external files required. NES hardware boots directly
+  from cartridge ROM. No FDS support (only .nes extension).

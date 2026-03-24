@@ -29,14 +29,15 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import yaml
 from common import (
-    build_zip_contents_index, check_inside_zip, group_identical_platforms,
-    load_emulator_profiles, load_platform_config, md5_composite, md5sum,
-    resolve_local_file, resolve_platform_cores,
+    _build_validation_index, build_zip_contents_index, check_file_validation,
+    check_inside_zip, compute_hashes, filter_files_by_mode,
+    group_identical_platforms, load_emulator_profiles, load_platform_config,
+    md5_composite, md5sum, parse_md5_list, resolve_local_file,
+    resolve_platform_cores, safe_extract_zip,
 )
 from verify import (
     Severity, Status, verify_platform, find_undeclared_files, find_exclusion_notes,
-    _build_validation_index, check_file_validation, verify_emulator,
-    _filter_files_by_mode, _effective_validation_label,
+    verify_emulator, _effective_validation_label,
 )
 
 
@@ -58,6 +59,10 @@ class TestE2E(unittest.TestCase):
     # ---------------------------------------------------------------
 
     def setUp(self):
+        # Clear emulator profile cache to avoid stale data between tests
+        from common import _emulator_profiles_cache
+        _emulator_profiles_cache.clear()
+
         self.root = tempfile.mkdtemp()
         self.bios_dir = os.path.join(self.root, "bios")
         self.platforms_dir = os.path.join(self.root, "platforms")
@@ -967,16 +972,16 @@ class TestE2E(unittest.TestCase):
         # test_validation has crc32, md5, sha1, size → all listed
         self.assertEqual(result["verification_mode"], "crc32+md5+sha1+signature+size")
 
-    def test_99_filter_files_by_mode(self):
-        """_filter_files_by_mode correctly filters standalone/libretro."""
+    def test_99filter_files_by_mode(self):
+        """filter_files_by_mode correctly filters standalone/libretro."""
         files = [
             {"name": "a.bin"},                         # no mode → both
             {"name": "b.bin", "mode": "libretro"},     # libretro only
             {"name": "c.bin", "mode": "standalone"},   # standalone only
             {"name": "d.bin", "mode": "both"},         # explicit both
         ]
-        lr = _filter_files_by_mode(files, standalone=False)
-        sa = _filter_files_by_mode(files, standalone=True)
+        lr = filter_files_by_mode(files, standalone=False)
+        sa = filter_files_by_mode(files, standalone=True)
         lr_names = {f["name"] for f in lr}
         sa_names = {f["name"] for f in sa}
         self.assertEqual(lr_names, {"a.bin", "b.bin", "d.bin"})
@@ -1010,6 +1015,87 @@ class TestE2E(unittest.TestCase):
             self.fail("undeclared_req.bin not found")
         # Severity should be WARNING (existence mode base)
         self.assertGreater(result["severity_counts"][Severity.WARNING], 0)
+
+
+    def test_102_safe_extract_zip_blocks_traversal(self):
+        """safe_extract_zip must reject zip-slip path traversal."""
+        malicious_zip = os.path.join(self.root, "evil.zip")
+        with zipfile.ZipFile(malicious_zip, "w") as zf:
+            zf.writestr("../../etc/passwd", "root:x:0:0")
+        dest = os.path.join(self.root, "extract_dest")
+        os.makedirs(dest)
+        with self.assertRaises(ValueError):
+            safe_extract_zip(malicious_zip, dest)
+
+    def test_103_safe_extract_zip_normal(self):
+        """safe_extract_zip extracts valid files correctly."""
+        normal_zip = os.path.join(self.root, "normal.zip")
+        with zipfile.ZipFile(normal_zip, "w") as zf:
+            zf.writestr("subdir/file.txt", "hello")
+        dest = os.path.join(self.root, "extract_normal")
+        os.makedirs(dest)
+        safe_extract_zip(normal_zip, dest)
+        extracted = os.path.join(dest, "subdir", "file.txt")
+        self.assertTrue(os.path.exists(extracted))
+        with open(extracted) as f:
+            self.assertEqual(f.read(), "hello")
+
+    def test_104_compute_hashes_correctness(self):
+        """compute_hashes returns correct values for known content."""
+        test_file = os.path.join(self.root, "hash_test.bin")
+        data = b"retrobios test content"
+        with open(test_file, "wb") as f:
+            f.write(data)
+        import zlib
+        expected_sha1 = hashlib.sha1(data).hexdigest()
+        expected_md5 = hashlib.md5(data).hexdigest()
+        expected_sha256 = hashlib.sha256(data).hexdigest()
+        expected_crc32 = format(zlib.crc32(data) & 0xFFFFFFFF, "08x")
+
+        result = compute_hashes(test_file)
+        self.assertEqual(result["sha1"], expected_sha1)
+        self.assertEqual(result["md5"], expected_md5)
+        self.assertEqual(result["sha256"], expected_sha256)
+        self.assertEqual(result["crc32"], expected_crc32)
+
+    def test_105_resolve_with_empty_database(self):
+        """resolve_local_file handles empty database gracefully."""
+        empty_db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_path_suffix": {}}}
+        entry = {"name": "nonexistent.bin", "sha1": "abc123"}
+        path, status = resolve_local_file(entry, empty_db)
+        self.assertIsNone(path)
+        self.assertEqual(status, "not_found")
+
+    def test_106_parse_md5_list(self):
+        """parse_md5_list normalizes comma-separated MD5s."""
+        self.assertEqual(parse_md5_list(""), [])
+        self.assertEqual(parse_md5_list("ABC123"), ["abc123"])
+        self.assertEqual(parse_md5_list("abc, DEF , ghi"), ["abc", "def", "ghi"])
+        self.assertEqual(parse_md5_list(",,,"), [])
+
+    def test_107filter_files_by_mode(self):
+        """filter_files_by_mode filters standalone/libretro correctly."""
+        files = [
+            {"name": "a.bin", "mode": "standalone"},
+            {"name": "b.bin", "mode": "libretro"},
+            {"name": "c.bin", "mode": "both"},
+            {"name": "d.bin"},  # no mode
+        ]
+        # Libretro mode: exclude standalone
+        result = filter_files_by_mode(files, standalone=False)
+        names = [f["name"] for f in result]
+        self.assertNotIn("a.bin", names)
+        self.assertIn("b.bin", names)
+        self.assertIn("c.bin", names)
+        self.assertIn("d.bin", names)
+
+        # Standalone mode: exclude libretro
+        result = filter_files_by_mode(files, standalone=True)
+        names = [f["name"] for f in result]
+        self.assertIn("a.bin", names)
+        self.assertNotIn("b.bin", names)
+        self.assertIn("c.bin", names)
+        self.assertIn("d.bin", names)
 
 
 if __name__ == "__main__":

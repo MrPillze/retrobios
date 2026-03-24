@@ -93,7 +93,10 @@ class ValidationResult:
 def load_database(db_path: str) -> dict | None:
     try:
         return _load_database(db_path)
-    except (FileNotFoundError, json.JSONDecodeError):
+    except FileNotFoundError:
+        return None
+    except json.JSONDecodeError as e:
+        print(f"WARNING: corrupt database.json: {e}", file=sys.stderr)
         return None
 
 
