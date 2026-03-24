@@ -40,6 +40,7 @@ from common import (
     load_emulator_profiles, load_platform_config,
     md5sum, md5_composite, resolve_local_file, resolve_platform_cores,
 )
+from crypto_verify import check_crypto_validation
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -205,13 +206,14 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
 
 def check_file_validation(
     local_path: str, filename: str, validation_index: dict[str, dict],
+    bios_dir: str = "bios",
 ) -> str | None:
     """Check emulator-level validation on a resolved file.
 
-    Supports: size (exact/min/max), crc32, md5, sha1, adler32.
-    Reports but cannot reproduce: signature, crypto (console-specific keys).
+    Supports: size (exact/min/max), crc32, md5, sha1, adler32,
+    signature (RSA-2048 PKCS1v15 SHA256), crypto (AES-128-CBC + SHA256).
 
-    Returns None if all reproducible checks pass or no validation applies.
+    Returns None if all checks pass or no validation applies.
     Returns a reason string if a check fails.
     """
     entry = validation_index.get(filename)
@@ -257,9 +259,12 @@ def check_file_validation(
                     f"got 0x{hashes['adler32']}"
                 )
 
-    # Note: signature/crypto checks require console-specific keys and
-    # cannot be reproduced. Size checks above still apply when combined
-    # (e.g. validation: [size, signature]).
+    # Signature/crypto checks (3DS RSA, AES)
+    if entry["crypto_only"]:
+        crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
+        if crypto_reason:
+            return crypto_reason
+
     return None
 
 
