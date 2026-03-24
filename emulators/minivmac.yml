@@ -1,69 +1,55 @@
 emulator: Mini vMac
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-minivmac"
-profiled_date: "2026-03-18"
-core_version: "GIT"
+upstream: "https://www.gryphel.com/c/minivmac/"
+profiled_date: "2026-03-24"
+core_version: "36.04"
 display_name: "Mac II (minivmac)"
+cores: [minivmac]
 systems: [macintosh-ii]
 
-# Mini vMac is a Macintosh II emulator. The libretro port is hardcoded for
-# Mac II emulation (CurEmMd = kEmMd_II) with 68020 CPU, FPU, ADB, VIA2, ASC.
-# ROM is loaded from the RetroArch system directory.
+# Libretro port of Mini vMac 36.04, hardcoded for Mac II emulation
+# (CurEmMd = kEmMd_II). 68020 CPU, FPU, ADB, VIA2, ASC. 640x480, 8-bit color.
+# The VidROM is generated in memory by Vid_Init(), not loaded from a file.
 
-# ROM loading order (OSGLUERETRO.c LoadMacRom):
-#   1. <system>/MacIIx.ROM    (tried first, same 256 KB size)
-#   2. <system>/MacII.ROM     (defined as RomFileName in CNFGRAPI.h)
-#   3. --rom command line arg  (if provided)
+# ROM loading order in LoadMacRom (OSGLUERETRO.c:774):
+#   1. <system_dir>/MacIIx.ROM
+#   2. <system_dir>/MacII.ROM
+#   3. --rom command line arg
 #   4. ~/.gryphel/mnvm_rom/MacII.ROM
 #   5. app parent directory
 #   6. current directory
 
-# ROM size: kROM_Size = 0x00040000 = 262144 bytes (256 KB)
-# ROM checksums defined in CNFGRAPI.h:
-#   kRomCheckSum1 = 0x9779D2C4 (Mac II v1)
-#   kRomCheckSum2 = 0x97221136 (Mac II v2)
-# Note: DisableRomCheck = 1, so checksum validation is skipped at runtime
-# (ROMEMDEV.c patches the ROM check jump). Any 256 KB Mac II ROM works.
+# The libretro port does NOT call ROM_IsValid() (unlike upstream backends),
+# so no checksum validation occurs. ROM_Init() patches the Mac's own boot
+# ROM check (DisableRomCheck = 1, ROMEMDEV.c:279).
 
 files:
-  # -- MacII.ROM (primary, required) --
-  # Standard Macintosh II ROM image. This is the hardcoded RomFileName.
-  # The core reads exactly kROM_Size (262144) bytes from this file.
-
   - name: "MacII.ROM"
     path: "MacII.ROM"
     required: true
     size: 262144
+    validation: [size]
     source_ref: "minivmac/cfg/CNFGRAPI.h:32, minivmac/src/OSGLUERETRO.c:781"
     note: >
-      Macintosh II ROM image (256 KB). The core loads this from the system
-      directory. Must be exactly 262144 bytes. ROM checksum verification is
-      disabled in the libretro build, so either Mac II ROM revision works.
-
-  # -- MacIIx.ROM (alternative, optional) --
-  # Tried before MacII.ROM in the loading sequence. The Mac IIx ROM is the
-  # same 256 KB size and is compatible with the Mac II emulation mode.
+      Macintosh II ROM image (256 KB). Hardcoded as RomFileName. The core
+      reads exactly kROM_Size (262144) bytes via filestream_read.
 
   - name: "MacIIx.ROM"
     path: "MacIIx.ROM"
     required: false
     size: 262144
+    validation: [size]
     source_ref: "minivmac/src/OSGLUERETRO.c:778"
     note: >
-      Macintosh IIx ROM image (256 KB). Checked first in the ROM loading
-      sequence. If present, it takes priority over MacII.ROM. The Mac IIx
-      uses the same 68020-class architecture as the Mac II.
+      Macintosh IIx ROM image (256 KB). Tried first in the loading sequence.
+      If present, takes priority over MacII.ROM.
 
 notes:
   emulation_target: >
-    The libretro build is configured exclusively for Macintosh II emulation
-    (kEmMd_II). Build options: 68020 CPU, FPU enabled, ADB keyboard/mouse,
-    VIA2, ASC sound chip. Screen: 640x480, 8-bit color depth.
-  disk_formats: >
-    Supported disk image formats: .dsk, .img, .zip, .hvf, .cmd
-    The core auto-inserts the loaded content as a floppy disk.
-    Supports up to NumDrives simultaneous disk images.
-  rom_checksum_note: >
-    DisableRomCheck is set to 1 in ROMEMDEV.c, meaning the core patches out
-    the ROM checksum verification at boot. This allows any valid Mac II era
-    ROM to work regardless of exact revision.
+    Configured for Macintosh II (kEmMd_II). 68020 CPU, FPU, ADB, VIA2, ASC
+    sound. Screen: 640x480, 8-bit color depth.
+  info_discrepancy: >
+    .info declares firmware_count=1 (MacII.ROM only). The code also tries
+    MacIIx.ROM first (OSGLUERETRO.c:778).

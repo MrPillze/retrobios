@@ -1,18 +1,23 @@
 emulator: mpv
 type: utility
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-mpv"
-profiled_date: "2026-03-18"
-core_version: "Git"
+upstream: "https://github.com/mpv-player/mpv"
+profiled_date: "2026-03-24"
+core_version: "0.2.alpha"
 display_name: "MPV"
 cores:
   - mpv
 systems: []
 
 notes: |
-  Libretro port of mpv, a media player based on MPlayer and mplayer2.
-  Plays video and audio files within RetroArch using mpv's decoding
-  pipeline.
+  Libretro wrapper around libmpv. Links against the mpv shared library
+  for video/audio decoding and OpenGL rendering. Experimental, proof of
+  concept. No system directory access — the core only loads the content
+  file passed by RetroArch.
 
-  No BIOS or system files required.
-
+# source_ref: mpv-libretro.c — single-file core (672 lines). No call to
+# RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. Only file access is the content
+# path via retro_load_game(info->path) forwarded to mpv loadfile command
+# (line 241, 296). No fopen, no system_dir path construction.
 files: []

@@ -1,8 +1,9 @@
 emulator: "mednafen_wswan"
 type: alias
 alias_of: "beetle_wswan"
-profiled_date: "2026-03-18"
+source: "https://github.com/libretro/beetle-wswan-libretro"
+profiled_date: "2026-03-24"
 core_version: "v0.9.35.1"
 display_name: "Bandai - WonderSwan/Color (Beetle Wonderswan)"
-note: "This core uses the same BIOS/firmware as beetle_wswan. See emulators/beetle_wswan.yml for details."
+note: "Binary name for beetle_wswan. Same codebase, single .so/.dll."
 files: []

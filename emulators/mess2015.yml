@@ -1,8 +1,38 @@
-emulator: "mess2015"
-type: alias
-alias_of: "mame2016"
-profiled_date: "2026-03-18"
-core_version: "Git"
+emulator: MESS 2015
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/mame2015-libretro"
+upstream: "https://github.com/mamedev/mame/tree/mame0160"
+profiled_date: "2026-03-24"
+core_version: "0.160"
 display_name: "Multi (MESS 2015)"
-note: "This core uses the same BIOS/firmware as mame2016. See emulators/mame2016.yml for details."
-files: []
+mame_version: "0.159"
+
+cores:
+  - mess2015
+systems: []
+
+notes: |
+  Frozen snapshot of MAME/MESS 0.159 (version.c says 0.159, core reports 0.160).
+  Built from same repo as mame2015/ume2015/cdi2015 with TARGET=mess.
+  619 machine drivers (home computers, consoles, handhelds, calculators).
+  No BIOS root sets (no GAME_IS_BIOS_ROOT in src/mess/). Machine ROMs loaded
+  per-machine via MAME ROM system from content directory.
+
+  Software list support via 375 XML hash files in system_dir/mess2015/hash/.
+  Hash files are bundled in the source repo at /hash/. Not on libretro buildbot.
+  .info incorrectly says SYSTEMDIR\ume\hash — actual path is mess2015/hash.
+
+  hiscore.c integrated (libretro addition, not in upstream MAME 0.159).
+  SAMPLES sound driver disabled in mess.mak.
+  Per-game cheat XMLs via system_dir/mess2015/cheat/.
+  Artwork layouts via system_dir/mess2015/artwork/.
+
+  Upstream comparison (tag mame0160): romload.c and softlist.c unmodified.
+
+files:
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/emu/hiscore.c:335-337"
+    note: "high score definitions, loaded via f.open without explicit search path"

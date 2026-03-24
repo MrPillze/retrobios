@@ -1,14 +1,15 @@
 emulator: Mr.Boom
 type: game
+core_classification: official_port
 source: "https://github.com/libretro/mrboom-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/mrboom-libretro"
+profiled_date: "2026-03-24"
 core_version: "3.1"
 display_name: "Mr.Boom (Bomberman)"
 cores: [mrboom]
 systems: []
 files: []
 notes: >
-  Bomberman clone supporting up to 8 players. Ported to libretro from
-  the original x86 assembly game by Remdy Software.
-  All game assets are compiled into the core binary.
-  No content file, BIOS, or system directory files required.
+  Bomberman clone supporting up to 8 players. Converted from DOS x86
+  assembly by the original author (Remdy Software) using asm2c.
+  All game assets (graphics, sounds, music) are compiled into the core binary.

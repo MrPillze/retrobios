@@ -1,35 +1,27 @@
 emulator: Mu
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/Mu"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/meepingsnesroms/Mu"
+profiled_date: "2026-03-24"
 core_version: "v1.3.3"
 display_name: "Palm OS (Mu)"
+cores: [mu]
 systems: [palm-os]
 
 notes: |
-  Mu emulates Palm OS handhelds: Palm m500, Palm m515, and (if compiled
-  with EMU_SUPPORT_PALM_OS5) the Tungsten T3.
-
-  A Palm OS ROM dump is required. The core selects the ROM filename based
-  on the "OS Version" core option:
+  Mu emulates Palm m500, Palm m515, and (with EMU_SUPPORT_PALM_OS5)
+  Tungsten T3. A Palm OS ROM dump is required. The core selects the
+  ROM filename based on the "OS Version" core option:
     Palm m500 / Palm OS 4.0   -> palmos40-en-m500.rom
     Palm m515 / Palm OS 4.1   -> palmos41-en-m515.rom  (default)
     Tungsten T3 / Palm OS 5.2 -> palmos52-en-t3.rom
     Tungsten T3 / Palm OS 6.0 -> palmos60-en-t3.rom
 
-  ROM path construction: retro_load_game() joins
-  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY + "/" + osVersion + ".rom".
-
-  The bootloader (bootloader-dbvz.rom) is optional. It contains the
-  MC68VZ328 UART bootloader and is only relevant for m500/m515 devices.
-  For the Tungsten T3 it is ignored even if present.
-
-  The m500/m515 ROM is loaded into a 4 MB region (M5XX_ROM_SIZE),
-  padded with 0x00 if smaller, and byte-swapped on little-endian hosts.
-  The Tungsten T3 ROM maps into a 16 MB region (TUNGSTEN_T3_ROM_SIZE).
-
-  The core also supports no-game mode (supports_no_game = true). Without
-  content, it boots the standard Palm OS desktop from the ROM.
+  ROM path: RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY + "/" + osVersion + ".rom".
+  No hash or size validation; the code reads whatever file is present.
+  The bootloader is optional and ignored for Tungsten T3.
+  Supports no-game mode (boots Palm OS desktop from ROM without content).
 
 files:
   # --- Palm m515 / Palm OS 4.1 (default device) ---
@@ -37,17 +29,15 @@ files:
     system: palm-os
     description: "Palm m515 ROM, Palm OS 4.1 English"
     required: true
-    md5: "83cb1d1c76e568b916dc2e7c0bf669f6"
-    note: "Default ROM. Selected when core option is 'Palm m515/Palm OS 4.1'. Max 4 MB, byte-swapped on LE."
-    source_ref: "libretroBuildSystem/libretro.c:173-176,744-763 (retro_load_game ROM loading)"
+    note: "Default ROM. Selected when core option is 'Palm m515/Palm OS 4.1'."
+    source_ref: "libretroBuildSystem/libretro.c:173-176 (check_variables), 744-763 (retro_load_game ROM loading)"
 
   # --- Palm m500 / Palm OS 4.0 ---
   - name: "palmos40-en-m500.rom"
     system: palm-os
     description: "Palm m500 ROM, Palm OS 4.0 English"
     required: false
-    md5: "f50e4d5e4d98dc831f2c34a9107651eb"
-    note: "Selected when core option is 'Palm m500/Palm OS 4.0'. Max 4 MB."
+    note: "Selected when core option is 'Palm m500/Palm OS 4.0'."
     source_ref: "libretroBuildSystem/libretro.c:169-172"
 
   # --- Tungsten T3 / Palm OS 5.2.1 (requires EMU_SUPPORT_PALM_OS5) ---
@@ -55,8 +45,7 @@ files:
     system: palm-os
     description: "Tungsten T3 ROM, Palm OS 5.2.1 English"
     required: false
-    md5: "de46ec84d9aabf655eabdf9b00a3845d"
-    note: "Selected when core option is 'Tungsten T3/Palm OS 5.2.1'. Max 16 MB. Only available if core compiled with EMU_SUPPORT_PALM_OS5."
+    note: "Selected when core option is 'Tungsten T3/Palm OS 5.2.1'. Requires EMU_SUPPORT_PALM_OS5 compile flag."
     source_ref: "libretroBuildSystem/libretro.c:178-181"
 
   # --- Tungsten T3 / Palm OS 6.0 (requires EMU_SUPPORT_PALM_OS5) ---
@@ -64,7 +53,7 @@ files:
     system: palm-os
     description: "Tungsten T3 ROM, Palm OS 6.0 English"
     required: false
-    note: "Selected when core option is 'Tungsten T3/Palm OS 6.0'. Max 16 MB. Only available if core compiled with EMU_SUPPORT_PALM_OS5."
+    note: "Selected when core option is 'Tungsten T3/Palm OS 6.0'. Requires EMU_SUPPORT_PALM_OS5 compile flag."
     source_ref: "libretroBuildSystem/libretro.c:182-185"
 
   # --- MC68VZ328 bootloader ---
@@ -72,17 +61,17 @@ files:
     system: palm-os
     description: "MC68VZ328 UART bootloader"
     required: false
-    md5: "9da101cd2317830649a31f8fa46debec"
-    note: "Optional for m500/m515. Ignored for Tungsten T3. Loads from system directory."
-    source_ref: "libretroBuildSystem/libretro.c:766-782"
+    note: "Optional for m500/m515. Ignored for Tungsten T3."
+    source_ref: "libretroBuildSystem/libretro.c:766-782, src/dbvz.c:1408-1423 (dbvzLoadBootloader)"
 
 platform_details:
   palm_m5xx:
     rom_size: 4194304       # 4 MB (M5XX_ROM_SIZE)
+    bootloader_size: 512    # DBVZ_BOOTLOADER_SIZE (0x200)
     cpu: "MC68VZ328"
-    source_ref: "include/m5XXBus.h:23, src/emulator.c:191-212"
+    source_ref: "include/m5XXBus.h:23,28, src/emulator.c:191-212"
 
   tungsten_t3:
     rom_size: 16777216      # 16 MB (TUNGSTEN_T3_ROM_SIZE)
     cpu: "PXA260 (ARM)"
-    source_ref: "include/tungstenT3Bus.h:17, src/emulator.c:158-164"
+    source_ref: "include/tungstenT3Bus.h:17, src/emulator.c:145-162"

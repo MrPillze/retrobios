@@ -1,124 +1,66 @@
 emulator: mkxp-z
 type: libretro
-source: "https://github.com/mkxp-z/mkxp-z"
-profiled_date: "2026-03-18"
-core_version: ""
+core_classification: game_engine
+source: "https://github.com/white-axe/mkxp-z"
+source_ref: "branch: libretro (PR #255 to mkxp-z/mkxp-z)"
+upstream: "https://github.com/mkxp-z/mkxp-z"
+profiled_date: "2026-03-24"
+core_version: "f4bc5aa"
 display_name: "RPG Maker XP/VX/VX Ace (mkxp-z)"
 cores:
   - mkxp-z
 systems:
   - rpgmaker
 
-# mkxp-z is an open-source player for RPG Maker XP, VX and VX Ace games.
-# Heavily modified fork of mkxp implementing the RGSS (Ruby Game Scripting
-# System) interface versions 1, 2 and 3.
-#
-# The libretro .info file (mkxp-z_libretro.info) declares 3 firmware entries,
-# all optional. These are RTP (Run-Time Package) directories, not individual
-# files. Each RTP contains default assets (tilesets, sprites, music, sound
-# effects, fonts) shared by games that don't bundle their own.
-#
-# Games that ship all assets internally need no RTP at all.
-#
-# firmware0: mkxp-z/RTP/Standard   (RPG Maker XP RTP)   optional
-# firmware1: mkxp-z/RTP/RPGVX      (RPG Maker VX RTP)   optional
-# firmware2: mkxp-z/RTP/RPGVXAce   (RPG Maker VX Ace RTP) optional
-#
-# Directory layout under <system_dir>:
-#   mkxp-z/RTP/Standard/           RPG Maker XP RTP
-#     Audio/                       BGM, BGS, ME, SE in ogg/midi/wav
-#     Graphics/                    tilesets, characters, battlers, etc.
-#   mkxp-z/RTP/RPGVX/             RPG Maker VX RTP
-#     Audio/
-#     Fonts/
-#     Graphics/
-#   mkxp-z/RTP/RPGVXAce/          RPG Maker VX Ace RTP
-#     Audio/
-#     Fonts/
-#     Graphics/
-#
-# RTP installers are available from https://www.rpgmakerweb.com/run-time-package
-# On non-Windows, use innoextract to unpack the Windows installers.
-#
-# RTP path resolution (sharedstate.cpp:144-145, config.cpp:326):
-#   config.rtps[] is populated from the "RTP" JSON array in mkxp.json.
-#   The libretro port sets these to <system_dir>/mkxp-z/RTP/<name>.
-#   Each path is added to PhysFS search path via fileSystem.addPath().
-#
-# Additional optional directories:
-#   mkxp-z/Fonts/                  custom fallback fonts (.otf/.ttf)
-#   mkxp-z/Scripts/Preload/        Ruby scripts run before game scripts
-#   mkxp-z/Scripts/Postload/       Ruby scripts run before rgss_main (RGSS3)
-#
-# MIDI playback: mkxp-z uses FluidSynth internally. A soundfont can be
-# specified per-game in mkxp.json via "midiSoundFont". No global soundfont
-# file is declared as firmware.
-#
-# Supported extensions: ini, json, rxproj, rvproj, rvproj2, mkxp, mkxpz, zip, 7z
-# Required GPU: OpenGL Core >= 2.0 or OpenGL ES >= 2.0
-
 notes: |
-  No individual BIOS or firmware files required. The three RTP directories
-  listed below are optional collections of default game assets. Only needed
-  when a game references stock RPG Maker assets instead of bundling them.
+  Game engine implementing RGSS 1/2/3 (Ruby Game Scripting System) for
+  RPG Maker XP, VX and VX Ace. Fork of Ancurio/mkxp. Libretro port by
+  white-axe, not yet merged upstream.
 
-  RPG Maker XP uses RGSS1 (Ruby Game Scripting System 1).
-  RPG Maker VX uses RGSS2.
-  RPG Maker VX Ace uses RGSS3.
-
-  Each RTP is a directory tree containing Audio/ and Graphics/ subdirs,
-  plus Fonts/ for VX and VX Ace. These are not hashable single files.
+  All entries are directories, not individual files. No hashable BIOS.
+  RTPs are shared asset packages needed only when a game references stock
+  assets instead of bundling its own. MIDI soundfont (GMGSx.sf2) is
+  embedded in the binary.
 
 files:
-  # ================================================================
-  # RPG Maker XP RTP (optional, game-dependent)
-  # mkxp-z_libretro.info firmware0
-  # ================================================================
-
-  - name: "RPG Maker XP RTP (Standard)"
+  - name: "Standard"
+    description: "RPG Maker XP Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/Standard/"
     required: false
-    type: directory
-    source_ref: "mkxp-z_libretro.info:firmware0, sharedstate.cpp:144-145"
-    note: >
-      Run-Time Package for RPG Maker XP (RGSS1) games. Contains default
-      tilesets, character sprites, battle animations, panoramas, windowskins,
-      BGM, BGS, ME and SE audio files. Only needed by games that reference
-      stock XP assets. Distributed by Enterbrain as a Windows installer,
-      extractable with innoextract on other platforms.
+    source_ref: "core.cpp:1042-1085, core.cpp:1087-1158"
 
-  # ================================================================
-  # RPG Maker VX RTP (optional, game-dependent)
-  # mkxp-z_libretro.info firmware1
-  # ================================================================
-
-  - name: "RPG Maker VX RTP (RPGVX)"
+  - name: "RPGVX"
+    description: "RPG Maker VX Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVX/"
     required: false
-    type: directory
-    source_ref: "mkxp-z_libretro.info:firmware1, sharedstate.cpp:144-145"
-    note: >
-      Run-Time Package for RPG Maker VX (RGSS2) games. Contains default
-      tilesets, character sprites, face graphics, battle animations, fonts
-      and audio assets. VX uses a different tileset format than XP. Only
-      needed by games that reference stock VX assets.
+    source_ref: "core.cpp:1042-1085, core.cpp:1087-1158"
 
-  # ================================================================
-  # RPG Maker VX Ace RTP (optional, game-dependent)
-  # mkxp-z_libretro.info firmware2
-  # ================================================================
-
-  - name: "RPG Maker VX Ace RTP (RPGVXAce)"
+  - name: "RPGVXAce"
+    description: "RPG Maker VX Ace Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVXAce/"
     required: false
-    type: directory
-    source_ref: "mkxp-z_libretro.info:firmware2, sharedstate.cpp:144-145"
-    note: >
-      Run-Time Package for RPG Maker VX Ace (RGSS3) games. Largest of the
-      three RTPs with expanded tilesets, character generators, battle system
-      assets, fonts and audio. VX Ace is the most commonly used RPG Maker
-      version on the RGSS engine. Only needed by games that reference stock
-      VX Ace assets.
+    source_ref: "core.cpp:1042-1085, core.cpp:1087-1158"
+
+  - name: "Fonts"
+    description: "Fallback font directory (.otf/.ttf)"
+    category: game_data
+    path: "mkxp-z/Fonts/"
+    required: false
+    source_ref: "core.cpp:1160-1172"
+
+  - name: "Preload"
+    description: "Ruby scripts loaded before game scripts"
+    category: game_data
+    path: "mkxp-z/Scripts/Preload/"
+    required: false
+    source_ref: "core.cpp:876-907"
+
+  - name: "Postload"
+    description: "Ruby scripts loaded after game scripts (RGSS3 only)"
+    category: game_data
+    path: "mkxp-z/Scripts/Postload/"
+    required: false
+    source_ref: "core.cpp:886-917"

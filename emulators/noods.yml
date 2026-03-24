@@ -1,25 +1,24 @@
 emulator: NooDS
 type: libretro
-source: "https://github.com/Hydr8gon/NooDS"
-profiled_date: "2026-03-18"
+core_classification: community_fork
+source: "https://github.com/jonian/libretro-noods"
+upstream: "https://github.com/Hydr8gon/NooDS"
+profiled_date: "2026-03-24"
 core_version: "Git"
 display_name: "Nintendo - DS (NooDS)"
 cores: [noods]
 systems: [nintendo-ds, nintendo-gba]
 
 notes: |
-  NooDS includes full HLE BIOS for ARM9, ARM7 and GBA SWI routines, making
-  all BIOS files optional when direct boot is enabled (default). HLE tables
-  cover SWI 0x00-0x20 for each processor (hle_bios.cpp:24-62). When BIOS
-  files are missing, a special opcode (0xFF at offset 3) is written for
-  interrupt return and the HLE handler is activated (memory.cpp:130-169).
-  Firmware is auto-generated (128KB non-bootable) if not provided, with
-  default WiFi config, touch calibration and user settings (spi.cpp:90-160).
-  Native BIOS+firmware required only for firmware boot (non-direct-boot mode).
-  ARM9 BIOS read: 0x1000 bytes (4 KB), ARM7 BIOS read: 0x4000 bytes (16 KB),
-  GBA BIOS read: 0x4000 bytes (16 KB). Firmware bootable threshold: >128 KB
-  (spi.cpp:87). DSi mode supported but uses same BIOS files.
-  Config: noods.ini keys bios9Path, bios7Path, firmwarePath, gbaBiosPath.
+  Full HLE BIOS for ARM9, ARM7 and GBA SWI routines (hle_bios.cpp:24-60).
+  All BIOS files optional when direct boot is enabled (default). When missing,
+  HLE handler activated via special opcode at offset 3 (memory.cpp:139-168).
+  Firmware auto-generated (128KB non-bootable) if not provided, with default
+  WiFi config, touch calibration and user settings (spi.cpp:90-160). Native
+  BIOS+firmware required only for firmware boot (non-direct-boot mode).
+  Bootable firmware threshold: >128KB (spi.cpp:87). DLDI patching provides
+  SD card access for homebrew via nds_sd_card.bin (dldi.cpp:29-77).
+  File loading code identical between upstream and libretro port.
 
 files:
   - name: "bios9.bin"
@@ -28,8 +27,7 @@ files:
     required: false
     hle_fallback: true
     size: 4096
-    md5: "a392174eb3e572fed6447e956bde4b25"
-    source_ref: "src/memory.cpp:130-142, src/memory.h:73"
+    source_ref: "src/memory.cpp:130-141"
     notes: "HLE fallback for all SWI calls; native needed for firmware boot and logo verification (copyBiosLogo)"
 
   - name: "bios7.bin"
@@ -38,8 +36,7 @@ files:
     required: false
     hle_fallback: true
     size: 16384
-    md5: "df692a80a5b1bc90728bc3dfc76cd948"
-    source_ref: "src/memory.cpp:144-156, src/memory.h:74"
+    source_ref: "src/memory.cpp:144-155"
     notes: "HLE fallback for all SWI calls; native needed for firmware boot"
 
   - name: "firmware.bin"
@@ -47,7 +44,7 @@ files:
     description: "NDS firmware image"
     required: false
     hle_fallback: true
-    source_ref: "src/spi.cpp:62-160, src/settings.cpp:42"
+    source_ref: "src/spi.cpp:62-160"
     notes: "Auto-generated 128KB non-bootable firmware as fallback; native dump (>128KB) needed for firmware boot"
 
   - name: "gba_bios.bin"
@@ -56,6 +53,12 @@ files:
     required: false
     hle_fallback: true
     size: 16384
-    md5: "a860e8c0b6d573d191e4ec7db1b1e4f6"
-    source_ref: "src/memory.cpp:158-169, src/memory.h:75, src/core.cpp:244-252"
-    notes: "HLE fallback via swiTableGba; native BIOS disables HLE and enables real GBA boot (core.cpp:244-247)"
+    source_ref: "src/memory.cpp:158-168, src/core.cpp:252-256"
+    notes: "HLE fallback via swiTableGba; native BIOS disables HLE and enables real GBA boot"
+
+  - name: "nds_sd_card.bin"
+    system: nintendo-ds
+    description: "DLDI SD card image for homebrew"
+    required: false
+    source_ref: "src/dldi.cpp:80-83, src/libretro/libretro.cpp:331"
+    notes: "Opened on DLDI startup() call from homebrew ROMs; user-created FAT image"

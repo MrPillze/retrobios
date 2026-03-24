@@ -1,8 +1,16 @@
-emulator: "parallel_n64"
-type: alias
-alias_of: "mupen64plus"
-profiled_date: "2026-03-18"
+emulator: "ParaLLEl N64"
+type: libretro
+source: "https://github.com/libretro/parallel-n64"
+profiled_date: "2026-03-24"
 core_version: "2.0-rc2"
 display_name: "Nintendo - Nintendo 64 (ParaLLEl N64)"
-note: "This core uses the same BIOS/firmware as mupen64plus. See emulators/mupen64plus.yml for details."
-files: []
+systems: [nintendo-64, nintendo-64dd]
+cores: [parallel_n64, parallel_n64_debug]
+
+# Needs full source-verified profiling. Minimal profile based on known file paths.
+
+files:
+  - name: "64DD_IPL.bin"
+    path: "64DD_IPL.bin"
+    required: false
+    note: "64DD IPL ROM. Only needed for N64 Disk Drive games"

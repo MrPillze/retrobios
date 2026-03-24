@@ -1,144 +1,122 @@
 emulator: NeoCD
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/neocd_libretro"
-profiled_date: "2026-03-18"
-core_version: "2019"
+upstream: "https://github.com/libretro/neocd_libretro"
+profiled_date: "2026-03-24"
+core_version: "2022"
 display_name: "SNK - Neo Geo CD (NeoCD)"
+cores:
+  - neocd
 systems:
   - snk-neogeo-cd
 
 notes: |
-  NeoCD is a dedicated SNK Neo Geo CD emulator. It supports Front Loader,
-  Top Loader, and CDZ hardware variants. BIOS files go in {system_dir}/neocd/
-  subdirectory (src/path.cpp:7, src/libretro_bios.cpp:76-81).
+  Complete rewrite of NeoCD in C++11. Scans {system_dir}/neocd/ for any .rom
+  or .bin file, also inside .zip archives (src/libretro_bios.cpp:69-105,
+  src/path.cpp:6 NEOCD_SYSTEM_SUBDIR = "neocd").
 
-  The core scans the neocd/ directory for any .rom or .bin file (also inside
-  .zip archives), reads the first 512 bytes, and identifies the BIOS type by
-  binary pattern matching at fixed ROM addresses (src/bios.cpp:168-208).
-  Filenames listed in the .info are conventional but not enforced by the core.
+  BIOS identified by binary pattern matching at fixed ROM addresses, not by
+  filename (src/bios.cpp:167-206). Files are auto byte-swapped if needed
+  (src/bios.cpp:148-160). Files smaller than 524288 bytes are skipped
+  (src/libretro_bios.cpp:42).
 
-  Three hardware families are detected: Front Loader (NeoCD), Top Loader
-  (NeoCD), and CDZ. Modified BIOS variants are also recognized: SMKDan 0.07,
-  SMKDan 0.07b, Universe BIOS 3.2, and Universe BIOS 3.3. The core applies
-  speed hack patches and CD recognition patches at load time for each type
-  (src/bios.cpp:209-280).
+  Three hardware families detected: Front Loader, Top Loader, CDZ. Modified
+  variants recognized: SMKDan 0.07, SMKDan 0.07b, Universe BIOS 3.2,
+  Universe BIOS 3.3 (src/bios.h:11-27). Any single valid BIOS is sufficient;
+  selection via core options dropdown sorted alphabetically.
 
-  The Y-ZOOM ROM (ng-lo.rom / 000-lo.lo) is a sprite zoom lookup table loaded
-  separately (src/memory.h:22, YZOOMROM_SIZE = 0x10000 = 65536 bytes). It is
-  optional but improves sprite scaling accuracy.
+  Y-ZOOM ROM (ng-lo.rom / 000-lo.lo) listed in .info but generated
+  algorithmically, never loaded from file (src/memory.cpp:223-253
+  generateYZoomData, CRC32 E09E253C). These are phantom .info entries.
 
-  All firmware entries are marked optional in the .info (any single valid BIOS
-  is sufficient). The core presents detected BIOSes as a dropdown in the core
-  options menu, sorted alphabetically by description.
-
-  BIOS ROM size: 524288 bytes (0x80000, src/memory.h:16).
-  Y-ZOOM ROM size: 65536 bytes (0x10000, src/memory.h:22).
+  .info firmware_count=12 but 2 are phantoms (Y-ZOOM), effective count=10.
+  .info lists uni-bioscd.rom as "Universe BIOS 3.2" but SHA1 matches
+  Universe BIOS 3.3 (confirmed by GitHub README).
 
 files:
-  # Front Loader BIOS (NeoCD original front-loading unit)
+  # --- Front Loader family ---
+
   - name: neocd_f.rom
     dest: neocd/neocd_f.rom
     system: snk-neogeo-cd
     required: false
     size: 524288
-    note: "Front Loader BIOS, official NeoCD format"
-    source_ref: "retroarch/libneocd_libretro.info:15 (firmware0)"
+    note: "Front Loader BIOS (big-endian, NeoCD naming)"
+    source_ref: "src/bios.cpp:59 FRONT_LOADER_SEARCH_PATTERN at 0xC0006C"
 
-  # Front Loader BIOS, SMKDan custom
-  - name: neocd_sf.rom
-    dest: neocd/neocd_sf.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 524288
-    note: "Front Loader BIOS, SMKDan custom"
-    source_ref: "retroarch/libneocd_libretro.info:18 (firmware1)"
-
-  # Top Loader BIOS (NeoCD top-loading unit)
-  - name: neocd_t.rom
-    dest: neocd/neocd_t.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 524288
-    note: "Top Loader BIOS, official NeoCD format"
-    source_ref: "retroarch/libneocd_libretro.info:21 (firmware2)"
-
-  # Top Loader BIOS, SMKDan custom
-  - name: neocd_st.rom
-    dest: neocd/neocd_st.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 524288
-    note: "Top Loader BIOS, SMKDan custom"
-    source_ref: "retroarch/libneocd_libretro.info:24 (firmware3)"
-
-  # CDZ BIOS (Neo Geo CDZ, last revision)
-  - name: neocd_z.rom
-    dest: neocd/neocd_z.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 524288
-    note: "CDZ BIOS, official NeoCD format"
-    source_ref: "retroarch/libneocd_libretro.info:27 (firmware4)"
-
-  # CDZ BIOS, SMKDan custom
-  - name: neocd_sz.rom
-    dest: neocd/neocd_sz.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 524288
-    note: "CDZ BIOS, SMKDan custom"
-    source_ref: "retroarch/libneocd_libretro.info:30 (firmware5)"
-
-  # Y-ZOOM ROM (sprite zoom lookup table)
-  - name: ng-lo.rom
-    dest: neocd/ng-lo.rom
-    system: snk-neogeo-cd
-    required: false
-    size: 65536
-    note: "Y-ZOOM ROM, NeoCD format"
-    source_ref: "retroarch/libneocd_libretro.info:33 (firmware6)"
-
-  # Y-ZOOM ROM, MAME naming
-  - name: 000-lo.lo
-    dest: neocd/000-lo.lo
-    system: snk-neogeo-cd
-    required: false
-    size: 65536
-    note: "Y-ZOOM ROM, MAME naming (same content as ng-lo.rom)"
-    source_ref: "retroarch/libneocd_libretro.info:36 (firmware7)"
-
-  # Front Loader BIOS, MAME naming
   - name: front-sp1.bin
     dest: neocd/front-sp1.bin
     system: snk-neogeo-cd
     required: false
     size: 524288
-    note: "Front Loader BIOS, MAME naming (same content as neocd_f.rom)"
-    source_ref: "retroarch/libneocd_libretro.info:39 (firmware8)"
+    note: "Front Loader BIOS (little-endian, MAME naming)"
+    source_ref: "src/bios.cpp:59 FRONT_LOADER_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
-  # Top Loader BIOS, MAME naming
+  - name: neocd_sf.rom
+    dest: neocd/neocd_sf.rom
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    note: "Front Loader BIOS, SMKDan 0.07b"
+    source_ref: "src/bios.cpp:62 SMKDANBETA_FRONT_SEARCH_PATTERN at 0xC00004"
+
+  # --- Top Loader family ---
+
+  - name: neocd_t.rom
+    dest: neocd/neocd_t.rom
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    note: "Top Loader BIOS (big-endian, NeoCD naming)"
+    source_ref: "src/bios.cpp:60 TOP_LOADER_SEARCH_PATTERN at 0xC0006C"
+
   - name: top-sp1.bin
     dest: neocd/top-sp1.bin
     system: snk-neogeo-cd
     required: false
     size: 524288
-    note: "Top Loader BIOS, MAME naming (same content as neocd_t.rom)"
-    source_ref: "retroarch/libneocd_libretro.info:42 (firmware9)"
+    note: "Top Loader BIOS (little-endian, MAME naming)"
+    source_ref: "src/bios.cpp:60 TOP_LOADER_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
-  # CDZ BIOS, MAME naming
+  - name: neocd_st.rom
+    dest: neocd/neocd_st.rom
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    note: "Top Loader BIOS, SMKDan 0.07b"
+    source_ref: "src/bios.cpp:63 SMKDANBETA_TOP_SEARCH_PATTERN at 0xC00004"
+
+  # --- CDZ family ---
+
+  - name: neocd_z.rom
+    dest: neocd/neocd_z.rom
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    note: "CDZ BIOS (big-endian, NeoCD naming)"
+    source_ref: "src/bios.cpp:61 CDZ_SEARCH_PATTERN at 0xC0006C"
+
   - name: neocd.bin
     dest: neocd/neocd.bin
     system: snk-neogeo-cd
     required: false
     size: 524288
-    note: "CDZ BIOS, MAME naming (same content as neocd_z.rom)"
-    source_ref: "retroarch/libneocd_libretro.info:45 (firmware10)"
+    note: "CDZ BIOS (little-endian, MAME naming)"
+    source_ref: "src/bios.cpp:61 CDZ_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
-  # Universe BIOS for CD systems
+  - name: neocd_sz.rom
+    dest: neocd/neocd_sz.rom
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    note: "CDZ BIOS, SMKDan 0.07b"
+    source_ref: "src/bios.cpp:64 SMKDANBETA_CDZ_SEARCH_PATTERN at 0xC00004"
+
   - name: uni-bioscd.rom
     dest: neocd/uni-bioscd.rom
     system: snk-neogeo-cd
     required: false
     size: 524288
-    note: "Universe BIOS CD, third-party multi-region BIOS (hack)"
-    source_ref: "retroarch/libneocd_libretro.info:48 (firmware11)"
+    note: "Universe BIOS 3.3, CDZ-based third-party multi-region BIOS"
+    source_ref: "src/bios.cpp:68 UNIVERSE33_SEARCH_PATTERN at 0xC00150"

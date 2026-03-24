@@ -1,8 +1,10 @@
 emulator: mGBA
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/mgba"
+upstream: "https://github.com/mgba-emu/mgba"
 logo: "https://raw.githubusercontent.com/mgba-emu/mgba/master/res/mgba-256.png"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-24"
 core_version: "0.10-dev"
 display_name: "Nintendo - Game Boy Advance (mGBA)"
 cores:
@@ -32,10 +34,12 @@ notes: |
     GBA           -> gba_bios.bin
     GB (DMG/MGB)  -> gb_bios.bin
     GBC (CGB/AGB) -> gbc_bios.bin
-    SGB (SGB/SGB2)-> sgb_bios.bin
+    SGB           -> sgb_bios.bin
+    SGB2          -> gb_bios.bin (falls to default, missing case)
 
-  The standalone core (src/gb/core.c:637-684) handles the same models
-  and maps SGB2 to sgb_bios.bin (marked TODO for a dedicated file).
+  The standalone core (src/gb/core.c:637-684) correctly maps SGB2 to
+  sgb_bios.bin (marked TODO for a dedicated file). The libretro port
+  omits GB_MODEL_SGB2 from its switch, so SGB2 falls to default.
 
   GBIsBIOS() in src/gb/gb.c validates BIOS files by CRC32 checksum.
   Accepted checksums cover DMG, DMG0, MGB, SGB, SGB2, CGB, CGB0, CGBE,
@@ -50,6 +54,7 @@ files:
     required: false
     hle_fallback: true
     size: 16384  # 16 KB (0x4000, GBA_SIZE_BIOS)
+    validation: [size]
     note: "GBA BIOS. HLE replacement built in. Real BIOS adds boot logo and full SWI accuracy."
     source_ref: "src/platform/libretro/libretro.c:2099"
 
@@ -60,6 +65,7 @@ files:
     system: nintendo-gb
     required: false
     size: 256  # 256 B (0x100)
+    validation: [crc32]
     note: "DMG/MGB boot ROM. Scrolling Nintendo logo. Skipped if absent."
     source_ref: "src/platform/libretro/libretro.c:2134"
 
@@ -70,6 +76,7 @@ files:
     system: nintendo-gbc
     required: false
     size: 2304  # 2304 B (0x900)
+    validation: [crc32]
     note: "CGB boot ROM. Used for CGB, AGB (GBA in GB mode), and SCGB models."
     source_ref: "src/platform/libretro/libretro.c:2127"
 
@@ -80,14 +87,15 @@ files:
     system: nintendo-sgb
     required: false
     size: 256  # 256 B (0x100)
-    note: "SGB/SGB2 boot ROM. Also used when model is SGB2 (no separate sgb2_bios.bin)."
+    validation: [crc32]
+    note: "SGB boot ROM. SGB2 maps here in standalone (src/gb/core.c:643) but falls to gb_bios.bin in libretro."
     source_ref: "src/platform/libretro/libretro.c:2130"
 
 platform_details:
   gba:
     bios_size: 16384  # 16 KB
     hle_bios: true
-    source_ref: "src/gba/hle-bios.c, src/gba/gba.c:520-548"
+    source_ref: "src/gba/hle-bios.c, src/gba/gba.c:520-551"
     notes: |
       GBALoadBIOS() validates size (must be exactly 0x4000) then computes
       an internal checksum. Two official checksums are recognized:
@@ -120,4 +128,5 @@ platform_details:
     notes: |
       Accepted SGB CRC32 checksums:
         SGB = 0xEC8A83B9, SGB2 = 0x53D0DD63
-      SGB2 model falls through to sgb_bios.bin (marked TODO upstream).
+      SGB2 maps here in standalone (marked TODO upstream). Libretro port
+      omits SGB2 case, falls to gb_bios.bin.

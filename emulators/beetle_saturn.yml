@@ -1,96 +1,67 @@
-emulator: Beetle Saturn (Mednafen)
+emulator: beetle_saturn
 type: libretro
+core_classification: community_fork
 core: mednafen_saturn_libretro
 source: "https://github.com/libretro/beetle-saturn-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
 core_version: "v0.9.45.1"
 display_name: "Sega - Saturn (Beetle Saturn)"
+cores:
+  - mednafen_saturn
 systems:
   - sega-saturn
 
 notes: |
-  Beetle Saturn is the libretro port of Mednafen's Sega Saturn emulation module.
-  Two region-specific BIOS files are used: sega_101.bin for Japan/Asia NTSC,
-  mpr-17933.bin for North America, Europe, and all other regions. The core
-  returns false from InitCommon() if the BIOS file is missing or not exactly
-  512 KB, so both BIOS files are required for full region coverage.
+  Libretro port of Mednafen's Saturn emulation module, frozen circa v0.9.45.1
+  (2017) with some later backports. Region auto-detection reads the disc header
+  and selects the matching BIOS. Manual override via beetle_saturn_region option.
 
-  Region auto-detection reads the disc header and picks the matching BIOS.
-  Manual region override is available via beetle_saturn_region core option.
+  InitCommon() returns false if the BIOS file is missing or not exactly 512 KB.
+  Both region BIOS files are required for full region coverage.
 
-  The KOF95 and Ultraman ROM carts are optional game-specific expansion
-  cartridges loaded from the system directory. The Action Replay 4M Plus
-  cart (satar4mp.bin) is listed but marked unfinished in source (needs
-  CPU UBC emulation).
+  KOF95 and Ultraman ROM carts are loaded when the cart type is set via core
+  option or auto-detected from the internal game database.
 
-  BIOS loading: mednafen/ss/ss.cpp InitCommon() lines 920-961.
-  Cart loading: mednafen/ss/cart.cpp CART_Init() lines 128-220.
-  Firmware path: libretro.cpp MDFN_MakeFName(MDFNMKF_FIRMWARE) -> system dir.
-  Default cart ROM filenames: mednafen/settings.cpp MDFN_GetSettingS().
+  Upstream Mednafen (1.32.x) has ST-V arcade board support (3 additional BIOS
+  files) and bootable ROM cart support, both absent from this libretro port.
 
 files:
-  # -------------------------------------------------------
-  # Saturn BIOS - Japan / Asia NTSC
-  # -------------------------------------------------------
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan, asia-ntsc]
     required: true
-    size: 524288  # 512 KB
-    md5: "85ec9ca47d8f6807718151cbcca8b964"
+    size: 524288
+    validation: [size]
     note: "Saturn BIOS v1.01 (Japan). Used when region is JP or Asia NTSC."
-    source_ref: "mednafen/ss/ss.cpp:928-929"
+    source_ref: "mednafen/ss/ss.cpp:928-929,937-949"
 
-  # -------------------------------------------------------
-  # Saturn BIOS - North America / Europe / other
-  # -------------------------------------------------------
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
     required: true
-    size: 524288  # 512 KB
-    md5: "3240872c70984b6cbfda1586cab68dbe"
+    size: 524288
+    validation: [size]
     note: "Saturn BIOS (NA/EU). Used for all non-JP/Asia-NTSC regions."
-    source_ref: "mednafen/ss/ss.cpp:930-931"
+    source_ref: "mednafen/ss/ss.cpp:930-931,937-949"
 
-  # -------------------------------------------------------
-  # King of Fighters '95 ROM cart
-  # -------------------------------------------------------
   - name: "mpr-18811-mx.ic1"
     system: sega-saturn
     required: false
-    size: 2097152  # 2 MB (0x200000, rom.cpp reads up to this)
-    md5: "255113ba943c92a54facd25a10fd780c"
+    size: 2097152
     note: "KOF95 expansion ROM cart. Loaded when cart type set to KOF95."
-    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/settings.cpp:64-65"
+    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/ss/cart/rom.cpp:32-43"
 
-  # -------------------------------------------------------
-  # Ultraman ROM cart
-  # -------------------------------------------------------
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
     required: false
-    size: 2097152  # 2 MB
-    md5: "1cd19988d1d72a3e7caa0b73234c96b4"
+    size: 2097152
     note: "Ultraman expansion ROM cart. Loaded when cart type set to Ultraman."
-    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/settings.cpp:66-67"
+    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/ss/cart/rom.cpp:32-43"
 
-  # -------------------------------------------------------
-  # Action Replay 4M Plus (unfinished)
-  # -------------------------------------------------------
   - name: "satar4mp.bin"
     system: sega-saturn
     required: false
-    note: "Action Replay 4M Plus firmware. Unfinished in source, needs CPU UBC emulation."
-    source_ref: "mednafen/ss/cart.cpp:174-188, mednafen/settings.cpp:68-69"
-
-platform_details:
-  saturn:
-    bios_size: 524288         # 512 KB
-    rom_cart_size: 2097152    # 2 MB max (rom.cpp)
-    workram_low: 1048576      # 1 MB
-    workram_high: 1048576     # 1 MB
-    bios_address: "0x00000000-0x000FFFFF"
-    cart_address: "0x02000000-0x03FFFFFF"
-    hle_available: false
-    source_ref: "mednafen/ss/ss.cpp:906-908"
+    size: 262144
+    note: "Action Replay 4M Plus firmware. Unfinished in source (ar4mp.cpp:22-24), needs CPU UBC emulation. Cart type not exposed in core options."
+    source_ref: "mednafen/ss/cart.cpp:174-188, mednafen/ss/cart/ar4mp.cpp:120-159"

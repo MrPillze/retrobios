@@ -1,8 +1,24 @@
-emulator: "mednafen_supafaust"
-type: alias
-alias_of: "bsnes"
-profiled_date: "2026-03-18"
+emulator: mednafen_supafaust
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/supafaust"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
 core_version: "1.29.0"
 display_name: "Nintendo - SNES / SFC (Beetle Supafaust)"
-note: "This core uses the same BIOS/firmware as bsnes. See emulators/bsnes.yml for details."
+cores: [mednafen_supafaust]
+systems: [nintendo-snes]
+
+# Port of Mednafen's experimental snes_faust module.
+# All special chips (DSP-1, DSP-2, CX4, SuperFX, SA-1, S-DD1) emulated via HLE.
+# DSP-1 data ROM synthesized in code (dsp1-datarom-synth.h).
+# DSP-3, DSP-4, ST010, ST011, ST018, SPC7110 detected but not emulated (fall through).
+# MSU1 supported (loads data from game directory, not system directory).
+# RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY never called.
+notes: >
+  Port of Mednafen's snes_faust module. All special chip firmware
+  emulated via HLE with synthesized data ROMs. No external firmware loading.
+  source_ref: dsp1.cpp:120-177, dsp2.cpp:118-140, cx4.cpp:1548-1656,
+  cart.cpp:129-584, libretro.cpp:496-742
+
 files: []

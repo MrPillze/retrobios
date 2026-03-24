@@ -1,7 +1,9 @@
 emulator: Moonlight
 type: utility
-source: "https://github.com/libretro/moonlight-libretro"
-profiled_date: "2026-03-18"
+core_classification: community_fork
+source: "https://github.com/rock88/moonlight-libretro"
+upstream: "https://github.com/moonlight-stream/moonlight-embedded"
+profiled_date: "2026-03-24"
 core_version: "1.0.3"
 display_name: "Moonlight"
 cores:
@@ -9,11 +11,13 @@ cores:
 systems: []
 
 notes: |
-  Moonlight is a game streaming client that connects to NVIDIA
-  GameStream or Sunshine hosts. The libretro port allows streaming
-  PC games through RetroArch.
+  Game streaming client for NVIDIA GameStream / Sunshine.
+  Port of moonlight-embedded for RetroArch, primarily targeting
+  Lakka on Nintendo Switch.
 
-  No BIOS or system files required. Configuration (host IP, pairing)
-  is handled through core options and the pairing process.
+  The core auto-generates all needed files on first run
+  (crypto keypair for pairing, unique ID, settings) in the
+  system directory under a key/ subdirectory. No user-supplied
+  files required.
 
 files: []
