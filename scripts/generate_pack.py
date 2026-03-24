@@ -100,13 +100,39 @@ def _sanitize_path(raw: str) -> str:
     return "/".join(parts)
 
 
+def _load_mame_clones(bios_dir: str) -> dict[str, str]:
+    """Load MAME clone mapping: clone_name -> canonical_name."""
+    clone_path = os.path.join(bios_dir, "_mame_clones.json")
+    if not os.path.exists(clone_path):
+        return {}
+    with open(clone_path) as f:
+        data = json.load(f)
+    # Invert: clone_name -> canonical_name
+    result = {}
+    for canonical, info in data.items():
+        for clone in info.get("clones", []):
+            result[clone] = canonical
+    return result
+
+
+_MAME_CLONE_MAP: dict[str, str] | None = None
+
+
+def _get_mame_clone_map(bios_dir: str) -> dict[str, str]:
+    global _MAME_CLONE_MAP
+    if _MAME_CLONE_MAP is None:
+        _MAME_CLONE_MAP = _load_mame_clones(bios_dir)
+    return _MAME_CLONE_MAP
+
+
 def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                   zip_contents: dict | None = None,
                   dest_hint: str = "") -> tuple[str | None, str]:
     """Resolve a BIOS file with storage tiers and release asset fallback.
 
     Wraps common.resolve_local_file() with pack-specific logic for
-    storage tiers (external/user_provided) and large file release assets.
+    storage tiers (external/user_provided), large file release assets,
+    and MAME clone mapping (deduped ZIPs).
     """
     storage = file_entry.get("storage", "embedded")
     if storage == "user_provided":
@@ -119,8 +145,17 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     if path:
         return path, status
 
-    # Last resort: large files from GitHub release assets
+    # MAME clone fallback: if the file was deduped, resolve via canonical
     name = file_entry.get("name", "")
+    clone_map = _get_mame_clone_map(bios_dir)
+    canonical = clone_map.get(name)
+    if canonical:
+        canonical_entry = {"name": canonical}
+        cpath, cstatus = resolve_local_file(canonical_entry, db, zip_contents)
+        if cpath:
+            return cpath, "mame_clone"
+
+    # Last resort: large files from GitHub release assets
     sha1 = file_entry.get("sha1")
     md5_raw = file_entry.get("md5", "")
     md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []

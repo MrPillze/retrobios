@@ -1,0 +1,964 @@
+{
+  "a1000kbd_de.zip": {
+    "clones": [
+      "a1000kbd_dk.zip",
+      "a1000kbd_fr.zip",
+      "a1000kbd_gb.zip",
+      "a1000kbd_it.zip",
+      "a1000kbd_se.zip",
+      "a1000kbd_us.zip"
+    ],
+    "sha1": "93d36de4d5d376c521a9ca99722f659e60d177f2",
+    "total_copies": 6
+  },
+  "a2000kbd_g80_de.zip": {
+    "clones": [
+      "a2000kbd_g80_dk.zip",
+      "a2000kbd_g80_gb.zip",
+      "a2000kbd_g80_se.zip",
+      "a2000kbd_g80_us.zip"
+    ],
+    "sha1": "9ecb4cae3fe19cd3faef4a22fe5d3a189ac8810c",
+    "total_copies": 4
+  },
+  "a2bufgrapplerplus.zip": {
+    "clones": [
+      "a2bufgrapplerplusa.zip"
+    ],
+    "sha1": "7c54fb94853478d23ec155a8e38b76d830f52e46",
+    "total_copies": 1
+  },
+  "a2q68.zip": {
+    "clones": [
+      "a2q68plus.zip"
+    ],
+    "sha1": "270c84df833b196e214738bbe158f4ea2203c272",
+    "total_copies": 1
+  },
+  "a3fdc.zip": {
+    "clones": [
+      "d2fdc.zip"
+    ],
+    "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
+    "total_copies": 2
+  },
+  "a500kbd_ch.zip": {
+    "clones": [
+      "a2000kbd_ch.zip",
+      "a2000kbd_de.zip",
+      "a2000kbd_dk.zip",
+      "a2000kbd_es.zip",
+      "a2000kbd_fr.zip",
+      "a2000kbd_gb.zip",
+      "a2000kbd_it.zip",
+      "a2000kbd_no.zip",
+      "a2000kbd_se.zip",
+      "a2000kbd_us.zip",
+      "a500kbd_de.zip",
+      "a500kbd_dk.zip",
+      "a500kbd_es.zip",
+      "a500kbd_fr.zip",
+      "a500kbd_gb.zip",
+      "a500kbd_it.zip",
+      "a500kbd_no.zip",
+      "a500kbd_se.zip",
+      "a500kbd_us.zip",
+      "a600kbd_ch.zip",
+      "a600kbd_de.zip",
+      "a600kbd_dk.zip",
+      "a600kbd_es.zip",
+      "a600kbd_fr.zip",
+      "a600kbd_gb.zip",
+      "a600kbd_it.zip",
+      "a600kbd_no.zip",
+      "a600kbd_se.zip",
+      "a600kbd_us.zip"
+    ],
+    "sha1": "e35eda0cc2c11da92c0a6c222f314d84e623b29e",
+    "total_copies": 29
+  },
+  "abc55.zip": {
+    "clones": [
+      "abc77.zip"
+    ],
+    "sha1": "3a5718ea19c8e4c900a77bfd6bee701597feaa56",
+    "total_copies": 1
+  },
+  "abc830.zip": {
+    "clones": [
+      "abc832.zip",
+      "abc834.zip",
+      "abc838.zip",
+      "abc850flop.zip",
+      "lux21046.zip"
+    ],
+    "sha1": "1e0182d0fd4fb64fe61cc4b77b1fd461c2e5a97c",
+    "total_copies": 5
+  },
+  "abc850.zip": {
+    "clones": [
+      "abc852.zip",
+      "abc856.zip",
+      "abc890.zip",
+      "abc894.zip"
+    ],
+    "sha1": "2ae988416d74273b0213e0be6513eabc3d974d49",
+    "total_copies": 4
+  },
+  "abcexp.zip": {
+    "clones": [
+      "abc_ssa.zip"
+    ],
+    "sha1": "a1bf15cba56e62d4ecbd05908e70292a2eef86dc",
+    "total_copies": 1
+  },
+  "arc_econet.zip": {
+    "clones": [
+      "acorn_econet.zip",
+      "atom_econet.zip"
+    ],
+    "sha1": "e46ff8f9b451e8ec67eff8a0e1238185bd8071d7",
+    "total_copies": 2
+  },
+  "atom_tube.zip": {
+    "clones": [
+      "electron_tube.zip"
+    ],
+    "sha1": "d5a80dd0b4ef0d22b533a3771f374dc446b63e11",
+    "total_copies": 1
+  },
+  "bbc_lcd.zip": {
+    "clones": [
+      "hd44780.zip",
+      "mdisplay2.zip"
+    ],
+    "sha1": "1b3e7285b59ee52972115e223d000fb93413eb0b",
+    "total_copies": 2
+  },
+  "bbc_m87.zip": {
+    "clones": [
+      "bbc_24bbc.zip",
+      "bbc_2ndserial.zip",
+      "bbc_awhd.zip",
+      "bbc_beebide.zip",
+      "bbc_cc500.zip",
+      "bbc_ieee488.zip",
+      "bbc_m2000.zip",
+      "bbc_m3000.zip",
+      "bbc_m500.zip",
+      "bbc_m5000.zip",
+      "bbc_ramdisc.zip",
+      "beebopl.zip",
+      "beebsid.zip",
+      "electron_stlefs.zip"
+    ],
+    "sha1": "eb7ff2179f102be63f217466f643bd93b4910f9e",
+    "total_copies": 14
+  },
+  "bbc_meup.zip": {
+    "clones": [
+      "bbc_usersplit.zip"
+    ],
+    "sha1": "90f1c144839c5269ff8567dd6685ae356027f146",
+    "total_copies": 1
+  },
+  "bbc_stlswr16.zip": {
+    "clones": [
+      "bbc_stlswr128.zip",
+      "bbc_stlswr32.zip",
+      "bbc_stlswr64.zip"
+    ],
+    "sha1": "b1abcb49eded4fcafa76198b5f7efc65fcc940e6",
+    "total_copies": 3
+  },
+  "bsmt2000.zip": {
+    "clones": [
+      "decobsmt.zip"
+    ],
+    "sha1": "d371725944490bdc0c339c8ad9e7bba52ffe9bfe",
+    "total_copies": 1
+  },
+  "c64_cspeech.zip": {
+    "clones": [
+      "msx_cart_easispeech.zip"
+    ],
+    "sha1": "24c414e38bbab50ae59e85a12f2dedccaed81433",
+    "total_copies": 1
+  },
+  "c64_tdos.zip": {
+    "clones": [
+      "c64_buscard.zip",
+      "c64_buscard2.zip",
+      "c64_ieee488.zip",
+      "c64_magic_voice.zip",
+      "c64_music64.zip",
+      "c64_sfxse.zip",
+      "c64_supercpu.zip"
+    ],
+    "sha1": "1927797dd8fba39987906d8c90c8b182968783eb",
+    "total_copies": 7
+  },
+  "c8050.zip": {
+    "clones": [
+      "c8250.zip"
+    ],
+    "sha1": "893deaeff7ac79fbde19817678b63905d9f9b9cb",
+    "total_copies": 1
+  },
+  "c8050fdc.zip": {
+    "clones": [
+      "c2040_fdc.zip"
+    ],
+    "sha1": "9ae8707d814dc197315fb1d49571209e48ab29f3",
+    "total_copies": 1
+  },
+  "cbm2_hrga.zip": {
+    "clones": [
+      "cbm2_hrgb.zip"
+    ],
+    "sha1": "275b6409633ffaf3c3fa5e191de9aa7294b8cf64",
+    "total_copies": 1
+  },
+  "cc90_232.zip": {
+    "clones": [
+      "acorn_vib.zip",
+      "pofo_hpc104.zip",
+      "pofo_hpc104_2.zip",
+      "psion_serpar.zip",
+      "psion_siena_ssd.zip"
+    ],
+    "sha1": "9f9ab9a092e0936758ad2fb93a537533231468c8",
+    "total_copies": 5
+  },
+  "cga.zip": {
+    "clones": [
+      "cga_superimpose.zip",
+      "ec1841_0002.zip"
+    ],
+    "sha1": "da272af2fb1da8883c539b19c1bda97c5301dc80",
+    "total_copies": 2
+  },
+  "chessmachine.zip": {
+    "clones": [
+      "centronics_chessmec.zip",
+      "isa_chessmdr.zip"
+    ],
+    "sha1": "e908b954f3c4b25f59de1e17e51cbd020540c243",
+    "total_copies": 2
+  },
+  "coco_ide.zip": {
+    "clones": [
+      "coco_multipack.zip"
+    ],
+    "sha1": "a866079ab029389bb00be91f48ae06133a47d52f",
+    "total_copies": 1
+  },
+  "coco_wpk.zip": {
+    "clones": [
+      "coco_wpk2.zip",
+      "coco_wpkrs.zip"
+    ],
+    "sha1": "2ed5c4f7350701a4eb279f7111e22f12afbf51b4",
+    "total_copies": 2
+  },
+  "cpc_rom.zip": {
+    "clones": [
+      "cpc_dkspeech.zip",
+      "cpc_mface2.zip",
+      "cpc_playcity.zip",
+      "cpc_ser.zip",
+      "cpc_serams.zip",
+      "cpc_ssa1.zip"
+    ],
+    "sha1": "949b9b362e1dc615a2e5783016207ff0d87de465",
+    "total_copies": 6
+  },
+  "d9060.zip": {
+    "clones": [
+      "d9090.zip"
+    ],
+    "sha1": "d375f64dc02703eee6751bd9723978c6633348c9",
+    "total_copies": 1
+  },
+  "dragon_claw.zip": {
+    "clones": [
+      "dragon_multipack.zip"
+    ],
+    "sha1": "9d73e22ee590cec56a8a1f0af0735b586f50602f",
+    "total_copies": 1
+  },
+  "dragon_msx2.zip": {
+    "clones": [
+      "msx_cart_fmpac.zip",
+      "sega_fm_unit.zip"
+    ],
+    "sha1": "562e5be9ed255804af505bdace7d104571ed6f79",
+    "total_copies": 2
+  },
+  "ds1001.zip": {
+    "clones": [
+      "nes_vrc7.zip"
+    ],
+    "sha1": "1d4c0f96f7c39d60c30b19c6e0566f291b9fe8f8",
+    "total_copies": 1
+  },
+  "ef9365.zip": {
+    "clones": [
+      "cms_hires.zip",
+      "cu_graphc.zip",
+      "cu_graphm.zip"
+    ],
+    "sha1": "8ff12b8bb0803f01822f6a5ff1f3a537f87dddf3",
+    "total_copies": 3
+  },
+  "electron_mode7.zip": {
+    "clones": [
+      "electron_plus2.zip",
+      "electron_plus3.zip",
+      "electron_rombox.zip",
+      "electron_sidewndr.zip"
+    ],
+    "sha1": "e9aee50fcf87177493095237dc2446d67fe57252",
+    "total_copies": 4
+  },
+  "epson_pf10.zip": {
+    "clones": [
+      "epson_tf20.zip"
+    ],
+    "sha1": "eda0107f44a9a5b15471aea99e847701f4899a96",
+    "total_copies": 1
+  },
+  "esq2x40_vfx.zip": {
+    "clones": [
+      "esqpanel240_vfx.zip"
+    ],
+    "sha1": "94569ad78f48cc7c583083d96761018f288b1307",
+    "total_copies": 1
+  },
+  "everdrive_md.zip": {
+    "clones": [
+      "megadrive_ar.zip"
+    ],
+    "sha1": "71b489cac8f942d5ff21feee098d1c3059ecb608",
+    "total_copies": 1
+  },
+  "exorterm155_device.zip": {
+    "clones": [
+      "exorterm155_terminal.zip"
+    ],
+    "sha1": "2e14dd681e3a7cc377120f43932d5643621624df",
+    "total_copies": 1
+  },
+  "heath_super19_tlb.zip": {
+    "clones": [
+      "heath_igc_super19_tlb_device.zip"
+    ],
+    "sha1": "21c7bb1abc74259f703c3db28a2982a9d3835338",
+    "total_copies": 1
+  },
+  "heath_tlb.zip": {
+    "clones": [
+      "heath_igc_tlb_device.zip"
+    ],
+    "sha1": "1ac2517f11360bdf993b7aa8c38ab473606f8e3a",
+    "total_copies": 1
+  },
+  "heath_ultra_tlb.zip": {
+    "clones": [
+      "heath_igc_ultra_tlb_device.zip"
+    ],
+    "sha1": "bda4c50891efe71da22fefad5a3c51fac6af91a4",
+    "total_copies": 1
+  },
+  "heath_watz_tlb.zip": {
+    "clones": [
+      "heath_igc_watz_tlb_device.zip"
+    ],
+    "sha1": "747676a713c79a8425b8e08cfc6fd02a3f4dd971",
+    "total_copies": 1
+  },
+  "i82371ab.zip": {
+    "clones": [
+      "sis85c496_host.zip"
+    ],
+    "sha1": "7d3363b91d27ac3ff9fb91aee36d798a5331e2be",
+    "total_copies": 1
+  },
+  "i8244.zip": {
+    "clones": [
+      "i8245.zip"
+    ],
+    "sha1": "98d8353e47979831ea003f535c7f02e965c4a8b3",
+    "total_copies": 1
+  },
+  "ie15_device.zip": {
+    "clones": [
+      "ie15_terminal.zip"
+    ],
+    "sha1": "17409b32b33cd1474b1aa1417dd3467b15589e16",
+    "total_copies": 1
+  },
+  "imi7000.zip": {
+    "clones": [
+      "imi5000h.zip"
+    ],
+    "sha1": "74f340f47cce8f6b0d3af2afb6d3d04f5671e4ea",
+    "total_copies": 1
+  },
+  "ioc2f.zip": {
+    "clones": [
+      "ioc2g.zip"
+    ],
+    "sha1": "75de4163ec975c736f71eff860d5d656e2806333",
+    "total_copies": 1
+  },
+  "isa_ide.zip": {
+    "clones": [
+      "bbc_ide8.zip",
+      "c64_ide64.zip",
+      "cpc_symf2.zip",
+      "i82371eb_ide.zip",
+      "i82371sb.zip",
+      "i82371sb_ide.zip",
+      "mediagx_cs5530_ide.zip",
+      "rc2014_82c55_ide.zip",
+      "rc2014_ide_hdd.zip",
+      "sam_atom_hdd.zip",
+      "sam_sdide.zip",
+      "sis5513_ide.zip",
+      "ss50_piaide.zip",
+      "ti99_ide.zip",
+      "vt82c586b_ide.zip"
+    ],
+    "sha1": "67b9199bc22c6fe2b3a4725ec291c158edd01151",
+    "total_copies": 15
+  },
+  "keytronic_pc3270.zip": {
+    "clones": [
+      "keytronic_pc3270_at.zip"
+    ],
+    "sha1": "87ecc7a33627b1fac62ffb87e79a5aa36fe746cf",
+    "total_copies": 1
+  },
+  "lux4105.zip": {
+    "clones": [
+      "arc_scsi_a500.zip",
+      "bbc_sasi.zip",
+      "bbc_scsi.zip",
+      "bbc_scsiaiv.zip",
+      "hp98265a.zip",
+      "msx_cart_gouda_scsi.zip",
+      "msx_cart_mega_scsi.zip",
+      "nokia_mmc186.zip",
+      "scsidma.zip"
+    ],
+    "sha1": "566a099bda7835a069bd6c61228ca3b7f6b03c14",
+    "total_copies": 9
+  },
+  "m68705p3.zip": {
+    "clones": [
+      "arkanoid68705p3.zip"
+    ],
+    "sha1": "6f56f5c71ce6428ed55724911e008c44db33ce71",
+    "total_copies": 1
+  },
+  "m68705p5.zip": {
+    "clones": [
+      "arkanoid68705p5.zip",
+      "taito68705.zip",
+      "taito68705tiger.zip",
+      "taitosjsecmcu.zip"
+    ],
+    "sha1": "59694128e4591ba01f3d67b56cf5de97faa375c5",
+    "total_copies": 4
+  },
+  "m68705r3.zip": {
+    "clones": [
+      "m68705u3.zip"
+    ],
+    "sha1": "4fc37b52d4313ff57f5557c2c3191e885b0e3fcb",
+    "total_copies": 1
+  },
+  "mackbd_m0110.zip": {
+    "clones": [
+      "mackbd_m0110b.zip",
+      "mackbd_m0110f.zip",
+      "mackbd_m0110j.zip",
+      "mackbd_m0110t.zip"
+    ],
+    "sha1": "9dfd9b51164d07cbe9d04b1deffbd962d7107466",
+    "total_copies": 4
+  },
+  "mackbd_m0120.zip": {
+    "clones": [
+      "mackbd_m0120p.zip"
+    ],
+    "sha1": "50619fb282c29cf61e2fd421a73acda8ace2b470",
+    "total_copies": 1
+  },
+  "md_jcart.zip": {
+    "clones": [
+      "md_seprom_codemast.zip",
+      "md_seprom_mm96.zip",
+      "megadrive_rom_jcart_micromac2.zip",
+      "megadrive_rom_jcart_micromac96.zip",
+      "megadrive_rom_jcart_sampras.zip",
+      "megadrive_rom_jcart_sskid.zip",
+      "msx_segactrl.zip",
+      "pce_multitap.zip",
+      "pce_xhe3.zip",
+      "sms_rapid_fire.zip",
+      "sms_teamplayer.zip"
+    ],
+    "sha1": "d92cc4e8fc80f98cf462e1da71e83e274af166d5",
+    "total_copies": 11
+  },
+  "mpu401.zip": {
+    "clones": [
+      "epson_qx_option_sound_card.zip",
+      "isa_mpu401.zip",
+      "mpu_pc98.zip"
+    ],
+    "sha1": "4d217c4a72a4450b75faaf7da871e8fe7b64ff60",
+    "total_copies": 3
+  },
+  "mvme120.zip": {
+    "clones": [
+      "mvme121.zip",
+      "mvme122.zip",
+      "mvme123.zip"
+    ],
+    "sha1": "ea17d5b5078cada683d59c6508c8825aff9ab722",
+    "total_copies": 3
+  },
+  "namco_amc.zip": {
+    "clones": [
+      "namco_asca1.zip",
+      "namco_asca3.zip",
+      "namco_asca3a.zip",
+      "namco_asca5.zip",
+      "namco_cyberlead.zip",
+      "namco_cyberleada.zip",
+      "namco_emio102.zip",
+      "namco_empri101.zip",
+      "namco_fca10.zip",
+      "namco_fca11.zip",
+      "namco_fcb.zip",
+      "namco_tssio.zip",
+      "namco_xmiu1.zip"
+    ],
+    "sha1": "e023f2efeb5f568b2669e789252cb1d662c28491",
+    "total_copies": 13
+  },
+  "namcoc67.zip": {
+    "clones": [
+      "namcos21_dsp_c67_device.zip"
+    ],
+    "sha1": "6f7905f4761c624e026a686d78b6e969607882e9",
+    "total_copies": 1
+  },
+  "namcoc68.zip": {
+    "clones": [
+      "namco_de_pcb.zip"
+    ],
+    "sha1": "a3067728f35db4a523a887e8063b351a5b0cda1c",
+    "total_copies": 1
+  },
+  "newbrain_eim.zip": {
+    "clones": [
+      "newbrain_fdc.zip"
+    ],
+    "sha1": "374ccff4cfa71cab6e5c925d4377a126bce5cd20",
+    "total_copies": 1
+  },
+  "ohare.zip": {
+    "clones": [
+      "a2bus_byte8251.zip",
+      "amiga_a2232.zip",
+      "bk_irps.zip",
+      "c64_swiftlink.zip",
+      "c64_turbo232.zip",
+      "dio98644.zip",
+      "dmv_k211.zip",
+      "dmv_k212.zip",
+      "dmv_k213.zip",
+      "dmv_k801.zip",
+      "dvk_ktlk.zip",
+      "electron_rs423.zip",
+      "grndctrl.zip",
+      "h89h_88_3.zip",
+      "h89ha_88_3.zip",
+      "h8_h_8_5.zip",
+      "harddriv_board.zip",
+      "harddrivc_board.zip",
+      "hdrivair0_board.zip",
+      "hdrivair_board.zip",
+      "heathrow.zip",
+      "hp82919.zip",
+      "hp98036.zip",
+      "iteagle_fpga.zip",
+      "mindset_rs232_module.zip",
+      "msx_slot_rs232.zip",
+      "msx_slot_rs232_mitsubishi.zip",
+      "msx_slot_rs232_sony.zip",
+      "msx_slot_rs232_svi738.zip",
+      "msx_slot_rs232_toshiba.zip",
+      "msx_slot_rs232_toshiba_hx3x.zip",
+      "mzr8300.zip",
+      "nabupc_option_rs232.zip",
+      "paddington.zip",
+      "pl6_fpga.zip",
+      "pofo_hpc102.zip",
+      "psion_pclink.zip",
+      "racedriv_board.zip",
+      "racedrivb1_board.zip",
+      "racedrivc1_board.zip",
+      "racedrivc_board.zip",
+      "racedrivc_panorama_side_board.zip",
+      "rc2014_dual_serial.zip",
+      "rc2014_dual_serial_40p.zip",
+      "rc2014_sc111.zip",
+      "rc2014_serial_io.zip",
+      "rf57_932.zip",
+      "rs232_patch_box.zip",
+      "s100_wunderbus.zip",
+      "sms_rs232.zip",
+      "ss50_mpc.zip",
+      "ss50_mps.zip",
+      "ss50_mps2.zip",
+      "steeltal1_board.zip",
+      "steeltal_board.zip",
+      "steeltalp_board.zip",
+      "strtdriv_board.zip",
+      "stunrun_board.zip",
+      "sv805.zip",
+      "sys68k_cpu30lite.zip",
+      "ti8x_glinkhle.zip",
+      "ti8x_tconn.zip",
+      "vic1011.zip",
+      "vrc5074.zip",
+      "z_89_11.zip"
+    ],
+    "sha1": "1a1826d7962e6bf6b94fc1bc2b17b8633eaaa0f5",
+    "total_copies": 65
+  },
+  "pa7234.zip": {
+    "clones": [
+      "pa7246.zip"
+    ],
+    "sha1": "18889ed623d8c635966de0947076066f3732d2aa",
+    "total_copies": 1
+  },
+  "pd3_30hr.zip": {
+    "clones": [
+      "pd3_30hrint.zip"
+    ],
+    "sha1": "4920e50f69e15d4a45cb5d96c7bfb42a8e49d2ff",
+    "total_copies": 1
+  },
+  "pd3_mclr.zip": {
+    "clones": [
+      "pd3_mclrint.zip"
+    ],
+    "sha1": "3730d54651d96a9a836d536c01b358f625d4f489",
+    "total_copies": 1
+  },
+  "peribox.zip": {
+    "clones": [
+      "peribox_ev.zip",
+      "peribox_ev1.zip",
+      "peribox_gen.zip",
+      "peribox_genmod.zip",
+      "peribox_sg.zip",
+      "ti99_iosplit.zip",
+      "ti99_speech.zip",
+      "ti99_speechconn.zip"
+    ],
+    "sha1": "e037089e7f53382950a6e8d3939af2cae5d4a7d5",
+    "total_copies": 8
+  },
+  "profighterqa.zip": {
+    "clones": [
+      "profighterqb.zip"
+    ],
+    "sha1": "631ccd946400978b10ee225e008eed199027fd8c",
+    "total_copies": 1
+  },
+  "ql_sqmouse.zip": {
+    "clones": [
+      "ql_sqboard256.zip",
+      "ql_sqboard512.zip",
+      "ql_sqmouse512.zip"
+    ],
+    "sha1": "7e37e3dae0c4ddff1912bf02fca3fb2019326b78",
+    "total_copies": 3
+  },
+  "ql_trump.zip": {
+    "clones": [
+      "ql_trump256.zip",
+      "ql_trump512.zip",
+      "ql_trump768.zip"
+    ],
+    "sha1": "c34662ee1d51ae0ae2899f923694f1d8024559fa",
+    "total_copies": 3
+  },
+  "qsound.zip": {
+    "clones": [
+      "qsound_hle.zip"
+    ],
+    "sha1": "b875be47c087d7a0d484d29232a23fd0bae736e6",
+    "total_copies": 1
+  },
+  "qx10_keyboard_ascii.zip": {
+    "clones": [
+      "qx10_keyboard_hasci.zip"
+    ],
+    "sha1": "bf946b98e9314ac877e67af84c82418604f4bade",
+    "total_copies": 1
+  },
+  "rc2014_sc106.zip": {
+    "clones": [
+      "rc2014_sc107.zip",
+      "rc2014_sc113.zip"
+    ],
+    "sha1": "bfa36e6517ba0744618e6778581beb85067be171",
+    "total_copies": 2
+  },
+  "saa5050.zip": {
+    "clones": [
+      "acorn_vdu40.zip",
+      "tanbus_mpvdu.zip"
+    ],
+    "sha1": "c16ded03b2a17dfaaaaac2856e013f27259a2254",
+    "total_copies": 2
+  },
+  "saa5055.zip": {
+    "clones": [
+      "tanbus_ravdu.zip"
+    ],
+    "sha1": "825a16bbd55265a8ccacbf807e7972dca2412444",
+    "total_copies": 1
+  },
+  "sed1200da.zip": {
+    "clones": [
+      "sed1200fa.zip"
+    ],
+    "sha1": "a0e6f65f2eca69c22c8d405af11c5d9c262efa1d",
+    "total_copies": 1
+  },
+  "sed1200db.zip": {
+    "clones": [
+      "sed1200fb.zip"
+    ],
+    "sha1": "b06ad209ef30db63711cc5bc46a5371465223ed0",
+    "total_copies": 1
+  },
+  "sega_sp400.zip": {
+    "clones": [
+      "sega_sk1100.zip",
+      "sega_sk1100e.zip"
+    ],
+    "sha1": "b8b8f5030a64769d27b784aeb5efca94cd72149a",
+    "total_copies": 2
+  },
+  "sis950_lpc.zip": {
+    "clones": [
+      "vt82c586b_isa.zip"
+    ],
+    "sha1": "477a7f5e80b6e47339c52d4807de35dfa642f489",
+    "total_copies": 1
+  },
+  "sns_dsp1leg.zip": {
+    "clones": [
+      "sns_dsp1leg_hi.zip"
+    ],
+    "sha1": "634008f34b031c0e5d0186936c065e6e20808264",
+    "total_copies": 1
+  },
+  "speakboard.zip": {
+    "clones": [
+      "pc98_otomichan_kai.zip"
+    ],
+    "sha1": "eaabc1ef9448c297ef7cbae90278b265acd48169",
+    "total_copies": 1
+  },
+  "spectrum_d40.zip": {
+    "clones": [
+      "spectrum_d80.zip"
+    ],
+    "sha1": "28fce4b27babe26a6bf5d139df489302764c5ad4",
+    "total_copies": 1
+  },
+  "spectrum_opus.zip": {
+    "clones": [
+      "spectrum_beta128.zip",
+      "spectrum_betacbi.zip",
+      "spectrum_betaclone.zip",
+      "spectrum_betaplus.zip",
+      "spectrum_betav2.zip",
+      "spectrum_betav3.zip",
+      "spectrum_disciple.zip",
+      "spectrum_flpone.zip",
+      "spectrum_fuller.zip",
+      "spectrum_gamma.zip",
+      "spectrum_intf1.zip",
+      "spectrum_kempdisc.zip",
+      "spectrum_lprint3.zip",
+      "spectrum_melodik.zip",
+      "spectrum_mface1.zip",
+      "spectrum_mface128.zip",
+      "spectrum_mface128v1.zip",
+      "spectrum_mface1v1.zip",
+      "spectrum_mface1v2.zip",
+      "spectrum_mface1v3.zip",
+      "spectrum_mprint.zip",
+      "spectrum_spdos.zip",
+      "spectrum_speccydos.zip",
+      "spectrum_specmate.zip",
+      "spectrum_swiftdisc.zip",
+      "spectrum_swiftdisc2.zip",
+      "spectrum_uslot.zip",
+      "spectrum_vtx5000.zip",
+      "spectrum_wafa.zip"
+    ],
+    "sha1": "8aaa6099ccaa133cb8f54846f65348dff3851c19",
+    "total_copies": 29
+  },
+  "spi.zip": {
+    "clones": [
+      "82c606.zip",
+      "a7ports.zip",
+      "bk_ay.zip",
+      "bk_covox.zip",
+      "bk_printer.zip",
+      "c64_geocable.zip",
+      "cgenie_printer.zip",
+      "cocopakram.zip",
+      "distomeb_rtime.zip",
+      "dmv_k210.zip",
+      "electron_fbprint.zip",
+      "fdc37c665gt.zip",
+      "fdc37c665ir.zip",
+      "fdc37c93x.zip",
+      "fdc37m707.zip",
+      "isa_bblue2.zip",
+      "isa_lpt.zip",
+      "it8661f.zip",
+      "it8703f_device.zip",
+      "it8705f.zip",
+      "pc87306.zip",
+      "pc97338.zip",
+      "pc_lpt.zip",
+      "pofo_hpc101.zip",
+      "psion_3link_par.zip",
+      "psion_parallel.zip",
+      "spectrum_kempcentrs.zip",
+      "sv802.zip",
+      "upc82c710.zip",
+      "upc82c711.zip",
+      "vtech_printer.zip",
+      "w83787f.zip",
+      "w83977tf.zip"
+    ],
+    "sha1": "b22847ad1d8c5ee0fff41b3bd31aab6cbf8778ea",
+    "total_copies": 33
+  },
+  "sv601.zip": {
+    "clones": [
+      "sv602.zip"
+    ],
+    "sha1": "d9d692484446ac37e992478d60d9478bfe1fd9a6",
+    "total_copies": 1
+  },
+  "swtpc8212_device.zip": {
+    "clones": [
+      "swtpc8212_terminal.zip"
+    ],
+    "sha1": "423b488154c36a97a160cae7d43e79089ddee16d",
+    "total_copies": 1
+  },
+  "sys68k_cpu20.zip": {
+    "clones": [
+      "sys68k_cpu21.zip",
+      "sys68k_cpu21a.zip",
+      "sys68k_cpu21b.zip",
+      "sys68k_cpu21s.zip",
+      "sys68k_cpu21ya.zip",
+      "sys68k_cpu21yb.zip"
+    ],
+    "sha1": "d1d784d3a697d73d54a154eaea23353d29fdb095",
+    "total_copies": 6
+  },
+  "sys68k_cpu30.zip": {
+    "clones": [
+      "sys68k_cpu30be.zip",
+      "sys68k_cpu30x.zip",
+      "sys68k_cpu30xa.zip",
+      "sys68k_cpu30za.zip"
+    ],
+    "sha1": "3f61686d2f83490d884b1b57971c66f6811326fb",
+    "total_copies": 4
+  },
+  "tms320c31.zip": {
+    "clones": [
+      "atari_cage.zip",
+      "atari_cage_seattle.zip",
+      "tms320vc33.zip"
+    ],
+    "sha1": "ddadaf48004421e04838506d9c07bb9cfd3625c0",
+    "total_copies": 3
+  },
+  "upd7220.zip": {
+    "clones": [
+      "a2grafex.zip",
+      "compis_hrg.zip",
+      "compis_uhrg.zip",
+      "number_9_rev.zip",
+      "wangpc_tig.zip"
+    ],
+    "sha1": "dc594fea200ce87d1bd33a4a1e73f0221b68b9eb",
+    "total_copies": 5
+  },
+  "vic1112.zip": {
+    "clones": [
+      "bbc_b488.zip",
+      "cms_ieee.zip"
+    ],
+    "sha1": "e29707cea8cc9f3a6466d1917fc4d67ee9a7e088",
+    "total_copies": 2
+  },
+  "voicebox.zip": {
+    "clones": [
+      "atom_speech.zip",
+      "bbc_detalker.zip",
+      "bbc_sweetalker.zip",
+      "bbc_voicebox.zip",
+      "einstein_speech.zip",
+      "electron_voxbox.zip"
+    ],
+    "sha1": "82aeaace3231022fc158e96c9042745f6482aa93",
+    "total_copies": 6
+  },
+  "votraxtnt.zip": {
+    "clones": [
+      "serial_votraxtnt.zip"
+    ],
+    "sha1": "b32303333a66101a83d008af1a8c1966751ed156",
+    "total_copies": 1
+  },
+  "votrsc01.zip": {
+    "clones": [
+      "gotsndspr1.zip",
+      "ssi263hle.zip"
+    ],
+    "sha1": "a57f14469867ce0d0865995a645b69f41a0ea718",
+    "total_copies": 2
+  },
+  "vp575.zip": {
+    "clones": [
+      "vp700.zip"
+    ],
+    "sha1": "9139c00e5986b7a86c7e8dcbce39986126ab7db4",
+    "total_copies": 1
+  }
+}
