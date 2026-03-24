@@ -30,6 +30,7 @@ from common import (
     load_emulator_profiles, load_platform_config, md5_composite,
     resolve_local_file,
 )
+from deterministic_zip import rebuild_zip_deterministic
 
 try:
     import yaml
@@ -362,6 +363,8 @@ def generate_pack(
                 extract = file_entry.get("extract", False)
                 if extract and local_path.endswith(".zip"):
                     _extract_zip_to_archive(local_path, full_dest, zf)
+                elif local_path.endswith(".zip"):
+                    _normalize_zip_for_pack(local_path, full_dest, zf)
                 else:
                     zf.write(local_path, full_dest)
                 total_files += 1
@@ -398,7 +401,10 @@ def generate_pack(
             if status in ("not_found", "external", "user_provided"):
                 continue
 
-            zf.write(local_path, full_dest)
+            if local_path.endswith(".zip"):
+                _normalize_zip_for_pack(local_path, full_dest, zf)
+            else:
+                zf.write(local_path, full_dest)
             seen_destinations.add(full_dest)
             seen_lower.add(full_dest.lower())
             core_count += 1
@@ -466,6 +472,28 @@ def _extract_zip_to_archive(source_zip: str, dest_prefix: str, target_zf: zipfil
             data = src.read(info.filename)
             target_path = f"{dest_prefix}/{clean_name}" if dest_prefix else clean_name
             target_zf.writestr(target_path, data)
+
+
+def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.ZipFile):
+    """Add a MAME BIOS ZIP to the pack as a deterministic rebuild.
+
+    Instead of copying the original ZIP (with non-deterministic metadata),
+    extracts the ROM atoms, rebuilds the ZIP deterministically, and writes
+    the normalized version into the pack.
+
+    This ensures:
+    - Same ROMs → same ZIP hash in every pack build
+    - No dependency on how the user built their MAME ROM set
+    - Bit-identical ZIPs across platforms and build times
+    """
+    import tempfile as _tmp
+    tmp_fd, tmp_path = _tmp.mkstemp(suffix=".zip", dir="tmp")
+    os.close(tmp_fd)
+    try:
+        rebuild_zip_deterministic(source_zip, tmp_path)
+        target_zf.write(tmp_path, dest_path)
+    finally:
+        os.unlink(tmp_path)
 
 
 # ---------------------------------------------------------------------------
@@ -625,7 +653,10 @@ def generate_emulator_pack(
                 archive_entry = {"name": archive_name}
                 local_path, status = resolve_file(archive_entry, db, bios_dir, zip_contents)
                 if local_path and status not in ("not_found",):
-                    zf.write(local_path, archive_dest)
+                    if local_path.endswith(".zip"):
+                        _normalize_zip_for_pack(local_path, archive_dest, zf)
+                    else:
+                        zf.write(local_path, archive_dest)
                     seen_destinations.add(archive_dest)
                     seen_lower.add(archive_dest.lower())
                     total_files += 1
@@ -689,7 +720,10 @@ def generate_emulator_pack(
                         continue
                     seen_hashes.add(dedup_key_hash)
 
-                zf.write(local_path, dest)
+                if local_path.endswith(".zip"):
+                    _normalize_zip_for_pack(local_path, dest, zf)
+                else:
+                    zf.write(local_path, dest)
                 seen_destinations.add(dest)
                 seen_lower.add(dest.lower())
                 total_files += 1
