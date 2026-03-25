@@ -424,8 +424,10 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
 
         sys_link = _system_link(sys_id, "../")
 
+        anchor = sys_id.replace(" ", "-")
         if use_collapsible:
             status_tag = "OK" if ok_count == total else f"{total - ok_count} issues"
+            lines.append(f"<a id=\"{anchor}\"></a>")
             lines.append(f"??? note \"{sys_id} ({ok_count}/{total} - {status_tag})\"")
             lines.append("")
             pad = "    "
@@ -621,8 +623,7 @@ def generate_emulators_index(profiles: dict) -> str:
         if not entries:
             continue
         desc = cls_desc.get(cls, "")
-        anchor = cls.replace("_", "-")
-        lines.append(f"| [{cls}](#{anchor}) | {len(entries)} | {desc} |")
+        lines.append(f"| [{cls}](#{cls}) | {len(entries)} | {desc} |")
     lines.append("")
 
     # Per-classification sections

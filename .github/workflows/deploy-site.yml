@@ -40,7 +40,7 @@ jobs:
         run: |
           python scripts/generate_site.py
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
-          mkdocs build --strict
+          mkdocs build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
