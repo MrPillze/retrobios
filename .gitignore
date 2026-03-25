@@ -11,13 +11,8 @@ site/
 *.log
 node_modules/
 
-# Generated site pages (built in CI)
-docs/index.md
-docs/platforms/
-docs/systems/
-docs/emulators/
-docs/contributing.md
-docs/gaps.md
+# Generated site pages (built by generate_site.py, deployed in CI)
+docs/
 
 # Large files stored as GitHub Release assets (> 50MB)
 bios/Arcade/Arcade/Firmware.19.0.0.zip

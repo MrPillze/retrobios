@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pages: write
     steps:
       - uses: actions/checkout@v6
 
@@ -80,14 +79,6 @@ jobs:
       - name: Build packs
         if: steps.rate.outputs.skip != 'true'
         run: python scripts/generate_pack.py --all --output-dir dist/
-
-      - name: Deploy site to GitHub Pages
-        if: steps.rate.outputs.skip != 'true'
-        run: |
-          pip install mkdocs-material
-          python scripts/generate_readme.py --db database.json --platforms-dir platforms
-          python scripts/generate_site.py
-          mkdocs gh-deploy --force --clean
 
       - name: Release
         if: steps.rate.outputs.skip != 'true'

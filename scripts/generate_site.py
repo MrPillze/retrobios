@@ -34,7 +34,8 @@ DOCS_DIR = "docs"
 SITE_NAME = "RetroBIOS"
 REPO_URL = "https://github.com/Abdess/retrobios"
 RELEASE_URL = f"{REPO_URL}/releases/latest"
-GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki"]
+GENERATED_DIRS = ["platforms", "systems", "emulators"]
+WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 
 # Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
@@ -2111,13 +2112,16 @@ def main():
         generate_gap_analysis(profiles, coverages, db)
     )
 
-    # Generate wiki pages
+    # Wiki pages: copy manually maintained sources + generate dynamic ones
     print("Generating wiki pages...")
-    (docs / "wiki" / "index.md").write_text(generate_wiki_index())
-    (docs / "wiki" / "architecture.md").write_text(generate_wiki_architecture())
-    (docs / "wiki" / "tools.md").write_text(generate_wiki_tools())
-    (docs / "wiki" / "profiling.md").write_text(generate_wiki_profiling())
-    (docs / "wiki" / "data-model.md").write_text(generate_wiki_data_model(db, profiles))
+    wiki_dest = docs / "wiki"
+    wiki_dest.mkdir(parents=True, exist_ok=True)
+    wiki_src = Path(WIKI_SRC_DIR)
+    if wiki_src.is_dir():
+        for src_file in wiki_src.glob("*.md"):
+            shutil.copy2(src_file, wiki_dest / src_file.name)
+    # data-model.md is generated (contains live DB stats)
+    (wiki_dest / "data-model.md").write_text(generate_wiki_data_model(db, profiles))
 
     # Generate contributing
     print("Generating contributing page...")

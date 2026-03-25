@@ -6,6 +6,7 @@ on:
     paths:
       - "platforms/**"
       - "emulators/**"
+      - "wiki/**"
       - "scripts/generate_site.py"
       - "scripts/generate_readme.py"
       - "scripts/verify.py"
@@ -15,15 +16,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
+  id-token: write
 
 concurrency:
   group: deploy-site
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -38,6 +40,20 @@ jobs:
         run: |
           python scripts/generate_site.py
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
+          mkdocs build --strict
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force --clean
+        id: deployment
+        uses: actions/deploy-pages@v4
