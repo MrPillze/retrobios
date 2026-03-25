@@ -2,19 +2,21 @@
 
 Source-verified BIOS and firmware packs for retrogaming platforms.
 
-Every file in this collection is traced to its ground truth: the emulator's source code.
-Not .info files, not documentation, not community wikis - the actual code that loads the file.
-305 emulators profiled from source, 8 platforms cross-referenced,
+Documentation and metadata can drift from what emulators actually load at runtime.
+To keep packs accurate, each file here is checked against the emulator's source code:
+what the code opens, what hashes it expects, what happens when a file is missing.
+305 emulators profiled, 8 platforms cross-referenced,
 6,733 files verified.
 
 ### How it works
 
-1. **Profile emulators from source code** - read the code, document every file loaded, its hash, size, and validation
-2. **Cross-reference with platforms** - each platform (RetroArch, Batocera, Recalbox...) declares what it needs
-3. **Build packs** - for each platform, include the baseline files + what its cores actually require
-4. **Verify everything** - platform-native verification (MD5, existence) + emulator-level validation (CRC32, SHA256, size)
+1. **Read emulator source code** - identify every file the code loads, its expected hash and size
+2. **Cross-reference with platforms** - match against what RetroArch, Batocera, Recalbox and others declare
+3. **Build packs** - for each platform, include its baseline files plus what its cores need
+4. **Verify** - run each platform's native checks (MD5, existence) and emulator-level validation (CRC32, size)
 
-When a platform and an emulator disagree on a file, we detect it. When a better variant exists in the repo, we use it.
+When a platform and an emulator disagree on a file, the discrepancy is reported.
+When a variant in the repo satisfies both, it is preferred automatically.
 
 > **6,733** files | **5043.6 MB** | **8** platforms | **305** emulator profiles
 
@@ -61,4 +63,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-25T13:49:31Z*
+*Auto-generated on 2026-03-25T13:51:15Z*
