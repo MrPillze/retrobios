@@ -113,6 +113,35 @@ def _system_link(sys_id: str, prefix: str = "") -> str:
     return sys_id
 
 
+def _render_yaml_value(lines: list[str], val, indent: int = 4) -> None:
+    """Render any YAML value as indented markdown."""
+    pad = " " * indent
+    if isinstance(val, dict):
+        for k, v in val.items():
+            if isinstance(v, dict):
+                lines.append(f"{pad}**{k}:**")
+                _render_yaml_value(lines, v, indent + 4)
+            elif isinstance(v, list):
+                lines.append(f"{pad}**{k}:**")
+                for item in v:
+                    if isinstance(item, dict):
+                        parts = [f"{ik}: {iv}" for ik, iv in item.items()]
+                        lines.append(f"{pad}- {', '.join(parts)}")
+                    else:
+                        lines.append(f"{pad}- {item}")
+            else:
+                lines.append(f"{pad}- **{k}:** {v}")
+    elif isinstance(val, list):
+        for item in val:
+            if isinstance(item, dict):
+                parts = [f"{ik}: {iv}" for ik, iv in item.items()]
+                lines.append(f"{pad}- {', '.join(parts)}")
+            else:
+                lines.append(f"{pad}- {item}")
+    else:
+        lines.append(f"{pad}{val}")
+
+
 def _platform_link(name: str, display: str, prefix: str = "") -> str:
     """Generate a markdown link to a platform page."""
     return f"[{display}]({prefix}platforms/{name}.md)"
@@ -557,6 +586,24 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     fw_ver = profile.get("firmware_version", "")
     if fw_ver:
         lines.append(f"| Firmware version | {fw_ver} |")
+    # Additional metadata fields
+    for field, label in [
+        ("core", "Core ID"), ("core_name", "Core name"),
+        ("bios_size", "BIOS size"), ("bios_directory", "BIOS directory"),
+        ("bios_detection", "BIOS detection"), ("bios_selection", "BIOS selection"),
+        ("firmware_file", "Firmware file"), ("firmware_source", "Firmware source"),
+        ("firmware_install", "Firmware install"), ("firmware_detection", "Firmware detection"),
+        ("resources_directory", "Resources directory"), ("rom_path", "ROM path"),
+        ("game_count", "Game count"), ("verification", "Verification mode"),
+        ("source_ref", "Source ref"), ("analysis_date", "Analysis date"),
+        ("analysis_commit", "Analysis commit"),
+    ]:
+        val = profile.get(field)
+        if val is not None and val != "":
+            if isinstance(val, str) and val.startswith("http"):
+                lines.append(f"| {label} | [{val}]({val}) |")
+            else:
+                lines.append(f"| {label} | {val} |")
     lines.append("")
 
     # Platform-specific details (rich structured data)
@@ -572,6 +619,40 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                 lines.append(f"    **{pk}:** {', '.join(str(x) for x in pv)}")
             else:
                 lines.append(f"    **{pk}:** {pv}")
+        lines.append("")
+
+    # All remaining structured data blocks as collapsible sections
+    _structured_blocks = [
+        ("analysis", "Source analysis"),
+        ("memory_layout", "Memory layout"),
+        ("regions", "Regions"),
+        ("nvm_layout", "NVM layout"),
+        ("model_kickstart_map", "Model kickstart map"),
+        ("builtin_boot_roms", "Built-in boot ROMs"),
+        ("common_bios_filenames", "Common BIOS filenames"),
+        ("valid_bios_crc32", "Valid BIOS CRC32"),
+        ("dev_flash", "dev_flash"),
+        ("dev_flash2", "dev_flash2"),
+        ("dev_flash3", "dev_flash3"),
+        ("firmware_modules", "Firmware modules"),
+        ("firmware_titles", "Firmware titles"),
+        ("fallback_fonts", "Fallback fonts"),
+        ("io_devices", "I/O devices"),
+        ("partitions", "Partitions"),
+        ("mlc_structure", "MLC structure"),
+        ("machine_directories", "Machine directories"),
+        ("machine_properties", "Machine properties"),
+        ("whdload_kickstarts", "WHDLoad kickstarts"),
+        ("bios_identical_to", "BIOS identical to"),
+        ("pack_structure", "Pack structure"),
+    ]
+    for field, label in _structured_blocks:
+        val = profile.get(field)
+        if val is None:
+            continue
+        lines.append(f"???+ abstract \"{label}\"")
+        lines.append("")
+        _render_yaml_value(lines, val, indent=4)
         lines.append("")
 
     # Notes
@@ -654,6 +735,14 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
             embedded = f.get("embedded", False)
             has_builtin = f.get("has_builtin", False)
             contents = f.get("contents", [])
+            config_key = f.get("config_key", "")
+            dest = f.get("dest", f.get("destination", ""))
+            ftype = f.get("type", "")
+            fpattern = f.get("pattern", "")
+            region_check = f.get("region_check")
+            size_note = f.get("size_note", "")
+            size_options = f.get("size_options", [])
+            size_range = f.get("size_range", "")
 
             # Status badges
             badges = []
@@ -679,6 +768,8 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                 badges.append("has built-in fallback")
             if archive:
                 badges.append(f"in `{archive}`")
+            if ftype and ftype != "bios":
+                badges.append(ftype)
             if not in_repo:
                 badges.append("missing from repo")
 
@@ -739,13 +830,43 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                     plat_links = [_platform_link(p, p, "../") for p in plats]
                     details.append(f"Platforms: {', '.join(plat_links)}")
 
+            if dest and dest != fname and dest != fpath:
+                details.append(f"Destination: `{dest}`")
+            if config_key:
+                details.append(f"Config key: `{config_key}`")
+            if fpattern:
+                details.append(f"Pattern: `{fpattern}`")
+            if region_check is not None:
+                details.append(f"Region check: {'yes' if region_check else 'no'}")
+            if size_note:
+                details.append(f"Size note: {size_note}")
+            if size_options:
+                details.append(f"Size options: {', '.join(_fmt_size(s) for s in size_options)}")
+            if size_range:
+                details.append(f"Size range: {size_range}")
+
             if details:
                 for d in details:
                     lines.append(f"- {d}")
             if fnote:
                 lines.append(f"- {fnote}")
             if contents:
-                lines.append(f"- Contents: {len(contents)} entries")
+                lines.append(f"- Contents ({len(contents)} entries):")
+                for c in contents[:10]:
+                    if isinstance(c, dict):
+                        cname = c.get("name", "")
+                        cdesc = c.get("description", "")
+                        csize = c.get("size", "")
+                        parts = [f"`{cname}`"]
+                        if cdesc:
+                            parts.append(cdesc)
+                        if csize:
+                            parts.append(_fmt_size(csize))
+                        lines.append(f"    - {' — '.join(parts)}")
+                    else:
+                        lines.append(f"    - {c}")
+                if len(contents) > 10:
+                    lines.append(f"    - ... and {len(contents) - 10} more")
             lines.append("")
 
     # Data directories
