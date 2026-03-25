@@ -26,7 +26,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
-    check_inside_zip, compute_hashes, filter_files_by_mode,
+    check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
     group_identical_platforms, list_emulator_profiles, list_system_ids,
     load_database, load_data_dir_registry, load_emulator_profiles,
     load_platform_config, md5_composite, resolve_local_file,
@@ -43,55 +43,7 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
 DEFAULT_BIOS_DIR = "bios"
-LARGE_FILES_RELEASE = "large-files"
-LARGE_FILES_REPO = "Abdess/retrobios"
-
 MAX_ENTRY_SIZE = 512 * 1024 * 1024  # 512MB
-
-
-def _verify_file_hash(path: str, expected_sha1: str = "",
-                      expected_md5: str = "") -> bool:
-    if not expected_sha1 and not expected_md5:
-        return True
-    hashes = compute_hashes(path)
-    if expected_sha1:
-        return hashes["sha1"].lower() == expected_sha1.lower()
-    md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
-    return hashes["md5"].lower() in md5_list
-
-
-def fetch_large_file(name: str, dest_dir: str = ".cache/large",
-                     expected_sha1: str = "", expected_md5: str = "") -> str | None:
-    """Download a large file from the 'large-files' GitHub release if not cached."""
-    cached = os.path.join(dest_dir, name)
-    if os.path.exists(cached):
-        if expected_sha1 or expected_md5:
-            if _verify_file_hash(cached, expected_sha1, expected_md5):
-                return cached
-            os.unlink(cached)
-        else:
-            return cached
-
-    encoded_name = urllib.request.quote(name)
-    url = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/{encoded_name}"
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-pack/1.0"})
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            os.makedirs(dest_dir, exist_ok=True)
-            with open(cached, "wb") as f:
-                while True:
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    f.write(chunk)
-    except (urllib.error.URLError, urllib.error.HTTPError):
-        return None
-
-    if expected_sha1 or expected_md5:
-        if not _verify_file_hash(cached, expected_sha1, expected_md5):
-            os.unlink(cached)
-            return None
-    return cached
 
 
 def _find_candidate_satisfying_both(

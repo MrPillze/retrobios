@@ -9,6 +9,8 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import urllib.error
+import urllib.request
 import zipfile
 import zlib
 from pathlib import Path
@@ -692,6 +694,59 @@ def filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
             continue
         result.append(f)
     return result
+
+
+LARGE_FILES_RELEASE = "large-files"
+LARGE_FILES_REPO = "Abdess/retrobios"
+LARGE_FILES_CACHE = ".cache/large"
+
+
+def fetch_large_file(name: str, dest_dir: str = LARGE_FILES_CACHE,
+                     expected_sha1: str = "", expected_md5: str = "") -> str | None:
+    """Download a large file from the 'large-files' GitHub release if not cached."""
+    cached = os.path.join(dest_dir, name)
+    if os.path.exists(cached):
+        if expected_sha1 or expected_md5:
+            hashes = compute_hashes(cached)
+            if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
+                os.unlink(cached)
+            elif expected_md5:
+                md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+                if hashes["md5"].lower() not in md5_list:
+                    os.unlink(cached)
+                else:
+                    return cached
+            else:
+                return cached
+        else:
+            return cached
+
+    encoded_name = urllib.request.quote(name)
+    url = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/{encoded_name}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
+        with urllib.request.urlopen(req, timeout=300) as resp:
+            os.makedirs(dest_dir, exist_ok=True)
+            with open(cached, "wb") as f:
+                while True:
+                    chunk = resp.read(65536)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+    except (urllib.error.URLError, urllib.error.HTTPError):
+        return None
+
+    if expected_sha1 or expected_md5:
+        hashes = compute_hashes(cached)
+        if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
+            os.unlink(cached)
+            return None
+        if expected_md5:
+            md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+            if hashes["md5"].lower() not in md5_list:
+                os.unlink(cached)
+                return None
+    return cached
 
 
 def safe_extract_zip(zip_path: str, dest_dir: str) -> None:

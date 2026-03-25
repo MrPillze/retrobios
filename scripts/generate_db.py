@@ -216,17 +216,18 @@ def save_cache(cache_path: str, cache: dict):
         json.dump(cache, f)
 
 
-def _load_gitignored_bios_paths() -> set[str]:
-    """Read .gitignore and return bios/ paths that are listed (large files)."""
+def _load_gitignored_large_files() -> dict[str, str]:
+    """Read .gitignore and return {filename: bios_path} for large files."""
     gitignore = Path(".gitignore")
     if not gitignore.exists():
-        return set()
-    paths = set()
+        return {}
+    entries = {}
     for line in gitignore.read_text().splitlines():
         line = line.strip()
         if line.startswith("bios/") and not line.startswith("#"):
-            paths.add(line)
-    return paths
+            name = Path(line).name
+            entries[name] = line
+    return entries
 
 
 def _preserve_large_file_entries(files: dict, db_path: str) -> int:
@@ -234,14 +235,14 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
 
     Large files (>50 MB) are stored as GitHub release assets and listed
     in .gitignore. When generate_db runs locally without them, their
-    entries would be lost. This reads the existing database and re-adds
-    entries whose paths match .gitignore bios/ entries.
-
-    If the file exists in .cache/large/, the path is updated so that
-    resolve_local_file can find it for verify and pack generation.
+    entries would be lost. This reads the existing database, downloads
+    missing files from the release, and re-adds entries with paths
+    pointing to the local cache.
     """
-    gitignored = _load_gitignored_bios_paths()
-    if not gitignored:
+    from common import fetch_large_file
+
+    large_files = _load_gitignored_large_files()
+    if not large_files:
         return 0
 
     try:
@@ -250,18 +251,24 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     except (FileNotFoundError, json.JSONDecodeError):
         return 0
 
-    cache_dir = Path(".cache/large")
     count = 0
     for sha1, entry in existing_db.get("files", {}).items():
+        if sha1 in files:
+            continue
+        name = entry.get("name", "")
         path = entry.get("path", "")
-        if path in gitignored and sha1 not in files:
-            # Point to cached copy if available
-            name = entry.get("name", "")
-            cached = cache_dir / name
-            if cached.exists():
-                entry = {**entry, "path": str(cached)}
-            files[sha1] = entry
-            count += 1
+        # Match by gitignored bios/ path OR by filename of a known large file
+        if path not in large_files.values() and name not in large_files:
+            continue
+        cached = fetch_large_file(
+            name,
+            expected_sha1=entry.get("sha1", ""),
+            expected_md5=entry.get("md5", ""),
+        )
+        if cached:
+            entry = {**entry, "path": cached}
+        files[sha1] = entry
+        count += 1
     return count
 
 
