@@ -1,7 +1,9 @@
 emulator: VBA-Next
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/vba-next"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/visualboyadvance-m/visualboyadvance-m"
+profiled_date: "2026-03-25"
 core_version: "SVN"
 display_name: "Nintendo - Game Boy Advance (VBA Next)"
 cores:
@@ -10,64 +12,34 @@ systems:
   - nintendo-gba
 
 notes: |
-  VBA-Next is a Game Boy Advance emulator forked from VBA-M, optimized for
-  libretro. It includes a built-in HLE BIOS (myROM array in src/gba.cpp:8423)
-  that handles all standard SWI calls, so no external BIOS file is needed for
-  most games.
+  Frozen snapshot of VBA-M circa 2011, optimized for libretro by Squarepusher.
 
-  BIOS loading is gated behind HAVE_HLE_BIOS (defined in build/Makefile.common)
-  and controlled by core option vbanext_bios (default: enabled). When enabled,
-  the libretro port looks for gba_bios.bin in RetroArch's system directory
-  (libretro/libretro.cpp:198-203). CPUInit() loads the file via utilLoad(),
-  validates it is exactly 0x4000 bytes (16 KB), and sets useBios = true
-  (src/gba.cpp:12413-12443). If loading fails or the option is off, the HLE
-  BIOS (myROM) is memcpy'd into the bios buffer instead.
+  Built-in HLE BIOS (myROM array, src/gba.cpp:8423) handles all standard SWI
+  calls. No external BIOS file needed for most games.
 
-  CPUIsGBABios() accepts extensions: .gba, .agb, .bin, .bios, .rom
+  BIOS loading gated by HAVE_HLE_BIOS (build/Makefile.common:3) and core option
+  vbanext_bios (default: enabled). When enabled, retro_init resolves gba_bios.bin
+  in system_dir (libretro/libretro.cpp:198-202). CPUInit loads via utilLoad(),
+  validates size == 0x4000, sets useBios = true (src/gba.cpp:12430-12438). On
+  failure, myROM is memcpy'd as HLE fallback (src/gba.cpp:12443).
+
+  With real BIOS, execution starts at 0x00000000 (BIOS entry point). Without,
+  jumps to 0x08000000 (ROM entry), skipping boot animation
+  (src/gba.cpp:12657-12675).
+
+  CPUIsGBABios accepts extensions: .gba, .agb, .bin, .bios, .rom
   (src/gba.cpp:8851-8873).
 
-  When useBios is true and skipBios is false, execution starts at 0x00000000
-  (real BIOS entry). Otherwise it jumps straight to 0x08000000 (ROM entry),
-  skipping the boot animation (src/gba.cpp:12657-12675).
-
-  The HLE BIOS covers: SoftReset, RegisterRamReset, Halt, VBlankIntrWait,
-  Div, Sqrt, ArcTan, ArcTan2, CpuSet, CpuFastSet, GetBiosChecksum,
-  BgAffineSet, ObjAffineSet, BitUnPack, LZ77UnComp (WRAM/VRAM),
-  HuffUnComp, RLUnComp (WRAM/VRAM), Diff8bitUnFilter (WRAM/VRAM),
-  Diff16bitUnFilter, MidiKey2Freq, SndDriverJmpTableCopy
-  (src/gba.cpp:2369-2578).
-
-  Some per-game overrides in gbaover[] (libretro/libretro.cpp:235) have a
-  useBios field, but all entries currently set it to 0 (no game forces BIOS).
+  Upstream VBA-M CPUInit (src/core/gba/gba.cpp:3674-3702) is functionally
+  identical. No divergences in BIOS handling.
 
 files:
-  # -------------------------------------------------------
-  # Game Boy Advance - BIOS (optional, HLE fallback)
-  # -------------------------------------------------------
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
     hle_fallback: true
-    size: 16384  # 16 KB (0x4000)
-    note: "GBA BIOS. Optional -- HLE replacement (myROM) handles all standard SWI calls. Real BIOS adds startup logo and may improve edge-case accuracy."
-    source_ref: "libretro/libretro.cpp:198-203, src/gba.cpp:12413-12443"
-
-platform_details:
-  gba:
-    bios_size: 16384  # 0x4000
-    hle_bios: true
-    source_ref: "src/gba.cpp:8423 (myROM), src/gba.cpp:2369-2578 (SWI handlers)"
-    notes: |
-      BIOS buffer is always allocated at 0x4000 bytes (src/gba.cpp:8963).
-      If the real BIOS loads successfully (exactly 0x4000 bytes), useBios is
-      set to true and CPUReset starts at address 0x00000000 with IRQ disabled.
-      Otherwise myROM (built-in HLE stub) is copied in and execution starts
-      at 0x08000000 with standard register init.
-
-      The core option vbanext_bios defaults to "enabled", so if gba_bios.bin
-      is present in the system directory it will be loaded automatically.
-
-      BIOS reads at runtime go through the memory map (src/gba.cpp:792-1076).
-      Address range 0x0000-0x3FFF maps to the bios buffer. A biosProtected[4]
-      array at 0x00f029e1 is returned when reading outside the current PC
-      region, matching real GBA BIOS protection behavior.
+    size: 16384
+    validation: [size]
+    description: "GBA BIOS"
+    note: "Optional. HLE replacement handles all standard SWI calls. Real BIOS adds startup logo and may improve edge-case accuracy."
+    source_ref: "libretro/libretro.cpp:198-202, src/gba.cpp:12430-12438"

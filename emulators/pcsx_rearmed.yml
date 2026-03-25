@@ -3,7 +3,7 @@ type: libretro
 core_classification: embedded_hle
 source: "https://github.com/libretro/pcsx_rearmed"
 upstream: "https://github.com/notaz/pcsx_rearmed"
-profiled_date: "2026-03-24"
+profiled_date: "2026-03-25"
 core_version: "r25"
 display_name: "Sony - PlayStation (PCSX ReARMed)"
 cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter]

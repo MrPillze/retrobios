@@ -1,15 +1,19 @@
 emulator: UXN
-type: game
-source: "https://github.com/libretro/uxn"
-profiled_date: "2026-03-18"
-core_version: "0.0.0"
+type: libretro
+core_classification: community_fork
+source: "https://codeberg.org/iyzsong/uxn-libretro"
+upstream: "https://github.com/chmod222/zuxn"
+profiled_date: "2026-03-25"
+core_version: "0.0.1"
 display_name: "Uxn / Varvara (zuxn)"
 cores: [uxn]
 systems: []
 files: []
+exclusion_note: >
+  Uxn/Varvara is a software-defined stack machine with 64KB of memory.
+  The VM has no firmware or BIOS. ROMs compiled from Uxntal assembly are
+  loaded directly via libretro game_info. The .info declares no firmware.
 notes: >
-  Libretro port of the Varvara/UXN stack machine designed by Hundred Rabbits.
-  UXN is a portable 8-bit virtual computer with 64KB of memory and a
-  minimal instruction set. Loads .rom files compiled from Uxntal assembly.
-  The VM is entirely software-defined with no firmware or BIOS dependencies.
-  No system directory files required.
+  Libretro wrapper around the zuxn library (Zig implementation of the
+  Uxn/Varvara spec by Hundred Rabbits). The file device in Varvara handles
+  ROM-initiated I/O but does not load system files from the system directory.

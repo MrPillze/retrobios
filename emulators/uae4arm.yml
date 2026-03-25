@@ -1,8 +1,64 @@
-emulator: "uae4arm"
-type: alias
-alias_of: "puae"
-profiled_date: "2026-03-18"
+emulator: uae4arm
+type: libretro
+core_classification: community_fork
+cores: [uae4arm]
+source: "https://github.com/libretro/uae4arm-libretro"
+upstream: "https://github.com/PandTomB/uae4arm"
+profiled_date: "2026-03-25"
 core_version: "v0.5"
 display_name: "Commodore - Amiga (UAE4ARM)"
-note: "This core uses the same BIOS/firmware as puae. See emulators/puae.yml for details."
-files: []
+systems:
+  - commodore-amiga
+
+notes: |
+  ARM-optimized Amiga emulator by TomB, ported to libretro by Chips-fr.
+  Based on an older uae4arm version, intended for low-powered ARM hardware
+  where PUAE cannot maintain full speed.
+
+  Core options expose three models: A500, A600, A1200. Each selects its
+  Kickstart ROM automatically. Extended ROMs (CDTV/CD32) can be set via
+  .uae config files but CD32/CDTV hardware emulation is absent from
+  this port (no akiko chip, CD support listed as missing).
+
+  Built-in AROS Kickstart replacement used as fallback when no ROM is found.
+
+  Cloanto-encrypted ROMs require rom.key in the system directory.
+
+files:
+  - name: "kick34005.A500"
+    description: "Amiga 500 Kickstart v1.3 rev 34.005"
+    required: false
+    hle_fallback: true
+    source_ref: "libretro/core/libretro-core.cpp:73,420 src/memory.cpp:2080-2180"
+
+  - name: "kick40063.A600"
+    description: "Amiga 600 Kickstart v3.1 rev 40.063"
+    required: false
+    hle_fallback: true
+    source_ref: "libretro/core/libretro-core.cpp:74,391 src/memory.cpp:2080-2180"
+
+  - name: "kick40068.A1200"
+    description: "Amiga 1200 Kickstart v3.1 rev 40.068"
+    required: false
+    hle_fallback: true
+    source_ref: "libretro/core/libretro-core.cpp:75,405 src/memory.cpp:2080-2180"
+
+  - name: "kick34005.CDTV"
+    description: "CDTV extended ROM v1.00 rev 34.005"
+    required: false
+    source_ref: "src/memory.cpp:1931-1971 (EXTENDED_ROM_CDTV via romextfile)"
+
+  - name: "kick40060.CD32"
+    description: "CD32 Kickstart v3.1 rev 40.060"
+    required: false
+    source_ref: "src/memory.cpp:2080-2180 (loaded via romfile from .uae config)"
+
+  - name: "kick40060.CD32.ext"
+    description: "CD32 extended ROM rev 40.060"
+    required: false
+    source_ref: "src/memory.cpp:1931-1971 (EXTENDED_ROM_CD32 via romextfile)"
+
+  - name: "rom.key"
+    description: "Cloanto Amiga Forever decryption key"
+    required: false
+    source_ref: "src/memory.cpp:598-613,625-700 (addkeydir, load_keyring)"

@@ -1,0 +1,39 @@
+emulator: trident
+display_name: "Nintendo - 3DS (Trident)"
+type: libretro
+core_classification: community_fork
+source: https://github.com/DanAlexMorton/3dsTrident
+upstream: https://github.com/wheremyfoodat/Panda3DS
+profiled_date: 2026-03-25
+core_version: git
+
+cores:
+  - trident
+
+systems:
+  - 3ds
+
+notes: >-
+  Libretro core wrapping Panda3DS, an HLE Nintendo 3DS emulator.
+  Shared font, Mii data, country list and bad word list are embedded in
+  the binary via CMRC and compiled-in headers. DSP firmware is loaded from
+  the game ROM at runtime, not from an external file.
+  DSP modes: HLE (default), LLE (Teakra), Null.
+  Files are resolved from the RetroArch save directory
+  (<save_dir>/Emulator Files/sysdata/), not the system directory.
+
+files:
+  - name: aes_keys.txt
+    description: AES encryption keys for decrypting encrypted 3DS ROMs
+    required: false
+    source_ref: >-
+      src/emulator.cpp:234,242-244 (path construction and existence check);
+      src/core/crypto/aes_engine.cpp:13-92 (loadKeys, parses key=value text);
+      src/core/loader/ncch.cpp:151-164 (panic if encrypted ROM loaded without keys)
+
+  - name: seeddb.bin
+    description: seed database for seed-encrypted 3DS games
+    required: false
+    source_ref: >-
+      src/emulator.cpp:235,246-248 (path construction and existence check);
+      src/core/crypto/aes_engine.cpp:94-153 (setSeedPath, loadSeeds, getSeedFromDB)

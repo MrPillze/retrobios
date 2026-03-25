@@ -1,9 +1,10 @@
 emulator: Amiberry
 type: standalone + libretro
+core_classification: official_port
 source: "https://github.com/BlitterStudio/amiberry"
 upstream: "https://github.com/tonioni/WinUAE"
-profiled_date: "2026-03-18"
-core_version: "v6.3.4"
+profiled_date: "2026-03-25"
+core_version: "v8.1.1"
 display_name: "Commodore - Amiga (Amiberry)"
 cores: [amiberry]
 systems:
@@ -12,111 +13,179 @@ systems:
   - commodore-cdtv
 
 notes: |
-  Amiberry is an Amiga emulator based on WinUAE, available as both
-  standalone and libretro core. No built-in kickstart fallback — a real
-  Kickstart ROM is required.
+  Amiberry is an Amiga emulator based on WinUAE, available as both standalone
+  and libretro core. No built-in kickstart — requires a real Kickstart ROM or
+  external AROS replacement files (aros-ext.bin + aros-rom.bin).
 
-  Core option "amiberry_kickstart" selects the ROM file:
-  auto, kick.rom, kick13.rom, kick20.rom, kick31.rom, kick205.rom,
-  kick40068.A1200, kick40068.A4000, cd32.rom, cdtv.rom.
-  "auto" selects based on the model option.
-  ref: BlitterStudio/amiberry/libretro/libretro.cpp:558,621-634
+  Core option "amiberry_kickstart" overrides ROM selection: auto, kick.rom,
+  kick13.rom, kick20.rom, kick31.rom, kick205.rom, kick40068.A1200,
+  kick40068.A4000, cd32.rom, cdtv.rom. "auto" selects per model.
+  ref: libretro/libretro.cpp:558,621-640
 
-  Standalone mode ships with data/ directory (UI icons, virtual keyboards,
-  floppy sounds, AmigaTopaz.ttf font, gamecontrollerdb.txt). These are
-  compiled into the standalone binary but the libretro core may look for
-  them in the system directory.
+  Default model is A500 (KS 1.3). ROM search directories:
+  save_dir/Kickstarts, system_dir/Kickstarts, system_dir/save-data/Kickstarts,
+  then system_dir as fallback.
+  ref: libretro/libretro.cpp:2740-2756
+
+  ROM identification uses SHA1 against WinUAE database (340+ entries) but does
+  not reject unknown ROMs. Cloanto encrypted ROMs supported with rom.key.
+
+  Munt MT-32/CM-32L emulation compiled in (WITH_MIDIEMU). ROMs loaded from
+  mt32-roms/ subdirectory of the ROM path.
+  ref: src/midiemu.cpp:120-157
+
+  WHDLoad autoboot requires whdboot/ directory in system_dir with boot-data.zip,
+  WHDLoad, AmiQuit, JST, whdload_db.xml. These ship with the standalone build
+  but must be obtained separately for the libretro core.
+  ref: libretro/libretro.cpp:1151-1184
 
 files:
-  # --- Required Kickstart ROMs (from .info) ---
-  # ref: BlitterStudio/amiberry/libretro/libretro.cpp:558
-  # ref: WinUAE rommgr.cpp for ROM identification
+  # --- Kickstart ROMs (searched by find_kickstart_in_system_dir) ---
+  # ref: libretro/libretro.cpp:1502-1565
 
-  - name: kick34005.A500
+  - name: kick13.rom
     system: commodore-amiga
     required: true
     size: 262144
-    crc32: c4f0f55f
-    note: "A500 Kickstart v1.3 rev 34.5"
-    source_ref: "libretro-super/dist/info/amiberry_libretro.info firmware0"
+    note: "A500 Kickstart v1.3 rev 34.005, default for A500 model"
+    source_ref: "libretro/libretro.cpp:1516 candidates_a500"
 
-  - name: kick37350.A600
-    system: commodore-amiga
-    required: true
-    size: 524288
-    crc32: 43b0df7b
-    note: "A600 Kickstart v2.05 rev 37.350"
-    source_ref: "amiberry_libretro.info firmware1"
-
-  - name: kick40068.A1200
-    system: commodore-amiga
-    required: true
-    size: 524288
-    crc32: 1483a091
-    note: "A1200 Kickstart v3.1 rev 40.68"
-    source_ref: "amiberry_libretro.info firmware2"
-
-  # --- Optional Kickstart ROMs ---
-
-  - name: kick33180.A500
+  - name: kick12.rom
     system: commodore-amiga
     required: false
     size: 262144
-    crc32: a6ce1636
-    note: "A500 Kickstart v1.2 rev 33.180"
-    source_ref: "amiberry_libretro.info firmware3"
+    note: "A500 Kickstart v1.2 rev 33.180, for A500OG model"
+    source_ref: "libretro/libretro.cpp:1515 candidates_a500og"
+
+  - name: kick20.rom
+    system: commodore-amiga
+    required: false
+    size: 524288
+    aliases: [kick204.rom]
+    note: "A500+ Kickstart v2.04 rev 37.175"
+    source_ref: "libretro/libretro.cpp:1517 candidates_a500p"
+
+  - name: kick205.rom
+    system: commodore-amiga
+    required: false
+    size: 524288
+    note: "A600 Kickstart v2.05 rev 37.350, also used for WHDLoad"
+    source_ref: "libretro/libretro.cpp:1518 candidates_a600, 1479 pick_whdload_kickstart"
+
+  - name: kick31.rom
+    system: commodore-amiga
+    required: false
+    size: 524288
+    note: "Kickstart v3.1 (generic), first candidate for A1200 and A4000"
+    source_ref: "libretro/libretro.cpp:1519-1520 candidates_a1200/a4000"
+
+  - name: kick40068.A1200
+    system: commodore-amiga
+    required: false
+    size: 524288
+    note: "A1200 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
+    source_ref: "libretro/libretro.cpp:1519 candidates_a1200"
 
   - name: kick40068.A4000
     system: commodore-amiga
     required: false
     size: 524288
-    crc32: d6bae334
-    note: "A4000 Kickstart v3.1 rev 40.68"
-    source_ref: "amiberry_libretro.info firmware4"
+    note: "A4000 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
+    source_ref: "libretro/libretro.cpp:1520 candidates_a4000"
 
-  - name: kick40060.CD32
-    system: commodore-cd32
-    required: false
-    size: 524288
-    crc32: 1e62d4a5
-    note: "CD32 Kickstart v3.1 rev 40.60"
-    source_ref: "amiberry_libretro.info firmware5"
-
-  - name: kick40060.CD32.ext
-    system: commodore-cd32
-    required: false
-    size: 524288
-    crc32: 87746be2
-    note: "CD32 Extended ROM rev 40.60"
-    source_ref: "amiberry_libretro.info firmware6"
-
-  # --- Alternative names accepted by core option ---
-  # these are common user-facing names, same ROMs as above
-
-  - name: kick13.rom
+  - name: kick.rom
     system: commodore-amiga
     required: false
-    note: "alias for kick34005.A500 (v1.3)"
-    source_ref: "libretro.cpp:630"
+    note: "Generic name, any Kickstart ROM. Last resort fallback for all models."
+    source_ref: "libretro/libretro.cpp:1510-1521 last in all candidate lists"
 
-  - name: kick34005.CDTV
+  # --- CD32 ROMs ---
+
+  - name: cd32.rom
+    system: commodore-cd32
+    required: false
+    size: 524288
+    aliases: [amiga-os-310-cd32.rom, kick40060.CD32]
+    note: "CD32 Kickstart v3.1 rev 40.60"
+    source_ref: "libretro/libretro.cpp:1521 candidates_cd32"
+
+  - name: cd32ext.rom
+    system: commodore-cd32
+    required: false
+    size: 524288
+    aliases: [amiga-ext-310-cd32.rom, "CD32 Extended.ROM"]
+    note: "CD32 extended ROM rev 40.60. Not needed if using a combined 1MB ROM."
+    source_ref: "libretro/libretro.cpp:1579 candidates_cd32 (find_ext_rom_in_system_dir)"
+
+  # --- CDTV ROMs ---
+
+  - name: cdtv.rom
     system: commodore-cdtv
     required: false
-    note: "CDTV extended ROM"
-    source_ref: "libretro.cpp:558 cdtv.rom option"
+    aliases: [kick34005.CDTV]
+    note: "CDTV extended ROM v1.00, used as kickstart candidate"
+    source_ref: "libretro/libretro.cpp:1522 candidates_cdtv"
 
-  # --- Standalone data files ---
+  - name: cdtvext.rom
+    system: commodore-cdtv
+    required: false
+    aliases: ["CDTV Extended.ROM"]
+    note: "CDTV extended ROM file"
+    source_ref: "libretro/libretro.cpp:1581 candidates_cdtv (find_ext_rom_in_system_dir)"
 
-  - name: AmigaTopaz.ttf
+  # --- AROS replacement ROMs ---
+  # ref: src/memory.cpp:1871-1930 load_kickstart_replacement
+
+  - name: aros-ext.bin
     system: commodore-amiga
     required: false
-    mode: standalone
-    note: "Amiga Topaz font for UI rendering"
-    source_ref: "BlitterStudio/amiberry/data/AmigaTopaz.ttf"
+    hle_fallback: true
+    note: "AROS extended ROM replacement. Used when no Kickstart ROM is found."
+    source_ref: "src/memory.cpp:1877 load_kickstart_replacement"
 
-  - name: gamecontrollerdb.txt
+  - name: aros-rom.bin
     system: commodore-amiga
     required: false
-    mode: standalone
-    note: "SDL gamepad mapping database"
-    source_ref: "BlitterStudio/amiberry/controllers/gamecontrollerdb.txt"
+    hle_fallback: true
+    note: "AROS main ROM replacement. Used with aros-ext.bin as Kickstart fallback."
+    source_ref: "src/memory.cpp:1910 load_kickstart_replacement"
+
+  # --- Cloanto key ---
+
+  - name: rom.key
+    system: commodore-amiga
+    required: false
+    note: "Decryption key for Cloanto Amiga Forever encrypted ROMs"
+    source_ref: "src/rommgr.cpp:1738 AMIROMTYPE1 decryption"
+
+  # --- Munt MT-32/CM-32L MIDI ROMs ---
+  # Located in mt32-roms/ subdirectory of the ROM path
+  # ref: src/midiemu.cpp:120-157 midi_emu_add_roms
+
+  - name: mt32-roms/mt32_control.rom
+    system: commodore-amiga
+    required: false
+    aliases: [mt32-roms/ctrl_mt32.rom, mt32-roms/MT32_CONTROL.rom]
+    note: "Roland MT-32 control ROM for Munt MIDI emulation"
+    source_ref: "src/midiemu.cpp:38-61 mt32ctl candidates, 151-156 load loop"
+
+  - name: mt32-roms/pcm_mt32.rom
+    system: commodore-amiga
+    required: false
+    aliases: [mt32-roms/mt32_pcm.rom, mt32-roms/MT32_PCM.rom, mt32-roms/PCM_MT32.rom]
+    note: "Roland MT-32 PCM ROM for Munt MIDI emulation"
+    source_ref: "src/midiemu.cpp:133-140 MT-32 PCM loading"
+
+  - name: mt32-roms/cm32l_control.rom
+    system: commodore-amiga
+    required: false
+    aliases: [mt32-roms/ctrl_cm32l.rom, mt32-roms/CM32L_CONTROL.rom]
+    note: "Roland CM-32L control ROM for Munt MIDI emulation"
+    source_ref: "src/midiemu.cpp:25-37 cm32lctl candidates, 151-156 load loop"
+
+  - name: mt32-roms/pcm_cm32l.rom
+    system: commodore-amiga
+    required: false
+    aliases: [mt32-roms/cm32l_pcm.rom, mt32-roms/PCM_CM32L.rom, mt32-roms/CM32L_PCM.rom]
+    note: "Roland CM-32L PCM ROM for Munt MIDI emulation"
+    source_ref: "src/midiemu.cpp:142-149 CM-32L PCM loading"

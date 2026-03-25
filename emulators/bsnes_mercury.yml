@@ -3,7 +3,7 @@ type: libretro
 core_classification: enhanced_fork
 source: "https://github.com/libretro/bsnes-mercury"
 upstream: "https://byuu.org/higan"
-profiled_date: "2026-03-23"
+profiled_date: "2026-03-25"
 core_version: "v094 (Mercury)"
 display_name: "Nintendo - SNES / SFC (bsnes-mercury)"
 cores: [bsnes_mercury_accuracy, bsnes_mercury_balanced, bsnes_mercury_performance]
@@ -22,7 +22,7 @@ notes: |
 
   Firmware loaded from system_dir via file::exists + mmapstream.
   No hash or size validation on any firmware file.
-  ref: target-libretro/libretro.cpp:241-263
+  ref: target-libretro/libretro.cpp:242-264
 
   firmware_appended: firmware can be appended to end of ROM file.
   ref: ananke/heuristics/super-famicom.hpp:83

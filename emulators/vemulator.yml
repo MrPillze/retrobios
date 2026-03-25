@@ -1,7 +1,9 @@
 emulator: VeMUlator
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/vemulator-libretro"
-profiled_date: "2026-03-18"
+upstream: "closed-source Android app (removed from Google Play ~2020)"
+profiled_date: "2026-03-25"
 core_version: "0.1"
 display_name: "VeMUlator"
 cores:
@@ -10,32 +12,18 @@ systems:
   - sega-vmu
 
 notes: |
-  VeMUlator is a Sega Dreamcast Visual Memory Unit (VMU/VMS) emulator ported
-  from Android (Java) to C++ for libretro. It emulates the Sanyo LC8670
-  "Potato" CPU, 128 KB flash memory, 48x32 monochrome LCD, piezo buzzer,
-  and basic timer subsystems.
+  Sega Dreamcast VMU/VMS emulator. Same author (Mahmoud Jaoune) ported
+  the original Android Java app to C++ for libretro. Emulates the Sanyo
+  LC8670 CPU, 128 KB flash, 48x32 LCD, piezo buzzer, and timers.
 
-  No BIOS files are required. The core uses High Level Emulation (HLE) to
-  bypass the VMU firmware entirely:
+  No BIOS files required. The core uses HLE exclusively: startCPU()
+  checks BIOSExists (always false), then initializeHLE() sets SFR
+  registers and system RAM directly (vmu.cpp:193-222).
 
-  - At startup, startCPU() checks the BIOSExists flag (vmu.cpp:195). When
-    false (always, in the libretro port), it calls initializeHLE() which
-    sets up SFR registers (SP=0x7F, PSW=0x02, IE=0x80, MCR=0x08, P7=0x02,
-    OCR=0xA3, BTCR=0x41) and system RAM variables directly (vmu.cpp:206-222).
-
-  - A loadBIOS() function exists in the VMU class (vmu.cpp:82-137) and can
-    handle both encrypted (XOR 0x37, 4-byte header stripped) and unencrypted
-    BIOS images (first byte must be 0x2A = JMPF opcode). Maximum accepted
-    size is 0xF004 (61444) bytes, loaded into 0xF000 (61440) bytes of ROM.
-    However, this function is never called by the libretro frontend code.
-    retro_load_game() in main.cpp only loads game flash data, with no BIOS
-    path resolution or RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY call.
-
-  - The README lists "BIOS support" as a planned future feature.
-
-  The .info file declares no firmware entries (firmware_count absent).
-  Supported ROM formats: VMS (.vms), DCI (.dci), raw flash dump (.bin).
-  The core option "enable_flash_write" allows persistent saves for .bin files.
+  A loadBIOS() function exists (vmu.cpp:82-137) handling encrypted and
+  unencrypted BIOS images, but is never called from the libretro
+  interface. retro_load_game() only loads game flash data, with no
+  system directory query. README lists BIOS support as planned.
 
 files: []
 

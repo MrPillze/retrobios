@@ -1,8 +1,49 @@
-emulator: "vbam"
-type: alias
-alias_of: "vba_next"
-profiled_date: "2026-03-18"
+emulator: VBA-M
+type: "standalone + libretro"
+core_classification: official_port
+source: "https://github.com/libretro/vbam-libretro"
+upstream: "https://github.com/visualboyadvance-m/visualboyadvance-m"
+profiled_date: "2026-03-25"
 core_version: "2.1.4"
 display_name: "Nintendo - Game Boy Advance (VBA-M)"
-note: "This core uses the same BIOS/firmware as vba_next. See emulators/vba_next.yml for details."
-files: []
+cores:
+  - vbam
+systems:
+  - nintendo-gba
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  Supports GB, GBC, GBA, and SGB (borders/palette only).
+  BIOS usage controlled by vbam_usebios core option (default: disabled).
+  Built-in HLE BIOS (myROM array) handles GBA SWI calls without external file.
+  GB/GBC boot sequence skipped when BIOS absent.
+  Upstream repo includes the libretro port in src/libretro/.
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    size: 16384
+    validation: [size]
+    description: "GBA BIOS"
+    source_ref: "src/gba/GBA.cpp:3262-3272 (CPUInit size check), src/libretro/libretro.cpp:846-851 (gba_init)"
+
+  - name: gb_bios.bin
+    system: nintendo-gb
+    required: false
+    hle_fallback: true
+    size: 256
+    validation: [size]
+    description: "Game Boy boot ROM"
+    source_ref: "src/gb/GB.cpp:2172-2192 (gbCPUInit size check), src/libretro/libretro.cpp:861-879 (gb_init)"
+
+  - name: gbc_bios.bin
+    system: nintendo-gbc
+    required: false
+    hle_fallback: true
+    size: 2304
+    validation: [size]
+    description: "Game Boy Color boot ROM"
+    source_ref: "src/gb/GB.cpp:2172-2192 (gbCPUInit size check), src/libretro/libretro.cpp:861-879 (gb_init)"

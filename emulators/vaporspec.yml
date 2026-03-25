@@ -1,14 +1,17 @@
 emulator: VaporSpec
-type: game
-source: "https://github.com/libretro/libretro-vaporspec"
-profiled_date: "2026-03-18"
+type: libretro
+core_classification: official_port
+source: "https://github.com/minkcv/vm"
+upstream: "https://github.com/minkcv/vm"
+profiled_date: "2026-03-25"
 core_version: "GIT"
 display_name: "VaporSpec"
 cores: [vaporspec]
-systems: []
+systems: [vaporspec]
 files: []
 notes: >
-  Fantasy console for libretro inspired by retro hardware aesthetics.
-  Provides a virtual machine with fixed specs (256x192 display, 4-channel
-  audio) for running homebrew .vaporbin cartridge files.
-  No BIOS, firmware, or system directory files required.
+  Fantasy console with fixed specs (256x192 display, 4-channel audio,
+  256-color palette). Runs .vaporbin cartridge bundles containing code
+  and optional ROM data. All content is self-contained in the bundle
+  passed by the frontend; no system directory files loaded.
+  firmware_count=0 confirmed by code analysis.
