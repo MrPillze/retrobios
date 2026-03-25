@@ -241,7 +241,9 @@ def generate_pack(
     platform_display = config.get("platform", platform_name)
     base_dest = config.get("base_destination", "")
 
-    zip_name = f"{platform_display.replace(' ', '_')}_BIOS_Pack.zip"
+    version = config.get("version", config.get("dat_version", ""))
+    version_tag = f"_{version.replace(' ', '')}" if version else ""
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}_BIOS_Pack.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -937,8 +939,11 @@ def main():
                 emu_profiles=emu_profiles,
             )
             if zip_path and variants:
+                rep_cfg = load_platform_config(representative, args.platforms_dir)
+                ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
+                ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
                 all_names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
-                combined = "_".join(n.replace(" ", "") for n in all_names) + "_BIOS_Pack.zip"
+                combined = "_".join(n.replace(" ", "") for n in all_names) + f"{ver_tag}_BIOS_Pack.zip"
                 new_path = os.path.join(os.path.dirname(zip_path), combined)
                 if new_path != zip_path:
                     os.rename(zip_path, new_path)
