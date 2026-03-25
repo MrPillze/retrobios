@@ -120,24 +120,36 @@ def _render_yaml_value(lines: list[str], val, indent: int = 4) -> None:
         for k, v in val.items():
             if isinstance(v, dict):
                 lines.append(f"{pad}**{k}:**")
+                lines.append("")
                 _render_yaml_value(lines, v, indent + 4)
             elif isinstance(v, list):
                 lines.append(f"{pad}**{k}:**")
+                lines.append("")
                 for item in v:
                     if isinstance(item, dict):
-                        parts = [f"{ik}: {iv}" for ik, iv in item.items()]
+                        parts = [f"{ik}: {iv}" for ik, iv in item.items()
+                                 if not isinstance(iv, (dict, list))]
                         lines.append(f"{pad}- {', '.join(parts)}")
                     else:
                         lines.append(f"{pad}- {item}")
+                lines.append("")
             else:
-                lines.append(f"{pad}- **{k}:** {v}")
+                # Truncate very long strings in tables
+                sv = str(v)
+                if len(sv) > 200:
+                    sv = sv[:200] + "..."
+                lines.append(f"{pad}- **{k}:** {sv}")
     elif isinstance(val, list):
         for item in val:
             if isinstance(item, dict):
-                parts = [f"{ik}: {iv}" for ik, iv in item.items()]
+                parts = [f"{ik}: {iv}" for ik, iv in item.items()
+                         if not isinstance(iv, (dict, list))]
                 lines.append(f"{pad}- {', '.join(parts)}")
             else:
                 lines.append(f"{pad}- {item}")
+    elif isinstance(val, str) and "\n" in val:
+        for line in val.split("\n"):
+            lines.append(f"{pad}{line}")
     else:
         lines.append(f"{pad}{val}")
 
@@ -583,10 +595,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     based_on = profile.get("based_on", "")
     if based_on:
         lines.append(f"| Based on | {based_on} |")
-    fw_ver = profile.get("firmware_version", "")
-    if fw_ver:
-        lines.append(f"| Firmware version | {fw_ver} |")
-    # Additional metadata fields
+    # Additional metadata fields (scalar values only — complex ones go to collapsible sections)
     for field, label in [
         ("core", "Core ID"), ("core_name", "Core name"),
         ("bios_size", "BIOS size"), ("bios_directory", "BIOS directory"),
@@ -599,11 +608,12 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
         ("analysis_commit", "Analysis commit"),
     ]:
         val = profile.get(field)
-        if val is not None and val != "":
-            if isinstance(val, str) and val.startswith("http"):
-                lines.append(f"| {label} | [{val}]({val}) |")
-            else:
-                lines.append(f"| {label} | {val} |")
+        if val is None or val == "" or isinstance(val, (dict, list)):
+            continue
+        if isinstance(val, str) and val.startswith("http"):
+            lines.append(f"| {label} | [{val}]({val}) |")
+        else:
+            lines.append(f"| {label} | {val} |")
     lines.append("")
 
     # Platform-specific details (rich structured data)
@@ -645,6 +655,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
         ("whdload_kickstarts", "WHDLoad kickstarts"),
         ("bios_identical_to", "BIOS identical to"),
         ("pack_structure", "Pack structure"),
+        ("firmware_version", "Firmware version"),
     ]
     for field, label in _structured_blocks:
         val = profile.get(field)
