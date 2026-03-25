@@ -70,11 +70,21 @@ def _status_icon(pct: float) -> str:
 # Home page
 # ---------------------------------------------------------------------------
 
-def generate_home(db: dict, coverages: dict, emulator_count: int,
+def generate_home(db: dict, coverages: dict, profiles: dict,
                    registry: dict | None = None) -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
     ts = _timestamp()
+
+    unique = {k: v for k, v in profiles.items()
+              if v.get("type") not in ("alias", "test")}
+    emulator_count = len(unique)
+
+    # Classification stats
+    classifications: dict[str, int] = {}
+    for p in unique.values():
+        cls = p.get("core_classification", "unclassified")
+        classifications[cls] = classifications.get(cls, 0) + 1
 
     lines = [
         f"# {SITE_NAME}",
@@ -83,12 +93,12 @@ def generate_home(db: dict, coverages: dict, emulator_count: int,
         "",
         "---",
         "",
-        f"**{total_files:,}** files across **{len(coverages)}** platforms, "
-        f"backed by **{emulator_count}** emulator source code profiles.",
+        f"**{total_files:,}** files | **{len(coverages)}** platforms | "
+        f"**{emulator_count}** emulator profiles | **{_fmt_size(total_size)}** total",
         "",
     ]
 
-    # Single unified table: platform + coverage + download
+    # Platform table
     lines.extend([
         "## Platforms",
         "",
@@ -109,6 +119,17 @@ def generate_home(db: dict, coverages: dict, emulator_count: int,
             f"[Pack]({RELEASE_URL}) |"
         )
 
+    # Emulator classification breakdown
+    lines.extend([
+        "",
+        "## Emulator profiles",
+        "",
+        "| Classification | Count |",
+        "|---------------|-------|",
+    ])
+    for cls, count in sorted(classifications.items(), key=lambda x: -x[1]):
+        lines.append(f"| {cls} | {count} |")
+
     # Quick links
     lines.extend([
         "",
@@ -116,10 +137,11 @@ def generate_home(db: dict, coverages: dict, emulator_count: int,
         "",
         f"[Systems](systems/){{ .md-button }} "
         f"[Emulators](emulators/){{ .md-button }} "
-        f"[Gap Analysis](gaps/){{ .md-button }} "
-        f"[Contributing](contributing/){{ .md-button .md-button--primary }}",
+        f"[Cross-reference](cross-reference.md){{ .md-button }} "
+        f"[Gap Analysis](gaps.md){{ .md-button }} "
+        f"[Contributing](contributing.md){{ .md-button .md-button--primary }}",
         "",
-        f"*{_fmt_size(total_size)} total. Generated on {ts}.*",
+        f"*Generated on {ts}.*",
     ])
 
     return "\n".join(lines) + "\n"
@@ -151,7 +173,8 @@ def generate_platform_index(coverages: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_platform_page(name: str, cov: dict, registry: dict | None = None) -> str:
+def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
+                           emulator_files: dict | None = None) -> str:
     config = cov["config"]
     display = cov["platform"]
     mode = cov["mode"]
@@ -160,16 +183,41 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None) -
     logo_url = (registry or {}).get(name, {}).get("logo", "")
     logo_md = f"![{display}]({logo_url}){{ width=48 align=right }}\n\n" if logo_url else ""
 
+    homepage = config.get("homepage", "")
+    version = config.get("version", "")
+    hash_type = config.get("hash_type", "")
+    base_dest = config.get("base_destination", "")
+
     lines = [
         f"# {display} - {SITE_NAME}",
         "",
-        logo_md + f"**Verification mode:** {mode}",
-        f"**Coverage:** {cov['present']}/{cov['total']} ({pct})",
+        logo_md + f"| | |",
+        "|---|---|",
+        f"| Verification | {mode} |",
+        f"| Hash type | {hash_type} |",
+    ]
+    if version:
+        lines.append(f"| Version | {version} |")
+    if base_dest:
+        lines.append(f"| BIOS path | `{base_dest}/` |")
+    if homepage:
+        lines.append(f"| Homepage | [{homepage}]({homepage}) |")
+    lines.extend([
+        "",
+        f"**Coverage:** {cov['present']}/{cov['total']} ({pct}) | "
         f"**Verified:** {cov['verified']} | **Untested:** {cov['untested']} | **Missing:** {cov['missing']}",
         "",
         f"[Download {display} Pack]({RELEASE_URL}){{ .md-button }}",
         "",
-    ]
+    ])
+
+    # Build lookup from config file entries (has hashes/sizes)
+    config_files: dict[str, dict] = {}
+    for sys_id, system in config.get("systems", {}).items():
+        for fe in system.get("files", []):
+            fname = fe.get("name", "")
+            if fname:
+                config_files[fname] = fe
 
     # Group details by system
     by_system: dict[str, list] = {}
@@ -180,39 +228,50 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None) -
     for sys_id, files in sorted(by_system.items()):
         ok_count = sum(1 for f in files if f["status"] == "ok")
         total = len(files)
+
+        # Cross-ref: emulators that handle this system
+        sys_emus = []
+        if emulator_files:
+            for emu_name, emu_data in emulator_files.items():
+                if sys_id in emu_data.get("systems", set()):
+                    sys_emus.append(emu_name)
+
         lines.append(f"## {sys_id}")
-        lines.append(f"")
-        lines.append(f"{ok_count}/{total} verified")
+        lines.append("")
+        lines.append(f"{ok_count}/{total} files verified")
+        if sys_emus:
+            emu_links = ", ".join(f"[{e}](../emulators/{e}.md)" for e in sorted(sys_emus))
+            lines.append(f"Emulators: {emu_links}")
         lines.append("")
 
-        # Only show table if there are non-OK entries, otherwise just list filenames
-        non_ok = [f for f in files if f["status"] != "ok"]
-        if non_ok:
-            lines.append("| File | Status | Detail |")
-            lines.append("|------|--------|--------|")
-            for f in sorted(non_ok, key=lambda x: x["name"]):
-                status = f["status"]
-                detail = ""
-                if status == "untested":
-                    reason = f.get("reason", "")
-                    expected = f.get("expected_md5", "")
-                    actual = f.get("actual_md5", "")
-                    detail = reason or (f"expected `{expected[:12]}...` got `{actual[:12]}...`" if expected and actual else "")
-                    status_display = "Untested"
-                elif status == "missing":
-                    status_display = "Missing"
-                    detail = f"Expected: `{f.get('expected_md5', 'unknown')}`"
-                else:
-                    status_display = status
-                lines.append(f"| `{f['name']}` | {status_display} | {detail} |")
-            lines.append("")
+        # File table with hashes and sizes
+        lines.append("| File | Status | Size | SHA1 | MD5 |")
+        lines.append("|------|--------|------|------|-----|")
+        for f in sorted(files, key=lambda x: x["name"]):
+            status = f["status"]
+            fname = f["name"]
+            # Pull hashes/size from platform config entry
+            cfg_entry = config_files.get(fname, {})
+            sha1 = cfg_entry.get("sha1", f.get("sha1", ""))
+            md5 = cfg_entry.get("md5", f.get("expected_md5", ""))
+            size = cfg_entry.get("size", f.get("size", 0))
+            size_str = _fmt_size(size) if size else "-"
+            sha1_str = f"`{sha1[:12]}...`" if sha1 and len(sha1) > 12 else (f"`{sha1}`" if sha1 else "-")
+            md5_str = f"`{md5[:12]}...`" if md5 and len(md5) > 12 else (f"`{md5}`" if md5 else "-")
 
-        ok_files = [f for f in files if f["status"] == "ok"]
-        if ok_files:
-            unique_names = sorted(set(f["name"] for f in ok_files))
-            names = ", ".join(f"`{n}`" for n in unique_names)
-            lines.append(f"Files: {names}")
-            lines.append("")
+            if status == "ok":
+                status_display = "OK"
+            elif status == "untested":
+                reason = f.get("reason", "")
+                status_display = f"Untested: {reason}" if reason else "Untested"
+            elif status == "missing":
+                status_display = "Missing"
+            else:
+                status_display = status
+
+            lines.append(f"| `{fname}` | {status_display} | {size_str} | {sha1_str} | {md5_str} |")
+
+        lines.append("")
 
     lines.append(f"*Generated on {_timestamp()}*")
     return "\n".join(lines) + "\n"
@@ -257,7 +316,7 @@ def generate_system_page(
     manufacturer: str,
     consoles: dict[str, list],
     platform_files: dict[str, set],
-    emulator_files: dict[str, set],
+    emulator_files: dict[str, dict],
 ) -> str:
     slug = manufacturer.lower().replace(" ", "-")
     lines = [
@@ -284,7 +343,7 @@ def generate_system_page(
             # Cross-reference: which platforms declare this file
             plats = sorted(p for p, names in platform_files.items() if name in names)
             # Cross-reference: which emulators load this file
-            emus = sorted(e for e, names in emulator_files.items() if name in names)
+            emus = sorted(e for e, data in emulator_files.items() if name in data.get("files", set()))
 
             lines.append(f"**`{name}`** ({size})")
             lines.append("")
@@ -364,70 +423,169 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
 
     emu_name = profile.get("emulator", name)
     emu_type = profile.get("type", "unknown")
+    classification = profile.get("core_classification", "")
     source = profile.get("source", "")
+    upstream = profile.get("upstream", "")
     version = profile.get("core_version", "unknown")
     display = profile.get("display_name", emu_name)
     profiled = profile.get("profiled_date", "unknown")
     systems = profile.get("systems", [])
     cores = profile.get("cores", [name])
     files = profile.get("files", [])
-
-    logo_url = profile.get("logo", "")
-    logo_md = f"![{emu_name}]({logo_url}){{ width=48 align=right }}\n\n" if logo_url else ""
+    notes_raw = profile.get("notes", profile.get("note", ""))
+    notes = str(notes_raw).strip() if notes_raw and not isinstance(notes_raw, dict) else ""
+    exclusion = profile.get("exclusion_note", "")
+    data_dirs = profile.get("data_directories", [])
 
     lines = [
         f"# {emu_name} - {SITE_NAME}",
         "",
-        logo_md + f"| | |",
+        f"| | |",
         f"|---|---|",
         f"| Type | {emu_type} |",
     ]
+    if classification:
+        lines.append(f"| Classification | {classification} |")
     if source:
         lines.append(f"| Source | [{source}]({source}) |")
+    if upstream and upstream != source:
+        lines.append(f"| Upstream | [{upstream}]({upstream}) |")
     lines.append(f"| Version | {version} |")
     lines.append(f"| Profiled | {profiled} |")
     if cores:
         lines.append(f"| Cores | {', '.join(str(c) for c in cores)} |")
     if systems:
-        lines.append(f"| Systems | {', '.join(str(s) for s in systems)} |")
+        sys_links = [f"[{s}](../systems/{s}.md)" for s in systems]
+        lines.append(f"| Systems | {', '.join(sys_links)} |")
     lines.append("")
 
+    # Notes
+    if notes:
+        indented = notes.replace("\n", "\n    ")
+        lines.extend(["???+ note \"Technical notes\"",
+                       f"    {indented}",
+                       ""])
+
     if not files:
-        lines.append("No BIOS or firmware files required. This core is self-contained.")
-        note = profile.get("note", profile.get("notes", ""))
-        if note:
-            lines.extend(["", str(note)])
+        lines.append("No BIOS or firmware files required.")
+        if exclusion:
+            lines.extend([
+                "",
+                f"!!! info \"Why no files\"",
+                f"    {exclusion}",
+            ])
     else:
         by_name = db.get("indexes", {}).get("by_name", {})
+        files_db = db.get("files", {})
+
+        # Stats by category
+        bios_files = [f for f in files if f.get("category", "bios") == "bios"]
+        game_data = [f for f in files if f.get("category") == "game_data"]
+        bios_zips = [f for f in files if f.get("category") == "bios_zip"]
+
         in_repo_count = sum(1 for f in files if f.get("name", "") in by_name)
         missing_count = len(files) - in_repo_count
-        lines.append(f"**{len(files)} files** ({in_repo_count} in repo, {missing_count} missing)")
+        req_count = sum(1 for f in files if f.get("required"))
+        opt_count = len(files) - req_count
+        hle_count = sum(1 for f in files if f.get("hle_fallback"))
+
+        parts = [f"**{len(files)} files**"]
+        parts.append(f"{req_count} required, {opt_count} optional")
+        parts.append(f"{in_repo_count} in repo, {missing_count} missing")
+        if hle_count:
+            parts.append(f"{hle_count} with HLE fallback")
+        lines.append(" | ".join(parts))
+
+        if game_data or bios_zips:
+            cats = []
+            if bios_files:
+                cats.append(f"{len(bios_files)} BIOS")
+            if game_data:
+                cats.append(f"{len(game_data)} game data")
+            if bios_zips:
+                cats.append(f"{len(bios_zips)} BIOS ZIPs")
+            lines.append(f"Categories: {', '.join(cats)}")
         lines.append("")
 
-        # Check which platforms declare each file
-        show_platforms = platform_files is not None
-
-        if show_platforms:
-            lines.append("| File | Required | In Repo | Platforms | Source Ref |")
-            lines.append("|------|----------|---------|-----------|-----------|")
-        else:
-            lines.append("| File | Required | In Repo | Source Ref |")
-            lines.append("|------|----------|---------|-----------|")
-
+        # File table
         for f in files:
             fname = f.get("name", "")
-            required = "yes" if f.get("required") else "no"
-            in_repo = "yes" if fname in by_name else "no"
+            required = f.get("required", False)
+            in_repo = fname in by_name
             source_ref = f.get("source_ref", "")
+            mode = f.get("mode", "")
+            hle = f.get("hle_fallback", False)
+            aliases = f.get("aliases", [])
+            category = f.get("category", "")
+            validation = f.get("validation", [])
+            size = f.get("size")
+            fnote = f.get("note", "")
+            storage = f.get("storage", "")
+            fmd5 = f.get("md5", "")
+            fsha1 = f.get("sha1", "")
+            fcrc32 = f.get("crc32", "")
 
-            if show_platforms:
-                plats = [p for p, names in platform_files.items() if fname in names]
-                plat_str = ", ".join(sorted(plats)) if plats else "-"
-                lines.append(f"| `{fname}` | {required} | {in_repo} | {plat_str} | {source_ref} |")
+            # Status badges
+            badges = []
+            if required:
+                badges.append("**required**")
             else:
-                lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} |")
+                badges.append("optional")
+            if hle:
+                badges.append("HLE available")
+            if mode:
+                badges.append(mode)
+            if category and category != "bios":
+                badges.append(category)
+            if storage and storage != "embedded":
+                badges.append(storage)
+            if not in_repo:
+                badges.append("missing from repo")
 
-    lines.extend(["", f"*Generated on {_timestamp()}*"])
+            lines.append(f"**`{fname}`** — {', '.join(badges)}")
+            lines.append("")
+
+            details = []
+            if size:
+                details.append(f"Size: {_fmt_size(size)}")
+            if fsha1:
+                details.append(f"SHA1: `{fsha1}`")
+            if fmd5:
+                details.append(f"MD5: `{fmd5}`")
+            if fcrc32:
+                details.append(f"CRC32: `{fcrc32}`")
+            if aliases:
+                details.append(f"Aliases: {', '.join(f'`{a}`' for a in aliases)}")
+            if validation:
+                if isinstance(validation, list):
+                    details.append(f"Validation: {', '.join(validation)}")
+                elif isinstance(validation, dict):
+                    for scope, checks in validation.items():
+                        details.append(f"Validation ({scope}): {', '.join(checks)}")
+            if source_ref:
+                details.append(f"Source: `{source_ref}`")
+            if platform_files:
+                plats = sorted(p for p, names in platform_files.items() if fname in names)
+                if plats:
+                    details.append(f"Platforms: {', '.join(plats)}")
+
+            if details:
+                for d in details:
+                    lines.append(f"- {d}")
+            if fnote:
+                lines.append(f"- {fnote}")
+            lines.append("")
+
+    # Data directories
+    if data_dirs:
+        lines.extend(["## Data directories", ""])
+        for dd in data_dirs:
+            ref = dd.get("ref", "")
+            dest = dd.get("destination", "")
+            lines.append(f"- `{ref}` → `{dest}`")
+        lines.append("")
+
+    lines.extend([f"*Generated on {_timestamp()}*"])
     return "\n".join(lines) + "\n"
 
 
@@ -548,6 +706,82 @@ def generate_gap_analysis(
     return "\n".join(lines) + "\n"
 
 
+def generate_cross_reference(
+    coverages: dict,
+    profiles: dict,
+) -> str:
+    """Generate a cross-reference page mapping platforms to emulators and back."""
+    unique = {k: v for k, v in profiles.items()
+              if v.get("type") not in ("alias", "test", "launcher")}
+
+    # Build system -> emulators map
+    system_emus: dict[str, list[str]] = {}
+    for emu_name, p in unique.items():
+        for sys_id in p.get("systems", []):
+            system_emus.setdefault(sys_id, []).append(emu_name)
+
+    # Build platform -> systems map
+    platform_systems: dict[str, list[str]] = {}
+    for name, cov in coverages.items():
+        config = cov["config"]
+        platform_systems[name] = sorted(config.get("systems", {}).keys())
+
+    lines = [
+        f"# Cross-reference - {SITE_NAME}",
+        "",
+        "Which emulators serve which platforms, mapped through shared system IDs.",
+        "",
+    ]
+
+    # Platform -> systems -> emulators
+    lines.extend(["## By platform", ""])
+    for pname in sorted(coverages.keys(), key=lambda x: coverages[x]["platform"]):
+        display = coverages[pname]["platform"]
+        systems = platform_systems.get(pname, [])
+        lines.append(f"### [{display}](platforms/{pname}.md)")
+        lines.append("")
+        lines.append(f"{len(systems)} systems")
+        lines.append("")
+
+        lines.append("| System | Emulators |")
+        lines.append("|--------|----------|")
+        for sys_id in systems:
+            emus = system_emus.get(sys_id, [])
+            if emus:
+                emu_links = ", ".join(f"[{e}](emulators/{e}.md)" for e in sorted(emus))
+            else:
+                emu_links = "-"
+            lines.append(f"| {sys_id} | {emu_links} |")
+        lines.append("")
+
+    # Emulator -> systems -> platforms
+    lines.extend(["## By emulator", ""])
+    lines.append("| Emulator | Type | Classification | Systems | Platforms |")
+    lines.append("|----------|------|---------------|---------|-----------|")
+
+    for emu_name in sorted(unique.keys()):
+        p = unique[emu_name]
+        emu_display = p.get("emulator", emu_name)
+        emu_type = p.get("type", "")
+        cls = p.get("core_classification", "")
+        emu_systems = set(p.get("systems", []))
+        # Find platforms that share systems with this emulator
+        emu_plats = set()
+        for pname, psystems in platform_systems.items():
+            if emu_systems & set(psystems):
+                emu_plats.add(pname)
+        plat_str = ", ".join(sorted(emu_plats)) if emu_plats else "-"
+        sys_count = len(emu_systems)
+
+        lines.append(
+            f"| [{emu_display}](emulators/{emu_name}.md) | {emu_type} | "
+            f"{cls} | {sys_count} | {plat_str} |"
+        )
+
+    lines.extend(["", f"*Generated on {_timestamp()}*"])
+    return "\n".join(lines) + "\n"
+
+
 def generate_contributing() -> str:
     return """# Contributing - RetroBIOS
 
@@ -607,14 +841,16 @@ def _build_platform_file_index(coverages: dict) -> dict[str, set]:
     return index
 
 
-def _build_emulator_file_index(profiles: dict) -> dict[str, set]:
-    """Map emulator_name -> set of file names it loads."""
+def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
+    """Map emulator_name -> {files: set, systems: set} for cross-reference."""
     index = {}
     for name, profile in profiles.items():
         if profile.get("type") == "alias":
             continue
-        names = {f.get("name", "") for f in profile.get("files", [])}
-        index[name] = names
+        index[name] = {
+            "files": {f.get("name", "") for f in profile.get("files", [])},
+            "systems": set(profile.get("systems", [])),
+        }
     return index
 
 
@@ -649,6 +885,7 @@ def generate_mkdocs_nav(
         {"Platforms": platform_nav},
         {"Systems": system_nav},
         {"Emulators": emu_nav},
+        {"Cross-reference": "cross-reference.md"},
         {"Gap Analysis": "gaps.md"},
         {"Contributing": "contributing.md"},
     ]
@@ -714,13 +951,13 @@ def main():
 
     # Generate home
     print("Generating home page...")
-    (docs / "index.md").write_text(generate_home(db, coverages, unique_count, registry))
+    (docs / "index.md").write_text(generate_home(db, coverages, profiles, registry))
 
     # Generate platform pages
     print("Generating platform pages...")
     (docs / "platforms" / "index.md").write_text(generate_platform_index(coverages))
     for name, cov in coverages.items():
-        (docs / "platforms" / f"{name}.md").write_text(generate_platform_page(name, cov, registry))
+        (docs / "platforms" / f"{name}.md").write_text(generate_platform_page(name, cov, registry, emulator_files))
 
     # Generate system pages
     print("Generating system pages...")
@@ -737,6 +974,12 @@ def main():
     for name, profile in profiles.items():
         page = generate_emulator_page(name, profile, db, platform_files)
         (docs / "emulators" / f"{name}.md").write_text(page)
+
+    # Generate cross-reference page
+    print("Generating cross-reference page...")
+    (docs / "cross-reference.md").write_text(
+        generate_cross_reference(coverages, profiles)
+    )
 
     # Generate gap analysis page
     print("Generating gap analysis page...")
@@ -768,6 +1011,7 @@ def main():
         1  # home
         + 1 + len(coverages)  # platform index + detail
         + 1 + len(manufacturers)  # system index + detail
+        + 1  # cross-reference
         + 1 + len(profiles)  # emulator index + detail
         + 1  # gap analysis
         + 1  # contributing
