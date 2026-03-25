@@ -5,7 +5,7 @@ Source-verified BIOS and firmware packs for retrogaming platforms.
 Documentation and metadata can drift from what emulators actually load at runtime.
 To keep packs accurate, each file here is checked against the emulator's source code:
 what the code opens, what hashes it expects, what happens when a file is missing.
-305 emulators profiled, 8 platforms cross-referenced,
+306 emulators profiled, 8 platforms cross-referenced,
 6,733 files verified.
 
 ### How it works
@@ -18,7 +18,7 @@ what the code opens, what hashes it expects, what happens when a file is missing
 When a platform and an emulator disagree on a file, the discrepancy is reported.
 When a variant in the repo satisfies both, it is preferred automatically.
 
-> **6,733** files | **5043.6 MB** | **8** platforms | **305** emulator profiles
+> **6,733** files | **5043.6 MB** | **8** platforms | **306** emulator profiles
 
 ## Download
 
@@ -63,4 +63,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-25T14:43:03Z*
+*Auto-generated on 2026-03-25T15:42:07Z*

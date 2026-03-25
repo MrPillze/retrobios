@@ -127,7 +127,7 @@ nav:
   - xrick: systems/xrick.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (59):
+  - Official ports (60):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -187,7 +187,8 @@ nav:
     - VeMUlator: emulators/vemulator.md
     - Vircon32: emulators/vircon32.md
     - vitaQuakeII: emulators/vitaquake2.md
-  - Community forks (101):
+    - yabasanshiro: emulators/yabasanshiro.md
+  - Community forks (104):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - Anarch: emulators/anarch.md
@@ -289,6 +290,9 @@ nav:
     - vitaQuakeIII: emulators/vitaquake3.md
     - vitavoyager: emulators/vitavoyager.md
     - X Millennium: emulators/x1.md
+    - x64sdl: emulators/x64sdl.md
+    - yabause: emulators/yabause.md
+    - ymir: emulators/ymir.md
   - Pure libretro (29):
     - '2048': emulators/2048.md
     - 3DEngine: emulators/3dengine.md
@@ -319,7 +323,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (23):
+  - Game engines (24):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -343,6 +347,7 @@ nav:
     - TIC-80: emulators/tic80.md
     - TyrQuake: emulators/tyrquake.md
     - WASM-4: emulators/wasm4.md
+    - XRick: emulators/xrick.md
   - Enhanced forks (12):
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
@@ -393,7 +398,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (12):
+  - Other (10):
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - Cemu: emulators/cemu.md
     - ep128emu-core: emulators/ep128emu.md
@@ -403,9 +408,7 @@ nav:
     - VBA-M: emulators/vba_m.md
     - VICE: emulators/vice.md
     - Vita3K: emulators/vita3k.md
-    - x64sdl: emulators/x64sdl.md
     - Xemu: emulators/xemu.md
-    - XRick: emulators/xrick.md
 - Cross-reference: cross-reference.md
 - Gap Analysis: gaps.md
 - Wiki:
