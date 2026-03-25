@@ -19,6 +19,7 @@ concurrency:
 
 jobs:
   release:
+    if: false  # disabled until pack generation is validated in production
     runs-on: ubuntu-latest
     permissions:
       contents: write
