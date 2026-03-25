@@ -1,0 +1,295 @@
+emulator: PUAE 2021
+type: libretro
+core_classification: frozen_snapshot
+cores: [puae2021]
+source: "https://github.com/libretro/libretro-uae/tree/2.6.1"
+upstream: "https://github.com/GnoStiC/PUAE"
+profiled_date: "2026-03-24"
+core_version: "2.6.1"
+display_name: "Commodore - Amiga (PUAE 2021)"
+systems:
+  - commodore-amiga
+  - commodore-amiga-cd32
+  - commodore-cdtv
+
+notes: |
+  Frozen snapshot of PUAE at WinUAE 2.6.1 era. Less accurate than current PUAE
+  (5.x), intended for weaker devices. BIOS handling is identical to the current
+  version.
+
+  PUAE is a port of UAE (Unix Amiga Emulator) to libretro, continuing E-UAE.
+  Emulates A500, 500+, 600, 1200, 2000, 4000, CD32, and CDTV. Kickstart ROMs
+  are loaded from the RetroArch system directory.
+
+  AROS (open-source Kickstart replacement) is available as a built-in fallback
+  when no Kickstart ROM is found. Compatibility is limited compared to real ROMs.
+
+  The core scans the system directory for files starting with "kick", "amiga-os",
+  or "KS ROM". Each filename is matched against a table of known naming
+  conventions: standard (kick*.A*), Amiga Forever (amiga-os-*.rom), and
+  TOSEC (Kickstart v*.rom). The first valid match is used.
+
+  Default kickstart per model (automatic selection):
+    A500, A500OG, A2000OG, CDTV -> kick34005.A500 (KS 1.3)
+    A500+                        -> kick37175.A500 (KS 2.04)
+    A600                         -> kick40063.A600 (KS 3.1)
+    A1200, A1200OG               -> kick40068.A1200 (KS 3.1)
+    A2000                        -> kick40063.A600 (KS 3.1)
+    A4030, A4040                 -> kick40068.A4000 (KS 3.1)
+    CD32, CD32FR                 -> kick40060.CD32 (KS 3.1)
+    CDTV (ext)                   -> kick34005.CDTV
+    CD32 (ext)                   -> kick40060.CD32.ext
+
+  Extended ROM handling: CD32 and CDTV require an extended ROM in addition
+  to the main kickstart. If the main ROM filesize is <= 512 KB, the extended
+  ROM is loaded separately. Combined ROMs (main + ext in one file) skip the
+  extended ROM search.
+
+  WHDLoad support copies kick33180.A500, kick34005.A500, kick40063.A600,
+  kick40068.A1200 into saves/WHDLoad/Devs/Kickstarts/ for use by WHDLoad
+  slave files. Also copies rom.key (Amiga Forever decryption) and WHDLoad.key
+  (license) from the system directory.
+
+  ROM search order (libretro-core.c retro_config_kickstart):
+    1. Exact filename in system directory
+    2. Amiga Forever naming (amiga-os-*.rom)
+    3. TOSEC modified naming (with [!] suffix)
+    4. TOSEC naming (without [!] suffix)
+
+  capsimg.so/capsimg.dll is an optional shared library for IPF floppy image
+  support (SPS/CAPS format). Not a BIOS file, loaded dynamically at runtime.
+
+  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5534-5700,
+  libretro/libretro-core.c:5786-5945
+
+files:
+  # -------------------------------------------------------
+  # Amiga 1000
+  # -------------------------------------------------------
+  - name: "kick31034.A1000"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 262144  # 256 KB
+    note: "Kickstart 1.1 rev 31.34 (1985) NTSC. A1000 only."
+    aliases:
+      - "amiga-os-110-ntsc.rom"
+      - "Kickstart v1.1 rev 31.34 (1985)(Commodore)(A1000)(NTSC).rom"
+    source_ref: "libretro/libretro-core.h:170-174"
+
+  - name: "kick32034.A1000"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 262144  # 256 KB
+    note: "Kickstart 1.1 rev 32.34 (1986) PAL. A1000 only."
+    aliases:
+      - "amiga-os-110-pal.rom"
+      - "Kickstart v1.1 rev 32.34 (1986)(Commodore)(A1000)(PAL).rom"
+    source_ref: "libretro/libretro-core.h:176-179"
+
+  # -------------------------------------------------------
+  # Amiga 500 / 2000
+  # -------------------------------------------------------
+  - name: "kick33180.A500"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 262144  # 256 KB
+    note: "Kickstart 1.2 rev 33.180 (1986). A500/A2000. Also used by WHDLoad."
+    aliases:
+      - "amiga-os-120.rom"
+      - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom"
+      - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom"
+    source_ref: "libretro/libretro-core.h:182-185"
+
+  - name: "kick34005.A500"
+    system: commodore-amiga
+    required: true
+    size: 262144  # 256 KB
+    note: "Kickstart 1.3 rev 34.5 (1987). Default for A500/A2000OG/CDTV models. Also used by WHDLoad."
+    aliases:
+      - "amiga-os-130.rom"
+      - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
+      - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom"
+    source_ref: "libretro/libretro-core.h:187-190"
+
+  - name: "kick37175.A500"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 262144  # 256 KB
+    note: "Kickstart 2.04 rev 37.175 (1991). Default for A500+ model."
+    aliases:
+      - "amiga-os-204.rom"
+      - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom"
+      - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom"
+    source_ref: "libretro/libretro-core.h:192-195"
+
+  # -------------------------------------------------------
+  # Amiga 600
+  # -------------------------------------------------------
+  - name: "kick37350.A600"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 262144  # 256 KB
+    note: "Kickstart 2.05 rev 37.350 (1992). A600HD."
+    aliases:
+      - "amiga-os-205-a600.rom"
+      - "Kickstart v2.05 rev 37.350 (1992)(Commodore)(A600HD)[!].rom"
+    source_ref: "libretro/libretro-core.h:198-201"
+
+  - name: "kick40063.A600"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 524288  # 512 KB
+    note: "Kickstart 3.1 rev 40.63 (1993). Default for A600/A2000 models. Also used by WHDLoad."
+    aliases:
+      - "amiga-os-310-a600.rom"
+      - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom"
+      - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom"
+    source_ref: "libretro/libretro-core.h:203-206"
+
+  # -------------------------------------------------------
+  # Amiga 1200
+  # -------------------------------------------------------
+  - name: "kick39106.A1200"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 524288  # 512 KB
+    note: "Kickstart 3.0 rev 39.106 (1992). A1200."
+    aliases:
+      - "amiga-os-300-a1200.rom"
+      - "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A1200)[!].rom"
+    source_ref: "libretro/libretro-core.h:209-212"
+
+  - name: "kick40068.A1200"
+    system: commodore-amiga
+    required: true
+    size: 524288  # 512 KB
+    note: "Kickstart 3.1 rev 40.68 (1993). Default for A1200/A1200OG models. Also used by WHDLoad."
+    aliases:
+      - "amiga-os-310-a1200.rom"
+      - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom"
+      - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom"
+    source_ref: "libretro/libretro-core.h:214-217"
+
+  # -------------------------------------------------------
+  # Amiga 4000
+  # -------------------------------------------------------
+  - name: "kick39106.A4000"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 524288  # 512 KB
+    note: "Kickstart 3.0 rev 39.106 (1992). A4000."
+    aliases:
+      - "amiga-os-300-a4000.rom"
+      - "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A4000)[!].rom"
+    source_ref: "libretro/libretro-core.h:220-223"
+
+  - name: "kick40068.A4000"
+    system: commodore-amiga
+    required: false
+    hle_fallback: true
+    size: 524288  # 512 KB
+    note: "Kickstart 3.1 rev 40.68 (1993). Default for A4030/A4040 models."
+    aliases:
+      - "amiga-os-310-a4000.rom"
+      - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom"
+    source_ref: "libretro/libretro-core.h:225-228"
+
+  # -------------------------------------------------------
+  # Commodore CDTV
+  # -------------------------------------------------------
+  - name: "kick34005.CDTV"
+    system: commodore-cdtv
+    required: true
+    size: 262144  # 256 KB
+    note: "CDTV Extended ROM v1.0 (1991). Required as extended ROM for CDTV model. Main kickstart is kick34005.A500."
+    aliases:
+      - "amiga-os-130-cdtv-ext.rom"
+      - "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom"
+      - "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom"
+    source_ref: "libretro/libretro-core.h:231-234"
+
+  # -------------------------------------------------------
+  # Amiga CD32
+  # -------------------------------------------------------
+  - name: "kick40060.CD32"
+    system: commodore-amiga-cd32
+    required: true
+    size: 524288  # 512 KB
+    note: "CD32 Kickstart 3.1 rev 40.60 (1993). Main ROM for CD32 and CD32FR models."
+    aliases:
+      - "amiga-os-310-cd32.rom"
+      - "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom"
+    source_ref: "libretro/libretro-core.h:236-239"
+
+  - name: "kick40060.CD32.ext"
+    system: commodore-amiga-cd32
+    required: true
+    size: 524288  # 512 KB
+    note: "CD32 Extended ROM rev 40.60 (1993). Required when main ROM is <= 512 KB (not combined)."
+    aliases:
+      - "amiga-os-310-cd32-ext.rom"
+      - "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom"
+    source_ref: "libretro/libretro-core.h:241-244"
+
+  # -------------------------------------------------------
+  # WHDLoad support files
+  # -------------------------------------------------------
+  - name: "rom.key"
+    system: commodore-amiga
+    required: false
+    note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
+    source_ref: "libretro/libretro-core.c:5887-5898"
+
+  - name: "WHDLoad.key"
+    system: commodore-amiga
+    required: false
+    note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
+    source_ref: "libretro/libretro-core.c:5903-5916"
+
+  - name: "WHDLoad.prefs"
+    system: commodore-amiga
+    required: false
+    note: "WHDLoad preferences. Copied to saves/WHDLoad/S/ when present."
+    source_ref: "libretro/libretro-core.c:5920-5943"
+
+model_kickstart_map:
+  A500:     {kickstart: "kick34005.A500", ext: null}
+  A500OG:   {kickstart: "kick34005.A500", ext: null}
+  A500PLUS: {kickstart: "kick37175.A500", ext: null}
+  A600:     {kickstart: "kick40063.A600", ext: null}
+  A1200:    {kickstart: "kick40068.A1200", ext: null}
+  A1200OG:  {kickstart: "kick40068.A1200", ext: null}
+  A2000:    {kickstart: "kick40063.A600", ext: null}
+  A2000OG:  {kickstart: "kick34005.A500", ext: null}
+  A4030:    {kickstart: "kick40068.A4000", ext: null}
+  A4040:    {kickstart: "kick40068.A4000", ext: null}
+  CDTV:     {kickstart: "kick34005.A500", ext: "kick34005.CDTV"}
+  CD32:     {kickstart: "kick40060.CD32", ext: "kick40060.CD32.ext"}
+  CD32FR:   {kickstart: "kick40060.CD32", ext: "kick40060.CD32.ext"}
+
+whdload_kickstarts:
+  - "kick33180.A500"   # KS 1.2, 256 KB
+  - "kick34005.A500"   # KS 1.3, 256 KB
+  - "kick40063.A600"   # KS 3.1, 512 KB
+  - "kick40068.A1200"  # KS 3.1, 512 KB
+
+platform_details:
+  rom_sizes:
+    ROM_SIZE_128: 131072   # 128 KB
+    ROM_SIZE_256: 262144   # 256 KB
+    ROM_SIZE_512: 524288   # 512 KB
+  aros_fallback: true
+  naming_conventions:
+    standard: "kick{rev}.{model}"
+    amiga_forever: "amiga-os-{version}.rom"
+    tosec: "Kickstart v{version} rev {rev} ({year})(Commodore)({model}).rom"
+  scan_prefixes: ["kick", "amiga-os", "KS ROM"]
+  source_ref: "libretro/libretro-core.c:2617-2656"

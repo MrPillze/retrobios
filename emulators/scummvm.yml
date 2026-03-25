@@ -1,10 +1,13 @@
 emulator: ScummVM
 type: libretro
+core_classification: game_engine
 source: "https://github.com/libretro/scummvm"
+upstream: "https://github.com/scummvm/scummvm"
 logo: "https://raw.githubusercontent.com/scummvm/scummvm/master/icons/scummvm.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-25"
 core_version: "2.8.0git"
 display_name: "ScummVM"
+cores: [scummvm]
 systems: [scummvm]
 
 # ScummVM is a multi-engine point-and-click adventure game interpreter.

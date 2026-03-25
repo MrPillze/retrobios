@@ -1,20 +1,41 @@
 emulator: Stone Soup
 type: game
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/crawl-ref"
-profiled_date: "2026-03-18"
-core_version: "Git"
+upstream: "https://github.com/crawl/crawl"
+profiled_date: "2026-03-25"
+core_version: "0.16-a0"
 display_name: "Dungeon Crawl Stone Soup"
 cores: [stonesoup]
 systems: []
 
-notes: >
-  Dungeon Crawl Stone Soup, a roguelike dungeon crawler. The libretro port is
-  built from the crawl-ref source tree (crawl-ref/source/) with TILES=y and
-  the libretro backend. The core accepts no content extensions - it launches
-  directly into a new game or save selection. All game data (tiles, databases,
-  descriptions, lua scripts, des files for level generation) is compiled into
-  the core binary or loaded from the bundled dat/ directory built alongside
-  the core. No BIOS, firmware, or external system files are required. Save
-  files are stored in the RetroArch save directory.
+notes: |
+  Roguelike dungeon crawler. Fork frozen at DCSS 0.16-a0 (upstream now ~0.32).
+  Last libretro commit: Oct 2019. Marked experimental.
+
+  Accepts .crawlrc config files as content (supported_extensions: crawlrc).
+  The libretro wrapper sets -dir to the content directory.
+  ref: libretro/libretro.cc:178-198 — main_wrap() passes -dir content_dir
+
+  Game data loaded at runtime from dat/ tree via datafile_path().
+  ref: source/files.cc:375-458 — _get_base_dirs() + datafile_path()
+  No DATA_DIR_PATH defined in Makefile.libretro — falls back to SysEnv.crawl_dir.
+  Data is NOT compiled into the binary.
+
+  dat/ tree contents (532 files, 16 MB):
+  - dat/tiles/*.png (floor, wall, feat, player, main, gui, icons) — tiletex.cc:89-97
+  - dat/DejaVuSans.ttf, dat/DejaVuSansMono.ttf — fontwrapper-ft.cc:79
+  - dat/descript/*.txt, dat/database/*.txt — database.cc:72-140
+  - dat/des/*.des (level generation) — maps.cc:1457
+  - dat/dlua/*.lua, dat/clua/*.lua — maps.cc:1465
+  - dat/defaults/ (settings)
+
+  Not on buildbot.libretro.com/assets/system/.
+  No divergence in file loading between upstream and libretro fork.
+
+data_directories:
+  - ref: stonesoup
+    source_ref: "source/files.cc:375-458"
 
 files: []
+# no BIOS/firmware — game data loaded via data_directories

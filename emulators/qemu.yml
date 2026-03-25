@@ -1,19 +1,27 @@
 emulator: QEMU
 type: libretro
+core_classification: community_fork
 source: "https://github.com/io12/qemu-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/qemu/qemu"
+profiled_date: "2026-03-25"
 core_version: "0.1.0"
 display_name: "QEMU"
-systems: [ibm-pc, x86, x86-64, ppc, sparc, sparc64, arm, aarch64, mips, riscv, s390x, m68k, alpha, hppa]
+cores: [qemu]
+systems: [ibm-pc, x86, x86-64, ppc, ppc64, sparc, sparc64, arm, aarch64, mips, mips64, riscv32, riscv64, s390x, m68k, alpha, hppa]
 
 # QEMU (Quick Emulator) libretro core, based on QEMU 9.0.50.
-# Supports x86_64, i386, PPC, Sparc, ARM, AArch64, MIPS, RISC-V, S390x, M68K, Alpha, HPPA.
-# Opens .iso, .img, .qcow, .qcow2 files or custom .qemu_cmd_line for any architecture.
+# Builds 17 targets: aarch64, alpha, arm, i386, m68k, mips(el), mips64(el),
+# ppc, ppc64, riscv32, riscv64, s390x, sparc, sparc64, x86_64.
+# Opens .iso, .img, .qcow, .qcow2 or custom .qemu_cmd_line for any architecture.
 # Default architecture is x86_64 when loading .iso/.img/.qcow directly.
 #
 # All BIOS/firmware files are loaded from {retroarch_system_dir}/qemu/
 # via qemu_add_data_dir(system_dir + "/qemu") in ui/libretro.c:659-660.
 # QEMU resolves firmware by name through its data directory search path.
+# No hash/size validation is performed on any firmware file.
+#
+# .info declares firmware_count=0. All firmware is loaded by QEMU's internal
+# machine/device code, not declared in the .info.
 
 files:
   # ========================================================
@@ -58,9 +66,7 @@ files:
     md5: "387c48aef9497c6c2b914b1e6b9bc7aa"
     size: 16384
     required: false
-    note: >
-      Minimal x86 firmware for fast Linux kernel booting.
-      Alternative to SeaBIOS for Linux-only workloads.
+    note: "Minimal x86 firmware for fast Linux kernel booting."
     source_ref: "pc-bios/meson.build:32"
 
   # ========================================================
@@ -83,9 +89,7 @@ files:
     md5: "fcd3d3c0b07a9096693d69425cd940f6"
     size: 38912
     required: false
-    note: >
-      Cirrus Logic GD5446 VGA BIOS. Used by the cirrus-vga PCI
-      device and cirrus-vga-isa ISA device.
+    note: "Cirrus Logic GD5446 VGA BIOS."
     source_ref: "hw/display/cirrus_vga.c:3001, hw/display/cirrus_vga_isa.c:67"
 
   - name: "VGA BIOS stdvga"
@@ -94,9 +98,7 @@ files:
     md5: "8117c3fd986fbbe327badfe38e77db1d"
     size: 39424
     required: false
-    note: >
-      Standard VGA PCI BIOS (Bochs VBE extensions). Used by the
-      VGA PCI device, the most common display adapter for x86.
+    note: "Standard VGA PCI BIOS (Bochs VBE extensions)."
     source_ref: "hw/display/vga-pci.c:387"
 
   - name: "VGA BIOS bochs-display"
@@ -105,7 +107,7 @@ files:
     md5: "83e39bd3e056291ee50d2b5d937bab3e"
     size: 28672
     required: false
-    note: "Bochs display device VGA BIOS. Simpler non-VGA display adapter."
+    note: "Bochs display device VGA BIOS."
     source_ref: "hw/display/bochs-display.c:365"
 
   - name: "VGA BIOS ramfb"
@@ -114,7 +116,7 @@ files:
     md5: "c55512e313c4cb08ec5a36198fdfef33"
     size: 28672
     required: false
-    note: "RAM framebuffer VGA BIOS for simple display output."
+    note: "RAM framebuffer VGA BIOS."
     source_ref: "hw/display/ramfb.c:150"
 
   - name: "VGA BIOS ATI"
@@ -154,7 +156,7 @@ files:
     source_ref: "hw/display/vmware_vga.c:1349"
 
   # ========================================================
-  # x86 OPTION ROMs (loaded on demand)
+  # x86 OPTION ROMs
   # ========================================================
   - name: "KVM VAPIC"
     path: "qemu/kvmvapic.bin"
@@ -162,9 +164,7 @@ files:
     md5: "b8cec9572e408a3259914f9aba8664cb"
     size: 9216
     required: false
-    note: >
-      KVM virtual APIC option ROM. Loaded as option ROM for
-      APIC acceleration on x86.
+    note: "KVM virtual APIC option ROM for APIC acceleration on x86."
     source_ref: "hw/i386/vapic.c:733"
 
   - name: "Linux boot ROM"
@@ -200,7 +200,7 @@ files:
     md5: "e942cc4f612050c7331d33a34b0d5192"
     size: 1024
     required: false
-    note: "DMA-capable option ROM for Multiboot kernel loading."
+    note: "DMA-capable Multiboot option ROM."
     source_ref: "hw/i386/multiboot.c:406"
 
   - name: "PVH boot ROM"
@@ -213,7 +213,7 @@ files:
     source_ref: "hw/i386/x86-common.c:735"
 
   # ========================================================
-  # PXE NETWORK BOOT ROMs (iPXE)
+  # PXE NETWORK BOOT ROMs (iPXE legacy BIOS)
   # ========================================================
   - name: "PXE e1000"
     path: "qemu/pxe-e1000.rom"
@@ -222,7 +222,7 @@ files:
     size: 67072
     required: false
     note: "iPXE PXE boot ROM for Intel e1000 NIC (8086:100e)."
-    source_ref: "pc-bios/README"
+    source_ref: "pc-bios/meson.build:47"
 
   - name: "PXE eepro100"
     path: "qemu/pxe-eepro100.rom"
@@ -230,8 +230,8 @@ files:
     md5: "2f8279177fdc2ce5abc47d9f1e303db1"
     size: 61440
     required: false
-    note: "iPXE PXE boot ROM for Intel eepro100 NIC (8086:1209)."
-    source_ref: "pc-bios/README"
+    note: "iPXE PXE boot ROM for Intel eepro100 NIC (8086:1209). Device default romfile."
+    source_ref: "hw/net/eepro100.c:2077"
 
   - name: "PXE ne2k_pci"
     path: "qemu/pxe-ne2k_pci.rom"
@@ -240,7 +240,7 @@ files:
     size: 61440
     required: false
     note: "iPXE PXE boot ROM for NE2000 PCI NIC (1050:0940)."
-    source_ref: "pc-bios/README"
+    source_ref: "pc-bios/meson.build:49"
 
   - name: "PXE pcnet"
     path: "qemu/pxe-pcnet.rom"
@@ -249,7 +249,7 @@ files:
     size: 61440
     required: false
     note: "iPXE PXE boot ROM for AMD PCnet NIC (1022:2000)."
-    source_ref: "pc-bios/README"
+    source_ref: "pc-bios/meson.build:50"
 
   - name: "PXE rtl8139"
     path: "qemu/pxe-rtl8139.rom"
@@ -258,7 +258,7 @@ files:
     size: 61440
     required: false
     note: "iPXE PXE boot ROM for Realtek RTL8139 NIC (10ec:8139)."
-    source_ref: "pc-bios/README"
+    source_ref: "pc-bios/meson.build:51"
 
   - name: "PXE virtio"
     path: "qemu/pxe-virtio.rom"
@@ -267,7 +267,7 @@ files:
     size: 60416
     required: false
     note: "iPXE PXE boot ROM for VirtIO NIC (1af4:1000)."
-    source_ref: "pc-bios/README"
+    source_ref: "pc-bios/meson.build:52"
 
   # ========================================================
   # EFI NETWORK BOOT ROMs (iPXE UEFI)
@@ -278,7 +278,7 @@ files:
     md5: "d8330b99643e31b51e7710fa26c7e859"
     size: 159232
     required: false
-    note: "iPXE EFI boot ROM for Intel e1000 NIC."
+    note: "iPXE EFI boot ROM for Intel e1000 NIC. Device default romfile."
     source_ref: "hw/net/e1000.c:1708"
 
   - name: "EFI e1000e"
@@ -287,7 +287,7 @@ files:
     md5: "a55bf3f4988d4a736c71a1300636cd69"
     size: 159232
     required: false
-    note: "iPXE EFI boot ROM for Intel e1000e NIC."
+    note: "iPXE EFI boot ROM for Intel e1000e NIC. Device default romfile."
     source_ref: "hw/net/e1000e.c:689"
 
   - name: "EFI eepro100"
@@ -297,7 +297,7 @@ files:
     size: 159232
     required: false
     note: "iPXE EFI boot ROM for Intel eepro100 NIC."
-    source_ref: "hw/net/eepro100.c:2077"
+    source_ref: "pc-bios/meson.build:54"
 
   - name: "EFI ne2k_pci"
     path: "qemu/efi-ne2k_pci.rom"
@@ -305,7 +305,7 @@ files:
     md5: "10b66275b3644af301c64a3c545c3daf"
     size: 157696
     required: false
-    note: "iPXE EFI boot ROM for NE2000 PCI NIC."
+    note: "iPXE EFI boot ROM for NE2000 PCI NIC. Device default romfile."
     source_ref: "hw/net/ne2000-pci.c:111"
 
   - name: "EFI pcnet"
@@ -314,7 +314,7 @@ files:
     md5: "374696f4fffa83c9cf18272212c21d83"
     size: 157696
     required: false
-    note: "iPXE EFI boot ROM for AMD PCnet NIC."
+    note: "iPXE EFI boot ROM for AMD PCnet NIC. Device default romfile."
     source_ref: "hw/net/pcnet-pci.c:267"
 
   - name: "EFI rtl8139"
@@ -323,7 +323,7 @@ files:
     md5: "f81dbbd7001a8db631f2a548b7d08c4e"
     size: 160768
     required: false
-    note: "iPXE EFI boot ROM for Realtek RTL8139 NIC."
+    note: "iPXE EFI boot ROM for Realtek RTL8139 NIC. Device default romfile."
     source_ref: "hw/net/rtl8139.c:3423"
 
   - name: "EFI virtio"
@@ -332,8 +332,8 @@ files:
     md5: "d3887f04c23035cae3f0e1075deea459"
     size: 160768
     required: false
-    note: "iPXE EFI boot ROM for VirtIO NIC."
-    source_ref: "pc-bios/meson.build:58"
+    note: "iPXE EFI boot ROM for VirtIO NIC. Device default romfile."
+    source_ref: "hw/virtio/virtio-net-pci.c:73"
 
   - name: "EFI vmxnet3"
     path: "qemu/efi-vmxnet3.rom"
@@ -341,8 +341,91 @@ files:
     md5: "ea1ba222dbd5aa356ea1f29393ae55e1"
     size: 156672
     required: false
-    note: "iPXE EFI boot ROM for VMware vmxnet3 NIC."
+    note: "iPXE EFI boot ROM for VMware vmxnet3 NIC. Device default romfile."
     source_ref: "hw/net/vmxnet3.c:2508"
+
+  # ========================================================
+  # EDK2 UEFI FIRMWARE
+  # ========================================================
+  - name: "EDK2 x86_64 UEFI"
+    path: "qemu/edk2-x86_64-code.fd"
+    sha1: "eac1a94b8e0d7c53fd5df001c36794ec34c7c724"
+    size: 3653632
+    required: false
+    note: "TianoCore UEFI firmware for x86_64. Built from edk2-stable202302."
+    source_ref: "pc-bios/meson.build:12"
+
+  - name: "EDK2 x86_64 Secure Boot UEFI"
+    path: "qemu/edk2-x86_64-secure-code.fd"
+    sha1: "617abe2746696bb4a309d72cecb446dc76a2a61e"
+    size: 3653632
+    required: false
+    note: "TianoCore UEFI firmware for x86_64 with Secure Boot support."
+    source_ref: "pc-bios/meson.build:13"
+
+  - name: "EDK2 i386 UEFI"
+    path: "qemu/edk2-i386-code.fd"
+    sha1: "45b8faebdfaaf19d16e3a7c5f60d69214685071c"
+    size: 3653632
+    required: false
+    note: "TianoCore UEFI firmware for i386."
+    source_ref: "pc-bios/meson.build:9"
+
+  - name: "EDK2 i386 Secure Boot UEFI"
+    path: "qemu/edk2-i386-secure-code.fd"
+    sha1: "6982abec8ef2ed7c8293163d5a0bd69a01a2126f"
+    size: 3653632
+    required: false
+    note: "TianoCore UEFI firmware for i386 with Secure Boot support."
+    source_ref: "pc-bios/meson.build:10"
+
+  - name: "EDK2 i386 UEFI vars template"
+    path: "qemu/edk2-i386-vars.fd"
+    sha1: "b62e676c9317a32aaa9ee1d76268d8c55663bd6e"
+    size: 540672
+    required: false
+    note: "UEFI variable store template for i386/x86_64 EDK2 firmware."
+    source_ref: "pc-bios/meson.build:11"
+
+  - name: "EDK2 AArch64 UEFI"
+    path: "qemu/edk2-aarch64-code.fd"
+    sha1: "514edbce58bfa877170673c1799351a7dab3b6df"
+    size: 67108864
+    required: false
+    note: "TianoCore UEFI firmware for AArch64 (ARM 64-bit)."
+    source_ref: "pc-bios/meson.build:4"
+
+  - name: "EDK2 ARM UEFI"
+    path: "qemu/edk2-arm-code.fd"
+    sha1: "c20f01c28b59b388abb9d0febeec45d801a632f0"
+    size: 67108864
+    required: false
+    note: "TianoCore UEFI firmware for ARM (32-bit)."
+    source_ref: "pc-bios/meson.build:5"
+
+  - name: "EDK2 ARM UEFI vars template"
+    path: "qemu/edk2-arm-vars.fd"
+    sha1: "b051167e0e57bd13d77ed92ef7b474872f44ec6d"
+    size: 67108864
+    required: false
+    note: "UEFI variable store template for ARM/AArch64 EDK2 firmware."
+    source_ref: "pc-bios/meson.build:6"
+
+  - name: "EDK2 RISC-V UEFI"
+    path: "qemu/edk2-riscv-code.fd"
+    sha1: "2c8633d881ece0c4794d740138a318f7e9af480c"
+    size: 33554432
+    required: false
+    note: "TianoCore UEFI firmware for RISC-V 64-bit."
+    source_ref: "pc-bios/meson.build:7"
+
+  - name: "EDK2 RISC-V UEFI vars template"
+    path: "qemu/edk2-riscv-vars.fd"
+    sha1: "c4e6cce4247ba8f32f528c1c69f49228f616677f"
+    size: 33554432
+    required: false
+    note: "UEFI variable store template for RISC-V EDK2 firmware."
+    source_ref: "pc-bios/meson.build:8"
 
   # ========================================================
   # POWERPC FIRMWARE
@@ -350,48 +433,40 @@ files:
   - name: "OpenBIOS PowerPC"
     path: "qemu/openbios-ppc"
     sha1: "0ef5051dcb318c0bc45d1908f8318d6eece8686a"
-    md5: ""
     size: 677196
     required: false
     note: >
       OpenBIOS (IEEE 1275 Open Firmware) for PowerPC emulation.
-      Required for -M mac99, -M g3beige and other PPC machines.
-    source_ref: "pc-bios/README"
+      Default for -M mac99, -M g3beige and other PPC machines.
+    source_ref: "hw/ppc/mac_oldworld.c:60, hw/ppc/mac_newworld.c:86"
 
   - name: "SLOF (Slimline Open Firmware)"
     path: "qemu/slof.bin"
     sha1: "a03a94acfe555804d66cc6c74760ae1375a71a64"
-    md5: ""
     size: 995000
     required: false
-    note: >
-      IBM SLOF firmware for pSeries (POWER) machine type.
-      Built from qemu-slof-20230918 tag.
-    source_ref: "pc-bios/README"
+    note: "IBM SLOF firmware for pSeries (POWER) machine type. Built from qemu-slof-20230918."
+    source_ref: "hw/ppc/spapr.c:106"
 
   - name: "skiboot"
     path: "qemu/skiboot.lid"
     sha1: "8052069aa9714c23be05b4e62fb245a3d572cb0f"
-    md5: ""
     size: 2527328
     required: false
-    note: >
-      OPAL firmware for OpenPOWER PowerNV (non-virtualized) machine type.
-    source_ref: "pc-bios/README"
+    note: "OPAL firmware for OpenPOWER PowerNV (non-virtualized) machine type."
+    source_ref: "hw/ppc/pnv.c:63"
 
   - name: "VOF (Virtual Open Firmware)"
     path: "qemu/vof.bin"
     sha1: "fc737b34a390f5752cb7e35b33d71f4f438ab607"
-    md5: ""
     size: 3456
     required: false
-    note: "Minimal Open Firmware shim for -machine pseries,x-vof=on."
-    source_ref: "pc-bios/README"
+    note: "Minimal Open Firmware shim for -machine pseries,x-vof=on. Also default for Pegasos II."
+    source_ref: "hw/ppc/spapr.c:107, hw/ppc/pegasos2.c:43"
 
   - name: "VOF NVRAM"
     path: "qemu/vof-nvram.bin"
     sha1: "5d1184609b87f78635f0575467a1c3f440900ff0"
-    md5: ""
     size: 16384
     required: false
     note: "NVRAM template for VOF (Virtual Open Firmware)."
@@ -400,18 +475,14 @@ files:
   - name: "U-Boot e500"
     path: "qemu/u-boot.e500"
     sha1: "9ea03f249f856cdcb4399cc1f5a5031729379911"
-    md5: ""
     size: 421720
     required: false
-    note: >
-      U-Boot for PowerPC e500 (qemu-ppce500 target).
-      Built from upstream denx u-boot, commit 2072e72.
-    source_ref: "pc-bios/README"
+    note: "U-Boot for PowerPC e500 (qemu-ppce500 target). Built from upstream denx u-boot, commit 2072e72."
+    source_ref: "hw/ppc/e500.c:1184"
 
   - name: "U-Boot SAM460"
     path: "qemu/u-boot-sam460-20100605.bin"
     sha1: "0399a79ac0cf77f0da70af9baec7548a3b368f0a"
-    md5: ""
     size: 524288
     required: false
     note: "U-Boot for Sam460ex (AmigaOne) PowerPC board."
@@ -420,11 +491,10 @@ files:
   - name: "QEMU VGA Mac driver"
     path: "qemu/qemu_vga.ndrv"
     sha1: "638c6262a6eb579ec3d1c9292566ac94c942dc15"
-    md5: ""
     size: 18752
     required: false
     note: "QemuMacDrivers VGA driver for PPC MacOS guests."
-    source_ref: "pc-bios/README"
+    source_ref: "hw/ppc/mac_oldworld.c:58, hw/ppc/mac_newworld.c:84"
 
   # ========================================================
   # SPARC FIRMWARE
@@ -432,38 +502,41 @@ files:
   - name: "OpenBIOS Sparc32"
     path: "qemu/openbios-sparc32"
     sha1: "5a4f2124c8f093f8aee99fbcebcf5d17d789ff26"
-    md5: ""
     size: 382080
     required: false
-    note: >
-      OpenBIOS for Sparc32 emulation. Includes QEMU,tcx.bin
-      and QEMU,cgthree.bin display drivers.
-    source_ref: "pc-bios/README"
+    note: "OpenBIOS for Sparc32 emulation (sun4m)."
+    source_ref: "hw/sparc/sun4m.c:79"
 
   - name: "OpenBIOS Sparc64"
     path: "qemu/openbios-sparc64"
     sha1: "c6e215fe460629d35688ab8e51faf6f765827cd6"
-    md5: ""
     size: 1593408
     required: false
-    note: "OpenBIOS for Sparc64 (UltraSPARC) emulation."
-    source_ref: "pc-bios/README"
+    note: "OpenBIOS for Sparc64 (UltraSPARC) emulation (sun4u)."
+    source_ref: "hw/sparc64/sun4u.c:67"
 
   - name: "QEMU TCX display"
     path: "qemu/QEMU,tcx.bin"
-    sha1: ""
-    md5: ""
+    sha1: "5f1792a73ee47d78b2160191ecb2c92f353f93ad"
+    size: 1402
     required: false
     note: "TCX framebuffer FCode driver for Sparc32 OpenBIOS."
-    source_ref: "pc-bios/meson.build:45"
+    source_ref: "hw/display/tcx.c:38,827"
 
   - name: "QEMU cgthree display"
     path: "qemu/QEMU,cgthree.bin"
-    sha1: ""
-    md5: ""
+    sha1: "619b86fb02faf8f682474be3f0653b58015008ba"
+    size: 850
     required: false
     note: "CG3 framebuffer FCode driver for Sparc32 OpenBIOS."
-    source_ref: "pc-bios/meson.build:46"
+    source_ref: "hw/display/cg3.c:44,303"
+
+  - name: "U-Boot LEON3"
+    path: "qemu/u-boot.bin"
+    sha1: ""
+    required: false
+    note: "U-Boot for LEON3 SPARC board. Not shipped with QEMU, user-supplied."
+    source_ref: "hw/sparc/leon3.c:53"
 
   # ========================================================
   # ALPHA FIRMWARE
@@ -471,11 +544,10 @@ files:
   - name: "Alpha PALcode"
     path: "qemu/palcode-clipper"
     sha1: "47b0870aaa45a7aa0d48847fd905908fb06f3e9f"
-    md5: ""
     size: 153728
     required: false
     note: "PALcode firmware for Alpha (Clipper/DP264) machine emulation."
-    source_ref: "pc-bios/README"
+    source_ref: "hw/alpha/dp264.c:139"
 
   # ========================================================
   # RISC-V FIRMWARE
@@ -483,24 +555,18 @@ files:
   - name: "OpenSBI RISC-V 32"
     path: "qemu/opensbi-riscv32-generic-fw_dynamic.bin"
     sha1: "7a23dfdeef3d78ffc89d86e89fc06a36f1e4386f"
-    md5: ""
     size: 268312
     required: false
-    note: >
-      OpenSBI (Supervisor Binary Interface) firmware for RISC-V 32-bit.
-      Required for riscv32-softmmu machine types.
-    source_ref: "pc-bios/README"
+    note: "OpenSBI (Supervisor Binary Interface) firmware for RISC-V 32-bit."
+    source_ref: "hw/riscv/boot.c:92"
 
   - name: "OpenSBI RISC-V 64"
     path: "qemu/opensbi-riscv64-generic-fw_dynamic.bin"
     sha1: "6883bfd1991c0ef0d67b0967e7dcbd60420dd480"
-    md5: ""
     size: 272504
     required: false
-    note: >
-      OpenSBI firmware for RISC-V 64-bit.
-      Required for riscv64-softmmu machine types.
-    source_ref: "pc-bios/README"
+    note: "OpenSBI firmware for RISC-V 64-bit."
+    source_ref: "hw/riscv/boot.c:92"
 
   # ========================================================
   # S390X FIRMWARE
@@ -508,20 +574,18 @@ files:
   - name: "S390 CCW firmware"
     path: "qemu/s390-ccw.img"
     sha1: "7b4fa888d32ca8ddbc752f7442e4d055cee1871a"
-    md5: ""
     size: 42608
     required: false
     note: "Channel Command Word boot firmware for s390x emulation."
-    source_ref: "pc-bios/meson.build:68"
+    source_ref: "hw/s390x/ipl.c:149"
 
   - name: "S390 network boot"
     path: "qemu/s390-netboot.img"
     sha1: "f6cec671408117bd9a31e982682662f27ef4fb2c"
-    md5: ""
     size: 67232
     required: false
     note: "Network boot firmware for s390x emulation."
-    source_ref: "pc-bios/meson.build:69"
+    source_ref: "hw/s390x/ipl.c:497"
 
   # ========================================================
   # HP-PA FIRMWARE
@@ -529,20 +593,77 @@ files:
   - name: "HP-PA firmware (32-bit)"
     path: "qemu/hppa-firmware.img"
     sha1: "605c36ede6c120c6cc7efe147a75a3dc4b7e4fb0"
-    md5: ""
     size: 167820
     required: false
     note: "SeaBIOS-hppa firmware for 32-bit HP-PARISC emulation."
-    source_ref: "pc-bios/README"
+    source_ref: "hw/hppa/machine.c:424"
 
   - name: "HP-PA firmware (64-bit)"
     path: "qemu/hppa-firmware64.img"
     sha1: "b42f6d4ca74073de6c038579b4a9323ad0a6b398"
-    md5: ""
     size: 206024
     required: false
     note: "SeaBIOS-hppa firmware for 64-bit HP-PARISC emulation."
-    source_ref: "pc-bios/README"
+    source_ref: "hw/hppa/machine.c:424"
+
+  # ========================================================
+  # MIPS FIRMWARE (not shipped, user-supplied)
+  # ========================================================
+  - name: "MIPS BIOS (big-endian)"
+    path: "qemu/mips_bios.bin"
+    sha1: ""
+    required: false
+    note: "Default BIOS for big-endian MIPS machines (Malta, MIPSsim, Jazz). Not shipped with QEMU."
+    source_ref: "hw/mips/malta.c:97"
+
+  - name: "MIPS BIOS (little-endian)"
+    path: "qemu/mipsel_bios.bin"
+    sha1: ""
+    required: false
+    note: "Default BIOS for little-endian MIPS machines (Malta, MIPSsim, Jazz). Not shipped with QEMU."
+    source_ref: "hw/mips/malta.c:99"
+
+  - name: "Loongson3 BIOS"
+    path: "qemu/bios_loongson3.bin"
+    sha1: ""
+    required: false
+    note: "Default BIOS for Loongson3 virtual MIPS machine. Not shipped with QEMU."
+    source_ref: "hw/mips/loongson3_virt.c:63"
+
+  - name: "PMON Fuloong2e"
+    path: "qemu/pmon_2e.bin"
+    sha1: ""
+    required: false
+    note: "PMON monitor for Fuloong2e MIPS board. Not shipped with QEMU."
+    source_ref: "hw/mips/fuloong2e.c:58"
+
+  # ========================================================
+  # M68K FIRMWARE (not shipped, user-supplied)
+  # ========================================================
+  - name: "Macintosh ROM"
+    path: "qemu/MacROM.bin"
+    sha1: ""
+    required: false
+    note: "Apple Macintosh ROM for Quadra 800 emulation. Not shipped with QEMU."
+    source_ref: "hw/m68k/q800.c:62"
+
+  # ========================================================
+  # ARM FIRMWARE (non-NPCM7xx, not shipped)
+  # ========================================================
+  - name: "Canon A1100 ROM"
+    path: "qemu/canon-a1100-rom1.bin"
+    sha1: ""
+    required: false
+    note: "Canon PowerShot A1100 IS DIGIC camera ROM. Not shipped with QEMU."
+    source_ref: "hw/arm/digic_boards.c:131"
+
+  - name: "NPCM7xx boot ROM"
+    path: "qemu/npcm7xx_bootrom.bin"
+    sha1: "22a75d26a0591d2c7763765b6381fa2f73de43e1"
+    size: 768
+    required: false
+    note: "Boot ROM for Nuvoton NPCM7xx BMC (ARM Cortex-A9)."
+    source_ref: "hw/arm/npcm7xx_boards.c:56"
 
   # ========================================================
   # DEVICE TREE BLOBS
@@ -550,50 +671,41 @@ files:
   - name: "Bamboo DTB (PPC)"
     path: "qemu/bamboo.dtb"
     sha1: "ebdf1745479f4ec88459bbd9ef16ee1114018508"
-    md5: ""
     size: 3211
     required: false
     note: "Device tree blob for PowerPC Bamboo (440EP) board."
-    source_ref: "pc-bios/meson.build:88"
+    source_ref: "hw/ppc/ppc440_bamboo.c:38"
 
   - name: "Canyonlands DTB (PPC)"
     path: "qemu/canyonlands.dtb"
     sha1: "8a2fda0b4f23a92eb44776b5d7ffe951987062da"
-    md5: ""
     size: 9779
     required: false
-    note: "Device tree blob for PowerPC Canyonlands (460EX) board."
-    source_ref: "pc-bios/meson.build:89"
+    note: "Device tree blob for PowerPC Canyonlands (460EX) / Sam460ex board."
+    source_ref: "hw/ppc/sam460ex.c:45"
 
   - name: "Petalogix ML605 DTB (MicroBlaze)"
     path: "qemu/petalogix-ml605.dtb"
     sha1: "892d265838866869b8a8ef104252ff5b2fda156f"
-    md5: ""
     size: 9882
     required: false
-    note: "Device tree blob for Xilinx Petalogix ML605 MicroBlaze board."
+    note: "Device tree blob for Xilinx Petalogix ML605 MicroBlaze board. MicroBlaze target not built in libretro core."
     source_ref: "pc-bios/meson.build:91"
 
   - name: "Petalogix S3ADSP1800 DTB (MicroBlaze)"
     path: "qemu/petalogix-s3adsp1800.dtb"
     sha1: "976600e3f89ecc1f3564b7077f53c58e0b565280"
-    md5: ""
     size: 8161
     required: false
-    note: "Device tree blob for Xilinx Petalogix S3ADSP1800 MicroBlaze board."
+    note: "Device tree blob for Xilinx Petalogix S3ADSP1800 MicroBlaze board. MicroBlaze target not built in libretro core."
     source_ref: "pc-bios/meson.build:90"
 
-  # ========================================================
-  # OTHER
-  # ========================================================
-  - name: "NPCM7xx boot ROM"
-    path: "qemu/npcm7xx_bootrom.bin"
-    sha1: "22a75d26a0591d2c7763765b6381fa2f73de43e1"
-    md5: ""
-    size: 768
+  - name: "Virtex ML507 DTB (PPC)"
+    path: "qemu/virtex-ml507.dtb"
+    sha1: ""
     required: false
-    note: "Boot ROM for Nuvoton NPCM7xx BMC (ARM Cortex-A9)."
-    source_ref: "pc-bios/README"
+    note: "Device tree blob for Xilinx Virtex ML507 PowerPC board. Not shipped with QEMU."
+    source_ref: "hw/ppc/virtex_ml507.c:148"
 
 notes:
   bios_directory: >
@@ -605,10 +717,12 @@ notes:
     Other VGA BIOS variants are loaded depending on the emulated GPU.
     PXE/EFI ROMs are only needed for network booting.
   multi_arch: >
-    The libretro build supports 16 target architectures. Non-x86 firmware
+    The libretro build targets 17 architectures. Non-x86 firmware
     is only needed when using .qemu_cmd_line files that invoke a different
     qemu-system-* binary (e.g. qemu-system-ppc for MacOS 9).
-  experimental: >
-    This core is marked is_experimental=true in its .info file.
-    Savestates are not supported.
+  edk2: >
+    EDK2 UEFI firmware is shipped as bz2-compressed blobs in pc-bios/. These
+    provide UEFI boot for x86, ARM, and RISC-V machine types. Users specify
+    them via -bios or pflash in .qemu_cmd_line files.
+  experimental: "This core is marked is_experimental=true in its .info file."
   version: "Based on QEMU 9.0.50 (io12/qemu-libretro)"

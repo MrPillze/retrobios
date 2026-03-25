@@ -1,8 +1,25 @@
-emulator: "sameduck"
-type: alias
-alias_of: "sameboy"
-profiled_date: "2026-03-18"
-core_version: "git"
+emulator: sameduck
+type: libretro
+core_classification: official_port
+source: "https://github.com/LIJI32/SameBoy"
+upstream: "https://github.com/LIJI32/SameBoy"
+profiled_date: "2026-03-25"
+core_version: "0.13.6"
 display_name: "Mega Duck / Cougar Boy (SameDuck)"
-note: "This core uses the same BIOS/firmware as sameboy. See emulators/sameboy.yml for details."
+cores:
+  - sameduck
+systems:
+  - mega-duck
+
+notes: |
+  SameDuck is the Mega Duck / Cougar Boy branch of SameBoy by LIJI32.
+  Built from the SameDuck branch of the upstream repo (no separate
+  libretro fork). The Mega Duck hardware has no boot ROM. All boot ROM
+  loading functions are stubs in this branch (GB_load_boot_rom returns 0,
+  request_boot_rom is empty, no BootROMs/ directory exists).
+
+  The libretro port loads only game ROMs via GB_load_rom(). No
+  boot_rom_load_callback is set. retro_system_directory is stored but
+  never used for file loading.
+
 files: []

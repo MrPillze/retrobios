@@ -1,7 +1,10 @@
 emulator: testgl_ff
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+upstream: null
+source_ref: "video/opengl/libretro_test_gl_fixedfunction/libretro_gl_ff_test.c"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "TestGL (FF)"
 cores:
@@ -9,11 +12,8 @@ cores:
 systems: []
 
 notes: |
-  OpenGL fixed-function test core from libretro-samples. Similar to testgl
-  but uses the legacy OpenGL fixed-function pipeline (glBegin/glEnd, matrix
-  stack) instead of shaders. Tests frontend compatibility with older GL code
-  paths.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  OpenGL fixed-function pipeline test core from libretro-samples.
+  Renders a colored quad using glBegin/glEnd and matrix stack (GL 1.4+ / GLES 1.x+).
+  No file loading of any kind. supports_no_game.
 
 files: []

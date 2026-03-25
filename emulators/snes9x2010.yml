@@ -1,0 +1,40 @@
+emulator: Snes9x 2010
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/snes9x2010"
+upstream: "https://github.com/snes9xgit/snes9x"
+profiled_date: "2026-03-25"
+core_version: "v1.52.4"
+display_name: "Nintendo - SNES / SFC (Snes9x 2010)"
+cores:
+  - snes9x2010
+systems:
+  - snes
+  - sufami-turbo
+  - satellaview
+
+notes: |
+  Frozen snapshot of Snes9x 1.52.4, rewritten in C with optimizations
+  for PS3 (originally called SNES9x Next).
+  SPC700 IPL ROM (64 bytes) embedded in src/apu.c:3442 as APUROM[64].
+  DSP-1 ROM data (1024 x uint16) embedded in src/dsp.c:219 as DSP1ROM[1024].
+  All coprocessors (DSP-1/2/3/4, CX4, ST010/011/018, SuperFX, SPC7110,
+  SA-1, S-DD1, S-RTC, OBC-1) are pure HLE.
+  Sufami Turbo support disabled: LoadSufamiTurbo in src/memmap.c is behind
+  #if SNES_SUPPORT_MULTI_CART which defaults to 0 and is never enabled in
+  any Makefile. retro_load_game_special returns false.
+  Upstream snes9x 1.52 supports Sufami Turbo (loads STBIOS.bin).
+
+files:
+  - name: "BS-X.bin"
+    system: satellaview
+    description: "Satellaview BS-X BIOS"
+    required: false
+    size: 1048576
+    validation: [size]
+    aliases: ["BS-X.bios"]
+    source_ref: "src/bsx.c:959-993 (BSX_LoadBIOS), src/bsx.c:1068 (caller in S9xInitBSX)"
+    notes: |
+      Loaded when a BS game is auto-detected (is_bsx checks ROM header at
+      0x7FC0/0xFFC0). Without this file, BSX.bootup is set to FALSE and
+      BIOSROM is zeroed. BS games still load but lack the boot menu.

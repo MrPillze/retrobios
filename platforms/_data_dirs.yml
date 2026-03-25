@@ -159,6 +159,16 @@ data_directories:
     strip_components: 1
     description: "FreeIntv per-game controller overlay PNGs"
 
+  # ref: crawl-ref/source/files.cc:375-458 — datafile_path() dat/ tree
+  # Not on buildbot — sourced from libretro repo
+  # 532 files (tiles, fonts, databases, lua scripts, level descriptions)
+  stonesoup:
+    source_url: "https://github.com/libretro/crawl-ref"
+    source_type: git_subtree
+    source_path: "crawl-ref/source/dat"
+    local_cache: data/stonesoup
+    description: "DCSS game data (tiles, fonts, databases, lua, level descriptions)"
+
   # ref: dirksimple — system/
   dirksimple:
     source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"

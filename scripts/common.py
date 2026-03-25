@@ -557,13 +557,21 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             # Hash checks — collect all accepted hashes as sets (multiple valid
             # versions of the same file, e.g. MT-32 ROM versions)
             if "crc32" in checks and f.get("crc32"):
-                norm = f["crc32"].lower()
-                if norm.startswith("0x"):
-                    norm = norm[2:]
-                index[fname]["crc32"].add(norm)
+                crc_val = f["crc32"]
+                crc_list = crc_val if isinstance(crc_val, list) else [crc_val]
+                for cv in crc_list:
+                    norm = str(cv).lower()
+                    if norm.startswith("0x"):
+                        norm = norm[2:]
+                    index[fname]["crc32"].add(norm)
             for hash_type in ("md5", "sha1", "sha256"):
                 if hash_type in checks and f.get(hash_type):
-                    index[fname][hash_type].add(f[hash_type].lower())
+                    val = f[hash_type]
+                    if isinstance(val, list):
+                        for h in val:
+                            index[fname][hash_type].add(str(h).lower())
+                    else:
+                        index[fname][hash_type].add(str(val).lower())
             # Adler32 — stored as known_hash_adler32 field (not in validation: list
             # for Dolphin, but support it in both forms for future profiles)
             adler_val = f.get("known_hash_adler32") or f.get("adler32")

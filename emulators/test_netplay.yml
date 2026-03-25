@@ -1,7 +1,7 @@
 emulator: test_netplay
 type: test
-source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+profiled_date: "2026-03-25"
 core_version: "1"
 display_name: "Test for netplay"
 cores:
@@ -9,11 +9,15 @@ cores:
 systems: []
 
 notes: |
-  Netplay test core from libretro-samples. Designed to validate the libretro
-  netplay subsystem: deterministic frame stepping, input synchronization,
-  savestate serialization for rollback. Renders a simple interactive scene
-  where two players can verify sync.
+  Phantom .info: declared in libretro-core-info since 2017 but no source code,
+  build recipe, or compiled binary exists anywhere in the libretro organization.
+  Not on the buildbot. The .info has empty authors, license, and extensions.
 
-  No system files, BIOS, or firmware required. Not an emulator.
+  No system files required.
+
+exclusion_note: >
+  .info declares no firmware (firmware_count absent). No source code found
+  to analyze — searched libretro-samples, RetroArch cores, libretro-super,
+  and the full libretro GitHub org.
 
 files: []

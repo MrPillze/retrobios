@@ -1,43 +1,28 @@
 emulator: RACE (Neo Geo Pocket)
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/RACE"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/8bitpsp/race"
+profiled_date: "2026-03-25"
 core_version: "v2.16"
 display_name: "SNK - Neo Geo Pocket / Color (RACE)"
+cores: [race]
 systems: [snk-ngp, snk-ngpc]
 
 notes: |
-  RACE is a Neo Geo Pocket and Neo Geo Pocket Color emulator, originally
-  developed for PSP (forked from Akop Karapetyan's port), adapted for
-  libretro.
+  RACE is a Neo Geo Pocket and Neo Geo Pocket Color emulator originally by
+  Judge_ (MHE), ported to GP2X by Flavor, to PSP by Akop Karapetyan, modified
+  by theelf, then adapted for libretro.
 
-  No external BIOS files are required. The core contains dead code in
-  race-memory.c that would load "NPBIOS.BIN" (64KB, loaded into cpurom
-  via filestream_open), but it is compiled out with #if 0 and loadBIOS()
-  unconditionally returns 0. The comment explains: "Using a real bios
-  file causes nothing but issues" and references Card Fighters' Clash
-  Test Mode as a known failure.
+  No external BIOS files are required. The upstream versions (GP2X, PSP) support
+  optional loading of NPBIOS.BIN, but the libretro port disabled it entirely
+  with #if 0 in race-memory.c:loadBIOS(). The comment explains: "Using a real
+  bios file causes nothing but issues."
 
-  Instead, the core uses a software HLE approach:
-  - A built-in koyote_bin memory dump (RAM state from a real console
-    post-boot) is copied into mainram at startup
-  - A fake SWI jump table is constructed at cpurom[0xE000] using the
-    TLCS-900H 0x1A (reg) dummy opcode to trap BIOS calls
-  - doBios() in tlcs900h.c handles 33 BIOS functions in software:
-    shutdown, clock speed, RTC, screen mode, font rendering, flash
-    read/write, communication, and sound control
-  - Interrupt vectors are set up at cpurom[0xFF00] and interrupt
-    handler code at cpurom[0xF800]
-  - CPU RAM defaults (interrupt priorities, timers) are loaded from
-    the ngpcpuram[256] table
-
-  The Z80 sound CPU is emulated in software (cz80 or DrZ80 backend).
-  Flash memory for game saves is handled internally by flash.c.
-
-  The only core option affecting system behavior is ngp_language
-  (english/japanese), which sets a RAM flag at 0x6F87.
-
-  ROM extensions: .ngp, .ngc, .ngpc, .npc
+  The core uses a software HLE approach: a compiled-in koyote_bin RAM dump
+  (post-boot console state) is copied into mainram at startup, a fake SWI jump
+  table is built at cpurom[0xE000], and doBios() in tlcs900h.c handles 33 BIOS
+  functions in software. The Z80 sound CPU is emulated via cz80 or DrZ80.
 
 files: []
 
@@ -48,8 +33,9 @@ analysis:
     loaded_by: "race-memory.c:loadBIOS()"
     status: disabled
     source_ref: "race-memory.c:337-361"
+    upstream_status: optional
+    upstream_ref: "memory.cpp:346-365 (8bitpsp/race)"
     notes: |
-      loadBIOS() is wrapped in #if 0 and always returns 0.
-      Even if re-enabled, the realBIOSloaded=1 path has known
-      compatibility issues (e.g. Puzzle Bobble fails to boot).
-      The HLE path is the only functional code path.
+      loadBIOS() is wrapped in #if 0 and always returns 0 in the libretro port.
+      In upstream (8bitpsp/race, alekmaul/race), the function is live and loads
+      NPBIOS.BIN optionally, falling back to HLE if not found.

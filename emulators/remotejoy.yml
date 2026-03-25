@@ -1,7 +1,9 @@
 emulator: RemoteJoy
 type: utility
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-remotejoy"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/akiraink/RemoteJoyLite"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "PSP RemotePlay (RemoteJoy)"
 cores:
@@ -9,11 +11,9 @@ cores:
 systems: []
 
 notes: |
-  RemoteJoy is a PSP remote display utility for libretro. It receives
-  video output from a PSP running the RemoteJoy plugin over USB or
-  network, displaying it within RetroArch.
-
-  No BIOS or system files required. Requires a PSP with the RemoteJoy
-  plugin installed on the device side.
+  USB streaming receiver for PSP. Connects via libusb to a PSP running the
+  RemoteJoy plugin (Sony VID 0x054C, PIDs 0x01C9/0x02D2) and displays
+  video frames at 480x272. No file I/O. Protocol reimplemented from
+  RemoteJoyLite Win32 client constants, not a port.
 
 files: []

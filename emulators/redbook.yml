@@ -1,7 +1,8 @@
 emulator: Redbook
 type: utility
-source: "https://github.com/libretro/RetroArch"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/libretro/redbook"
+profiled_date: "2026-03-25"
 core_version: "1.0"
 display_name: "Redbook Audio Player"
 cores:
@@ -9,10 +10,7 @@ cores:
 systems: []
 
 notes: |
-  Redbook is an audio CD player core for RetroArch. Plays standard
-  Red Book audio CDs and CD image files (CUE/BIN) containing audio
-  tracks.
-
-  No BIOS or system files required.
+  Audio CD player core. Plays Red Book audio CDs and CUE/BIN images.
+  Original libretro creation by Brad Parker, no upstream emulator.
 
 files: []

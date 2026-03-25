@@ -1,7 +1,9 @@
 emulator: testretroluxury
 type: test
-source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/libretro/retroluxury"
+upstream: "https://github.com/leiradel/retroluxury"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "Test RetroLuxury"
 cores:
@@ -9,11 +11,8 @@ cores:
 systems: []
 
 notes: |
-  RetroLuxury test core from libretro-samples. Demonstrates the rluxury
-  (RetroLuxury) middleware layer for libretro, which provides a simplified
-  game development framework on top of the core API. Used as a reference
-  implementation for the middleware.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  Tech demo for the retroluxury middleware layer. All resources (sprites, audio,
+  fonts) are embedded in the binary via xxd -i at compile time. No external
+  files loaded at runtime.
 
 files: []

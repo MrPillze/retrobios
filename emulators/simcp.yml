@@ -1,7 +1,9 @@
 emulator: SimCoupe
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-simcoupe"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/simonowen/simcoupe"
+profiled_date: "2026-03-25"
 core_version: "Git"
 display_name: "SAM Coupe (SimCoupe)"
 cores:
@@ -10,15 +12,15 @@ systems:
   - sam-coupe
 
 notes: |
-  SimCoupe is an emulator for the SAM Coupe, a British 8-bit home
-  computer by Miles Gordon Technology (1989). The SAM Coupe was
-  designed as a successor to the ZX Spectrum with a Z80B CPU at 6 MHz
-  and custom ASIC graphics.
+  SAM Coupe emulator by Simon Owen. Port based on old pre-1.0 SimCoupe
+  codebase. Experimental, incomplete (no sound, partial input).
 
-  No external BIOS or ROM files required. The SAM Coupe ROM is built
-  into the emulator. The libretro wrapper does not request any files
-  from the system directory.
+  SAM Coupe ROM v3.0 and SAMDOS 2.0 embedded in the binary (SAMROM.h,
+  SAMDOS.h). HDBOOT patches for Atom Lite also embedded (HDBOOT.h).
+  The libretro wrapper never accesses the system directory.
 
-  Loads .dsk, .sad, .mgt, .sbt, and .cpm disk images as content.
+  Upstream v1.2.x loads external resource files (samcoupe.rom,
+  sp0256-al2.bin for VoiceBox speech synthesis). The libretro port
+  lacks VoiceBox/SP0256 support (commented out in IO.cpp).
 
 files: []

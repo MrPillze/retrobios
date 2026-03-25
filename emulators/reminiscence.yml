@@ -1,7 +1,9 @@
 emulator: REminiscence
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/REminiscence"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/cyxx/REminiscence"
+profiled_date: "2026-03-25"
 core_version: "0.3.6"
 display_name: "Flashback (REminiscence)"
 cores:
@@ -10,23 +12,22 @@ systems:
   - flashback
 
 notes: |
-  REminiscence is a re-implementation of the Flashback (Delphine Software, 1992) game engine,
-  ported to libretro. Version 0.3.6. It is not a general-purpose emulator; it only runs the
-  original Flashback game data files.
+  Game engine re-implementation of Flashback (Delphine Software, 1992) by Gregory Montoir,
+  ported to libretro by Stuart Carnie. Version 0.3.6 (upstream is at 0.5.5).
 
-  The core sets need_fullpath = true and valid_extensions = "map" (libretro.cpp:67-68).
+  The core sets need_fullpath = true and valid_extensions = "map" (libretro.cpp:66).
   Content loading (retro_load_game) extracts the parent directory from the provided .MAP
   file path and uses it as the data root via FileSystem (libretro.cpp:194-196).
 
-  Version detection (libretro.cpp:126-149) probes for these files in order:
+  Version detection (libretro.cpp:125-148) probes for these files in order:
     DEMO_UK.ABA -> DOS Demo
     INTRO.SEQ   -> DOS CD
     LEVEL1.MAP  -> DOS
     LEVEL1.LEV  -> Amiga
     DEMO.LEV    -> Amiga Demo
-  Only kResourceTypeDOS is accepted by retro_load_game (line 199); Amiga data is rejected.
+  Only kResourceTypeDOS is accepted (line 199); Amiga data is rejected.
 
-  Language detection (libretro.cpp:151-175) probes for:
+  Language detection (libretro.cpp:150-174) probes for:
     ENGCINE.TXT -> English
     FR_CINE.TXT -> French
     GERCINE.TXT -> German
@@ -35,26 +36,37 @@ notes: |
     FRCINE.TXT  -> French (Amiga)
   Falls back to English if none found.
 
-  All game data files are loaded from the content directory at runtime via FileSystem
-  (fs.cpp), which recursively scans the directory and matches filenames case-insensitively
-  (strcasecmp at fs.cpp:52). The resource system (resource.cpp) loads files by constructing
-  names like "LEVEL1.MAP", "GLOBAL.ICN", "PERSO.SPR", "FB_TXT.FNT", etc.
+  All game data files are loaded from the content directory via FileSystem (fs.cpp),
+  which scans the directory and matches filenames case-insensitively (strcasecmp at
+  fs.cpp:52). The resource system (resource.cpp) loads files by constructing names
+  like "LEVEL1.MAP", "GLOBAL.ICN", "PERSO.SPR", "FB_TXT.FNT", etc.
 
   The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. All data files must live
-  alongside the loaded .MAP content file (or in subdirectories of its parent). There are
-  no BIOS or firmware files; the required files are the original Flashback game data.
+  alongside the loaded .MAP content file. No BIOS or firmware files; the required files
+  are the original Flashback DOS game data.
 
-  Music is loaded from .mod files or Amiga-format module files (mod_player.cpp, staticres.cpp
-  lines 3198-3225). These are optional; the core has a built-in SFX player for in-game
-  action music (sfx_player.cpp with embedded music data in staticres.cpp).
+  Music loaded from .mod files (mod_player.cpp, staticres.cpp:3198-3225). Optional;
+  the core has a built-in SFX player for in-game action music (sfx_player.cpp with
+  embedded music data in staticres.cpp).
 
-  VOICE.VCE from the SegaCD version can optionally be placed in the data directory for
-  in-game voice playback (resource.cpp:910).
+  VOICE.VCE from the SegaCD version can be placed in the data directory for in-game
+  voice playback (resource.cpp:900-941). Optional.
 
-  INTRO.SEQ and other .SEQ files from the DOS CD version provide FMV cutscenes
-  (seq_player.cpp). Without them, the core falls back to polygon-based cutscenes.
+  SEQ cutscene playback is disabled in the libretro build: g_options is zero-initialized
+  (game.cpp:30) and rs.cfg is never parsed, so use_seq_cutscenes defaults to false.
+  The core always uses polygon-based cutscenes (cutscene.cpp).
+
+  Upstream (0.5.5) additionally supports Amiga, Macintosh, PC98 data, MIDI music,
+  OGG playback, SEQ cutscenes, and widescreen modes. None of these are in the
+  libretro port.
 
 files: []
+
+exclusion_note: >
+  Game engine core. All data files (game data, music, voice) are loaded from the content
+  directory alongside the .MAP file via FileSystem. The core never accesses the system
+  directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY is never called). The .info declares
+  firmware_count=0, consistent with the code.
 
 analysis:
   content_type: game_data
@@ -77,7 +89,7 @@ analysis:
         - "VOICE.VCE (SegaCD voice data)"
     dos_cd:
       additional:
-        - "INTRO.SEQ, CREDITS.SEQ, and other .SEQ cutscene videos"
+        - "INTRO.SEQ, CREDITS.SEQ, and other .SEQ cutscene videos (SEQ playback disabled in libretro build)"
     demo:
       archive: "DEMO_UK.ABA (contains all demo data in a single archive)"
   detection_order:

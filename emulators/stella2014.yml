@@ -1,0 +1,60 @@
+emulator: Stella 2014
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/stella2014-libretro"
+upstream: "https://github.com/stella-emu/stella"
+profiled_date: "2026-03-25"
+core_version: "3.9.3"
+display_name: "Atari - 2600 (Stella 2014)"
+cores:
+  - stella2014
+systems:
+  - atari_2600
+
+notes: |
+  Frozen snapshot of Stella 3.9.3. The Atari 2600 has no BIOS ROM; the TIA,
+  RIOT, and 6507 CPU are fully emulated in software. The SuperCharger (Starpath)
+  BIOS is emulated via a built-in dummy ROM (ourDummyROMCode in CartAR.cxx:518).
+  Game properties database (stella.pro) is compiled into DefProps.hxx; external
+  loading is disabled in the libretro port (PropsSet.cxx:35). The core does not
+  call GET_SYSTEM_DIRECTORY. KidVid Voice Module audio tapes (7 WAV files) are
+  loaded via rfopen with relative filenames from the content directory
+  (KidVid.cxx:166-185); absence is handled gracefully. EEPROM save data for
+  AtariVox and SaveKey peripherals is managed as NVRAM, not user-supplied.
+
+files:
+  - name: kvs1.wav
+    description: "KidVid Voice Module audio tape 1 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvs2.wav
+    description: "KidVid Voice Module audio tape 2 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvs3.wav
+    description: "KidVid Voice Module audio tape 3 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvb1.wav
+    description: "KidVid Voice Module audio tape 1 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvb2.wav
+    description: "KidVid Voice Module audio tape 2 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvb3.wav
+    description: "KidVid Voice Module audio tape 3 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:167,182"
+  - name: kvshared.wav
+    description: "KidVid Voice Module shared audio samples"
+    required: false
+    category: game_data
+    source_ref: "stella/src/emucore/KidVid.cxx:185"

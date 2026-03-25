@@ -31,8 +31,11 @@ jobs:
 
       - name: Get changed BIOS files
         id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} | grep '^bios/' || true)
+          files=$(git diff --name-only "$BASE_SHA"..."$HEAD_SHA" | grep '^bios/' || true)
           echo "files=$files" >> "$GITHUB_OUTPUT"
           echo "$files" > /tmp/changed_files.txt
 
@@ -46,17 +49,11 @@ jobs:
           fi
 
       - name: Post validation report
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const fs = require('fs');
-            const report = fs.readFileSync('/tmp/report.md', 'utf8');
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: report
-            });
+        if: always()
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/report.md
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   validate-configs:
     runs-on: ubuntu-latest
@@ -68,7 +65,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install pyyaml jsonschema
+        run: pip install pyyaml jsonschema==4.23.0
 
       - name: Validate platform configs
         run: |
@@ -88,14 +85,29 @@ jobs:
                   config = yaml.safe_load(f)
               try:
                   validate(config, schema)
-                  print(f'✅ {yml_file.name}')
+                  print(f'OK {yml_file.name}')
               except ValidationError as e:
                   errors.append(f'{yml_file.name}: {e.message}')
-                  print(f'❌ {yml_file.name}: {e.message}')
+                  print(f'FAIL {yml_file.name}: {e.message}')
 
           if errors:
               sys.exit(1)
           "
+
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run test suite
+        run: python -m unittest tests.test_e2e -v
 
   label-pr:
     runs-on: ubuntu-latest
@@ -107,43 +119,25 @@ jobs:
           fetch-depth: 0
 
       - name: Auto-label PR
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const { data: files } = await github.rest.pulls.listFiles({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-            });
+        run: |
+          labels=""
+          files=$(gh pr diff "${{ github.event.pull_request.number }}" --name-only)
 
-            const labels = new Set();
+          if echo "$files" | grep -q '^bios/'; then
+            labels="$labels bios"
+            for sys in $(echo "$files" | grep '^bios/' | cut -d/ -f2 | sort -u); do
+              labels="$labels system:$(echo "$sys" | tr '[:upper:]' '[:lower:]')"
+            done
+          fi
+          if echo "$files" | grep -q '^platforms/'; then
+            labels="$labels platform-config"
+          fi
+          if echo "$files" | grep -q '^scripts/'; then
+            labels="$labels automation"
+          fi
 
-            for (const file of files) {
-              if (file.filename.startsWith('bios/')) {
-                labels.add('bios');
-                // Extract system from path
-                const parts = file.filename.split('/');
-                if (parts.length >= 3) {
-                  labels.add(`system:${parts[1].toLowerCase()}`);
-                }
-              }
-              if (file.filename.startsWith('platforms/')) {
-                labels.add('platform-config');
-              }
-              if (file.filename.startsWith('scripts/')) {
-                labels.add('automation');
-              }
-            }
-
-            if (labels.size > 0) {
-              try {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: [...labels],
-                });
-              } catch (e) {
-                console.log('Could not add labels:', e.message);
-              }
-            }
+          for label in $labels; do
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "$label" 2>/dev/null || true
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}

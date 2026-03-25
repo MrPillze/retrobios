@@ -1,14 +1,17 @@
 emulator: TamaLIBretro
-type: game
-source: "https://github.com/libretro/tamern-libretro"
-profiled_date: "2026-03-18"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/celerizer/tamalibretro"
+upstream: "https://github.com/jcrona/tamalib"
+source_ref: "main.c:345-365 (retro_load_game)"
+profiled_date: "2026-03-25"
 core_version: "1.0"
 display_name: "Bandai - Tamagotchi P1 (TamaLIBretro)"
 cores: [tamalibretro]
-systems: []
+systems: [tamagotchi-p1]
 files: []
 notes: >
-  Tamagotchi P1 virtual pet simulator for libretro based on TamaLIB.
-  Emulates the Bandai Tamagotchi P1 hardware (E0C6S46 CPU).
-  The original Tamagotchi ROM is compiled into the binary.
-  No content file, BIOS, or system directory files required.
+  Emulates Bandai Tamagotchi P1 hardware (Epson E0C6S46 CPU) via TamaLIB.
+  Loads the Tamagotchi ROM (tama.b from MAME set) as content.
+  No BIOS or system directory files required.
+  .info firmware_count=0 matches the code.

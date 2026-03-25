@@ -1,14 +1,15 @@
 emulator: PocketCDG
 type: utility
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-pocketcdg"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/redbug26/libretro-pocketcdg"
+profiled_date: "2026-03-24"
 core_version: "Git"
 display_name: "PocketCDG"
 cores: [pocketcdg]
 systems: []
 files: []
 notes: >
-  CD+G (CD+Graphics) karaoke player for libretro. Renders the subcode
-  graphics channel from .cdg files synchronized with audio.
-  Loads .cdg content files directly.
-  No BIOS, firmware, or system directory files required.
+  CD+G (CD+Graphics) karaoke player. Renders subcode graphics from .cdg
+  files synchronized with MP3 audio. Font and MP3 decoder (libmad)
+  embedded in the binary.

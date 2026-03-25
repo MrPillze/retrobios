@@ -1,7 +1,9 @@
 emulator: testaudio_callback
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "TestAudio Callback"
 cores:
@@ -11,9 +13,7 @@ systems: []
 notes: |
   Audio callback test core from libretro-samples. Tests the
   RETRO_ENVIRONMENT_SET_AUDIO_CALLBACK path where audio runs on a
-  separate thread managed by the frontend. Generates a simple tone
-  to validate callback-driven audio output.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  separate thread managed by the frontend. Generates a 300 Hz sine
+  tone to validate callback-driven audio output.
 
 files: []

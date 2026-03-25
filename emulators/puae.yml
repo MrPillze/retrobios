@@ -1,9 +1,11 @@
 emulator: PUAE (P-UAE)
 type: libretro
-cores: [puae, puae2021]
+core_classification: community_fork
+cores: [puae]
 source: "https://github.com/libretro/libretro-uae"
-profiled_date: "2026-03-18"
-core_version: "5.3.0"
+upstream: "https://github.com/GnoStiC/PUAE"
+profiled_date: "2026-03-24"
+core_version: "5.3.1"
 display_name: "Commodore - Amiga (PUAE)"
 systems:
   - commodore-amiga
@@ -41,7 +43,8 @@ notes: |
 
   WHDLoad support copies kick33180.A500, kick34005.A500, kick40063.A600,
   kick40068.A1200 into saves/WHDLoad/Devs/Kickstarts/ for use by WHDLoad
-  slave files.
+  slave files. Also copies rom.key (Amiga Forever decryption) and WHDLoad.key
+  (license) from the system directory.
 
   ROM search order (libretro-core.c retro_config_kickstart):
     1. Exact filename in system directory
@@ -231,6 +234,27 @@ files:
       - "amiga-os-310-cd32-ext.rom"
       - "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom"
     source_ref: "libretro/libretro-core.h:241-244"
+
+  # -------------------------------------------------------
+  # WHDLoad support files
+  # -------------------------------------------------------
+  - name: "rom.key"
+    system: commodore-amiga
+    required: false
+    note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
+    source_ref: "libretro/libretro-core.c:5969-5980"
+
+  - name: "WHDLoad.key"
+    system: commodore-amiga
+    required: false
+    note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
+    source_ref: "libretro/libretro-core.c:5985-5998"
+
+  - name: "WHDLoad.prefs"
+    system: commodore-amiga
+    required: false
+    note: "WHDLoad preferences. Copied to saves/WHDLoad/S/ when present."
+    source_ref: "libretro/libretro-core.c:6002-6025"
 
 model_kickstart_map:
   A500:     {kickstart: "kick34005.A500", ext: null}

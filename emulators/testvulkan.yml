@@ -1,7 +1,9 @@
 emulator: testvulkan
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "TestVulkan"
 cores:
@@ -11,8 +13,8 @@ systems: []
 notes: |
   Vulkan test core from libretro-samples. Validates the Vulkan hardware
   rendering path in the frontend via the libretro hw_render_interface_vulkan
-  API. Renders a basic scene using Vulkan command buffers and swapchain
-  integration.
+  API. Renders a rotating triangle using Vulkan command buffers and swapchain
+  integration. Shaders embedded at compile time (SPIR-V).
 
   No system files, BIOS, or firmware required. Not an emulator.
 

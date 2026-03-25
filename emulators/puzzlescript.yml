@@ -1,20 +1,21 @@
 emulator: PuzzleScript
 type: game
-source: "https://github.com/libretro/puzzlescript-libretro"
-profiled_date: "2026-03-18"
-core_version: ""
-display_name: "PuzzleScript (pzretro)"
+core_classification: game_engine
+source: "https://github.com/nwhitehead/pzretro"
+upstream: "https://github.com/increpare/PuzzleScript"
+profiled_date: "2026-03-25"
+core_version: "0.2.1"
 display_name: "PuzzleScript (pzretro)"
 cores:
   - puzzlescript
 systems: []
 
 notes: |
-  Libretro port of PuzzleScript, an open-source HTML5 puzzle game
-  engine by Stephen Lavelle (increpare). Runs .puz puzzle definition
-  files within RetroArch.
+  Libretro port of PuzzleScript, an open-source HTML5 puzzle game engine
+  by Stephen Lavelle (increpare). Runs .pz and .pzp puzzle definition files.
+  Also supports PuzzleScript Plus (Auroriax fork) for .pzp files.
 
-  No BIOS or system files required. The puzzle engine and renderer
-  are self-contained.
+  The PuzzleScript and PuzzleScript Plus JavaScript engines are compiled into
+  the binary via QuickJS. No external files required.
 
 files: []

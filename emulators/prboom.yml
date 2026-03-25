@@ -1,9 +1,12 @@
 emulator: PrBoom
 type: libretro
+core_classification: game_engine
 source: "https://github.com/libretro/libretro-prboom"
-profiled_date: "2026-03-18"
+upstream: "http://prboom.sourceforge.net/"
+profiled_date: "2026-03-24"
 core_version: "v2.5.0"
 display_name: "Doom (PrBoom)"
+cores: [prboom]
 systems: [doom]
 
 notes: |
@@ -22,7 +25,7 @@ notes: |
   (d_main.c:1073-1074), so the file is technically optional but expected
   for correct rendering of menus, HUD digits, and extended features.
 
-  File search order (libretro.c I_FindFile, line 1743):
+  File search order (libretro.c I_FindFile, line 1742):
   1. WAD directory (same folder as the loaded game WAD)
   2. system/prboom/ subdirectory
   3. system/ directory directly
@@ -47,5 +50,5 @@ files:
     md5: "72ae1b47820fcc93cc0df9c428d0face"
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
     crc32: "a5751b99"
-    source_ref: "d_main.c:1069-1078 (PACKAGE .wad load), libretro.c:1743-1780 (I_FindFile search), config.h:46 (PACKAGE=prboom)"
+    source_ref: "d_main.c:1069-1078 (PACKAGE .wad load), libretro.c:1742-1784 (I_FindFile search), config.h:46 (PACKAGE=prboom)"
     notes: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."

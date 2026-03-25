@@ -1,12 +1,15 @@
 emulator: Theodore
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/Zlika/theodore"
-profiled_date: "2026-03-18"
-core_version: "v4.1"
+upstream: "http://dcmoto.free.fr/"
+profiled_date: "2026-03-25"
+core_version: "Git (post-3.1)"
 display_name: "Thomson - MO/TO (Theodore)"
 cores: [theodore]
 systems: [thomson-to7, thomson-to770, thomson-to8, thomson-to8d, thomson-to9, thomson-to9plus, thomson-mo5, thomson-mo6, olivetti-pc128]
 notes: >
-  All system ROMs (monitor + BASIC) are compiled into the binary.
-  No external BIOS files needed.
+  All system ROMs (monitor, BASIC, disk drive controller) are compiled into the binary
+  as C arrays in src/rom/*.inc. Derived from Daniel Coulom's DCTO8D/DCTO9P/DCMO5 emulators.
+  The .info declares no firmware (firmware_count absent), consistent with the code.
 files: []

@@ -1,7 +1,9 @@
 emulator: ProSystem
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/prosystem-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/gstanton/ProSystem1_3"
+profiled_date: "2026-03-24"
 core_version: "1.3e"
 display_name: "Atari - 7800 (ProSystem)"
 cores:
@@ -10,51 +12,37 @@ systems:
   - atari-7800
 
 notes: |
-  ProSystem is an Atari 7800 emulator ported to libretro.
+  Atari 7800 emulator by Greg Stanton, ported to libretro by community
+  contributors. The upstream is a Windows-only application with a single
+  user-configured BIOS path. The libretro port adds automatic region-based
+  BIOS selection: PAL carts get (E), everything else gets (U).
 
-  BIOS loading is in core/libretro.c:579-588. Region is read from the
-  cartridge header byte 57 (core/Cartridge.c:214) or overridden by the
-  internal database (core/Database.c). PAL carts get the (E) BIOS,
-  everything else gets (U).
+  Region is read from cartridge header byte 57 (core/Cartridge.c:214) or
+  overridden by the internal database (core/Database.c:1739-1757).
 
-  Both BIOS files are optional. The core runs games without them, but
-  some titles may have compatibility issues without the real BIOS
-  (startup encryption check, etc). bios_Store() maps the BIOS data
-  into the top of the 64K address space (65536 - bios_size).
+  Both BIOS files are optional. The core runs without them but some titles
+  have compatibility issues (startup encryption check). bios_Store() maps
+  the BIOS into ROM at address (65536 - bios_size).
 
-  No core option controls BIOS loading -- if the file exists in the
-  system directory, it is loaded automatically.
+  No core option controls BIOS loading. If the file exists in the system
+  directory, it is loaded automatically. No hash or size validation is
+  performed on the BIOS file.
+
+  The .info declares firmware_count=1 (U only), missing the PAL BIOS.
 
 files:
   - name: "7800 BIOS (U).rom"
     system: atari-7800
     required: false
     hle_fallback: true
-    size: 4096  # 4 KB
-    note: "NTSC/US Atari 7800 BIOS. Loaded when cartridge_region != REGION_PAL."
+    size: 4096
+    description: "NTSC/US BIOS, loaded when cartridge_region != REGION_PAL"
     source_ref: "core/libretro.c:585"
 
   - name: "7800 BIOS (E).rom"
     system: atari-7800
     required: false
     hle_fallback: true
-    size: 16384  # 16 KB (PAL BIOS is larger than NTSC)
-    note: "PAL/EU Atari 7800 BIOS. Loaded when cartridge_region == REGION_PAL."
+    size: 16384
+    description: "PAL/EU BIOS, loaded when cartridge_region == REGION_PAL"
     source_ref: "core/libretro.c:583"
-
-platform_details:
-  bios_mapping:
-    target: "top of 64K memory (65536 - bios_size)"
-    source_ref: "core/Bios.c:88"
-    notes: |
-      bios_Store() writes the BIOS into ROM at address (65536 - bios_size).
-      The BIOS size is read dynamically from the file, not hardcoded.
-      bios_enabled flag is set only if bios_Load() succeeds (file found
-      and read without error).
-
-  region_detection:
-    source_ref: "core/Cartridge.c:214, core/Database.c"
-    notes: |
-      Region byte is at offset 57 in the A7800 cartridge header.
-      The internal database (Database.c) can override the header value.
-      REGION_NTSC = 0, REGION_PAL = 1 (defined in Region.h).

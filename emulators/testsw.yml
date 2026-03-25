@@ -1,7 +1,10 @@
 emulator: testsw
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+source_ref: "video/software/rendering/libretro-test.c"
+upstream: null
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "TestSW"
 cores:
@@ -9,10 +12,8 @@ cores:
 systems: []
 
 notes: |
-  Software rendering test core from libretro-samples. Validates the basic
-  software framebuffer path (RETRO_HW_FRAME_BUFFER_VALID). Writes pixel
-  data directly to the framebuffer without any hardware acceleration.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  Software rendering test core from libretro-samples. Allocates a 320x240
+  XRGB8888 framebuffer and renders a moving checkered pattern. Reference
+  implementation for core authors testing the software rendering path.
 
 files: []

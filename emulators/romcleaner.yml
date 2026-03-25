@@ -1,7 +1,9 @@
 emulator: ROM Cleaner
 type: utility
-source: "https://github.com/libretro/libretro-database"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/JesseTG/rom-cleaner"
+upstream: "https://github.com/JesseTG/rom-cleaner"
+profiled_date: "2026-03-25"
 core_version: "1.0.0"
 display_name: "ROM Cleaner"
 cores:
@@ -9,10 +11,8 @@ cores:
 systems: []
 
 notes: |
-  ROM Cleaner is a utility core for identifying and cleaning ROM
-  headers. Uses the libretro database for ROM identification via
-  CRC32/SHA1 matching.
-
-  No BIOS or system files required.
+  Utility core that simulates blowing dust off a cartridge via microphone
+  input. All visual and audio assets are compiled into the binary.
+  No external files required.
 
 files: []

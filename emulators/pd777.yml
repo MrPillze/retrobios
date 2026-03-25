@@ -1,7 +1,9 @@
 emulator: PD777
 type: libretro
-source: "https://github.com/W88DodPECuThLOl/PD777"
-profiled_date: "2026-03-18"
+core_classification: community_fork
+source: "https://github.com/mittonk/PD777"
+upstream: "https://github.com/W88DodPECuThLOl/PD777"
+profiled_date: "2026-03-24"
 core_version: "v1.0.0"
 display_name: "Epoch - Cassette Vision (PD777)"
 cores:
@@ -10,12 +12,12 @@ systems:
   - epochcv
 
 notes: |
-  PD777 is an Epoch Cassette Vision emulator (NEC uPD777C CPU) with a libretro
-  interface, by W88DodPECuThLOl.
+  PD777 is an Epoch Cassette Vision emulator (NEC uPD777C CPU), by
+  W88DodPECuThLOl. Libretro port by Ken Mitton (mittonk).
 
   No BIOS or firmware files required. The .info file declares firmware_count = 0.
 
-  Game loading in source/libretro/libretro.cpp:retro_load_game() (line 386-474).
+  Game loading in source/libretro/libretro.cpp:retro_load_game() (line 404-532).
   The core loads a code ROM file (.bin777) directly from the content path, then
   attempts to load a pattern ROM file (.ptn777) by replacing the extension.
 

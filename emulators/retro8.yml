@@ -1,18 +1,23 @@
 emulator: Retro8
-type: game
+type: libretro
+core_classification: game_engine
 source: "https://github.com/libretro/retro8"
-profiled_date: "2026-03-18"
-core_version: "Git"
+upstream: "https://github.com/Jakz/retro8"
+profiled_date: "2026-03-25"
+core_version: "0.1b"
 display_name: "PICO-8 (Retro8)"
 cores:
   - retro8
-systems: []
+systems:
+  - pico8
 
 notes: |
-  Retro8 is a PICO-8 compatible runtime for libretro. It can run .p8
-  and .p8.png cartridge files created for the PICO-8 fantasy console.
+  Open-source PICO-8 fantasy console reimplementation by Jacopo Santoni.
+  Runs .p8 and .p8.png cartridge files. The PICO-8 font is compiled into the
+  binary as a byte array (gen/pico_font.h, loaded in gfx.cpp:9). The Lua API
+  shim is compiled as a string constant (gen/lua_api.h, loaded in
+  lua_bridge.cpp:1126). The core never calls GET_SYSTEM_DIRECTORY and performs
+  no file I/O from the system directory.
 
-  No BIOS, firmware, or system files required. The virtual machine and
-  Lua interpreter are self-contained in the core binary.
-
+exclusion_note: "all engine resources (font, Lua API, color palette, audio synth) compiled into the binary"
 files: []

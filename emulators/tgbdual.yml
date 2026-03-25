@@ -1,7 +1,9 @@
 emulator: TGB Dual
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/tgbdual-libretro"
-profiled_date: "2026-03-18"
+upstream: "http://gigo.retrogames.com/download.html#tgb-dual"
+profiled_date: "2026-03-25"
 core_version: "v0.8.3"
 display_name: "Nintendo - Game Boy / Color (TGB Dual)"
 cores:
@@ -11,22 +13,11 @@ systems:
   - nintendo-gbc
 
 notes: |
-  TGB Dual is a Game Boy / Game Boy Color emulator by GIGO and Hii with
-  link cable support for two Game Boy units side by side.
+  Game Boy / Game Boy Color emulator by GIGO and Hii with link cable support
+  for two units side by side. Libretro port based on shinichiro.h's SDL port.
 
-  No BIOS or boot ROM files are required or supported. The core does not
-  call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for firmware loading and does
-  not attempt to open any files from the system directory.
-
-  In cpu.cpp:57, the program counter is initialized to 0x100 (post-boot ROM
-  entry point), and cpu::reset() sets all registers to their post-boot
-  values directly (AF=0x01B0 for DMG, 0x11B0 for CGB). This means the
-  core completely bypasses the boot ROM sequence via HLE register setup.
-
-  The load_rom() path in libretro.cpp passes ROM data directly to the gb
-  class without any BIOS file concatenation or boot ROM mapping.
-
-  Supported extensions: gb, dmg, gbc, cgb, sgb.
-  Library version: v0.8.3.
+  cpu::reset() initializes PC to 0x100 and sets post-boot register values
+  (AF=0x01B0 DMG, 0x11B0 CGB), bypassing the boot ROM via HLE.
+  No system directory access, no file I/O for firmware.
 
 files: []

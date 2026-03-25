@@ -1,0 +1,73 @@
+emulator: Stella 2023
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/stella2023"
+upstream: "https://github.com/stella-emu/stella"
+profiled_date: "2026-03-25"
+core_version: "7.0_pre"
+display_name: "Atari - 2600 (Stella 2023)"
+cores:
+  - stella2023
+systems:
+  - atari_2600
+
+notes: |
+  Frozen snapshot of Stella development branch (7.0_pre, copyright 2024).
+  The .info reports display_version 6.6 which does not match the source
+  (src/common/Version.hxx defines STELLA_VERSION as "7.0_pre").
+
+  The Atari 2600 has no BIOS ROM; TIA, RIOT, and 6507 CPU are fully
+  emulated in software. The SuperCharger (Starpath) BIOS is emulated via
+  a built-in dummy ROM (ourDummyROMCode in CartAR.cxx:279). The game
+  properties database is compiled into DefProps.hxx; external loading is
+  disabled in the libretro port (OSystemLIBRETRO returns
+  CompositeKeyValueRepositoryNoop for the property repository).
+
+  The libretro interface does not call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+  and declares no firmware requirements (firmware_count=0 in .info).
+
+  KidVid Voice Module audio tapes (7 WAV files) are checked via
+  FSNode::exists() in baseDir (resolves to content directory in the
+  libretro port). SoundLIBRETRO does not override playWav()/wavSize()
+  from the base Sound class, so WAV playback is non-functional. Games
+  work without WAV files using a timing-based fallback in KidVid::setNextSong().
+
+  EEPROM save data for AtariVox and SaveKey peripherals is managed as
+  NVRAM, not user-supplied.
+
+files:
+  - name: KVS1.WAV
+    description: "KidVid Voice Module audio tape 1 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:245,273"
+  - name: KVS2.WAV
+    description: "KidVid Voice Module audio tape 2 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:245,273"
+  - name: KVS3.WAV
+    description: "KidVid Voice Module audio tape 3 (Smurfs Save the Day)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:245,273"
+  - name: KVB1.WAV
+    description: "KidVid Voice Module audio tape 1 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:246,273"
+  - name: KVB2.WAV
+    description: "KidVid Voice Module audio tape 2 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:246,273"
+  - name: KVB3.WAV
+    description: "KidVid Voice Module audio tape 3 (Berenstain Bears)"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:246,273"
+  - name: KVSHARED.WAV
+    description: "KidVid Voice Module shared audio samples"
+    required: false
+    category: game_data
+    source_ref: "stella2023/src/emucore/KidVid.cxx:274"

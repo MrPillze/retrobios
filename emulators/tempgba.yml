@@ -1,7 +1,9 @@
 emulator: TempGBA
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/TempGBA-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/Nebuleon/ReGBA"
+profiled_date: "2026-03-25"
 core_version: "26731013"
 display_name: "Nintendo - Game Boy Advance (TempGBA)"
 cores:
@@ -10,22 +12,16 @@ systems:
   - nintendo-gba
 
 notes: |
-  TempGBA is a Game Boy Advance emulator forked from gpSP. Originally
-  developed for the Nintendo DS homebrew scene, the libretro port wraps
-  the dynarec-based GBA engine for use in RetroArch.
-
-  The GBA BIOS (gba_bios.bin) is optional. TempGBA includes HLE BIOS
-  stubs inherited from gpSP that handle most SWI calls. The real BIOS
-  improves boot logo display and SWI accuracy for a small number of
-  titles.
-
-  BIOS file goes in the system directory as gba_bios.bin (same path
-  used by gpSP and mGBA).
+  Fork chain: gpSP (Exophase) -> gpSP Kai (takka) -> TempGBA NDS
+  (Nebuleon) -> TempGBA4PSP (unknown) -> TempGBA-libretro.
+  PSP-optimized GBA emulator. No HLE BIOS: SWI calls execute from
+  the real BIOS ROM. The NDS version (ReGBA) added an open-source
+  BIOS replacement (Normmatt), but TempGBA4PSP did not carry it over.
+  Boot sequence skipped by default (PC starts at 0x08000000).
 
 files:
   - name: gba_bios.bin
     system: nintendo-gba
-    required: false
-    hle_fallback: true
+    required: true
     size: 16384
-    note: "GBA BIOS. Optional, HLE stubs cover most software."
+    source_ref: "memory.c:3308-3323 (load_bios), libretro.c:238-314 (retro_load_game returns false if missing)"

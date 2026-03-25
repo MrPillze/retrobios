@@ -1,7 +1,10 @@
 emulator: testsw_vram
 type: test
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/libretro/libretro-samples"
+source_ref: "video/software/rendering_direct_to_vram/libretro-test.c"
+profiled_date: "2026-03-25"
 core_version: "v1"
 display_name: "TestSW VRAM"
 cores:
@@ -9,10 +12,8 @@ cores:
 systems: []
 
 notes: |
-  Software VRAM test core from libretro-samples. Tests the software rendering
-  path with VRAM access patterns, validating how the frontend handles direct
-  video memory writes and buffer management.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  Software rendering test core. Renders a checkered pattern directly to VRAM
+  via RETRO_ENVIRONMENT_GET_CURRENT_SOFTWARE_FRAMEBUFFER, with fallback to
+  standard framebuffer copy. Single source file, no file I/O.
 
 files: []

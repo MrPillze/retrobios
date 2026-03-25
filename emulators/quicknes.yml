@@ -2,7 +2,8 @@ emulator: QuickNES
 type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/QuickNES_Core"
-profiled_date: "2026-03-21"
+upstream: "https://github.com/kode54/QuickNES"
+profiled_date: "2026-03-25"
 core_version: "1.0-WIP"
 display_name: "Nintendo - NES / Famicom (QuickNES)"
 cores:
@@ -11,7 +12,7 @@ systems:
   - nintendo-nes
 
 notes: |
-  NES emulator by blargg (Shay Green). No BIOS required.
-  NES cartridge games are self-contained.
+  NES emulator by blargg (Shay Green), maintained by kode54.
+  NES has no BIOS. All palettes compiled in.
 
 files: []

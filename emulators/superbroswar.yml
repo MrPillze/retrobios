@@ -1,14 +1,16 @@
 emulator: Super Bros War
 type: game
+core_classification: game_engine
 source: "https://github.com/libretro/superbroswar-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/mmatyas/supermariowar"
+profiled_date: "2026-03-25"
 core_version: "v0.1"
 display_name: "Super Bros War"
 cores: [superbroswar]
 systems: []
 files: []
 notes: >
-  Libretro port of Super Mario War, a fan-made multiplayer battle game
-  where players stomp each other in Mario-style arenas.
-  Game data (maps, sprites, sounds) ships with the core repository.
-  No BIOS, firmware, or system directory files required.
+  Libretro port of Super Mario War, a fan-made multiplayer battle game.
+  All game data (maps, sprites, sounds, tilesets, skins) loads from the
+  content directory via convertPath(). System directory not used for game
+  data, only as save directory fallback.

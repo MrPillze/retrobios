@@ -1,21 +1,23 @@
 emulator: RVVM
 type: libretro
+core_classification: official_port
 source: "https://github.com/LekKit/RVVM"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/LekKit/RVVM"
+profiled_date: "2026-03-25"
 core_version: "0.6-git"
 display_name: "RVVM"
+cores: [rvvm]
 systems: [riscv]
 
-# RVVM is a RISC-V virtual machine / emulator. The libretro core loads a
-# ".rvvm" config file that specifies bootrom, kernel, nvme drives, memory,
-# CPU mode (rv32/rv64), cmdline, and framebuffer resolution.
+# RVVM emulates a RISC-V machine (rv64imafdcb or rv32ima). The libretro core
+# loads a .rvvm plain-text config file specifying bootrom, kernel, nvme drives,
+# memory, CPU mode, cmdline, and framebuffer resolution.
 #
-# The core itself does NOT bundle any firmware. Users must supply:
-#   1. A bootrom (M-mode firmware): typically OpenSBI fw_payload.bin or fw_jump.bin
-#   2. Optionally a kernel payload (S-mode): Linux Image, U-Boot, etc.
-#   3. Optionally a custom DTB (the core auto-generates one if not provided)
+# The core does NOT use the RetroArch system directory. All firmware paths are
+# specified in the .rvvm config file and resolved relative to its directory.
+# The core chdir()s to the .rvvm file's parent before initializing the VM.
 #
-# The .rvvm file is a plain-text key=value config parsed by retro_load_game():
+# The .rvvm config format (parsed by retro_load_game):
 #   bootrom=/path/to/fw_payload.bin
 #   kernel=/path/to/Image
 #   nvme=/path/to/rootfs.img
@@ -24,80 +26,54 @@ systems: [riscv]
 #   rv64
 #   cmdline=root=/dev/nvme0n1 rootflags=discard rw console=tty0
 #
-# Paths in the .rvvm file are resolved relative to the .rvvm file's directory
-# (the core chdir()s there before vm_init). The bootrom is mandatory - the core
-# shows "RVVM: No bootrom" if missing.
+# The libretro binding uses an older RVVM API (rvvm_load_bootrom, 4-param
+# rvvm_create_machine) that has been renamed in the current upstream
+# (rvvm_load_firmware, 3-param rvvm_create_machine). The binding may not
+# compile against RVVM HEAD without updates.
 
 # Source references:
-#   libretro binding: src/bindings/libretro/libretro.c
-#   firmware loading: src/rvvm.c:rvvm_load_firmware()
-#   kernel loading:   src/rvvm.c:rvvm_load_kernel() (offset 0x200000 rv64, 0x400000 rv32)
-#   FDT generation:   src/rvvm.c:rvvm_init_fdt() (auto-generated if not provided)
-#   CLI help:         src/main.c:rvvm_print_help()
+#   libretro binding:   src/bindings/libretro/libretro.c
+#   config parsing:     libretro.c:332-421 (retro_load_game)
+#   VM init + loading:  libretro.c:288-330 (vm_init)
+#   firmware loading:   rvvm.c:621-628 (rvvm_load_firmware)
+#   kernel loading:     rvvm.c:630-638 (rvvm_load_kernel)
+#   FDT loading:        rvvm.c:641-648 (rvvm_load_fdt, standalone only)
+#   standalone CLI:     main.c:213-282 (rvvm_cli_configure)
 
 files:
-  # -- OpenSBI firmware (required) --
-  # M-mode firmware loaded at RESET_PC (0x80000000). This is the first code
-  # executed by the virtual machine. The standard choice is OpenSBI with
-  # U-Boot as payload (fw_payload.bin) or OpenSBI standalone (fw_jump.bin).
-  # The core calls rvvm_load_bootrom() which maps to rvvm_load_firmware().
-
   - name: "fw_payload.bin"
     path: "rvvm/fw_payload.bin"
     required: true
-    source_ref: "libretro.c:309-315, rvvm.c:621-628"
+    source_ref: "libretro.c:309-314, rvvm.c:621-628"
     note: >
-      OpenSBI firmware with U-Boot payload. This is the M-mode bootrom
-      loaded at physical address 0x80000000. Without this file, the VM
-      cannot start. Common builds: opensbi fw_payload (includes U-Boot),
-      or fw_jump.bin (jumps to kernel directly). The file is referenced
-      by the bootrom= key in the .rvvm config file.
-
-  # -- Kernel image (optional) --
-  # S-mode kernel loaded at offset 0x200000 (rv64) or 0x400000 (rv32) from
-  # RAM base. Used with fw_jump.bin to boot Linux directly without U-Boot.
+      M-mode firmware loaded at 0x80000000. Typically OpenSBI with U-Boot
+      payload (fw_payload.bin) or standalone (fw_jump.bin). Referenced by
+      the bootrom= key in the .rvvm config.
 
   - name: "Image"
     path: "rvvm/Image"
     required: false
     source_ref: "libretro.c:316-318, rvvm.c:630-638"
     note: >
-      Linux kernel image or other S-mode payload. Loaded at a fixed offset
-      from RAM base (0x200000 for rv64, 0x400000 for rv32). Only needed
-      when using fw_jump.bin as bootrom. Referenced by the kernel= key
-      in the .rvvm config file.
-
-  # -- Device Tree Blob (optional) --
-  # Custom FDT passed to the guest. The core auto-generates a complete DTB
-  # with cpu topology, memory map, and all attached devices if not provided.
+      S-mode kernel payload loaded at offset 0x200000 (rv64) or 0x400000
+      (rv32) from RAM base. Only needed with fw_jump.bin as bootrom.
+      Referenced by the kernel= key in the .rvvm config.
 
   - name: "machine.dtb"
     path: "rvvm/machine.dtb"
     required: false
-    source_ref: "rvvm.c:641-648, main.c:230"
+    mode: standalone
+    source_ref: "main.c:230, rvvm.c:641-648"
     note: >
-      Custom Flattened Device Tree. The core generates a DTB automatically
-      based on the machine configuration (cpus, memory, devices), so this
-      is only needed for special setups. The FDT address is passed to the
-      firmware in register a1 at boot.
+      Custom Flattened Device Tree. The core auto-generates a DTB based on
+      machine configuration. The libretro binding does not parse a dtb= key
+      in the .rvvm config, so this is only usable via the standalone CLI
+      (-dtb flag).
 
 notes:
-  emulation_target: >
-    RVVM emulates a RISC-V machine with rv64imafdcb (or rv32ima) ISA,
-    SiFive PLIC interrupt controller, NVMe storage, RTL8169 networking,
-    framebuffer display, HID keyboard/mouse, UART, Goldfish RTC, and
-    PCI bus. It includes a tracing JIT with x86_64/ARM64/RISC-V backends.
   firmware_sources: >
-    OpenSBI builds: https://github.com/riscv-software-src/opensbi/releases
-    Pre-built fw_payload.bin (OpenSBI + U-Boot) for RVVM:
-    https://github.com/LekKit/RVVM/wiki/Running
-  config_format: >
-    The .rvvm file is a plain-text key=value config. Supported keys:
-    bootrom, kernel, nvme (up to 4), mem (MB), smp, cmdline, rv64/rv32.
-    Default: rv64, 256 MB RAM, 1 core, 640x480 framebuffer.
-  libretro_info: >
-    Core name: rvvm_libretro. Extension: .rvvm. Experimental: yes.
-    No save states, no cheats, needs_fullpath=true.
-    The core does not use the RetroArch system directory for firmware -
-    all paths are specified in the .rvvm config file relative to its
-    own directory.
+    OpenSBI: https://github.com/riscv-software-src/opensbi/releases.
+    Pre-built images for RVVM: https://github.com/LekKit/RVVM/wiki/Running
+  info_firmware_count: >
+    .info declares 0 firmware. Correct: the core loads firmware via
+    user-specified paths in the .rvvm config, not from system_dir.

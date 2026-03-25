@@ -11,9 +11,7 @@ on:
         type: boolean
         default: false
 
-permissions:
-  contents: write
-  pages: write
+permissions: {}
 
 concurrency:
   group: build
@@ -22,6 +20,11 @@ concurrency:
 jobs:
   regenerate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v6
 
@@ -57,6 +60,9 @@ jobs:
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
           python scripts/generate_site.py
 
+      - name: Run tests
+        run: python -m unittest tests.test_e2e -v
+
       - name: Deploy site to GitHub Pages
         if: github.ref == 'refs/heads/main'
         run: mkdocs gh-deploy --force --clean
@@ -74,8 +80,10 @@ jobs:
 
   release:
     needs: regenerate
-    if: needs.regenerate.result == 'success' || github.event.inputs.force_release == 'true'
+    if: (needs.regenerate.outputs.changed == 'true' || github.event.inputs.force_release == 'true')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Rate limit
         if: github.event.inputs.force_release != 'true'
@@ -105,6 +113,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        if: steps.rate.outputs.skip != 'true'
+        run: pip install pyyaml
+
       - name: Refresh data directories
         if: steps.rate.outputs.skip != 'true'
         run: python scripts/refresh_data_dirs.py
@@ -113,7 +125,6 @@ jobs:
       - name: Build packs
         if: steps.rate.outputs.skip != 'true'
         run: |
-          pip install pyyaml
           python scripts/generate_db.py --bios-dir bios --output database.json
           python scripts/generate_pack.py --all --output-dir dist/
 
