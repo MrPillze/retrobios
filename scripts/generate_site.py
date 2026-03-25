@@ -217,6 +217,21 @@ def generate_home(db: dict, coverages: dict, profiles: dict,
         "",
         "Source-verified BIOS and firmware packs for retrogaming platforms.",
         "",
+        "## Quick start",
+        "",
+        "1. Find your platform in the table below",
+        "2. Click **Pack** to download the ZIP",
+        "3. Extract to your emulator's BIOS directory",
+        "",
+        "| Platform | Extract to |",
+        "|----------|-----------|",
+        "| RetroArch / Lakka | `system/` |",
+        "| Batocera | `/userdata/bios/` |",
+        "| Recalbox | `/recalbox/share/bios/` |",
+        "| RetroBat | `bios/` |",
+        "| RetroDECK | `~/retrodeck/bios/` |",
+        "| EmuDeck | `Emulation/bios/` |",
+        "",
         "---",
         "",
         "## Methodology",
@@ -369,11 +384,37 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
         sys_id = d.get("system", "unknown")
         by_system.setdefault(sys_id, []).append(d)
 
+    # System summary table (quick navigation)
+    lines.extend([
+        "## Systems overview",
+        "",
+        "| System | Files | Status | Emulators |",
+        "|--------|-------|--------|-----------|",
+    ])
+    for sys_id, files in sorted(by_system.items()):
+        ok_count = sum(1 for f in files if f["status"] == "ok")
+        total = len(files)
+        non_ok = total - ok_count
+        status = "OK" if non_ok == 0 else f"{non_ok} issue{'s' if non_ok > 1 else ''}"
+        sys_emus = []
+        if emulator_files:
+            for emu_name, emu_data in emulator_files.items():
+                if sys_id in emu_data.get("systems", set()):
+                    sys_emus.append(emu_name)
+        emu_str = ", ".join(sys_emus[:3])
+        if len(sys_emus) > 3:
+            emu_str += f" +{len(sys_emus) - 3}"
+        anchor = sys_id.replace(" ", "-")
+        lines.append(f"| [{sys_id}](#{anchor}) | {ok_count}/{total} | {status} | {emu_str} |")
+    lines.append("")
+
+    # Per-system detail sections (collapsible for large platforms)
+    use_collapsible = len(by_system) > 10
+
     for sys_id, files in sorted(by_system.items()):
         ok_count = sum(1 for f in files if f["status"] == "ok")
         total = len(files)
 
-        # Cross-ref: emulators that handle this system
         sys_emus = []
         if emulator_files:
             for emu_name, emu_data in emulator_files.items():
@@ -381,40 +422,56 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
                     sys_emus.append(emu_name)
 
         sys_link = _system_link(sys_id, "../")
-        lines.append(f"## {sys_link}")
-        lines.append("")
-        lines.append(f"{ok_count}/{total} files verified")
+
+        if use_collapsible:
+            status_tag = "OK" if ok_count == total else f"{total - ok_count} issues"
+            lines.append(f"??? note \"{sys_id} ({ok_count}/{total} - {status_tag})\"")
+            lines.append("")
+            pad = "    "
+        else:
+            lines.append(f"## {sys_link}")
+            lines.append("")
+            pad = ""
+
+        lines.append(f"{pad}{ok_count}/{total} files verified")
         if sys_emus:
             emu_links = ", ".join(_emulator_link(e, "../") for e in sorted(sys_emus))
-            lines.append(f"Emulators: {emu_links}")
+            lines.append(f"{pad}Emulators: {emu_links}")
         lines.append("")
 
-        # File table with hashes and sizes
-        lines.append("| File | Status | Size | SHA1 | MD5 |")
-        lines.append("|------|--------|------|------|-----|")
+        # File listing
         for f in sorted(files, key=lambda x: x["name"]):
             status = f["status"]
             fname = f["name"]
-            # Pull hashes/size from platform config entry
             cfg_entry = config_files.get(fname, {})
             sha1 = cfg_entry.get("sha1", f.get("sha1", ""))
             md5 = cfg_entry.get("md5", f.get("expected_md5", ""))
             size = cfg_entry.get("size", f.get("size", 0))
-            size_str = _fmt_size(size) if size else "-"
-            sha1_str = f"`{sha1[:12]}...`" if sha1 and len(sha1) > 12 else (f"`{sha1}`" if sha1 else "-")
-            md5_str = f"`{md5[:12]}...`" if md5 and len(md5) > 12 else (f"`{md5}`" if md5 else "-")
 
             if status == "ok":
                 status_display = "OK"
             elif status == "untested":
                 reason = f.get("reason", "")
-                status_display = f"Untested: {reason}" if reason else "Untested"
+                status_display = f"untested: {reason}" if reason else "untested"
             elif status == "missing":
-                status_display = "Missing"
+                status_display = "**missing**"
             else:
                 status_display = status
 
-            lines.append(f"| `{fname}` | {status_display} | {size_str} | {sha1_str} | {md5_str} |")
+            size_str = _fmt_size(size) if size else ""
+            details = [status_display]
+            if size_str:
+                details.append(size_str)
+
+            lines.append(f"{pad}- `{fname}` - {', '.join(details)}")
+            # Show full hashes on a sub-line (useful for copy-paste)
+            if sha1 or md5:
+                hash_parts = []
+                if sha1:
+                    hash_parts.append(f"SHA1: `{sha1}`")
+                if md5:
+                    hash_parts.append(f"MD5: `{md5}`")
+                lines.append(f"{pad}    {' | '.join(hash_parts)}")
 
         lines.append("")
 
@@ -1010,19 +1067,56 @@ def generate_gap_analysis(
                     "source_ref": g["source_ref"],
                 })
 
+    # Build reverse map: emulator -> platforms that use it
+    emu_to_platforms: dict[str, set[str]] = {}
+    for pname, pfiles in platform_files.items():
+        for emu_name, emu_profile in profiles.items():
+            if emu_profile.get("type") == "alias":
+                continue
+            emu_file_names = {f.get("name", "") for f in emu_profile.get("files", [])}
+            if emu_file_names & pfiles:
+                emu_to_platforms.setdefault(emu_name, set()).add(pname)
+
     if missing_details:
+        req_missing = [m for m in missing_details if m["required"]]
+        opt_missing = [m for m in missing_details if not m["required"]]
+
         lines.extend([
             "",
-            f"## Missing Files ({len(missing_details)} unique)",
+            f"## Missing Files ({len(missing_details)} unique, {len(req_missing)} required)",
             "",
             "Files loaded by emulators but not available in the repository.",
+            "Adding these files would improve pack completeness.",
             "",
-            "| File | Emulator | Required | Source |",
-            "|------|----------|----------|--------|",
         ])
-        for m in sorted(missing_details, key=lambda x: x["name"]):
-            req = "yes" if m["required"] else "no"
-            lines.append(f"| `{m['name']}` | {m['emulator']} | {req} | {m['source_ref']} |")
+
+        if req_missing:
+            lines.extend([
+                "### Required (highest priority)",
+                "",
+                "These files are needed for the emulator to function.",
+                "",
+                "| File | Emulator | Affects platforms | Source |",
+                "|------|----------|------------------|--------|",
+            ])
+            for m in sorted(req_missing, key=lambda x: x["name"]):
+                emu_key = next((k for k, v in profiles.items()
+                               if v.get("emulator") == m["emulator"]), "")
+                plats = sorted(emu_to_platforms.get(emu_key, set()))
+                plat_str = ", ".join(plats) if plats else "-"
+                lines.append(f"| `{m['name']}` | {m['emulator']} | {plat_str} | {m['source_ref']} |")
+            lines.append("")
+
+        if opt_missing:
+            lines.extend([
+                "### Optional",
+                "",
+                "| File | Emulator | Source |",
+                "|------|----------|--------|",
+            ])
+            for m in sorted(opt_missing, key=lambda x: x["name"]):
+                lines.append(f"| `{m['name']}` | {m['emulator']} | {m['source_ref']} |")
+            lines.append("")
 
     lines.extend(["", f"*Generated on {_timestamp()}*"])
     return "\n".join(lines) + "\n"
@@ -1059,7 +1153,7 @@ def generate_cross_reference(
         config = cov["config"]
         platform_cores = config.get("cores", [])
 
-        lines.append(f"## [{display}](platforms/{pname}.md)")
+        lines.append(f"??? abstract \"[{display}](platforms/{pname}.md)\"")
         lines.append("")
 
         # Resolve which profiles this platform uses
@@ -1082,13 +1176,13 @@ def generate_cross_reference(
                        if set(v.get("systems", [])) & psystems}
 
         if platform_cores == "all_libretro":
-            lines.append(f"**{len(matched)} cores** (all libretro)")
+            lines.append(f"    **{len(matched)} cores** (all libretro)")
         else:
-            lines.append(f"**{len(matched)} cores**")
+            lines.append(f"    **{len(matched)} cores**")
         lines.append("")
 
-        lines.append("| Core | Classification | Systems | Files | Upstream |")
-        lines.append("|------|---------------|---------|-------|----------|")
+        lines.append("    | Core | Classification | Systems | Files | Upstream |")
+        lines.append("    |------|---------------|---------|-------|----------|")
 
         for emu_name in sorted(matched.keys()):
             p = matched[emu_name]
@@ -1126,7 +1220,7 @@ def generate_cross_reference(
                 upstream_display = f"[{source_short}]({source})"
 
             lines.append(
-                f"| [{emu_display}](emulators/{emu_name}.md) | {cls} | "
+                f"    | [{emu_display}](emulators/{emu_name}.md) | {cls} | "
                 f"{sys_str} | {file_str} | {upstream_display} |"
             )
 
@@ -1232,6 +1326,30 @@ The CI automatically:
 # ---------------------------------------------------------------------------
 # Wiki pages
 # ---------------------------------------------------------------------------
+
+def generate_wiki_index() -> str:
+    """Generate wiki landing page."""
+    return f"""# Wiki - {SITE_NAME}
+
+Technical documentation for the RetroBIOS toolchain.
+
+## Pages
+
+- **[Architecture](architecture.md)** - directory structure, data flow, platform inheritance, pack grouping, security, edge cases, CI workflows
+- **[Tools](tools.md)** - CLI reference for every script, pipeline usage, scrapers
+- **[Profiling guide](profiling.md)** - how to create an emulator profile from source code, step by step, with YAML field reference
+- **[Data model](data-model.md)** - database.json structure, indexes, file resolution order, YAML formats
+
+## For users
+
+If you just want to download BIOS packs, see the [home page](../index.md).
+
+## For contributors
+
+Start with the [profiling guide](profiling.md) to understand how emulator profiles are built,
+then see [contributing](../contributing.md) for submission guidelines.
+"""
+
 
 def generate_wiki_architecture() -> str:
     """Generate architecture overview from codebase structure."""
@@ -1798,6 +1916,7 @@ def generate_mkdocs_nav(
         emu_nav.append({display: f"emulators/{name}.md"})
 
     wiki_nav = [
+        {"Overview": "wiki/index.md"},
         {"Architecture": "wiki/architecture.md"},
         {"Tools": "wiki/tools.md"},
         {"Profiling guide": "wiki/profiling.md"},
@@ -1920,6 +2039,7 @@ def main():
 
     # Generate wiki pages
     print("Generating wiki pages...")
+    (docs / "wiki" / "index.md").write_text(generate_wiki_index())
     (docs / "wiki" / "architecture.md").write_text(generate_wiki_architecture())
     (docs / "wiki" / "tools.md").write_text(generate_wiki_tools())
     (docs / "wiki" / "profiling.md").write_text(generate_wiki_profiling())
@@ -1952,7 +2072,7 @@ def main():
         + 1  # cross-reference
         + 1 + len(profiles)  # emulator index + detail
         + 1  # gap analysis
-        + 4  # wiki (architecture, tools, profiling, data model)
+        + 5  # wiki (index, architecture, tools, profiling, data model)
         + 1  # contributing
     )
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")
