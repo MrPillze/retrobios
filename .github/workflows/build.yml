@@ -18,13 +18,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  regenerate:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pages: write
-    outputs:
-      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v6
 
@@ -34,57 +32,9 @@ jobs:
 
       - run: pip install pyyaml
 
-      - name: Restore large files from release
-        run: |
-          mkdir -p .cache/large
-          gh release download large-files -D .cache/large/ 2>/dev/null || true
-          # Copy large files to their bios/ paths so generate_db sees them
-          for f in .cache/large/*; do
-            [ -f "$f" ] || continue
-            name=$(basename "$f")
-            # Match against .gitignore entries to find target path
-            target=$(grep "$name" .gitignore | head -1)
-            if [ -n "$target" ] && [ ! -f "$target" ]; then
-              mkdir -p "$(dirname "$target")"
-              cp "$f" "$target"
-              echo "Restored: $target"
-            fi
-          done
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Regenerate database, readme, and site
-        run: |
-          pip install mkdocs-material
-          python scripts/generate_db.py --force --bios-dir bios --output database.json
-          python scripts/generate_readme.py --db database.json --platforms-dir platforms
-          python scripts/generate_site.py
-
       - name: Run tests
         run: python -m unittest tests.test_e2e -v
 
-      - name: Deploy site to GitHub Pages
-        if: github.ref == 'refs/heads/main'
-        run: mkdocs gh-deploy --force --clean
-
-      - name: Commit if changed
-        id: commit
-        run: |
-          git diff --quiet database.json README.md CONTRIBUTING.md && echo "changed=false" >> "$GITHUB_OUTPUT" && exit 0
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add database.json README.md CONTRIBUTING.md
-          git commit -m "regenerate database and docs"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-  release:
-    needs: regenerate
-    if: (needs.regenerate.outputs.changed == 'true' || github.event.inputs.force_release == 'true')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
       - name: Rate limit
         if: github.event.inputs.force_release != 'true'
         id: rate
@@ -102,20 +52,6 @@ jobs:
           echo "skip=false" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/checkout@v6
-        if: steps.rate.outputs.skip != 'true'
-        with:
-          ref: main
-
-      - uses: actions/setup-python@v6
-        if: steps.rate.outputs.skip != 'true'
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        if: steps.rate.outputs.skip != 'true'
-        run: pip install pyyaml
 
       - name: Restore large files from release
         if: steps.rate.outputs.skip != 'true'
@@ -142,9 +78,15 @@ jobs:
 
       - name: Build packs
         if: steps.rate.outputs.skip != 'true'
+        run: python scripts/generate_pack.py --all --output-dir dist/
+
+      - name: Deploy site to GitHub Pages
+        if: steps.rate.outputs.skip != 'true'
         run: |
-          python scripts/generate_db.py --bios-dir bios --output database.json
-          python scripts/generate_pack.py --all --output-dir dist/
+          pip install mkdocs-material
+          python scripts/generate_readme.py --db database.json --platforms-dir platforms
+          python scripts/generate_site.py
+          mkdocs gh-deploy --force --clean
 
       - name: Release
         if: steps.rate.outputs.skip != 'true'
