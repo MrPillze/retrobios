@@ -545,7 +545,34 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     if systems:
         sys_links = [_system_link(s, "../") for s in systems]
         lines.append(f"| Systems | {', '.join(sys_links)} |")
+    mame_ver = profile.get("mame_version", "")
+    if mame_ver:
+        lines.append(f"| MAME version | {mame_ver} |")
+    author = profile.get("author", "")
+    if author:
+        lines.append(f"| Author | {author} |")
+    based_on = profile.get("based_on", "")
+    if based_on:
+        lines.append(f"| Based on | {based_on} |")
+    fw_ver = profile.get("firmware_version", "")
+    if fw_ver:
+        lines.append(f"| Firmware version | {fw_ver} |")
     lines.append("")
+
+    # Platform-specific details (rich structured data)
+    platform_details = profile.get("platform_details")
+    if platform_details and isinstance(platform_details, dict):
+        lines.extend(["???+ info \"Platform details\"", ""])
+        for pk, pv in platform_details.items():
+            if isinstance(pv, dict):
+                lines.append(f"    **{pk}:**")
+                for sk, sv in pv.items():
+                    lines.append(f"    - {sk}: {sv}")
+            elif isinstance(pv, list):
+                lines.append(f"    **{pk}:** {', '.join(str(x) for x in pv)}")
+            else:
+                lines.append(f"    **{pk}:** {pv}")
+        lines.append("")
 
     # Notes
     if notes:
@@ -607,11 +634,26 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
             category = f.get("category", "")
             validation = f.get("validation", [])
             size = f.get("size")
-            fnote = f.get("note", "")
+            fnote = f.get("note", f.get("notes", ""))
             storage = f.get("storage", "")
             fmd5 = f.get("md5", "")
             fsha1 = f.get("sha1", "")
             fcrc32 = f.get("crc32", "")
+            fsha256 = f.get("sha256", "")
+            fadler32 = f.get("known_hash_adler32", "")
+            fmin = f.get("min_size")
+            fmax = f.get("max_size")
+            desc = f.get("description", "")
+            region = f.get("region", "")
+            archive = f.get("archive", "")
+            fpath = f.get("path", "")
+            fsystem = f.get("system", "")
+            priority = f.get("priority")
+            fast_boot = f.get("fast_boot")
+            bundled = f.get("bundled", False)
+            embedded = f.get("embedded", False)
+            has_builtin = f.get("has_builtin", False)
+            contents = f.get("contents", [])
 
             # Status badges
             badges = []
@@ -625,25 +667,64 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                 badges.append(mode)
             if category and category != "bios":
                 badges.append(category)
+            if region:
+                badges.append(", ".join(region) if isinstance(region, list) else str(region))
             if storage and storage != "embedded":
                 badges.append(storage)
+            if bundled:
+                badges.append("bundled in binary")
+            if embedded:
+                badges.append("embedded")
+            if has_builtin:
+                badges.append("has built-in fallback")
+            if archive:
+                badges.append(f"in `{archive}`")
             if not in_repo:
                 badges.append("missing from repo")
 
             lines.append(f"**`{fname}`** — {', '.join(badges)}")
+            if desc:
+                lines.append(f": {desc}")
             lines.append("")
 
             details = []
+            if fpath and fpath != fname:
+                details.append(f"Path: `{fpath}`")
+            if fsystem:
+                details.append(f"System: {_system_link(fsystem, '../')}")
             if size:
-                details.append(f"Size: {_fmt_size(size)}")
+                size_str = _fmt_size(size)
+                if fmin or fmax:
+                    bounds = []
+                    if fmin:
+                        bounds.append(f"min {_fmt_size(fmin)}")
+                    if fmax:
+                        bounds.append(f"max {_fmt_size(fmax)}")
+                    size_str += f" ({', '.join(bounds)})"
+                details.append(f"Size: {size_str}")
+            elif fmin or fmax:
+                bounds = []
+                if fmin:
+                    bounds.append(f"min {_fmt_size(fmin)}")
+                if fmax:
+                    bounds.append(f"max {_fmt_size(fmax)}")
+                details.append(f"Size: {', '.join(bounds)}")
             if fsha1:
                 details.append(f"SHA1: `{fsha1}`")
             if fmd5:
                 details.append(f"MD5: `{fmd5}`")
             if fcrc32:
                 details.append(f"CRC32: `{fcrc32}`")
+            if fsha256:
+                details.append(f"SHA256: `{fsha256}`")
+            if fadler32:
+                details.append(f"Adler32: `{fadler32}`")
             if aliases:
                 details.append(f"Aliases: {', '.join(f'`{a}`' for a in aliases)}")
+            if priority is not None:
+                details.append(f"Priority: {priority}")
+            if fast_boot is not None:
+                details.append(f"Fast boot: {'yes' if fast_boot else 'no'}")
             if validation:
                 if isinstance(validation, list):
                     details.append(f"Validation: {', '.join(validation)}")
@@ -663,6 +744,8 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                     lines.append(f"- {d}")
             if fnote:
                 lines.append(f"- {fnote}")
+            if contents:
+                lines.append(f"- Contents: {len(contents)} entries")
             lines.append("")
 
     # Data directories
