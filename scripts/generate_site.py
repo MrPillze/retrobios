@@ -37,6 +37,91 @@ RELEASE_URL = f"{REPO_URL}/releases/latest"
 GENERATED_DIRS = ["platforms", "systems", "emulators"]
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 
+# Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
+_system_page_map: dict[str, tuple[str, str]] = {}
+
+
+def _build_system_page_map_from_data(
+    manufacturers: dict, coverages: dict, db: dict,
+) -> None:
+    """Build system_id -> (manufacturer_slug, console_name) mapping.
+
+    Uses platform file paths to trace system_id -> bios directory -> manufacturer page.
+    """
+    files_db = db.get("files", {})
+    by_name = db.get("indexes", {}).get("by_name", {})
+
+    # Build reverse index: filename -> (manufacturer, console) from bios/ structure
+    file_to_console: dict[str, tuple[str, str]] = {}
+    for mfr, consoles in manufacturers.items():
+        for console, entries in consoles.items():
+            for entry in entries:
+                file_to_console[entry["name"]] = (mfr, console)
+
+    # Build normalized console name index for fuzzy matching
+    console_norm: dict[str, tuple[str, str]] = {}
+    for mfr, consoles in manufacturers.items():
+        slug = mfr.lower().replace(" ", "-")
+        mfr_norm = mfr.lower().replace(" ", "-")
+        for console in consoles:
+            norm = console.lower().replace(" ", "-")
+            entry = (slug, console)
+            console_norm[norm] = entry
+            console_norm[f"{mfr_norm}-{norm}"] = entry
+            # Short aliases: strip common manufacturer prefix words
+            for prefix in (f"{mfr_norm}-", "nintendo-", "sega-", "sony-", "snk-", "nec-"):
+                if norm.startswith(prefix.replace(f"{mfr_norm}-", "")):
+                    pass  # already covered by norm
+                key = f"{prefix}{norm}"
+                console_norm[key] = entry
+
+    # Map system_id -> (manufacturer, console) via platform file entries
+    for cov in coverages.values():
+        config = cov["config"]
+        for sys_id, system in config.get("systems", {}).items():
+            if sys_id in _system_page_map:
+                continue
+            # Strategy 1: trace via file paths in DB
+            for fe in system.get("files", []):
+                fname = fe.get("name", "")
+                if fname in file_to_console:
+                    mfr, console = file_to_console[fname]
+                    slug = mfr.lower().replace(" ", "-")
+                    _system_page_map[sys_id] = (slug, console)
+                    break
+            if sys_id in _system_page_map:
+                continue
+            # Strategy 2: fuzzy match system_id against console directory names
+            if sys_id in console_norm:
+                _system_page_map[sys_id] = console_norm[sys_id]
+            else:
+                # Try partial match: "nintendo-wii" matches "Wii" under "Nintendo"
+                parts = sys_id.split("-")
+                for i in range(len(parts)):
+                    suffix = "-".join(parts[i:])
+                    if suffix in console_norm:
+                        _system_page_map[sys_id] = console_norm[suffix]
+                        break
+
+
+def _system_link(sys_id: str, prefix: str = "") -> str:
+    """Generate a markdown link to a system page with anchor."""
+    if sys_id in _system_page_map:
+        slug, console = _system_page_map[sys_id]
+        anchor = console.lower().replace(" ", "-").replace("/", "-")
+        return f"[{sys_id}]({prefix}systems/{slug}.md#{anchor})"
+    return sys_id
+
+
+def _platform_link(name: str, display: str, prefix: str = "") -> str:
+    """Generate a markdown link to a platform page."""
+    return f"[{display}]({prefix}platforms/{name}.md)"
+
+
+def _emulator_link(name: str, prefix: str = "") -> str:
+    """Generate a markdown link to an emulator page."""
+    return f"[{name}]({prefix}emulators/{name}.md)"
+
 
 def _timestamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -236,11 +321,12 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
                 if sys_id in emu_data.get("systems", set()):
                     sys_emus.append(emu_name)
 
-        lines.append(f"## {sys_id}")
+        sys_link = _system_link(sys_id, "../")
+        lines.append(f"## {sys_link}")
         lines.append("")
         lines.append(f"{ok_count}/{total} files verified")
         if sys_emus:
-            emu_links = ", ".join(f"[{e}](../emulators/{e}.md)" for e in sorted(sys_emus))
+            emu_links = ", ".join(_emulator_link(e, "../") for e in sorted(sys_emus))
             lines.append(f"Emulators: {emu_links}")
         lines.append("")
 
@@ -350,9 +436,11 @@ def generate_system_page(
             lines.append(f"- SHA1: `{sha1_full}`")
             lines.append(f"- MD5: `{md5_full}`")
             if plats:
-                lines.append(f"- Platforms: {', '.join(plats)}")
+                plat_links = [_platform_link(p, p, "../../") for p in plats]
+                lines.append(f"- Platforms: {', '.join(plat_links)}")
             if emus:
-                lines.append(f"- Emulators: {', '.join(emus)}")
+                emu_links = [_emulator_link(e, "../../") for e in emus]
+                lines.append(f"- Emulators: {', '.join(emu_links)}")
             lines.append("")
 
         if variant_files:
@@ -455,7 +543,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     if cores:
         lines.append(f"| Cores | {', '.join(str(c) for c in cores)} |")
     if systems:
-        sys_links = [f"[{s}](../systems/{s}.md)" for s in systems]
+        sys_links = [_system_link(s, "../") for s in systems]
         lines.append(f"| Systems | {', '.join(sys_links)} |")
     lines.append("")
 
@@ -567,7 +655,8 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
             if platform_files:
                 plats = sorted(p for p, names in platform_files.items() if fname in names)
                 if plats:
-                    details.append(f"Platforms: {', '.join(plats)}")
+                    plat_links = [_platform_link(p, p, "../") for p in plats]
+                    details.append(f"Platforms: {', '.join(plat_links)}")
 
             if details:
                 for d in details:
@@ -1036,6 +1125,12 @@ def main():
     print("Generating home page...")
     (docs / "index.md").write_text(generate_home(db, coverages, profiles, registry))
 
+    # Build system_id -> manufacturer page map (needed by all generators)
+    print("Building system cross-reference map...")
+    manufacturers = _group_by_manufacturer(db)
+    _build_system_page_map_from_data(manufacturers, coverages, db)
+    print(f"  {len(_system_page_map)} system IDs mapped to pages")
+
     # Generate platform pages
     print("Generating platform pages...")
     (docs / "platforms" / "index.md").write_text(generate_platform_index(coverages))
@@ -1044,7 +1139,7 @@ def main():
 
     # Generate system pages
     print("Generating system pages...")
-    manufacturers = _group_by_manufacturer(db)
+
     (docs / "systems" / "index.md").write_text(generate_systems_index(manufacturers))
     for mfr, consoles in manufacturers.items():
         slug = mfr.lower().replace(" ", "-")
