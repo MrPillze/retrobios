@@ -710,72 +710,155 @@ def generate_cross_reference(
     coverages: dict,
     profiles: dict,
 ) -> str:
-    """Generate a cross-reference page mapping platforms to emulators and back."""
+    """Generate cross-reference: Platform -> Core -> Systems -> Upstream."""
     unique = {k: v for k, v in profiles.items()
-              if v.get("type") not in ("alias", "test", "launcher")}
+              if v.get("type") not in ("alias", "test")}
 
-    # Build system -> emulators map
-    system_emus: dict[str, list[str]] = {}
-    for emu_name, p in unique.items():
-        for sys_id in p.get("systems", []):
-            system_emus.setdefault(sys_id, []).append(emu_name)
-
-    # Build platform -> systems map
-    platform_systems: dict[str, list[str]] = {}
-    for name, cov in coverages.items():
-        config = cov["config"]
-        platform_systems[name] = sorted(config.get("systems", {}).keys())
+    # Build core -> profile lookup by core name
+    core_to_profile: dict[str, str] = {}
+    for pname, p in unique.items():
+        for core in p.get("cores", [pname]):
+            core_to_profile[str(core)] = pname
 
     lines = [
         f"# Cross-reference - {SITE_NAME}",
         "",
-        "Which emulators serve which platforms, mapped through shared system IDs.",
+        "Platform → Core → Systems → Upstream emulator.",
+        "",
+        "The libretro core is a port of the upstream emulator. "
+        "Files, features, and validation may differ between the two.",
         "",
     ]
 
-    # Platform -> systems -> emulators
-    lines.extend(["## By platform", ""])
+    # Per platform
     for pname in sorted(coverages.keys(), key=lambda x: coverages[x]["platform"]):
-        display = coverages[pname]["platform"]
-        systems = platform_systems.get(pname, [])
-        lines.append(f"### [{display}](platforms/{pname}.md)")
-        lines.append("")
-        lines.append(f"{len(systems)} systems")
-        lines.append("")
+        cov = coverages[pname]
+        display = cov["platform"]
+        config = cov["config"]
+        platform_cores = config.get("cores", [])
 
-        lines.append("| System | Emulators |")
-        lines.append("|--------|----------|")
-        for sys_id in systems:
-            emus = system_emus.get(sys_id, [])
-            if emus:
-                emu_links = ", ".join(f"[{e}](emulators/{e}.md)" for e in sorted(emus))
-            else:
-                emu_links = "-"
-            lines.append(f"| {sys_id} | {emu_links} |")
+        lines.append(f"## [{display}](platforms/{pname}.md)")
         lines.append("")
 
-    # Emulator -> systems -> platforms
-    lines.extend(["## By emulator", ""])
-    lines.append("| Emulator | Type | Classification | Systems | Platforms |")
-    lines.append("|----------|------|---------------|---------|-----------|")
+        # Resolve which profiles this platform uses
+        if platform_cores == "all_libretro":
+            matched = {k: v for k, v in unique.items()
+                       if "libretro" in v.get("type", "")}
+        elif isinstance(platform_cores, list):
+            matched = {}
+            for cname in platform_cores:
+                cname_str = str(cname)
+                if cname_str in unique:
+                    matched[cname_str] = unique[cname_str]
+                elif cname_str in core_to_profile:
+                    pkey = core_to_profile[cname_str]
+                    matched[pkey] = unique[pkey]
+        else:
+            # Fallback: system intersection
+            psystems = set(config.get("systems", {}).keys())
+            matched = {k: v for k, v in unique.items()
+                       if set(v.get("systems", [])) & psystems}
 
-    for emu_name in sorted(unique.keys()):
-        p = unique[emu_name]
-        emu_display = p.get("emulator", emu_name)
-        emu_type = p.get("type", "")
-        cls = p.get("core_classification", "")
-        emu_systems = set(p.get("systems", []))
-        # Find platforms that share systems with this emulator
-        emu_plats = set()
-        for pname, psystems in platform_systems.items():
-            if emu_systems & set(psystems):
-                emu_plats.add(pname)
-        plat_str = ", ".join(sorted(emu_plats)) if emu_plats else "-"
-        sys_count = len(emu_systems)
+        if platform_cores == "all_libretro":
+            lines.append(f"**{len(matched)} cores** (all libretro)")
+        else:
+            lines.append(f"**{len(matched)} cores**")
+        lines.append("")
+
+        lines.append("| Core | Classification | Systems | Files | Upstream |")
+        lines.append("|------|---------------|---------|-------|----------|")
+
+        for emu_name in sorted(matched.keys()):
+            p = matched[emu_name]
+            emu_display = p.get("emulator", emu_name)
+            cls = p.get("core_classification", "-")
+            emu_type = p.get("type", "")
+            upstream = p.get("upstream", "")
+            source = p.get("source", "")
+            systems = p.get("systems", [])
+            files = p.get("files", [])
+
+            sys_str = ", ".join(systems[:3])
+            if len(systems) > 3:
+                sys_str += f" +{len(systems) - 3}"
+
+            file_count = len(files)
+            # Count mode divergences
+            libretro_only = sum(1 for f in files if f.get("mode") == "libretro")
+            standalone_only = sum(1 for f in files if f.get("mode") == "standalone")
+            file_str = str(file_count)
+            if libretro_only or standalone_only:
+                parts = []
+                if libretro_only:
+                    parts.append(f"{libretro_only} libretro-only")
+                if standalone_only:
+                    parts.append(f"{standalone_only} standalone-only")
+                file_str += f" ({', '.join(parts)})"
+
+            upstream_display = "-"
+            if upstream:
+                upstream_short = upstream.replace("https://github.com/", "")
+                upstream_display = f"[{upstream_short}]({upstream})"
+            elif source:
+                source_short = source.replace("https://github.com/", "")
+                upstream_display = f"[{source_short}]({source})"
+
+            lines.append(
+                f"| [{emu_display}](emulators/{emu_name}.md) | {cls} | "
+                f"{sys_str} | {file_str} | {upstream_display} |"
+            )
+
+        lines.append("")
+
+    # Reverse view: by upstream emulator
+    lines.extend([
+        "## By upstream emulator",
+        "",
+        "| Upstream | Cores | Classification | Platforms |",
+        "|----------|-------|---------------|-----------|",
+    ])
+
+    # Group profiles by upstream
+    by_upstream: dict[str, list[str]] = {}
+    for emu_name, p in sorted(unique.items()):
+        upstream = p.get("upstream", p.get("source", ""))
+        if upstream:
+            by_upstream.setdefault(upstream, []).append(emu_name)
+
+    # Build platform membership per core
+    platform_membership: dict[str, set[str]] = {}
+    for pname, cov in coverages.items():
+        config = cov["config"]
+        pcores = config.get("cores", [])
+        if pcores == "all_libretro":
+            for k, v in unique.items():
+                if "libretro" in v.get("type", ""):
+                    platform_membership.setdefault(k, set()).add(pname)
+        elif isinstance(pcores, list):
+            for cname in pcores:
+                cname_str = str(cname)
+                if cname_str in unique:
+                    platform_membership.setdefault(cname_str, set()).add(pname)
+                elif cname_str in core_to_profile:
+                    pkey = core_to_profile[cname_str]
+                    platform_membership.setdefault(pkey, set()).add(pname)
+
+    for upstream_url in sorted(by_upstream.keys()):
+        cores = by_upstream[upstream_url]
+        upstream_short = upstream_url.replace("https://github.com/", "")
+        classifications = set()
+        all_plats: set[str] = set()
+        for c in cores:
+            classifications.add(unique[c].get("core_classification", "-"))
+            all_plats.update(platform_membership.get(c, set()))
+
+        cls_str = ", ".join(sorted(classifications))
+        plat_str = ", ".join(sorted(all_plats)) if all_plats else "-"
+        core_links = ", ".join(f"[{c}](emulators/{c}.md)" for c in sorted(cores))
 
         lines.append(
-            f"| [{emu_display}](emulators/{emu_name}.md) | {emu_type} | "
-            f"{cls} | {sys_count} | {plat_str} |"
+            f"| [{upstream_short}]({upstream_url}) | {core_links} | "
+            f"{cls_str} | {plat_str} |"
         )
 
     lines.extend(["", f"*Generated on {_timestamp()}*"])
