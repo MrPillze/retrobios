@@ -578,39 +578,84 @@ def generate_system_page(
 # ---------------------------------------------------------------------------
 
 def generate_emulators_index(profiles: dict) -> str:
+    unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+    aliases = {k: v for k, v in profiles.items() if v.get("type") == "alias"}
+
+    # Group by classification
+    by_class: dict[str, list[tuple[str, dict]]] = {}
+    for name in sorted(unique.keys()):
+        p = unique[name]
+        cls = p.get("core_classification", "other")
+        by_class.setdefault(cls, []).append((name, p))
+
+    total_files = sum(len(p.get("files", [])) for p in unique.values())
+
     lines = [
         f"# Emulators - {SITE_NAME}",
         "",
-        "| Engine | Type | Systems | Files |",
-        "|--------|------|---------|-------|",
+        f"**{len(unique)}** emulator profiles, **{total_files}** files total, **{len(aliases)}** aliases.",
+        "",
+        "| Classification | Count | Description |",
+        "|---------------|-------|-------------|",
     ]
 
-    unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
-    test_cores = {k: v for k, v in profiles.items() if v.get("type") == "test"}
-    aliases = {k: v for k, v in profiles.items() if v.get("type") == "alias"}
+    cls_desc = {
+        "official_port": "Same author maintains both standalone and libretro",
+        "community_fork": "Third-party port to libretro",
+        "pure_libretro": "Built for libretro, no standalone version",
+        "game_engine": "Game engine reimplementation",
+        "enhanced_fork": "Fork with added features",
+        "frozen_snapshot": "Frozen at an old version",
+        "embedded_hle": "All ROMs compiled into binary",
+        "launcher": "Launches an external emulator",
+        "other": "Unclassified",
+    }
 
-    for name in sorted(unique.keys()):
-        p = unique[name]
-        emu_name = p.get("emulator", name)
-        emu_type = p.get("type", "unknown")
-        systems = p.get("systems", [])
-        files = p.get("files", [])
-        sys_str = ", ".join(systems[:3])
-        if len(systems) > 3:
-            sys_str += f" +{len(systems)-3}"
+    cls_order = ["official_port", "community_fork", "pure_libretro",
+                 "game_engine", "enhanced_fork", "frozen_snapshot",
+                 "embedded_hle", "launcher", "other"]
 
-        lines.append(
-            f"| [{emu_name}]({name}.md) | {emu_type} | "
-            f"{sys_str} | {len(files)} |"
-        )
+    for cls in cls_order:
+        entries = by_class.get(cls, [])
+        if not entries:
+            continue
+        desc = cls_desc.get(cls, "")
+        anchor = cls.replace("_", "-")
+        lines.append(f"| [{cls}](#{anchor}) | {len(entries)} | {desc} |")
+    lines.append("")
+
+    # Per-classification sections
+    for cls in cls_order:
+        entries = by_class.get(cls, [])
+        if not entries:
+            continue
+        lines.extend([
+            f"## {cls}",
+            "",
+            "| Engine | Systems | Files |",
+            "|--------|---------|-------|",
+        ])
+
+        for name, p in entries:
+            emu_name = p.get("emulator", name)
+            systems = p.get("systems", [])
+            files = p.get("files", [])
+            sys_str = ", ".join(systems[:3])
+            if len(systems) > 3:
+                sys_str += f" +{len(systems) - 3}"
+            lines.append(
+                f"| [{emu_name}]({name}.md) | {sys_str} | {len(files)} |"
+            )
+        lines.append("")
 
     if aliases:
-        lines.extend(["", "## Aliases", ""])
+        lines.extend(["## Aliases", ""])
         lines.append("| Core | Points to |")
         lines.append("|------|-----------|")
         for name in sorted(aliases.keys()):
             parent = aliases[name].get("alias_of", "unknown")
             lines.append(f"| {name} | [{parent}]({parent}.md) |")
+        lines.append("")
 
     return "\n".join(lines) + "\n"
 
@@ -1067,15 +1112,16 @@ def generate_gap_analysis(
                     "source_ref": g["source_ref"],
                 })
 
-    # Build reverse map: emulator -> platforms that use it
+    # Build reverse map: emulator -> platforms that use it (via cores: field)
+    from common import resolve_platform_cores
     emu_to_platforms: dict[str, set[str]] = {}
-    for pname, pfiles in platform_files.items():
-        for emu_name, emu_profile in profiles.items():
-            if emu_profile.get("type") == "alias":
-                continue
-            emu_file_names = {f.get("name", "") for f in emu_profile.get("files", [])}
-            if emu_file_names & pfiles:
-                emu_to_platforms.setdefault(emu_name, set()).add(pname)
+    unique_profiles = {k: v for k, v in profiles.items()
+                       if v.get("type") not in ("alias", "test")}
+    for pname in coverages:
+        config = coverages[pname]["config"]
+        matched = resolve_platform_cores(config, unique_profiles)
+        for emu_name in matched:
+            emu_to_platforms.setdefault(emu_name, set()).add(pname)
 
     if missing_details:
         req_missing = [m for m in missing_details if m["required"]]
@@ -1910,10 +1956,38 @@ def generate_mkdocs_nav(
         system_nav.append({mfr: f"systems/{slug}.md"})
 
     unique_profiles = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
-    emu_nav = [{"Overview": "emulators/index.md"}]
+
+    # Group emulators by classification for nav
+    by_class: dict[str, list[tuple[str, str]]] = {}
     for name in sorted(unique_profiles.keys()):
-        display = unique_profiles[name].get("emulator", name)
-        emu_nav.append({display: f"emulators/{name}.md"})
+        p = unique_profiles[name]
+        cls = p.get("core_classification", "other")
+        display = p.get("emulator", name)
+        by_class.setdefault(cls, []).append((display, f"emulators/{name}.md"))
+
+    # Classification display names
+    cls_labels = {
+        "pure_libretro": "Pure libretro",
+        "official_port": "Official ports",
+        "community_fork": "Community forks",
+        "frozen_snapshot": "Frozen snapshots",
+        "enhanced_fork": "Enhanced forks",
+        "game_engine": "Game engines",
+        "embedded_hle": "Embedded HLE",
+        "launcher": "Launchers",
+        "other": "Other",
+    }
+
+    emu_nav: list = [{"Overview": "emulators/index.md"}]
+    for cls in ["official_port", "community_fork", "pure_libretro",
+                "game_engine", "enhanced_fork", "frozen_snapshot",
+                "embedded_hle", "launcher", "other"]:
+        entries = by_class.get(cls, [])
+        if not entries:
+            continue
+        label = cls_labels.get(cls, cls)
+        sub = [{display: path} for display, path in entries]
+        emu_nav.append({f"{label} ({len(entries)})": sub})
 
     wiki_nav = [
         {"Overview": "wiki/index.md"},
@@ -2054,16 +2128,56 @@ def main():
     nav = generate_mkdocs_nav(coverages, manufacturers, profiles)
     nav_yaml = yaml.dump({"nav": nav}, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
-    with open("mkdocs.yml") as f:
-        content = f.read()
-    # Replace nav section (everything from \nnav: to the next top-level key or EOF)
-    import re
-    if "\nnav:" in content:
-        content = re.sub(r'\nnav:\n(?:[ \t]+.*\n?)*', '\n' + nav_yaml, content, count=1)
-    else:
-        content += "\n" + nav_yaml
+    # Rewrite mkdocs.yml entirely (static config + generated nav)
+    mkdocs_static = """\
+site_name: RetroBIOS
+site_url: https://abdess.github.io/retrobios/
+repo_url: https://github.com/Abdess/retrobios
+repo_name: Abdess/retrobios
+theme:
+  name: material
+  palette:
+  - media: (prefers-color-scheme)
+    toggle:
+      icon: material/brightness-auto
+      name: Switch to light mode
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    toggle:
+      icon: material/brightness-4
+      name: Switch to auto
+  font: false
+  features:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.top
+  - navigation.indexes
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - toc.follow
+markdown_extensions:
+- tables
+- admonition
+- attr_list
+- md_in_html
+- toc:
+    permalink: true
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.tabbed:
+    alternate_style: true
+plugins:
+- search
+"""
     with open("mkdocs.yml", "w") as f:
-        f.write(content)
+        f.write(mkdocs_static)
+        f.write(nav_yaml)
 
     total_pages = (
         1  # home
