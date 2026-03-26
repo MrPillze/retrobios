@@ -1,0 +1,143 @@
+emulator: Zelda Classic v2.10
+type: libretro
+core_classification: game_engine
+source: https://github.com/netux79/zc210-libretro
+upstream: https://www.zeldaclassic.com/
+core_version: "2.10 Beta 5"
+display_name: Zelda Classic v2.10 (ZC210)
+profiled_date: 2026-03-26
+cores:
+  - zc210
+systems:
+  - zc210
+notes: >-
+  Libretro port of Zelda Classic 2.10 quest player by netux79. Removed
+  Allegro dependency, runs .qst quest files. No ZQuest editor, no ZC Music
+  (mp3/ogg), no menus. MIDI playback via SoundFont (SF2). Data files
+  distributed with the core source in the datfile/ directory.
+files:
+  - name: zcdata.dat
+    path: zc210/zcdata.dat
+    description: main engine data (fonts, palette, SFX samples, MIDI tracks)
+    required: true
+    source_ref: "zelda.cpp:1173-1181 load_datafile + signature validation"
+
+  - name: default.sf2
+    path: zc210/sf2/default.sf2
+    description: default SoundFont for MIDI music playback
+    required: true
+    source_ref: "zc_sys.cpp:2234-2238 file_exists + midi_init"
+
+  - name: custom0.sf2
+    path: zc210/sf2/custom0.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom1.sf2
+    path: zc210/sf2/custom1.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom2.sf2
+    path: zc210/sf2/custom2.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom3.sf2
+    path: zc210/sf2/custom3.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom4.sf2
+    path: zc210/sf2/custom4.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom5.sf2
+    path: zc210/sf2/custom5.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom6.sf2
+    path: zc210/sf2/custom6.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom7.sf2
+    path: zc210/sf2/custom7.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom8.sf2
+    path: zc210/sf2/custom8.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: custom9.sf2
+    path: zc210/sf2/custom9.sf2
+    description: alternative SoundFont (selectable via core option)
+    required: false
+    source_ref: "zc_sys.cpp:2234-2238, libretro.cpp:147"
+
+  - name: LinkTothePast.dat
+    path: zc210/sfx/LinkTothePast.dat
+    description: Zelda A Link to the Past SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: LinksAwakening.dat
+    path: zc210/sfx/LinksAwakening.dat
+    description: Zelda Link's Awakening SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: BSZelda.dat
+    path: zc210/sfx/BSZelda.dat
+    description: BS Zelda SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: Metroid.dat
+    path: zc210/sfx/Metroid.dat
+    description: Metroid NES SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: Tortuga.dat
+    path: zc210/sfx/Tortuga.dat
+    description: Link to Tortuga quest SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: Castle.dat
+    path: zc210/sfx/Castle.dat
+    description: Castle Hunt quest SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: Elise.dat
+    path: zc210/sfx/Elise.dat
+    description: Search for Elise quest SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: SwangSong.dat
+    path: zc210/sfx/SwangSong.dat
+    description: Swang Song quest SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"
+
+  - name: Custom.dat
+    path: zc210/sfx/Custom.dat
+    description: user-provided custom SFX replacement
+    required: false
+    source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"

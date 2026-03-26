@@ -1,0 +1,32 @@
+emulator: x16emu
+type: standalone
+upstream: "https://github.com/X16Community/x16-emulator"
+profiled_date: "2026-03-26"
+core_version: "r50"
+display_name: "Commander X16 (x16emu)"
+cores:
+  - x16emu
+systems:
+  - commanderx16
+
+notes: |
+  Standalone emulator for the Commander X16 retro computer by Michael Steil.
+  65C02/65C816 CPU, VERA video, YM2151+PSG audio, SD card, cartridge support.
+
+  System ROM built separately from the x16-rom repo (KERNAL + BASIC + DOS,
+  32 banks x 16 KB = 512 KB). Emulator and ROM versions must match.
+
+  Batocera configgen (x16emuGenerator.py) passes -rom /userdata/bios/commanderx16/rom.bin.
+  Also sets -ram 2048, -rtc, and scale/quality/widescreen per user config.
+
+files:
+  - name: rom.bin
+    path: commanderx16/rom.bin
+    required: true
+    size: 524288
+    description: "Commander X16 system ROM (KERNAL, BASIC, DOS, charset)"
+    source_ref: "x16-emulator/src/main.c:602,1158-1165; glue.h:19,24"
+    note: >
+      Default filename "rom.bin", loaded from executable directory or via -rom flag.
+      ROM_SIZE = NUM_ROM_BANKS(32) * 16384 = 524288 bytes. exit(1) if file not found.
+      Built from x16-rom repo (open source, derived from C64 KERNAL/BASIC).

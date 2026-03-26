@@ -1,0 +1,88 @@
+emulator: Lexaloffle
+type: standalone
+upstream: "https://www.lexaloffle.com/"
+profiled_date: "2026-03-26"
+display_name: "Lexaloffle - PICO-8 / Voxatron"
+cores:
+  - lexaloffle
+systems:
+  - pico8
+  - voxatron
+
+notes: |
+  Commercial fantasy consoles by Lexaloffle Games LLP. Closed-source binaries
+  distributed as ZIP archives from lexaloffle.com (requires purchase).
+
+  Batocera configgen (lexaloffleGenerator.py) handles both systems via a single
+  generator. PICO-8: binary at bios/pico-8/pico8. Voxatron: binary at
+  bios/voxatron/vox. Generator checks binary existence and executable permission,
+  raises BatoceraException if missing. LD_LIBRARY_PATH set to the BIOS directory
+  for shared library resolution.
+
+  Each distribution ships a statically linked binary (pico8/vox) and a dynamically
+  linked variant (pico8_dyn/vox_dyn). Batocera uses the static binary. The .dat
+  file is loaded at startup and contains boot sequence, themes, and internal data.
+
+  PICO-8 supports x86_64 and ARM (Raspberry Pi). Voxatron x86_64 only.
+  Voxatron depends on libHoloPlayCore.so (Looking Glass SDK), compile-time linked.
+
+files:
+  # -------------------------------------------------------
+  # PICO-8
+  # -------------------------------------------------------
+  - name: pico8
+    path: pico-8/pico8
+    system: pico8
+    required: true
+    description: "PICO-8 main executable (statically linked)"
+    source_ref: "lexaloffleGenerator.py:17,36,48-49"
+    note: "Configgen checks existence and executable permission"
+
+  - name: pico8_dyn
+    path: pico-8/pico8_dyn
+    system: pico8
+    required: false
+    description: "PICO-8 dynamically linked executable"
+    source_ref: "lexaloffleGenerator.py:17,36"
+    note: "Alternative to pico8. Requires system SDL2. Some platforms prefer this variant."
+
+  - name: pico8.dat
+    path: pico-8/pico8.dat
+    system: pico8
+    required: true
+    description: "PICO-8 data file (boot sequence, themes, demo carts)"
+    note: "POD format. Loaded by pico8/pico8_dyn from same directory at startup."
+
+  # -------------------------------------------------------
+  # Voxatron
+  # -------------------------------------------------------
+  - name: vox
+    path: voxatron/vox
+    system: voxatron
+    required: true
+    description: "Voxatron main executable"
+    source_ref: "lexaloffleGenerator.py:20,42,48-49"
+    note: "Configgen checks existence and executable permission. x86_64 only."
+
+  - name: vox_dyn
+    path: voxatron/vox_dyn
+    system: voxatron
+    required: false
+    description: "Voxatron dynamically linked executable"
+    source_ref: "lexaloffleGenerator.py:20,42"
+    note: "Alternative to vox. Requires system SDL2."
+
+  - name: vox.dat
+    path: voxatron/vox.dat
+    system: voxatron
+    required: true
+    description: "Voxatron data file"
+    note: "Loaded by vox/vox_dyn from same directory at startup."
+
+  - name: libHoloPlayCore.so
+    path: voxatron/libHoloPlayCore.so
+    system: voxatron
+    required: true
+    description: "Looking Glass holographic display support library"
+    source_ref: "lexaloffleGenerator.py:89"
+    note: "Compile-time linked dependency. LD_LIBRARY_PATH set to bios/voxatron/ by configgen."

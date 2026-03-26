@@ -1,0 +1,157 @@
+emulator: Demul
+type: standalone
+upstream: "https://demul.emulation64.com"
+profiled_date: "2026-03-26"
+core_version: "0.7"
+display_name: "Sega - Dreamcast/NAOMI/Hikaru (Demul)"
+cores:
+  - demul
+systems:
+  - sega-dreamcast
+  - sega-naomi
+  - sega-naomi2
+  - sega-hikaru
+  - sammy-atomiswave
+  - sega-system-sp
+  - gaelco-powervr
+  - cave-cv1000
+
+notes: |
+  Closed-source Windows emulator for Sega Dreamcast and related arcade hardware.
+  Run via Wine (32-bit, win32 prefix) on Linux platforms (Batocera, RetroBat).
+  Uses MAME ROM naming conventions for arcade BIOS archives.
+
+  Batocera configgen (demulGenerator.py) maps roms0 to the BIOS directory.
+  All BIOS ZIPs are placed directly in bios/ (no subdirectory prefix).
+  Demul searches configured ROM paths for both game ROMs and BIOS archives.
+
+  Gaelco PowerVR and Cave CV1000 (3rd gen) games are self-contained ROM sets
+  and do not require separate BIOS archives.
+
+  HLE MIE emulation available (changelog: "full HLE MIE" mode). LLE mode
+  requires mie.zip with the 315-6146 MCU firmware.
+
+  Supported launch modes via -run= parameter:
+    dc, naomi, naomi2, hikaru, atomiswave, gaelco, cave3rd, segasp.
+
+  BIOS requirements verified against Batocera configgen, batocera-systems
+  declarations, MAME ROM set conventions, and community documentation.
+  No source code available for direct verification.
+
+files:
+  # -------------------------------------------------------
+  # Sega Dreamcast
+  # -------------------------------------------------------
+  - name: dc_boot.bin
+    system: sega-dreamcast
+    required: true
+    size: 2097152
+    note: "Dreamcast boot ROM (2 MB). No HLE fallback in Demul."
+
+  - name: dc_flash.bin
+    system: sega-dreamcast
+    required: false
+    size: 131072
+    note: "Dreamcast flash memory (128 KB). Created by emulator if missing."
+
+  # -------------------------------------------------------
+  # Sega NAOMI
+  # -------------------------------------------------------
+  - name: naomi.zip
+    system: sega-naomi
+    required: true
+    category: bios_zip
+    note: >
+      NAOMI system BIOS archive (MAME format). Contains region-specific
+      BIOS ROMs (EPR-21576 Japan, EPR-21577 USA, EPR-21578 Export,
+      EPR-21579 Korea) plus development and special BIOS variants.
+
+  - name: naomigd.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "NAOMI GD-ROM BIOS. Shares ROMs with naomi.zip (subset of region BIOS variants)."
+
+  - name: hod2bios.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "House of the Dead 2 game-specific BIOS. Japan/USA/Export variants."
+
+  - name: f355bios.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "Ferrari F355 Challenge game-specific BIOS. Japan/USA/Export variants."
+
+  - name: f355dlx.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "Ferrari F355 Challenge Deluxe game-specific BIOS. Japan/USA/Export variants."
+
+  - name: airlbios.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "Airline Pilots Deluxe game-specific BIOS. USA/Export variants."
+
+  # -------------------------------------------------------
+  # Sega NAOMI 2
+  # -------------------------------------------------------
+  - name: naomi2.zip
+    system: sega-naomi2
+    required: true
+    category: bios_zip
+    note: >
+      NAOMI 2 system BIOS archive (MAME format). Contains region-specific
+      BIOS ROMs (EPR-23605 Japan, EPR-23607 USA, EPR-23608 Export,
+      EPR-23609 Korea, EPR-23610 Australia).
+
+  # -------------------------------------------------------
+  # Sega Hikaru
+  # -------------------------------------------------------
+  - name: hikaru.zip
+    system: sega-hikaru
+    required: true
+    category: bios_zip
+    note: >
+      Hikaru system BIOS archive (MAME format). Contains EPR-23400a (latest),
+      EPR-23400, EPR-21904 (early), prot_bot (dev/prototype). All 2 MB at IC94.
+
+  # -------------------------------------------------------
+  # Sammy Atomiswave
+  # -------------------------------------------------------
+  - name: awbios.zip
+    system: sammy-atomiswave
+    required: true
+    category: bios_zip
+    note: "Atomiswave system BIOS archive (MAME format). Contains bios0.ic23 and bios1.ic23 (128 KB each)."
+
+  # -------------------------------------------------------
+  # Sega System SP
+  # -------------------------------------------------------
+  - name: segasp.zip
+    system: sega-system-sp
+    required: true
+    category: bios_zip
+    note: >
+      System SP (Aurora/Spider) BIOS archive (MAME format). Contains
+      EPR-24236a, EPR-24328/a BIOS ROMs, serial EEPROM, and network
+      firmware variants.
+
+  # -------------------------------------------------------
+  # Device ROMs (NAOMI / NAOMI 2 / Hikaru)
+  # -------------------------------------------------------
+  - name: mie.zip
+    required: false
+    hle_fallback: true
+    category: bios_zip
+    note: "MIE (Maple-JVS bridge) Z80 MCU firmware (315-6146.bin). HLE mode available; LLE mode requires this archive."
+
+  - name: jvs13551.zip
+    required: true
+    category: bios_zip
+    note: >
+      Sega 837-13551 JVS I/O board firmware. Contains sp5001.bin,
+      sp5001-a.bin, sp5001-b.bin, sp5002-a.bin, 315-6215.bin.

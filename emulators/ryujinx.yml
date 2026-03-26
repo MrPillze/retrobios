@@ -1,0 +1,45 @@
+emulator: Ryujinx
+type: standalone
+source: "https://git.ngram.ca/mirrors/Ryujinx"
+upstream: "https://github.com/Ryujinx/Ryujinx"
+profiled_date: "2026-03-26"
+core_version: "1.1.1403"
+display_name: "Ryujinx (Nintendo Switch)"
+systems: [nintendo-switch]
+analysis_date: "2026-03-26"
+analysis_commit: "HEAD (depth=1, ngram.ca mirror)"
+mode: standalone
+
+# Key files are read from {BaseDirPath}/system/ (AppDataManager.cs:229)
+# Also searched in ~/.switch/ (AppDataManager.cs:47)
+# Batocera copies bios/switch/prod.keys to Ryujinx/system/prod.keys (ryujinxGenerator.py:108)
+# Firmware NCAs are installed via UI (ContentManager.cs:429), not placed as files
+
+files:
+  - name: "prod.keys"
+    required: true
+    path: "switch/"
+    mode: standalone
+    note: "Switch production keys for NCA decryption"
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:239"
+
+  - name: "title.keys"
+    required: false
+    path: "switch/"
+    mode: standalone
+    note: "Per-title decryption keys, needed for specific game content"
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:240"
+
+  - name: "console.keys"
+    required: false
+    path: "switch/"
+    mode: standalone
+    note: "Console-specific keys for encrypted content"
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:241"
+
+notes: |
+  Ryujinx is a standalone Nintendo Switch emulator written in C#, created by gdkchan.
+  Original repo discontinued October 2024 after Nintendo takedown.
+  Firmware (system NCAs) must be installed through Ryujinx's UI from a ZIP or XCI.
+  Required for commercial games (.nsp, .xci). Homebrew (.nro, .nso) runs without firmware.
+  Firmware provides shared fonts, timezone data, SSL certificates, system version info.

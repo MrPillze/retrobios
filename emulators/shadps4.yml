@@ -1,0 +1,135 @@
+emulator: shadps4
+type: standalone
+source: "https://github.com/shadps4-emu/shadPS4"
+upstream: "https://github.com/shadps4-emu/shadPS4"
+profiled_date: "2026-03-26"
+core_version: "pre-release 2026-03-25"
+display_name: "shadPS4 (PlayStation 4)"
+cores:
+  - shadps4
+systems:
+  - ps4
+mode: standalone
+analysis_date: "2026-03-26"
+analysis_commit: "31b2d9c (depth=1)"
+
+notes: |
+  shadPS4 is a standalone PlayStation 4 emulator. Most PS4 system libraries
+  are reimplemented in HLE. For better game compatibility, real firmware
+  modules (.sprx) can be loaded in LLE mode from the sys_modules/ directory.
+
+  Modules are loaded by sysmodule_internal.cpp via loadModuleInternal().
+  If a module exists in sys_modules/, it is loaded as LLE. If absent and
+  an HLE implementation exists, the emulator falls back to HLE. If neither,
+  the module is stubbed and games needing it may fail.
+
+  Game-specific overrides are supported: sys_modules/{CUSA_ID}/ takes
+  priority over the global sys_modules/ directory.
+
+  System fonts are mounted from fonts/font/ (/preinst/common/font on real
+  PS4) and fonts/font2/ (/system/common/font2 on real PS4). These are SST
+  (Sony Standard Text) typeface files in OTF format. The emulator mounts
+  the directories wholesale; games load individual fonts by name. Without
+  fonts, the emulator warns "No dumped system fonts, expect missing text
+  or instability."
+
+  All firmware files are extracted from a real PS4 via FTP:
+  - .sprx modules from /system/common/lib/
+  - font/ from /preinst/common/font/
+  - font2/ from /system/common/font2/
+
+  Batocera configgen (shadps4Generator.py) configures display, input, and
+  saves but does not map BIOS/firmware paths. The emulator uses its own
+  user directory for sys_modules/ and fonts/.
+
+files:
+  - name: "libSceLibcInternal.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 C standard library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:221"
+
+  - name: "libSceNgs2.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 next-generation audio system"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:213"
+
+  - name: "libSceRtc.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 real-time clock library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:215"
+
+  - name: "libSceJpegEnc.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 JPEG encoder"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:217"
+
+  - name: "libScePngEnc.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 PNG encoder"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:218"
+
+  - name: "libSceFont.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 font rendering library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:224"
+
+  - name: "libSceFontFt.sprx"
+    required: false
+    hle_fallback: true
+    path: "shadps4/sys_modules/"
+    description: "PS4 FreeType font library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:225"
+
+  - name: "libSceUlt.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 user-level threading library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:214"
+
+  - name: "libSceJpegDec.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 JPEG decoder"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:216"
+
+  - name: "libSceJson.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 JSON parser"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:219"
+
+  - name: "libSceJson2.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 JSON v2 parser"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:220"
+
+  - name: "libSceCesCs.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 character encoding conversion"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:222"
+
+  - name: "libSceAudiodec.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 audio decoder"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:223"
+
+  - name: "libSceFreeTypeOt.sprx"
+    required: false
+    path: "shadps4/sys_modules/"
+    description: "PS4 FreeType OpenType library"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:226"

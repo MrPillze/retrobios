@@ -189,7 +189,7 @@ nav:
     - Vircon32: emulators/vircon32.md
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
-  - Community forks (104):
+  - Community forks (105):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - Anarch: emulators/anarch.md
@@ -211,6 +211,7 @@ nav:
     - ChimeraSNES: emulators/chimerasnes.md
     - Citra: emulators/citra.md
     - Citra Canary: emulators/citra_canary.md
+    - Citron: emulators/citron.md
     - Daphne: emulators/daphne.md
     - DeSmuME: emulators/desmume.md
     - DICE: emulators/dice.md
@@ -324,7 +325,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (24):
+  - Game engines (25):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -349,6 +350,7 @@ nav:
     - TyrQuake: emulators/tyrquake.md
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
+    - Zelda Classic v2.10: emulators/zc210.md
   - Enhanced forks (12):
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
@@ -399,18 +401,28 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (11):
+  - Other (21):
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - Cemu: emulators/cemu.md
     - Clock Signal (CLK): emulators/clk.md
+    - Demul: emulators/demul.md
+    - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
+    - GSplus: emulators/gsplus.md
+    - Lexaloffle: emulators/lexaloffle.md
+    - openMSX: emulators/openmsx.md
     - PCSX2: emulators/pcsx2.md
     - Redream: emulators/redream.md
     - RPCS3: emulators/rpcs3.md
+    - Ryujinx: emulators/ryujinx.md
+    - shadps4: emulators/shadps4.md
+    - tsugaru: emulators/tsugaru.md
     - VBA-M: emulators/vba_m.md
     - VICE: emulators/vice.md
     - Vita3K: emulators/vita3k.md
+    - x16emu: emulators/x16emu.md
     - Xemu: emulators/xemu.md
+    - XRoar: emulators/xroar.md
 - Cross-reference: cross-reference.md
 - Gap Analysis: gaps.md
 - Wiki:

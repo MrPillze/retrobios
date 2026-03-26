@@ -1,0 +1,43 @@
+emulator: GSplus
+type: standalone
+source: "https://github.com/digarok/gsplus"
+upstream: "https://github.com/digarok/gsplus"
+profiled_date: "2026-03-26"
+core_version: "KEGS 1.38"
+display_name: "Apple - Apple IIGS (GSplus)"
+cores:
+  - gsplus
+systems:
+  - apple-iigs
+
+notes: |
+  Fork of KEGS (Kent's Emulated GS) by digarok. Cross-platform Apple IIGS
+  emulator supporting ROM 01 (128K), ROM 03 (256K), and Apple //e (32K) ROMs.
+  ROM version determined by file size at load time.
+
+  Batocera configgen (gsplusGenerator.py) sets g_cfg_rom_path to bios/ROM.03
+  by default (configurable via gsplus_bios_filename system setting).
+
+  Built-in Disk II controller PROM derived via XOR diffs from main ROM.
+  Built-in HD SmartPort PROM (slot 7) hardcoded in source.
+  Built-in character font (kegsfont.h), optional ROMX-compatible charrom
+  loadable via config UI.
+
+files:
+  - name: ROM
+    aliases: [ROM.01, ROM.03, APPLE2GS.ROM, APPLE2GS.ROM2, xgs.rom, XGS.ROM, Rom03gd, 342-0077-b]
+    required: true
+    description: "Apple IIGS system ROM"
+    source_ref: "config.c:131,403-407,1092-1149"
+    note: "Accepted sizes: 32768 (Apple //e), 131072 (ROM 01), 262144 (ROM 03)"
+    validation: [size]
+
+  - name: c600.rom
+    aliases: [controller.rom, disk.rom, DISK.ROM, diskII.prom]
+    required: false
+    hle_fallback: true
+    size: 256
+    description: "Disk II controller PROM (slot 6)"
+    validation: [size]
+    source_ref: "config.c:414-415,1188-1220"
+    note: "Built-in PROM generated from XOR diffs against main ROM"

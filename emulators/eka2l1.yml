@@ -1,0 +1,53 @@
+emulator: eka2l1
+type: standalone
+source: "https://github.com/EKA2L1/EKA2L1"
+upstream: "https://github.com/EKA2L1/EKA2L1"
+profiled_date: "2026-03-26"
+core_version: "continuous"
+display_name: "EKA2L1 (Symbian OS / N-Gage)"
+cores:
+  - eka2l1
+systems:
+  - ngage
+analysis_date: "2026-03-26"
+analysis_commit: "e67f84d (depth=1)"
+mode: standalone
+
+# EKA2L1 emulates Symbian OS kernel and reimplements critical app servers and
+# libraries. Supports S60v1 through Symbian Belle, including N-Gage 1.0/2.0.
+#
+# Each phone model requires its own ROM dump identified by firmware code.
+# ROM path at runtime: {storage}/roms/{firmware_code_lowercase}/SYM.ROM
+# Storage defaults to data/ relative to executable.
+#
+# Device installation (GUI or CLI) processes ROM dumps:
+#   - Raw .rom files → copied to roms/{firmcode}/SYM.ROM
+#   - RPKG files → extracted to drives/z/{firmcode}/ (system partition)
+#   - VPL firmware packages → extracted to roms/ and drives/
+#
+# drives/z/{firmcode}/ content is generated during installation, not
+# user-placed. drives/c/, drives/d/, drives/e/ are runtime storage.
+#
+# Firmware codes for N-Gage systems:
+#   NEM-4 = Nokia N-Gage (original, S60v1)
+#   RH-29 = Nokia N-Gage QD (S60v1)
+# For N-Gage 2.0 games, a S60v3 phone ROM is needed (e.g., RM-409 = 5320 XpressMusic).
+#
+# No libretro core exists. No .info file.
+# resources/ files (shaders, soundfonts, gamecontrollerdb.txt) ship with the
+# emulator distribution, not user-supplied.
+
+notes: |
+  Pure standalone Symbian OS / N-Gage emulator. No libretro core.
+  Requires phone ROM dumps (SYM.ROM) obtained from real Nokia devices.
+  The emulator supports 100+ Nokia phone models (NEM-4, RH-29, RM-409, etc.).
+  No hash or size validation on the ROM file; the loader parses the ROM structure.
+  Batocera maps the ngage system to eka2l1 in configgen-defaults.yml.
+  No dedicated Batocera configgen generator exists.
+
+files:
+  - name: "SYM.ROM"
+    required: true
+    mode: standalone
+    description: "Symbian OS phone ROM dump. One per device, placed in roms/{firmware_code}/ subdirectory."
+    source_ref: "src/emu/system/src/epoc.cpp:1225,754-759, src/emu/system/include/system/consts.h:23-25"
