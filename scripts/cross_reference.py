@@ -181,12 +181,23 @@ def main():
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--emulator", "-e", help="Analyze single emulator")
+    parser.add_argument("--platform", "-p", help="Platform name (required for --target)")
+    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
 
     profiles = load_emulator_profiles(args.emulators_dir)
     if args.emulator:
         profiles = {k: v for k, v in profiles.items() if k == args.emulator}
+
+    if args.target:
+        if not args.platform:
+            parser.error("--target requires --platform")
+        from common import load_target_config, resolve_platform_cores
+        target_cores = load_target_config(args.platform, args.target, args.platforms_dir)
+        config = load_platform_config(args.platform, args.platforms_dir)
+        relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
+        profiles = {k: v for k, v in profiles.items() if k in relevant}
 
     if not profiles:
         print("No emulator profiles found.", file=sys.stderr)
