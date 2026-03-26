@@ -1,6 +1,6 @@
 platform: retroarch
 source: https://buildbot.libretro.com/nightly/
-scraped_at: '2026-03-26T08:11:41Z'
+scraped_at: '2026-03-26T08:31:53Z'
 targets:
   linux-x86_64:
     architecture: x86_64
@@ -3138,3 +3138,104 @@ targets:
     - vaporspec
     - wasm4
     - x1
+  playstation-vita:
+    architecture: armv7
+    cores:
+    - '2048'
+    - '81'
+    - atari800
+    - bk
+    - bluemsx
+    - cap32
+    - chimerasnes
+    - clownmdemu
+    - crocods
+    - desmume
+    - dice
+    - dosbox_svn
+    - doublecherrygb
+    - easyrpg
+    - ecwolf
+    - fbalpha2012
+    - fbalpha2012_cps1
+    - fbalpha2012_cps2
+    - fbalpha2012_neogeo
+    - fbneo
+    - fceumm
+    - fmsx
+    - freechaf
+    - freeintv
+    - frodo
+    - fuse
+    - gambatte
+    - gearboy
+    - gearsystem
+    - genesis_plus_gx
+    - genesis_plus_gx_wide
+    - gme
+    - gpsp
+    - gw
+    - handy
+    - hatari
+    - lowresnx
+    - lutro
+    - mame2000
+    - mame2003
+    - mame2003_plus
+    - mednafen_lynx
+    - mednafen_ngp
+    - mednafen_pce_fast
+    - mednafen_supergrafx
+    - mednafen_vb
+    - mednafen_wswan
+    - mgba
+    - mrboom
+    - mu
+    - nekop2
+    - neocd
+    - nestopia
+    - np2kai
+    - numero
+    - nxengine
+    - parallel_n64
+    - pcsx_rearmed
+    - picodrive
+    - pocketcdg
+    - pokemini
+    - prboom
+    - prosystem
+    - puae
+    - px68k
+    - quasi88
+    - quicknes
+    - race
+    - smsplus
+    - snes9x2002
+    - snes9x2005
+    - snes9x2005_plus
+    - snes9x2010
+    - squirreljme
+    - stella
+    - stella2014
+    - tamalibretro
+    - test
+    - tgbdual
+    - theodore
+    - tic80
+    - tyrquake
+    - uw8
+    - uzem
+    - vba_next
+    - vecx
+    - vice_x128
+    - vice_x64
+    - vice_x64sc
+    - vice_xcbm2
+    - vice_xcbm5x0
+    - vice_xpet
+    - vice_xplus4
+    - vice_xscpu64
+    - vice_xvic
+    - x1
+    - xrick
+    - yabause
