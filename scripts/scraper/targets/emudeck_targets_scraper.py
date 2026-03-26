@@ -28,7 +28,21 @@ WINDOWS_CHECKBIOS_URL = (
     "main/functions/checkBIOS.ps1"
 )
 
-# Patterns for emulator name extraction from shell install/check functions
+# checkBIOS functions check by system, not by core. Map to actual emulators.
+# Source: EmuDeck install scripts + wiki documentation.
+_BIOS_SYSTEM_TO_CORES: dict[str, list[str]] = {
+    "ps1bios": ["beetle_psx", "pcsx_rearmed", "duckstation", "swanstation"],
+    "ps2bios": ["pcsx2"],
+    "segacdbios": ["genesisplusgx", "picodrive"],
+    "saturnbios": ["beetle_saturn", "kronos", "yabasanshiro", "yabause"],
+    "dreamcastbios": ["flycast"],
+    "dsbios": ["melonds", "desmume"],
+    "ryujinxbios": [],  # standalone, not libretro
+    "yuzubios": [],  # standalone, not libretro
+    "citronbios": ["citron"],
+}
+
+# Patterns for BIOS check function names
 _SH_EMULATOR_RE = re.compile(
     r'(?:function\s+|^)(?:check|install|setup)([A-Za-z0-9_]+)\s*\(',
     re.MULTILINE,
@@ -51,27 +65,18 @@ def _fetch(url: str) -> str | None:
         return None
 
 
-def _extract_sh_emulators(text: str) -> list[str]:
-    """Extract emulator names from checkBIOS.sh function declarations."""
+def _extract_cores(text: str, pattern: re.Pattern[str]) -> list[str]:
+    """Extract core names by parsing BIOS check functions and mapping to cores."""
     seen: set[str] = set()
     results: list[str] = []
-    for m in _SH_EMULATOR_RE.finditer(text):
-        name = m.group(1).lower()
-        if name and name not in seen:
-            seen.add(name)
-            results.append(name)
-    return sorted(results)
-
-
-def _extract_ps1_emulators(text: str) -> list[str]:
-    """Extract emulator names from checkBIOS.ps1 function declarations."""
-    seen: set[str] = set()
-    results: list[str] = []
-    for m in _PS1_EMULATOR_RE.finditer(text):
-        name = m.group(1).lower()
-        if name and name not in seen:
-            seen.add(name)
-            results.append(name)
+    for m in pattern.finditer(text):
+        system_name = m.group(1).lower()
+        # Map system BIOS check to actual core names
+        cores = _BIOS_SYSTEM_TO_CORES.get(system_name, [])
+        for core in cores:
+            if core not in seen:
+                seen.add(core)
+                results.append(core)
     return sorted(results)
 
 
@@ -84,11 +89,11 @@ class Scraper(BaseTargetScraper):
     def fetch_targets(self) -> dict:
         print("  fetching SteamOS checkBIOS.sh...", file=sys.stderr)
         sh_text = _fetch(STEAMOS_CHECKBIOS_URL)
-        steamos_cores = _extract_sh_emulators(sh_text) if sh_text else []
+        steamos_cores = _extract_cores(sh_text, _SH_EMULATOR_RE) if sh_text else []
 
         print("  fetching Windows checkBIOS.ps1...", file=sys.stderr)
         ps1_text = _fetch(WINDOWS_CHECKBIOS_URL)
-        windows_cores = _extract_ps1_emulators(ps1_text) if ps1_text else []
+        windows_cores = _extract_cores(ps1_text, _PS1_EMULATOR_RE) if ps1_text else []
 
         targets: dict[str, dict] = {
             "steamos": {

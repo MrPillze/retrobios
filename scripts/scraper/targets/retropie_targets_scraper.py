@@ -138,9 +138,15 @@ class Scraper(BaseTargetScraper):
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
                 continue
+            # Normalize: strip lr- prefix and convert hyphens to underscores
+            # to match emulator profile keys (lr-beetle-psx -> beetle_psx)
+            core_name = module_id
+            if core_name.startswith("lr-"):
+                core_name = core_name[3:]
+            core_name = core_name.replace("-", "_")
             for platform in PLATFORM_FLAGS:
                 if _is_available(flags, platform):
-                    platform_cores[platform].append(module_id)
+                    platform_cores[platform].append(core_name)
 
         print(f"  parsed {len(filenames)} scriptmodules", file=sys.stderr)
 

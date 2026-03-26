@@ -1,28 +1,40 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck
-scraped_at: '2026-03-26T08:18:29Z'
+scraped_at: '2026-03-26T08:44:04Z'
 targets:
   steamos:
     architecture: x86_64
     cores:
-    - citronbios
-    - dreamcastbios
-    - dsbios
-    - ps1bios
-    - ps2bios
-    - ryujinxbios
-    - saturnbios
-    - segacdbios
-    - yuzubios
+    - beetle_psx
+    - beetle_saturn
+    - citron
+    - desmume
+    - duckstation
+    - flycast
+    - genesisplusgx
+    - kronos
+    - melonds
+    - pcsx2
+    - pcsx_rearmed
+    - picodrive
+    - swanstation
+    - yabasanshiro
+    - yabause
   windows:
     architecture: x86_64
     cores:
-    - citronbios
-    - dreamcastbios
-    - dsbios
-    - ps1bios
-    - ps2bios
-    - ryujinxbios
-    - saturnbios
-    - segacdbios
-    - yuzubios
+    - beetle_psx
+    - beetle_saturn
+    - citron
+    - desmume
+    - duckstation
+    - flycast
+    - genesisplusgx
+    - kronos
+    - melonds
+    - pcsx2
+    - pcsx_rearmed
+    - picodrive
+    - swanstation
+    - yabasanshiro
+    - yabause
