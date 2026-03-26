@@ -230,6 +230,7 @@ def generate_pack(
     zip_contents: dict | None = None,
     data_registry: dict | None = None,
     emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -406,7 +407,7 @@ def generate_pack(
             emu_profiles = load_emulator_profiles(emulators_dir)
         core_files = _collect_emulator_extras(
             config, emulators_dir, db,
-            seen_destinations, base_dest, emu_profiles,
+            seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
         )
         core_count = 0
         for fe in core_files:
@@ -848,6 +849,8 @@ def main():
     parser.add_argument("--refresh-data", action="store_true",
                         help="Force re-download all data directories")
     parser.add_argument("--list", action="store_true", help="List available platforms")
+    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
     args = parser.parse_args()
 
     if args.list:
@@ -861,6 +864,18 @@ def main():
     if args.list_systems:
         list_system_ids(args.emulators_dir)
         return
+    if args.list_targets:
+        if not args.platform:
+            parser.error("--list-targets requires --platform")
+        from common import list_available_targets
+        targets = list_available_targets(args.platform, args.platforms_dir)
+        if not targets:
+            print(f"No targets configured for platform '{args.platform}'")
+            return
+        for t in targets:
+            aliases = f" (aliases: {', '.join(t['aliases'])})" if t['aliases'] else ""
+            print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
+        return
 
     # Mutual exclusion
     modes = sum(1 for x in (args.platform, args.all, args.emulator, args.system) if x)
@@ -870,6 +885,10 @@ def main():
         parser.error("--platform, --all, --emulator, and --system are mutually exclusive")
     if args.standalone and not (args.emulator or args.system):
         parser.error("--standalone requires --emulator or --system")
+    if args.target and not (args.platform or args.all):
+        parser.error("--target requires --platform or --all")
+    if args.target and (args.emulator or args.system):
+        parser.error("--target is incompatible with --emulator and --system")
 
     db = load_database(args.db)
     zip_contents = build_zip_contents_index(db)
@@ -917,7 +936,31 @@ def main():
             print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
 
     emu_profiles = load_emulator_profiles(args.emulators_dir)
-    groups = group_identical_platforms(platforms, args.platforms_dir)
+
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        from common import load_target_config
+        skip = []
+        for p in platforms:
+            try:
+                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
+            except FileNotFoundError:
+                if args.all:
+                    target_cores_cache[p] = None
+                else:
+                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
+                    sys.exit(1)
+            except ValueError as e:
+                if args.all:
+                    print(f"INFO: Skipping {p}: {e}")
+                    skip.append(p)
+                else:
+                    print(f"ERROR: {e}", file=sys.stderr)
+                    sys.exit(1)
+        platforms = [p for p in platforms if p not in skip]
+
+    groups = group_identical_platforms(platforms, args.platforms_dir,
+                                      target_cores_cache if args.target else None)
 
     for group_platforms, representative in groups:
         variants = [p for p in group_platforms if p != representative]
@@ -929,11 +972,12 @@ def main():
             print(f"\nGenerating pack for {representative}...")
 
         try:
+            tc = target_cores_cache.get(representative) if args.target else None
             zip_path = generate_pack(
                 representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
                 include_extras=args.include_extras, emulators_dir=args.emulators_dir,
                 zip_contents=zip_contents, data_registry=data_registry,
-                emu_profiles=emu_profiles,
+                emu_profiles=emu_profiles, target_cores=tc,
             )
             if zip_path and variants:
                 rep_cfg = load_platform_config(representative, args.platforms_dir)
