@@ -1,0 +1,11 @@
+# Manual target overrides.
+# This file is NEVER overwritten by scrapers.
+# Use it to add aliases, add/remove cores per target.
+#
+# Format:
+#   platform_name:
+#     targets:
+#       target-name:
+#         aliases: [alias1, alias2]
+#         add_cores: [core_to_add]
+#         remove_cores: [core_to_remove]
