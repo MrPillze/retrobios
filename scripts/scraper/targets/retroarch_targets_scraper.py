@@ -56,8 +56,15 @@ TARGETS: list[tuple[str, str, str]] = [
     ("nintendo/wiiu/latest", "nintendo-wiiu", "ppc"),
     ("playstation/ps2/latest", "playstation-ps2", "mips"),
     ("playstation/psp/latest", "playstation-psp", "mips"),
-    # vita: only VPK bundles, no individual cores on buildbot
+    # vita: only VPK bundles on buildbot — cores listed via libretro-super recipes
 ]
+
+# Recipe-based targets: (recipe_path_under_RECIPE_BASE_URL, target_name, architecture)
+RECIPE_TARGETS: list[tuple[str, str, str]] = [
+    ("playstation/vita", "playstation-vita", "armv7"),
+]
+
+RECIPE_BASE_URL = "https://raw.githubusercontent.com/libretro/libretro-super/master/recipes/"
 
 # Match any href containing _libretro followed by a platform-specific extension
 # Covers: .so.zip, .dll.zip, .dylib.zip, .nro.zip, .dol.zip, .rpx.zip,
@@ -106,11 +113,45 @@ class Scraper(BaseTargetScraper):
                     cores.append(core)
         return sorted(cores)
 
+    def _parse_recipe_cores(self, text: str) -> list[str]:
+        cores: list[str] = []
+        seen: set[str] = set()
+        for line in text.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if not parts:
+                continue
+            core = parts[0]
+            if core not in seen:
+                seen.add(core)
+                cores.append(core)
+        return sorted(cores)
+
+    def _fetch_cores_for_recipe(self, recipe_path: str) -> list[str]:
+        url = f"{RECIPE_BASE_URL}{recipe_path}"
+        text = self._fetch_url(url)
+        if text is None:
+            return []
+        return self._parse_recipe_cores(text)
+
     def fetch_targets(self) -> dict:
         targets: dict[str, dict] = {}
         for path, target_name, arch in TARGETS:
             print(f"  fetching {target_name}...", file=sys.stderr)
             cores = self._fetch_cores_for_target(path)
+            if not cores:
+                print(f"  warning: no cores found for {target_name}", file=sys.stderr)
+                continue
+            targets[target_name] = {
+                "architecture": arch,
+                "cores": cores,
+            }
+            print(f"  {target_name}: {len(cores)} cores", file=sys.stderr)
+        for recipe_path, target_name, arch in RECIPE_TARGETS:
+            print(f"  fetching {target_name} (recipe)...", file=sys.stderr)
+            cores = self._fetch_cores_for_recipe(recipe_path)
             if not cores:
                 print(f"  warning: no cores found for {target_name}", file=sys.stderr)
                 continue
