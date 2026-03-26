@@ -2,6 +2,19 @@
 
 Source: https://buildbot.libretro.com/nightly/
 Fetches directory listings per target to determine available cores.
+
+Buildbot structure varies by platform:
+- linux:       {path}/latest/  -> *_libretro.so.zip
+- windows:     {path}/latest/  -> *_libretro.dll.zip
+- apple/osx:   {path}/latest/  -> *_libretro.dylib.zip
+- android:     android/latest/{arch}/  -> *_libretro_android.so.zip
+- switch:      nintendo/switch/libnx/latest/  -> *_libretro_libnx.nro.zip
+- 3ds:         nintendo/3ds/latest/3dsx/  -> *_libretro.3dsx.zip
+- wii/ngc:     {path}/latest/  -> *_libretro_{plat}.dol.zip
+- wiiu:        nintendo/wiiu/latest/  -> *_libretro.rpx.zip
+- psp:         playstation/psp/latest/  -> *_libretro_psp.PBP.zip
+- ps2:         playstation/ps2/latest/  -> *_libretro_ps2.elf.zip
+- vita:        bundles only (VPK) - no individual cores
 """
 from __future__ import annotations
 
@@ -20,40 +33,42 @@ PLATFORM_NAME = "retroarch"
 
 BUILDBOT_URL = "https://buildbot.libretro.com/nightly/"
 
-# (path, target_name, architecture)
+# (url_path_under_nightly, target_name, architecture)
+# url_path must end at the directory containing core files
 TARGETS: list[tuple[str, str, str]] = [
-    ("linux/x86_64", "linux-x86_64", "x86_64"),
-    ("linux/armhf", "linux-armhf", "armhf"),
-    ("linux/armv7-neon-hf", "linux-armv7-neon-hf", "armv7"),
-    ("windows/x86_64", "windows-x86_64", "x86_64"),
-    ("windows/x86", "windows-x86", "x86"),
-    ("android/armeabi-v7a", "android-armeabi-v7a", "armv7"),
-    ("android/arm64-v8a", "android-arm64-v8a", "aarch64"),
-    ("apple/osx/x86_64", "osx-x86_64", "x86_64"),
-    ("apple/osx/arm64", "osx-arm64", "aarch64"),
-    ("apple/ios-arm64", "ios-arm64", "aarch64"),
-    ("apple/tvos-arm64", "tvos-arm64", "aarch64"),
-    ("nintendo/switch/libnx", "switch-libnx", "aarch64"),
-    ("nintendo/3ds", "3ds", "armv6"),
-    ("nintendo/ngc", "ngc", "ppc"),
-    ("nintendo/wii", "wii", "ppc"),
-    ("nintendo/wiiu", "wiiu", "ppc"),
-    ("playstation/ps2", "ps2", "mips"),
-    ("playstation/psp", "psp", "mips"),
-    ("playstation/vita", "vita", "armv7"),
+    ("linux/x86_64/latest", "linux-x86_64", "x86_64"),
+    ("linux/armhf/latest", "linux-armhf", "armhf"),
+    ("linux/armv7-neon-hf/latest", "linux-armv7-neon-hf", "armv7"),
+    ("windows/x86_64/latest", "windows-x86_64", "x86_64"),
+    ("windows/x86/latest", "windows-x86", "x86"),
+    ("android/latest/arm64-v8a", "android-arm64-v8a", "aarch64"),
+    ("android/latest/armeabi-v7a", "android-armeabi-v7a", "armv7"),
+    ("android/latest/x86_64", "android-x86_64", "x86_64"),
+    ("android/latest/x86", "android-x86", "x86"),
+    ("apple/osx/x86_64/latest", "osx-x86_64", "x86_64"),
+    ("apple/osx/arm64/latest", "osx-arm64", "aarch64"),
+    ("apple/ios-arm64/latest", "ios-arm64", "aarch64"),
+    ("apple/tvos-arm64/latest", "tvos-arm64", "aarch64"),
+    ("nintendo/switch/libnx/latest", "nintendo-switch", "aarch64"),
+    ("nintendo/3ds/latest/3dsx", "nintendo-3ds", "arm"),
+    ("nintendo/ngc/latest", "nintendo-gamecube", "ppc"),
+    ("nintendo/wii/latest", "nintendo-wii", "ppc"),
+    ("nintendo/wiiu/latest", "nintendo-wiiu", "ppc"),
+    ("playstation/ps2/latest", "playstation-ps2", "mips"),
+    ("playstation/psp/latest", "playstation-psp", "mips"),
+    # vita: only VPK bundles, no individual cores on buildbot
 ]
 
-_CORE_RE = re.compile(
-    r'href="([^"]+_libretro(?:\.so|\.dll|\.dylib)(?:\.zip)?)"',
+# Match any href containing _libretro followed by a platform-specific extension
+# Covers: .so.zip, .dll.zip, .dylib.zip, .nro.zip, .dol.zip, .rpx.zip,
+#         .3dsx.zip, .PBP.zip, .elf.zip, _android.so.zip
+_HREF_RE = re.compile(
+    r'href="([^"]*?(\w+)_libretro[^"]*?\.zip)"',
     re.IGNORECASE,
 )
 
-
-def _strip_core_suffix(filename: str) -> str:
-    """Strip _libretro.so/.dll/.dylib(.zip)? suffix to get core name."""
-    name = re.sub(r'\.zip$', '', filename, flags=re.IGNORECASE)
-    name = re.sub(r'_libretro(?:\.so|\.dll|\.dylib)$', '', name, flags=re.IGNORECASE)
-    return name
+# Extract core name: everything before _libretro
+_CORE_NAME_RE = re.compile(r'^(.+?)_libretro')
 
 
 class Scraper(BaseTargetScraper):
@@ -63,7 +78,6 @@ class Scraper(BaseTargetScraper):
         super().__init__(url=url)
 
     def _fetch_url(self, url: str) -> str | None:
-        """Fetch URL, return text or None on failure."""
         try:
             req = urllib.request.Request(
                 url, headers={"User-Agent": "retrobios-scraper/1.0"}
@@ -75,33 +89,36 @@ class Scraper(BaseTargetScraper):
             return None
 
     def _fetch_cores_for_target(self, path: str) -> list[str]:
-        """Fetch core list from buildbot directory listing."""
-        url = f"{self.url}{path}/latest/"
+        url = f"{self.url}{path}/"
         html = self._fetch_url(url)
         if html is None:
             return []
-        cores = []
+        cores: list[str] = []
         seen: set[str] = set()
-        for match in _CORE_RE.finditer(html):
-            filename = match.group(1).split("/")[-1]
-            core = _strip_core_suffix(filename)
-            if core and core not in seen:
-                seen.add(core)
-                cores.append(core)
+        for match in _HREF_RE.finditer(html):
+            href = match.group(1)
+            filename = href.split("/")[-1]
+            m = _CORE_NAME_RE.match(filename)
+            if m:
+                core = m.group(1)
+                if core not in seen:
+                    seen.add(core)
+                    cores.append(core)
         return sorted(cores)
 
     def fetch_targets(self) -> dict:
-        """Fetch all targets and their core lists."""
         targets: dict[str, dict] = {}
         for path, target_name, arch in TARGETS:
             print(f"  fetching {target_name}...", file=sys.stderr)
             cores = self._fetch_cores_for_target(path)
             if not cores:
                 print(f"  warning: no cores found for {target_name}", file=sys.stderr)
+                continue
             targets[target_name] = {
                 "architecture": arch,
                 "cores": cores,
             }
+            print(f"  {target_name}: {len(cores)} cores", file=sys.stderr)
         return {
             "platform": "retroarch",
             "source": self.url,
@@ -121,9 +138,13 @@ def main() -> None:
     scraper = Scraper()
     data = scraper.fetch_targets()
 
+    total_cores = sum(len(t["cores"]) for t in data["targets"].values())
+    print(f"\n{len(data['targets'])} targets, {total_cores} total core entries",
+          file=sys.stderr)
+
     if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} cores")
+        for name, info in sorted(data["targets"].items()):
+            print(f"  {name:30s} {info['architecture']:10s} {len(info['cores']):>4d} cores")
         return
 
     if args.output:

@@ -1,0 +1,28 @@
+platform: emudeck
+source: https://github.com/dragoonDorise/EmuDeck
+scraped_at: '2026-03-26T08:18:29Z'
+targets:
+  steamos:
+    architecture: x86_64
+    cores:
+    - citronbios
+    - dreamcastbios
+    - dsbios
+    - ps1bios
+    - ps2bios
+    - ryujinxbios
+    - saturnbios
+    - segacdbios
+    - yuzubios
+  windows:
+    architecture: x86_64
+    cores:
+    - citronbios
+    - dreamcastbios
+    - dsbios
+    - ps1bios
+    - ps2bios
+    - ryujinxbios
+    - saturnbios
+    - segacdbios
+    - yuzubios

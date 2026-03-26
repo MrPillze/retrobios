@@ -34,8 +34,8 @@ _SH_EMULATOR_RE = re.compile(
     re.MULTILINE,
 )
 _PS1_EMULATOR_RE = re.compile(
-    r'(?:function\s+|^)(?:Check|Install|Setup)([A-Za-z0-9_]+)\s*\{',
-    re.MULTILINE,
+    r'function\s+(?:check|install|setup)([A-Za-z0-9_]+)\s*(?:\(\))?\s*\{',
+    re.MULTILINE | re.IGNORECASE,
 )
 
 
