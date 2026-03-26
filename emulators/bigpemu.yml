@@ -1,0 +1,23 @@
+emulator: BigPEmu
+type: standalone
+source: "https://www.richwhitehouse.com/jaguar/"
+upstream: "https://www.richwhitehouse.com/jaguar/"
+profiled_date: "2026-03-26"
+core_version: "1.12"
+display_name: "BigPEmu (Atari Jaguar)"
+cores:
+  - bigpemu
+systems:
+  - atari-jaguar
+  - atari-jaguarcd
+mode: standalone
+
+notes: |
+  Closed-source Atari Jaguar and Jaguar CD emulator by Rich Whitehouse.
+  Built-in boot ROM emulation for both cartridge and CD. No external
+  BIOS or firmware files required. The emulator supports optional
+  "custom boot ROM images" via the UI (loading mode for specific
+  homebrew demos), but no fixed file path or file name is expected.
+  EmuDeck confirms: "No BIOS are required to play BigPEmu."
+
+files: []

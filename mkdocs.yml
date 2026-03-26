@@ -128,7 +128,7 @@ nav:
   - xrick: systems/xrick.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (60):
+  - Official ports (61):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -189,7 +189,8 @@ nav:
     - Vircon32: emulators/vircon32.md
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
-  - Community forks (105):
+    - Yuzu: emulators/yuzu.md
+  - Community forks (108):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - Anarch: emulators/anarch.md
@@ -220,6 +221,7 @@ nav:
     - DOSBox-core: emulators/dosbox_core.md
     - DOSBox-SVN: emulators/dosbox_svn.md
     - DOSBox-SVN CE: emulators/dosbox_svn_ce.md
+    - Eden: emulators/eden.md
     - EmuSCV: emulators/emuscv.md
     - ep128emu_core: emulators/ep128emu_core.md
     - FCEUmm: emulators/fceumm.md
@@ -269,6 +271,7 @@ nav:
     - RetroDream: emulators/retrodream.md
     - SAME CDi: emulators/same_cdi.md
     - SimCoupe: emulators/simcp.md
+    - Suyu: emulators/suyu.md
     - swanstation: emulators/swanstation.md
     - Syobon Action: emulators/syobonaction.md
     - TamaLIBretro: emulators/tamalibretro.md
@@ -293,6 +296,7 @@ nav:
     - vitavoyager: emulators/vitavoyager.md
     - X Millennium: emulators/x1.md
     - x64sdl: emulators/x64sdl.md
+    - Xenia Canary: emulators/xenia.md
     - yabause: emulators/yabause.md
     - ymir: emulators/ymir.md
   - Pure libretro (29):
@@ -351,7 +355,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (12):
+  - Enhanced forks (13):
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
     - DOSBox Pure: emulators/dosbox_pure.md
@@ -363,6 +367,7 @@ nav:
     - MAME 2003-Plus: emulators/mame2003_plus.md
     - Mupen64Plus-Next: emulators/mupen64plus_next.md
     - NP2kai: emulators/np2kai.md
+    - PrimeHack: emulators/primehack.md
     - SMS Plus GX: emulators/smsplus.md
   - Frozen snapshots (32):
     - bnes: emulators/bnes.md
@@ -401,8 +406,10 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (21):
+  - Other (25):
+    - ares: emulators/ares.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
+    - BigPEmu: emulators/bigpemu.md
     - Cemu: emulators/cemu.md
     - Clock Signal (CLK): emulators/clk.md
     - Demul: emulators/demul.md
@@ -410,12 +417,14 @@ nav:
     - ep128emu-core: emulators/ep128emu.md
     - GSplus: emulators/gsplus.md
     - Lexaloffle: emulators/lexaloffle.md
+    - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
     - PCSX2: emulators/pcsx2.md
     - Redream: emulators/redream.md
     - RPCS3: emulators/rpcs3.md
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md
+    - Supermodel: emulators/supermodel.md
     - tsugaru: emulators/tsugaru.md
     - VBA-M: emulators/vba_m.md
     - VICE: emulators/vice.md

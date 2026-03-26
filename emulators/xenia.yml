@@ -1,0 +1,38 @@
+emulator: Xenia Canary
+type: standalone
+core_classification: community_fork
+source: "https://github.com/xenia-canary/xenia-canary"
+upstream: "https://github.com/xenia-canary/xenia-canary"
+profiled_date: "2026-03-26"
+core_version: "canary"
+display_name: "Xenia Canary (Xbox 360)"
+cores:
+  - xenia
+systems:
+  - microsoft-xbox-360
+analysis_date: "2026-03-26"
+analysis_commit: "3efc88a (depth=1)"
+mode: standalone
+
+notes: |
+  Xenia Canary is an experimental open-source Xbox 360 emulator (BSD license)
+  originally by Ben Vanik, now maintained by the xenia-canary community. Pure
+  HLE: the Xbox 360 kernel (xboxkrnl), XAM, and XBDM modules are fully
+  reimplemented in C++. XConfig system settings are hardcoded with user-
+  configurable overrides (language, region, audio, video). No BIOS, firmware,
+  NAND dump, flash dump, or keyvault file is loaded at any point.
+
+  EmuDeck installs xenia_canary.exe into the xbox360 ROMs folder. Config via
+  xenia-canary.config.toml. Game patches downloaded separately into patches/.
+
+files: []
+
+exclusion_note: >
+  Xenia is a pure high-level emulation (HLE) Xbox 360 emulator. The entire
+  Xbox 360 operating system (kernel, XAM dashboard services, XBDM debug
+  manager) is reimplemented in C++ as HLE modules loaded at startup
+  (emulator.cc:316-318). System configuration (XConfig) returns hardcoded
+  values from xboxkrnl_xconfig.cc. Memory, CPU (JIT), GPU, APU, and HID
+  subsystems are all software-emulated. No external BIOS, firmware, NAND
+  flash dump, or system files are loaded from disk. The wiki confirms:
+  "Xenia doesn't require any Xbox 360 system files."

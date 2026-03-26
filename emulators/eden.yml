@@ -1,0 +1,55 @@
+emulator: Eden
+type: standalone
+core_classification: community_fork
+source: "https://git.eden-emu.dev/eden-emu/eden"
+upstream: "https://git.eden-emu.dev/eden-emu/eden"
+profiled_date: "2026-03-26"
+core_version: "0.1.1"
+display_name: "Eden (Nintendo Switch)"
+systems: [nintendo-switch]
+analysis_date: "2026-03-26"
+analysis_commit: "9347202 (depth=1)"
+mode: standalone
+
+# Eden is a community fork of yuzu, started by Camille LaVey.
+# Key files loaded from <data_dir>/keys/ (fs_paths.h:20, path_util.cpp:158).
+# On Linux: $XDG_DATA_HOME/eden/keys/
+# On Windows: %APPDATA%/eden/keys/
+# Firmware NCAs are installed via UI (Tools > Install Firmware), not placed as files.
+# HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
+
+files:
+  - name: "prod.keys"
+    required: true
+    path: "switch/"
+    mode: standalone
+    note: "Production keys for NCA decryption (master, key area, header, titlekek)"
+    source_ref: "src/core/crypto/key_manager.cpp:652-653"
+
+  - name: "title.keys"
+    required: false
+    path: "switch/"
+    mode: standalone
+    note: "Per-title encryption keys (rights_id to titlekey mappings)"
+    source_ref: "src/core/crypto/key_manager.cpp:655-656"
+
+  - name: "console.keys"
+    required: false
+    path: "switch/"
+    mode: standalone
+    note: "Console-specific keys (BIS, SD seed)"
+    source_ref: "src/core/crypto/key_manager.cpp:657-658"
+
+  - name: "key_retail.bin"
+    required: false
+    path: "switch/"
+    size: 160
+    mode: standalone
+    note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
+    source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:281-302"
+
+notes: |
+  Eden is a standalone Nintendo Switch emulator, community fork of yuzu by Camille LaVey.
+  dev.keys can be used instead of prod.keys when use_dev_keys is enabled (for Switch dev units).
+  Firmware (system NCAs) must be installed through Eden's UI from a firmware ZIP or NCA folder.
+  Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.

@@ -1,0 +1,36 @@
+emulator: Supermodel
+type: standalone
+source: https://github.com/trzy/Supermodel
+upstream: https://github.com/trzy/Supermodel
+profiled_date: "2026-03-26"
+core_version: "0.3a"
+display_name: "Supermodel (Sega Model 3)"
+cores:
+  - supermodel
+systems:
+  - sega-model3
+mode: standalone
+
+notes: |
+  Open-source Sega Model 3 arcade emulator by Bart Trzynadlowski (trzy) and
+  contributors, under GPL-3.0. Emulates all three Model 3 steppings (1.0, 1.5,
+  2.0/2.1) including Real3D graphics, SCSP sound, DSB1/DSB2 MPEG music boards,
+  drive boards, and net board. Cross-platform (Windows, Linux, macOS).
+
+  Uses MAME-compatible ROM sets loaded from ZIP archives. GameLoader identifies
+  games by CRC32 checksums defined in Config/Games.xml. Parent/child ROM set
+  relationships exist between regional variants of the same game, not as shared
+  BIOS sets. No standalone BIOS or firmware files are loaded outside of game ZIPs.
+
+  EmuDeck installs the Flatpak package (com.supermodel3.Supermodel). Config
+  stored in ~/.supermodel/Config/. No checkBIOS entry in EmuDeck.
+
+files: []
+
+exclusion_note: >
+  The Sega Model 3 arcade hardware has no shared system BIOS. Each game board
+  contains its own program ROMs (CROM), video ROMs (VROM), sound program, sound
+  samples, and optional DSB/drive board ROMs, all contained within per-game
+  MAME-format ZIP archives. Supermodel loads all required data from these game
+  ZIPs via CRC32-based identification defined in Games.xml. No standalone BIOS
+  or firmware files are referenced by the emulator source code.

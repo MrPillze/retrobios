@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**6,748** verified files across **322** systems, ready to extract into your emulator's BIOS directory.
+**6,748** verified files across **352** systems, ready to extract into your emulator's BIOS directory.
 
 ## Download BIOS packs
 
@@ -26,14 +26,14 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Each file is checked against the emulator's source code to match what the code actually loads at runtime.
 
 - **9 platforms** supported with platform-specific verification
-- **319 emulators** profiled from source (RetroArch cores + standalone)
-- **322 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **328 emulators** profiled from source (RetroArch cores + standalone)
+- **352 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **6,748 files** verified with MD5, SHA1, CRC32 checksums
 - **5251 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 288+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 318+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -84,7 +84,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 9 platforms and 319 emulators
+- **Cross-reference** mapping files across 9 platforms and 328 emulators
 
 ## How it works
 
@@ -110,4 +110,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-26T06:14:11Z*
+*Auto-generated on 2026-03-26T12:17:35Z*
