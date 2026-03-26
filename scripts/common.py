@@ -192,6 +192,100 @@ def list_registered_platforms(
     return platforms
 
 
+def load_target_config(
+    platform_name: str,
+    target: str,
+    platforms_dir: str = "platforms",
+) -> set[str]:
+    """Load target config and return the set of core names for the given target.
+
+    Resolves aliases from _overrides.yml, applies add_cores/remove_cores.
+    Raises ValueError if target is unknown (with list of available targets).
+    Raises FileNotFoundError if no target file exists for the platform.
+    """
+    targets_dir = os.path.join(platforms_dir, "targets")
+    target_file = os.path.join(targets_dir, f"{platform_name}.yml")
+    if not os.path.exists(target_file):
+        raise FileNotFoundError(
+            f"No target config for platform '{platform_name}': {target_file}"
+        )
+    with open(target_file) as f:
+        data = yaml.safe_load(f) or {}
+
+    targets = data.get("targets", {})
+
+    overrides_file = os.path.join(targets_dir, "_overrides.yml")
+    overrides = {}
+    if os.path.exists(overrides_file):
+        with open(overrides_file) as f:
+            all_overrides = yaml.safe_load(f) or {}
+        overrides = all_overrides.get(platform_name, {}).get("targets", {})
+
+    alias_index: dict[str, str] = {}
+    for tname in targets:
+        alias_index[tname] = tname
+        for alias in overrides.get(tname, {}).get("aliases", []):
+            alias_index[alias] = tname
+
+    canonical = alias_index.get(target)
+    if canonical is None:
+        available = sorted(targets.keys())
+        aliases = []
+        for tname, ovr in overrides.items():
+            for a in ovr.get("aliases", []):
+                aliases.append(f"{a} -> {tname}")
+        msg = f"Unknown target '{target}' for platform '{platform_name}'.\n"
+        msg += f"Available targets: {', '.join(available)}"
+        if aliases:
+            msg += f"\nAliases: {', '.join(sorted(aliases))}"
+        raise ValueError(msg)
+
+    cores = set(str(c) for c in targets[canonical].get("cores", []))
+
+    ovr = overrides.get(canonical, {})
+    for c in ovr.get("add_cores", []):
+        cores.add(str(c))
+    for c in ovr.get("remove_cores", []):
+        cores.discard(str(c))
+
+    return cores
+
+
+def list_available_targets(
+    platform_name: str,
+    platforms_dir: str = "platforms",
+) -> list[dict]:
+    """List available targets for a platform with their aliases.
+
+    Returns list of dicts with keys: name, architecture, core_count, aliases.
+    Returns empty list if no target file exists.
+    """
+    targets_dir = os.path.join(platforms_dir, "targets")
+    target_file = os.path.join(targets_dir, f"{platform_name}.yml")
+    if not os.path.exists(target_file):
+        return []
+    with open(target_file) as f:
+        data = yaml.safe_load(f) or {}
+
+    overrides_file = os.path.join(targets_dir, "_overrides.yml")
+    overrides = {}
+    if os.path.exists(overrides_file):
+        with open(overrides_file) as f:
+            all_overrides = yaml.safe_load(f) or {}
+        overrides = all_overrides.get(platform_name, {}).get("targets", {})
+
+    result = []
+    for tname, tdata in sorted(data.get("targets", {}).items()):
+        aliases = overrides.get(tname, {}).get("aliases", [])
+        result.append({
+            "name": tname,
+            "architecture": tdata.get("architecture", ""),
+            "core_count": len(tdata.get("cores", [])),
+            "aliases": aliases,
+        })
+    return result
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,

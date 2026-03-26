@@ -1175,6 +1175,122 @@ class TestE2E(unittest.TestCase):
         resolved = resolve_platform_cores(config, profiles)
         self.assertIn("test_alias_core", resolved)
 
+    # ---------------------------------------------------------------
+    # Target config tests (Task 1)
+    # ---------------------------------------------------------------
+
+    def _write_target_fixtures(self):
+        """Create target config fixtures for testing."""
+        targets_dir = os.path.join(self.platforms_dir, "targets")
+        os.makedirs(targets_dir, exist_ok=True)
+        target_config = {
+            "platform": "testplatform",
+            "source": "test",
+            "scraped_at": "2026-01-01T00:00:00Z",
+            "targets": {
+                "target-full": {
+                    "architecture": "x86_64",
+                    "cores": ["core_a", "core_b", "core_c"],
+                },
+                "target-minimal": {
+                    "architecture": "armv7",
+                    "cores": ["core_a"],
+                },
+            },
+        }
+        with open(os.path.join(targets_dir, "testplatform.yml"), "w") as f:
+            yaml.dump(target_config, f)
+        single_config = {
+            "platform": "singleplatform",
+            "source": "test",
+            "scraped_at": "2026-01-01T00:00:00Z",
+            "targets": {
+                "only-target": {
+                    "architecture": "x86_64",
+                    "cores": ["core_a", "core_b"],
+                },
+            },
+        }
+        with open(os.path.join(targets_dir, "singleplatform.yml"), "w") as f:
+            yaml.dump(single_config, f)
+        overrides = {
+            "testplatform": {
+                "targets": {
+                    "target-full": {
+                        "aliases": ["full", "pc", "desktop"],
+                        "add_cores": ["core_d"],
+                        "remove_cores": ["core_c"],
+                    },
+                    "target-minimal": {
+                        "aliases": ["minimal", "arm"],
+                    },
+                },
+            },
+        }
+        with open(os.path.join(targets_dir, "_overrides.yml"), "w") as f:
+            yaml.dump(overrides, f)
+
+    def test_load_target_config(self):
+        self._write_target_fixtures()
+        from common import load_target_config
+        cores = load_target_config("testplatform", "target-minimal", self.platforms_dir)
+        self.assertEqual(cores, {"core_a"})
+
+    def test_target_alias_resolution(self):
+        self._write_target_fixtures()
+        from common import load_target_config
+        cores = load_target_config("testplatform", "full", self.platforms_dir)
+        self.assertEqual(cores, {"core_a", "core_b", "core_d"})
+
+    def test_target_unknown_error(self):
+        self._write_target_fixtures()
+        from common import load_target_config
+        with self.assertRaises(ValueError) as ctx:
+            load_target_config("testplatform", "nonexistent", self.platforms_dir)
+        self.assertIn("target-full", str(ctx.exception))
+        self.assertIn("target-minimal", str(ctx.exception))
+
+    def test_target_override_add_remove(self):
+        self._write_target_fixtures()
+        from common import load_target_config
+        cores = load_target_config("testplatform", "full", self.platforms_dir)
+        self.assertIn("core_d", cores)
+        self.assertNotIn("core_c", cores)
+        self.assertIn("core_a", cores)
+        self.assertIn("core_b", cores)
+
+    def test_target_single_target_noop(self):
+        self._write_target_fixtures()
+        from common import load_target_config
+        cores = load_target_config("singleplatform", "only-target", self.platforms_dir)
+        self.assertEqual(cores, {"core_a", "core_b"})
+
+    def test_target_inherits(self):
+        self._write_target_fixtures()
+        targets_dir = os.path.join(self.platforms_dir, "targets")
+        child_config = {
+            "platform": "childplatform",
+            "source": "test",
+            "scraped_at": "2026-01-01T00:00:00Z",
+            "targets": {
+                "target-full": {
+                    "architecture": "x86_64",
+                    "cores": ["core_a"],
+                },
+            },
+        }
+        with open(os.path.join(targets_dir, "childplatform.yml"), "w") as f:
+            yaml.dump(child_config, f)
+        from common import load_target_config
+        parent = load_target_config("testplatform", "target-minimal", self.platforms_dir)
+        child = load_target_config("childplatform", "target-full", self.platforms_dir)
+        self.assertEqual(parent, {"core_a"})
+        self.assertEqual(child, {"core_a"})
+        self.assertNotEqual(
+            load_target_config("testplatform", "full", self.platforms_dir),
+            child,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
