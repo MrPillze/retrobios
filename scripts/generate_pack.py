@@ -28,9 +28,9 @@ from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
     group_identical_platforms, list_emulator_profiles, list_registered_platforms,
-    list_system_ids, load_database, load_data_dir_registry,
-    load_emulator_profiles, load_platform_config, md5_composite,
-    resolve_local_file,
+    filter_systems_by_target, list_system_ids, load_database,
+    load_data_dir_registry, load_emulator_profiles, load_platform_config,
+    md5_composite, resolve_local_file,
 )
 from deterministic_zip import rebuild_zip_deterministic
 
@@ -264,8 +264,15 @@ def generate_pack(
     if emu_profiles:
         validation_index = _build_validation_index(emu_profiles)
 
+    # Filter systems by target if specified
+    pack_systems = filter_systems_by_target(
+        config.get("systems", {}),
+        emu_profiles or {},
+        target_cores,
+    )
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for sys_id, system in sorted(config.get("systems", {}).items()):
+        for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
                 dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
@@ -444,7 +451,7 @@ def generate_pack(
             total_files += 1
 
         # Data directories from _data_dirs.yml
-        for sys_id, system in sorted(config.get("systems", {}).items()):
+        for sys_id, system in sorted(pack_systems.items()):
             for dd in system.get("data_directories", []):
                 ref_key = dd.get("ref", "")
                 if not ref_key or not data_registry or ref_key not in data_registry:

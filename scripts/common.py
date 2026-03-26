@@ -646,6 +646,43 @@ def resolve_platform_cores(
     return result
 
 
+def filter_systems_by_target(
+    systems: dict[str, dict],
+    profiles: dict[str, dict],
+    target_cores: set[str] | None,
+) -> dict[str, dict]:
+    """Filter platform systems to only those reachable by target cores.
+
+    A system is reachable if at least one core that emulates it is available
+    on the target. Returns the filtered systems dict (or all if no target).
+    """
+    if target_cores is None:
+        return systems
+
+    # Build reverse index for target core name resolution
+    upstream_to_profile: dict[str, str] = {}
+    for name, p in profiles.items():
+        upstream_to_profile[name] = name
+        for alias in p.get("cores", []):
+            upstream_to_profile[str(alias)] = name
+    expanded_target = {upstream_to_profile.get(c, c) for c in target_cores}
+
+    # Build system -> profile keys mapping
+    system_to_cores: dict[str, set[str]] = {}
+    for name, p in profiles.items():
+        if p.get("type") == "alias":
+            continue
+        for sid in p.get("systems", []):
+            system_to_cores.setdefault(sid, set()).add(name)
+
+    filtered = {}
+    for sys_id, sys_data in systems.items():
+        cores_for_system = system_to_cores.get(sys_id, set())
+        if cores_for_system & expanded_target:
+            filtered[sys_id] = sys_data
+    return filtered
+
+
 def _parse_validation(validation: list | dict | None) -> list[str]:
     """Extract the validation check list from a file's validation field.
 

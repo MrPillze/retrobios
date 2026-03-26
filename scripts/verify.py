@@ -37,9 +37,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, filter_files_by_mode,
-    group_identical_platforms, list_emulator_profiles, list_system_ids,
-    load_data_dir_registry, load_emulator_profiles, load_platform_config,
-    md5sum, md5_composite, resolve_local_file, resolve_platform_cores,
+    filter_systems_by_target, group_identical_platforms, list_emulator_profiles,
+    list_system_ids, load_data_dir_registry, load_emulator_profiles,
+    load_platform_config, md5sum, md5_composite, resolve_local_file,
+    resolve_platform_cores,
 )
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -392,6 +393,11 @@ def verify_platform(
                 hle_index[f.get("name", "")] = True
     validation_index = _build_validation_index(profiles)
 
+    # Filter systems by target
+    verify_systems = filter_systems_by_target(
+        config.get("systems", {}), profiles, target_cores,
+    )
+
     # Per-entry results
     details = []
     # Per-destination aggregation
@@ -399,7 +405,7 @@ def verify_platform(
     file_required: dict[str, bool] = {}
     file_severity: dict[str, str] = {}
 
-    for sys_id, system in config.get("systems", {}).items():
+    for sys_id, system in verify_systems.items():
         for file_entry in system.get("files", []):
             local_path, resolve_status = resolve_local_file(
                 file_entry, db, zip_contents,
