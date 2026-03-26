@@ -533,6 +533,7 @@ def load_emulator_profiles(
 
 def group_identical_platforms(
     platforms: list[str], platforms_dir: str,
+    target_cores_cache: dict[str, set[str] | None] | None = None,
 ) -> list[tuple[list[str], str]]:
     """Group platforms that produce identical packs (same files + base_destination).
 
@@ -567,6 +568,11 @@ def group_identical_platforms(
                 entries.append(f"{full_dest}|{sha1}|{md5}")
 
         fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
+        if target_cores_cache:
+            tc = target_cores_cache.get(platform)
+            if tc is not None:
+                tc_str = "|".join(sorted(tc))
+                fp = hashlib.sha1(f"{fp}|{tc_str}".encode()).hexdigest()
         fingerprints.setdefault(fp, []).append(platform)
         # Prefer the root platform (no inherits) as representative
         if fp not in representatives or (not inherits[platform] and inherits.get(representatives[fp], False)):
