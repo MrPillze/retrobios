@@ -1614,7 +1614,7 @@ systems:
     - name: sc3000.zip
       destination: sc3000.zip
       required: true
-      md5: a6a47eae38600e41cc67e887e36e70b7
+      md5: fda6619ba96bf00b849192f5e7460622
       zipped_file: sc3000.rom
   segaai:
     files:

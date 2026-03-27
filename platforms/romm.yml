@@ -1613,23 +1613,23 @@ systems:
     - name: plus3-0.rom
       destination: zxs/plus3-0.rom
       required: true
-      sha1: a837f66977040f7b51ed053a2483c10f3d070ab7
-      md5: 3abdc20e72890a750dd3c745d286dfba
-      crc32: a10230c0
+      sha1: e319ed08b4d53a5e421a75ea00ea02039ba6555b
+      md5: 9833b8b73384dd5fa3678377ff00a2bb
+      crc32: 17373da2
       size: 16384
     - name: plus3-1.rom
       destination: zxs/plus3-1.rom
       required: true
-      sha1: 6a4364f25513e4079f048f2de131a896d30edc64
-      md5: 8361a1d9c8bcef89c0c39293776564ad
-      crc32: 09b9c3ca
+      sha1: c9969fc36095a59787554026a9adc3b87678c794
+      md5: 0f711ceb5ab801b4701989982e0f334c
+      crc32: f1d1d99e
       size: 16384
     - name: plus3-2.rom
       destination: zxs/plus3-2.rom
       required: true
-      sha1: 0a747cc0b827a94b4fd74cfd818ca792437a38f7
-      md5: f36c5c2d1f2a682caadeaa6f947db0da
-      crc32: a60285a0
+      sha1: 22e50c6ba4157a3f6a821bd9937cd26e292775c6
+      md5: 3b6dd659d5e4ec97f0e2f7878152c987
+      crc32: 3dbf351d
       size: 16384
     - name: plus3-3.rom
       destination: zxs/plus3-3.rom
@@ -1641,23 +1641,23 @@ systems:
     - name: plus3e-0.rom
       destination: zxs/plus3e-0.rom
       required: true
-      sha1: a837f66977040f7b51ed053a2483c10f3d070ab7
-      md5: 3abdc20e72890a750dd3c745d286dfba
-      crc32: a10230c0
+      sha1: 649fbd233490bf58b35350b0123d36caaaa011eb
+      md5: bc123f625e245c225f92ef05933ed134
+      crc32: 7f4a5482
       size: 16384
     - name: plus3e-1.rom
       destination: zxs/plus3e-1.rom
       required: true
-      sha1: 6a4364f25513e4079f048f2de131a896d30edc64
-      md5: 8361a1d9c8bcef89c0c39293776564ad
-      crc32: 09b9c3ca
+      sha1: f12198108cbb14de4f03c6695bc16d08c85ee214
+      md5: 617364264c587d20c9fc4746c29679f2
+      crc32: 5aeb4675
       size: 16384
     - name: plus3e-2.rom
       destination: zxs/plus3e-2.rom
       required: true
-      sha1: 0a747cc0b827a94b4fd74cfd818ca792437a38f7
-      md5: f36c5c2d1f2a682caadeaa6f947db0da
-      crc32: a60285a0
+      sha1: 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
+      md5: c363e95dcd0a90e6e7f847e6e47e0179
+      crc32: 504755cb
       size: 16384
     - name: plus3e-3.rom
       destination: zxs/plus3e-3.rom
