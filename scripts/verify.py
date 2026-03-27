@@ -555,37 +555,27 @@ def print_platform_result(result: dict, group: list[str]) -> None:
         opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
         opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
 
-        summary_parts = []
+        # Core coverage: files from emulator profiles not declared by the platform
+        core_in_pack = len(req_in_repo) + len(opt_in_repo)
+        core_missing_req = len(req_not_in_repo) + len(req_hle_not_in_repo)
+        core_missing_opt = len(opt_not_in_repo)
+        core_total = len(bios_files)
+
+        print(f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, {core_missing_opt} optional missing")
+
+        # Required NOT in repo = critical
         if req_not_in_repo:
-            summary_parts.append(f"{len(req_not_in_repo)} required NOT in repo")
+            for u in req_not_in_repo:
+                print(f"    MISSING (required): {u['emulator']} needs {u['name']}")
         if req_hle_not_in_repo:
-            summary_parts.append(f"{len(req_hle_not_in_repo)} required with HLE NOT in repo")
-        if req_in_repo:
-            summary_parts.append(f"{len(req_in_repo)} required in repo")
-        if opt_in_repo:
-            summary_parts.append(f"{len(opt_in_repo)} optional in repo")
-        if opt_not_in_repo:
-            summary_parts.append(f"{len(opt_not_in_repo)} optional NOT in repo")
+            for u in req_hle_not_in_repo:
+                print(f"    MISSING (required, HLE fallback): {u['emulator']} needs {u['name']}")
+
         if game_data:
             gd_missing = [u for u in game_data if not u["in_repo"]]
             gd_present = [u for u in game_data if u["in_repo"]]
-            if gd_missing:
-                summary_parts.append(f"{len(gd_missing)} game_data NOT in repo")
-            if gd_present:
-                summary_parts.append(f"{len(gd_present)} game_data in repo")
-        print(f"  Core gaps: {len(undeclared)} undeclared ({', '.join(summary_parts)})")
-
-        # Show critical gaps (required bios + no HLE + not in repo)
-        for u in req_not_in_repo:
-            print(f"    {u['emulator']} → {u['name']} (required, NOT in repo)")
-        # Show required with HLE (core works but not ideal)
-        for u in req_hle_not_in_repo:
-            print(f"    {u['emulator']} → {u['name']} (required, HLE available, NOT in repo)")
-        # Show required in repo (actionable)
-        for u in req_in_repo[:10]:
-            print(f"    {u['emulator']} → {u['name']} (required, in repo)")
-        if len(req_in_repo) > 10:
-            print(f"    ... and {len(req_in_repo) - 10} more required in repo")
+            if gd_missing or gd_present:
+                print(f"  Game data: {len(gd_present)} in pack, {len(gd_missing)} missing")
 
     # Intentional exclusions (explain why certain emulator files are NOT included)
     exclusions = result.get("exclusion_notes", [])
