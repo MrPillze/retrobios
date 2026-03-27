@@ -231,6 +231,7 @@ def generate_pack(
     data_registry: dict | None = None,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
+    required_only: bool = False,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -246,7 +247,8 @@ def generate_pack(
 
     version = config.get("version", config.get("dat_version", ""))
     version_tag = f"_{version.replace(' ', '')}" if version else ""
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}_BIOS_Pack.zip"
+    req_tag = "_Required" if required_only else ""
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{req_tag}_BIOS_Pack.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -282,6 +284,8 @@ def generate_pack(
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
+                if required_only and file_entry.get("required") is False:
+                    continue
                 dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
                     # EmuDeck-style entries (system:md5 whitelist, no filename).
@@ -429,6 +433,8 @@ def generate_pack(
         )
         core_count = 0
         for fe in core_files:
+            if required_only and fe.get("required") is False:
+                continue
             dest = _sanitize_path(fe.get("destination", fe["name"]))
             if not dest:
                 continue
@@ -591,6 +597,7 @@ def generate_emulator_pack(
     output_dir: str,
     standalone: bool = False,
     zip_contents: dict | None = None,
+    required_only: bool = False,
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles."""
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
@@ -710,6 +717,8 @@ def generate_emulator_pack(
 
             # Pack individual files (skip archived ones)
             for fe in files:
+                if required_only and fe.get("required") is False:
+                    continue
                 if fe.get("archive"):
                     continue
 
@@ -801,6 +810,7 @@ def generate_system_pack(
     output_dir: str,
     standalone: bool = False,
     zip_contents: dict | None = None,
+    required_only: bool = False,
 ) -> str | None:
     """Generate a ZIP pack for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -835,7 +845,7 @@ def generate_system_pack(
     )
     result = generate_emulator_pack(
         matching, emulators_dir, db, bios_dir, output_dir,
-        standalone, zip_contents,
+        standalone, zip_contents, required_only=required_only,
     )
     if result:
         # Rename to system-based name
@@ -874,6 +884,8 @@ def main():
     parser.add_argument("--refresh-data", action="store_true",
                         help="Force re-download all data directories")
     parser.add_argument("--list", action="store_true", help="List available platforms")
+    parser.add_argument("--required-only", action="store_true",
+                        help="Only include required files, skip optional")
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
     args = parser.parse_args()
@@ -923,7 +935,7 @@ def main():
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
         result = generate_emulator_pack(
             names, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents,
+            args.standalone, zip_contents, required_only=args.required_only,
         )
         if not result:
             sys.exit(1)
@@ -934,7 +946,7 @@ def main():
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
         result = generate_system_pack(
             system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents,
+            args.standalone, zip_contents, required_only=args.required_only,
         )
         if not result:
             sys.exit(1)
@@ -1003,6 +1015,7 @@ def main():
                 include_extras=args.include_extras, emulators_dir=args.emulators_dir,
                 zip_contents=zip_contents, data_registry=data_registry,
                 emu_profiles=emu_profiles, target_cores=tc,
+                required_only=args.required_only,
             )
             if zip_path and variants:
                 rep_cfg = load_platform_config(representative, args.platforms_dir)

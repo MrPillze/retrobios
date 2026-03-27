@@ -1539,6 +1539,68 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(gt["total"], result["total_files"])
         self.assertGreaterEqual(gt["with_validation"], 1)
 
+    def test_130_required_only_excludes_optional(self):
+        """--required-only excludes files with required: false from pack."""
+        from generate_pack import generate_pack
+        output_dir = os.path.join(self.root, "pack_reqonly")
+        os.makedirs(output_dir, exist_ok=True)
+        # Create a platform with one required and one optional file
+        config = {
+            "platform": "ReqOnlyTest",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {"name": "present_req.bin", "destination": "present_req.bin", "required": True},
+                        {"name": "present_opt.bin", "destination": "present_opt.bin", "required": False},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_reqonly.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        zip_path = generate_pack(
+            "test_reqonly", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            required_only=True,
+        )
+        self.assertIsNotNone(zip_path)
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        self.assertTrue(any("present_req.bin" in n for n in names))
+        self.assertFalse(any("present_opt.bin" in n for n in names))
+        # Verify _Required tag in filename
+        self.assertIn("_Required_", os.path.basename(zip_path))
+
+    def test_131_required_only_keeps_default_required(self):
+        """--required-only keeps files with no required field (default = required)."""
+        from generate_pack import generate_pack
+        output_dir = os.path.join(self.root, "pack_reqdef")
+        os.makedirs(output_dir, exist_ok=True)
+        # File with no required field
+        config = {
+            "platform": "ReqDefTest",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {"name": "present_req.bin", "destination": "present_req.bin"},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_reqdef.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        zip_path = generate_pack(
+            "test_reqdef", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            required_only=True,
+        )
+        self.assertIsNotNone(zip_path)
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        self.assertTrue(any("present_req.bin" in n for n in names))
+
 
 if __name__ == "__main__":
     unittest.main()
