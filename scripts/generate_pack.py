@@ -27,7 +27,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
-    group_identical_platforms, list_emulator_profiles, list_registered_platforms,
+    group_identical_platforms, list_emulator_profiles, list_platform_system_ids,
+    list_registered_platforms,
     filter_systems_by_target, list_system_ids, load_database,
     load_data_dir_registry, load_emulator_profiles, load_platform_config,
     md5_composite, resolve_local_file,
@@ -232,6 +233,7 @@ def generate_pack(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     required_only: bool = False,
+    system_filter: list[str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -248,7 +250,25 @@ def generate_pack(
     version = config.get("version", config.get("dat_version", ""))
     version_tag = f"_{version.replace(' ', '')}" if version else ""
     req_tag = "_Required" if required_only else ""
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{req_tag}_BIOS_Pack.zip"
+
+    sys_tag = ""
+    if system_filter:
+        display_parts = []
+        for sid in system_filter:
+            s = sid.lower().replace("_", "-")
+            for prefix in ("microsoft-", "nintendo-", "sony-", "sega-", "snk-",
+                           "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
+                           "hartung-", "tiger-", "magnavox-", "philips-", "bandai-",
+                           "casio-", "coleco-", "commodore-", "sharp-", "sinclair-",
+                           "atari-"):
+                if s.startswith(prefix):
+                    s = s[len(prefix):]
+                    break
+            parts = s.split("-")
+            display_parts.append("_".join(p.title() for p in parts if p))
+        sys_tag = "_" + "_".join(display_parts)
+
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -280,6 +300,18 @@ def generate_pack(
         target_cores,
         platform_cores=plat_cores,
     )
+
+    if system_filter:
+        from common import _norm_system_id
+        norm_filter = {_norm_system_id(s) for s in system_filter}
+        filtered = {sid: sys_data for sid, sys_data in pack_systems.items()
+                    if sid in system_filter or _norm_system_id(sid) in norm_filter}
+        if not filtered:
+            available = sorted(pack_systems.keys())[:10]
+            print(f"  WARNING: no systems matched filter {system_filter} "
+                  f"(available: {', '.join(available)})")
+            return None
+        pack_systems = filtered
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for sys_id, system in sorted(pack_systems.items()):
@@ -899,7 +931,10 @@ def main():
         list_emulator_profiles(args.emulators_dir)
         return
     if args.list_systems:
-        list_system_ids(args.emulators_dir)
+        if args.platform:
+            list_platform_system_ids(args.platform, args.platforms_dir)
+        else:
+            list_system_ids(args.emulators_dir)
         return
     if args.list_targets:
         if not args.platform:
@@ -914,18 +949,26 @@ def main():
             print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
         return
 
-    # Mutual exclusion
-    modes = sum(1 for x in (args.platform, args.all, args.emulator, args.system) if x)
-    if modes == 0:
+    # Mode validation
+    has_platform = bool(args.platform)
+    has_all = args.all
+    has_emulator = bool(args.emulator)
+    has_system = bool(args.system)
+
+    # --platform/--all and --system can combine (system filters within platform)
+    # --emulator is exclusive with everything else
+    if has_emulator and (has_platform or has_all or has_system):
+        parser.error("--emulator is mutually exclusive with --platform, --all, and --system")
+    if has_platform and has_all:
+        parser.error("--platform and --all are mutually exclusive")
+    if not (has_platform or has_all or has_emulator or has_system):
         parser.error("Specify --platform, --all, --emulator, or --system")
-    if modes > 1:
-        parser.error("--platform, --all, --emulator, and --system are mutually exclusive")
-    if args.standalone and not (args.emulator or args.system):
-        parser.error("--standalone requires --emulator or --system")
-    if args.target and not (args.platform or args.all):
+    if args.standalone and not (has_emulator or (has_system and not has_platform and not has_all)):
+        parser.error("--standalone requires --emulator or --system (without --platform)")
+    if args.target and not (has_platform or has_all):
         parser.error("--target requires --platform or --all")
-    if args.target and (args.emulator or args.system):
-        parser.error("--target is incompatible with --emulator and --system")
+    if args.target and has_emulator:
+        parser.error("--target is incompatible with --emulator")
 
     db = load_database(args.db)
     zip_contents = build_zip_contents_index(db)
@@ -941,8 +984,8 @@ def main():
             sys.exit(1)
         return
 
-    # System mode
-    if args.system:
+    # System mode (standalone, without platform context)
+    if has_system and not has_platform and not has_all:
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
         result = generate_system_pack(
             system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
@@ -951,6 +994,10 @@ def main():
         if not result:
             sys.exit(1)
         return
+
+    system_filter = None
+    if args.system:
+        system_filter = [s.strip() for s in args.system.split(",") if s.strip()]
 
     # Platform mode (existing)
     if args.all:
@@ -1016,6 +1063,7 @@ def main():
                 zip_contents=zip_contents, data_registry=data_registry,
                 emu_profiles=emu_profiles, target_cores=tc,
                 required_only=args.required_only,
+                system_filter=system_filter,
             )
             if zip_path and variants:
                 rep_cfg = load_platform_config(representative, args.platforms_dir)

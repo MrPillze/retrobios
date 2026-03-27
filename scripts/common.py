@@ -1068,3 +1068,14 @@ def list_system_ids(emulators_dir: str) -> None:
     for sys_id in sorted(system_emus):
         count = len(system_emus[sys_id])
         print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
+
+
+def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
+    """Print system IDs from a platform's YAML config."""
+    config = load_platform_config(platform_name, platforms_dir)
+    systems = config.get("systems", {})
+    for sys_id in sorted(systems):
+        file_count = len(systems[sys_id].get("files", []))
+        mfr = systems[sys_id].get("manufacturer", "")
+        mfr_display = f"  [{mfr.split('|')[0]}]" if mfr else ""
+        print(f"  {sys_id:35s} ({file_count} file{'s' if file_count != 1 else ''}){mfr_display}")

@@ -1602,5 +1602,84 @@ class TestE2E(unittest.TestCase):
         self.assertTrue(any("present_req.bin" in n for n in names))
 
 
+    def test_132_platform_system_filter(self):
+        """--platform + --system filters systems within a platform pack."""
+        from generate_pack import generate_pack
+        output_dir = os.path.join(self.root, "pack_sysfilter")
+        os.makedirs(output_dir, exist_ok=True)
+        config = {
+            "platform": "SysFilterTest",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "system-a": {
+                    "files": [
+                        {"name": "present_req.bin", "destination": "present_req.bin"},
+                    ],
+                },
+                "system-b": {
+                    "files": [
+                        {"name": "present_opt.bin", "destination": "present_opt.bin"},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_sysfilter.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        zip_path = generate_pack(
+            "test_sysfilter", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            system_filter=["system-a"],
+        )
+        self.assertIsNotNone(zip_path)
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        self.assertTrue(any("present_req.bin" in n for n in names))
+        self.assertFalse(any("present_opt.bin" in n for n in names))
+
+    def test_133_platform_system_filter_normalized(self):
+        """_norm_system_id normalization matches with manufacturer prefix."""
+        from common import _norm_system_id
+        self.assertEqual(
+            _norm_system_id("sony-playstation"),
+            _norm_system_id("playstation"),
+        )
+
+    def test_134_list_systems_platform_context(self):
+        """list_platform_system_ids lists systems from a platform YAML."""
+        from common import list_platform_system_ids
+        import io
+        config = {
+            "platform": "ListSysTest",
+            "verification_mode": "existence",
+            "systems": {
+                "alpha-sys": {
+                    "files": [
+                        {"name": "a.bin", "destination": "a.bin"},
+                    ],
+                },
+                "beta-sys": {
+                    "files": [
+                        {"name": "b1.bin", "destination": "b1.bin"},
+                        {"name": "b2.bin", "destination": "b2.bin"},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_listsys.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        captured = io.StringIO()
+        old_stdout = sys.stdout
+        sys.stdout = captured
+        try:
+            list_platform_system_ids("test_listsys", self.platforms_dir)
+        finally:
+            sys.stdout = old_stdout
+        output = captured.getvalue()
+        self.assertIn("alpha-sys", output)
+        self.assertIn("beta-sys", output)
+        self.assertIn("1 file", output)
+        self.assertIn("2 files", output)
+
+
 if __name__ == "__main__":
     unittest.main()
