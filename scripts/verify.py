@@ -586,10 +586,10 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             if gd_missing or gd_present:
                 print(f"  Game data: {len(gd_present)} in pack, {len(gd_missing)} missing")
 
-    # Intentional exclusions (explain why certain emulator files are NOT included)
+    # No external files (explain why certain emulator files are NOT included)
     exclusions = result.get("exclusion_notes", [])
     if exclusions:
-        print(f"  Intentional exclusions ({len(exclusions)}):")
+        print(f"  No external files ({len(exclusions)}):")
         for ex in exclusions:
             print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
 
