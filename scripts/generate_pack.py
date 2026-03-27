@@ -1171,16 +1171,102 @@ def generate_sha256sums(output_dir: str) -> str | None:
     return sums_path
 
 
-def verify_and_finalize_packs(output_dir: str, db: dict) -> bool:
+def verify_pack_against_platform(
+    zip_path: str, platform_name: str, platforms_dir: str,
+) -> tuple[bool, int, int, list[str]]:
+    """Verify a pack ZIP against its platform config.
+
+    Checks:
+    1. Every baseline file declared by the platform exists in the ZIP
+       at the correct destination path
+    2. No duplicate entries
+    3. No path anomalies (double slash, absolute, traversal)
+    4. No unexpected zero-byte BIOS files
+
+    Hash verification is handled by verify.py upstream (which runs
+    against bios/ on disk before packing). This function verifies
+    that the pack was assembled correctly.
+
+    Returns (all_ok, checked, present, errors).
+    """
+    from collections import Counter
+
+    config = load_platform_config(platform_name, platforms_dir)
+    base_dest = config.get("base_destination", "")
+    errors: list[str] = []
+    checked = 0
+    present = 0
+
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        zip_set = set(zf.namelist())
+        zip_lower = {n.lower(): n for n in zip_set}
+
+        # Structural checks
+        dupes = sum(1 for c in Counter(zf.namelist()).values() if c > 1)
+        if dupes:
+            errors.append(f"{dupes} duplicate entries")
+        for n in zip_set:
+            if "//" in n:
+                errors.append(f"double slash: {n}")
+            if n.startswith("/"):
+                errors.append(f"absolute path: {n}")
+            if ".." in n:
+                errors.append(f"path traversal: {n}")
+
+        # Zero-byte check (exclude Dolphin GraphicMods markers)
+        for info in zf.infolist():
+            if info.file_size == 0 and not info.is_dir():
+                if "GraphicMods" not in info.filename and info.filename != "manifest.json":
+                    errors.append(f"zero-byte: {info.filename}")
+
+        # Baseline file presence
+        for sys_id, system in config.get("systems", {}).items():
+            for fe in system.get("files", []):
+                dest = fe.get("destination", fe.get("name", ""))
+                if not dest:
+                    continue
+                expected = f"{base_dest}/{dest}" if base_dest else dest
+                checked += 1
+
+                if expected in zip_set:
+                    present += 1
+                elif expected.lower() in zip_lower:
+                    present += 1  # case variant, OK on case-sensitive packs
+                else:
+                    errors.append(f"missing: {expected}")
+
+    return len(errors) == 0, checked, present, errors
+
+
+def verify_and_finalize_packs(output_dir: str, db: dict,
+                               platforms_dir: str = "platforms") -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
+
+    Two-stage verification:
+    1. Hash check against database.json (integrity)
+    2. Extract + verify against platform config (conformance)
 
     Returns True if all packs pass verification.
     """
     all_ok = True
+
+    # Map ZIP names to platform names
+    pack_to_platform: dict[str, list[str]] = {}
+    for name in sorted(os.listdir(output_dir)):
+        if not name.endswith(".zip"):
+            continue
+        for pname in list_registered_platforms(platforms_dir):
+            cfg = load_platform_config(pname, platforms_dir)
+            display = cfg.get("platform", pname).replace(" ", "_")
+            if display in name or display.replace("_", "") in name.replace("_", ""):
+                pack_to_platform.setdefault(name, []).append(pname)
+
     for name in sorted(os.listdir(output_dir)):
         if not name.endswith(".zip"):
             continue
         zip_path = os.path.join(output_dir, name)
+
+        # Stage 1: database integrity
         ok, manifest = verify_pack(zip_path, db)
         summary = manifest["summary"]
         status = "OK" if ok else "ERRORS"
@@ -1191,6 +1277,21 @@ def verify_and_finalize_packs(output_dir: str, db: dict) -> bool:
                 print(f"    ERROR: {err}")
             all_ok = False
         inject_manifest(zip_path, manifest)
+
+        # Stage 2: platform conformance (extract + verify)
+        platforms = pack_to_platform.get(name, [])
+        for pname in platforms:
+            p_ok, total, matched, p_errors = verify_pack_against_platform(
+                zip_path, pname, platforms_dir,
+            )
+            if p_ok:
+                print(f"  platform {pname}: {matched}/{total} OK")
+            else:
+                print(f"  platform {pname}: {matched}/{total} FAILED")
+                for err in p_errors:
+                    print(f"    {err}")
+                all_ok = False
+
     generate_sha256sums(output_dir)
     return all_ok
 
