@@ -468,7 +468,12 @@ def generate_pack(
                     print(f"  WARNING: data directory '{ref_key}' not cached at {local_path} — run refresh_data_dirs.py")
                     continue
                 dd_dest = dd.get("destination", "")
-                dd_prefix = f"{base_dest}/{dd_dest}" if base_dest else dd_dest
+                if base_dest and dd_dest:
+                    dd_prefix = f"{base_dest}/{dd_dest}"
+                elif base_dest:
+                    dd_prefix = base_dest
+                else:
+                    dd_prefix = dd_dest
                 for root, _dirs, filenames in os.walk(local_path):
                     for fname in filenames:
                         src = os.path.join(root, fname)
