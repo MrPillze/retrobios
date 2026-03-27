@@ -623,10 +623,11 @@ def resolve_platform_cores(
             if c in core_to_profile
         }
     else:
-        platform_systems = set(config.get("systems", {}).keys())
+        # Fallback: system ID intersection with normalization
+        norm_plat_systems = {_norm_system_id(s) for s in config.get("systems", {})}
         result = {
             name for name, p in profiles.items()
-            if set(p.get("systems", [])) & platform_systems
+            if {_norm_system_id(s) for s in p.get("systems", [])} & norm_plat_systems
             and p.get("type") != "alias"
         }
 
@@ -644,6 +645,25 @@ def resolve_platform_cores(
         expanded = {upstream_to_profile.get(c, c) for c in target_cores}
         result = result & expanded
     return result
+
+
+def _norm_system_id(sid: str) -> str:
+    """Normalize system ID for cross-platform matching.
+
+    Strips manufacturer prefixes and separators so that platform-specific
+    IDs (e.g., "xbox", "nintendo-wiiu") match profile IDs
+    (e.g., "microsoft-xbox", "nintendo-wii-u").
+    """
+    s = sid.lower().replace("_", "-")
+    for prefix in ("microsoft-", "nintendo-", "sony-", "sega-",
+                    "snk-", "panasonic-", "nec-", "epoch-", "mattel-",
+                    "fairchild-", "hartung-", "tiger-", "magnavox-",
+                    "philips-", "bandai-", "casio-", "coleco-",
+                    "commodore-", "sharp-", "sinclair-"):
+        if s.startswith(prefix):
+            s = s[len(prefix):]
+            break
+    return s.replace("-", "")
 
 
 def filter_systems_by_target(
@@ -672,21 +692,7 @@ def filter_systems_by_target(
             upstream_to_profile[str(alias)] = name
     expanded_target = {upstream_to_profile.get(c, c) for c in target_cores}
 
-    # Build normalized system ID index for fuzzy matching.
-    # Platforms and profiles may use different IDs for the same system
-    # (e.g., "xbox" vs "microsoft-xbox-360"). Normalize by stripping
-    # manufacturer prefixes and separators to group them.
-    def _norm_sid(sid: str) -> str:
-        s = sid.lower().replace("_", "-")
-        for prefix in ("microsoft-", "nintendo-", "sony-", "sega-",
-                        "snk-", "panasonic-", "nec-", "epoch-", "mattel-",
-                        "fairchild-", "hartung-", "tiger-", "magnavox-",
-                        "philips-", "bandai-", "casio-", "coleco-",
-                        "commodore-", "sharp-", "sinclair-"):
-            if s.startswith(prefix):
-                s = s[len(prefix):]
-                break
-        return s.replace("-", "")
+    _norm_sid = _norm_system_id
 
     # Build normalized system -> cores from ALL profiles
     norm_system_cores: dict[str, set[str]] = {}
