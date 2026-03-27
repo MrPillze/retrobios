@@ -247,6 +247,9 @@ def find_undeclared_files(
             fname = f.get("name", "")
             if not fname or fname in seen:
                 continue
+            # Skip pattern placeholders (e.g., <user-selected>.bin)
+            if "<" in fname or ">" in fname or "*" in fname:
+                continue
             # Mode filtering: skip files incompatible with platform's usage
             file_mode = f.get("mode")
             if file_mode == "standalone" and not is_standalone:
@@ -322,15 +325,21 @@ def find_exclusion_notes(
             })
             continue
 
-        # Count standalone-only files
-        standalone_files = [f for f in profile.get("files", []) if f.get("mode") == "standalone"]
-        if standalone_files:
-            names = [f["name"] for f in standalone_files[:3]]
-            more = f" +{len(standalone_files)-3}" if len(standalone_files) > 3 else ""
-            notes.append({
-                "emulator": emu_display, "reason": "standalone_only",
-                "detail": f"{len(standalone_files)} files for standalone mode only ({', '.join(names)}{more})",
-            })
+        # Count standalone-only files — but only report as excluded if the
+        # platform does NOT use this emulator in standalone mode
+        standalone_set = set(str(c) for c in config.get("standalone_cores", []))
+        is_standalone = emu_name in standalone_set or bool(
+            standalone_set & {str(c) for c in profile.get("cores", [])}
+        )
+        if not is_standalone:
+            standalone_files = [f for f in profile.get("files", []) if f.get("mode") == "standalone"]
+            if standalone_files:
+                names = [f["name"] for f in standalone_files[:3]]
+                more = f" +{len(standalone_files)-3}" if len(standalone_files) > 3 else ""
+                notes.append({
+                    "emulator": emu_display, "reason": "standalone_only",
+                    "detail": f"{len(standalone_files)} files for standalone mode only ({', '.join(names)}{more})",
+                })
 
     return notes
 
