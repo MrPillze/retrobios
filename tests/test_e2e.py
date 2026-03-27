@@ -353,13 +353,15 @@ class TestE2E(unittest.TestCase):
             "files": [
                 # Size validation — correct size (16 bytes = len(b"PRESENT_REQUIRED"))
                 {"name": "present_req.bin", "required": True,
-                 "validation": ["size"], "size": 16},
+                 "validation": ["size"], "size": 16,
+                 "source_ref": "test.c:10-20"},
                 # Size validation — wrong expected size
                 {"name": "present_opt.bin", "required": False,
                  "validation": ["size"], "size": 9999},
                 # CRC32 validation — correct crc32
                 {"name": "correct_hash.bin", "required": True,
-                 "validation": ["crc32"], "crc32": "91d0b1d3"},
+                 "validation": ["crc32"], "crc32": "91d0b1d3",
+                 "source_ref": "hash.c:42"},
                 # CRC32 validation — wrong crc32
                 {"name": "no_md5.bin", "required": False,
                  "validation": ["crc32"], "crc32": "deadbeef"},
@@ -1497,6 +1499,45 @@ class TestE2E(unittest.TestCase):
         lines = _format_ground_truth_verbose(gt)
         self.assertEqual(len(lines), 1)
         self.assertNotIn("[", lines[0])
+
+    def test_123_ground_truth_full_chain_verbose(self):
+        """Full chain: file -> platform -> emulator -> source_ref visible in ground_truth."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        for d in result["details"]:
+            if d["name"] == "present_req.bin":
+                gt = d["ground_truth"]
+                for g in gt:
+                    if g["emulator"] == "test_validation":
+                        self.assertIn("size", g["checks"])
+                        self.assertEqual(g["source_ref"], "test.c:10-20")
+                        self.assertEqual(g["expected"]["size"], 16)
+                        return
+        self.fail("present_req.bin / test_validation ground truth not found")
+
+    def test_124_ground_truth_json_includes_all(self):
+        """JSON output includes ground_truth on all detail entries."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        # Simulate --json filtering (non-OK only) — ground_truth must survive
+        filtered = [d for d in result["details"] if d["status"] != Status.OK]
+        for d in filtered:
+            self.assertIn("ground_truth", d)
+        # Also check OK entries have it (before filtering)
+        ok_entries = [d for d in result["details"] if d["status"] == Status.OK]
+        for d in ok_entries:
+            self.assertIn("ground_truth", d)
+
+    def test_125_ground_truth_coverage_in_md5_mode(self):
+        """MD5 platform also gets ground truth coverage."""
+        config = load_platform_config("test_md5", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        gt = result["ground_truth_coverage"]
+        self.assertEqual(gt["total"], result["total_files"])
+        self.assertGreaterEqual(gt["with_validation"], 1)
 
 
 if __name__ == "__main__":
