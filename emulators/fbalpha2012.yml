@@ -8,6 +8,7 @@ core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012)"
 cores:
   - fbalpha2012
+  - fbalpha
 systems:
   - arcade
   - neogeo

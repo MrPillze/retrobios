@@ -1,7 +1,7 @@
 emulator: melonDS DS
 type: libretro
 core_classification: community_fork
-cores: [melonds_ds]
+cores: [melonds_ds, melondsds]
 source: "https://github.com/JesseTG/melonds-ds"
 upstream: "https://github.com/melonDS-emu/melonDS"
 profiled_date: "2026-03-24"
