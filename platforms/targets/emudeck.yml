@@ -1,6 +1,6 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck
-scraped_at: '2026-03-26T09:14:02Z'
+scraped_at: '2026-03-27T09:27:29Z'
 targets:
   steamos:
     architecture: x86_64
