@@ -9,6 +9,7 @@ core_version: "1.2.10"
 
 cores:
   - ep128emu_core
+  - ep128emu-core
 
 systems:
   - enterprise-64

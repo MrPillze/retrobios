@@ -11,6 +11,8 @@ systems: [nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo]
 
 cores:
   snes9x:
+  snes9x_next:
+  pocketsnes:
     source: "https://github.com/libretro/snes9x"
     firmware_loading: true
     hle_only: true

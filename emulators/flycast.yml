@@ -9,6 +9,8 @@ core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast)"
 cores:
   - flycast
+  - flycast_dev
+  - flycastvl
 systems:
   - sega-dreamcast
   - sega-naomi

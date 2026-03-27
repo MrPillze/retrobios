@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - C64DTV (VICE x64dtv)"
-cores: [vice_x64dtv]
+cores: [vice_x64dtv, x64dtv]
 systems: [commodore-c64dtv]
 notes: >
   System ROMs embedded in binary: C64 BASIC (901226-01), kernal Rev 3

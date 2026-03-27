@@ -9,6 +9,7 @@ display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX Wide)"
 cores:
   - genesis_plus_gx_wide
   - genesisplusgxwide
+  - genesisplusgx-wide
 systems:
   - sega-megadrive
   - sega-megacd

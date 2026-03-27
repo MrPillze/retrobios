@@ -9,6 +9,7 @@ core_version: "1.8"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"
 cores:
   - hatari
+  - hatarib
 systems: [atari-st, atari-ste, atari-tt, atari-falcon]
 
 # Hatari requires a TOS ROM image to boot. The default filename is tos.img,

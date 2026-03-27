@@ -10,6 +10,7 @@ display_name: "Arcade (MAME)"
 
 cores:
   - mame
+  - imame4all
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes

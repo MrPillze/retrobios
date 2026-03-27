@@ -10,6 +10,7 @@ mame_version: "0.159"
 
 cores:
   - mess2015
+  - mess
 systems: []
 
 notes: |

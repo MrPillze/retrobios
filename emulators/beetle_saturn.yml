@@ -9,6 +9,7 @@ core_version: "v0.9.45.1"
 display_name: "Sega - Saturn (Beetle Saturn)"
 cores:
   - mednafen_saturn
+  - beetle-saturn
 systems:
   - sega-saturn
 

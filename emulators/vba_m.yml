@@ -7,7 +7,7 @@
 # for GB/GBC mode (not listed in mgba profile).
 emulator: VBA-M
 type: libretro
-cores: [vbam]
+cores: [vbam, vba-m]
 source: "https://github.com/visualboyadvance-m/visualboyadvance-m"
 systems:
   - nintendo-gb
