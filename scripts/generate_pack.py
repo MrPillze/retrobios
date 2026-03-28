@@ -1497,6 +1497,13 @@ def main():
         skip_conf = bool(system_filter or args.split)
         all_ok = verify_and_finalize_packs(args.output_dir, db,
                                             skip_conformance=skip_conf)
+        # Also verify split subdirectories
+        if args.split:
+            for entry in os.listdir(args.output_dir):
+                sub = os.path.join(args.output_dir, entry)
+                if os.path.isdir(sub) and entry.endswith("_Split"):
+                    ok = verify_and_finalize_packs(sub, db, skip_conformance=True)
+                    all_ok = all_ok and ok
         if not all_ok:
             print("WARNING: some packs have verification errors")
             sys.exit(1)
