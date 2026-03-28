@@ -694,6 +694,36 @@ def generate_pack(
         }
         extract_to = extract_paths.get(platform_name, f"{base_dest}/")
         num_systems = len(pack_systems)
+        # Platform-specific notes
+        platform_notes = {
+            "emudeck": (
+                "\nSTANDALONE EMULATORS\n"
+                "  Switch emulators (Yuzu, Eden, Ryujinx) and Citra need\n"
+                "  keys in their own folders, not in Emulation/bios/.\n"
+                "  Use the automatic installer to set this up, or copy\n"
+                "  manually:\n"
+                "    prod.keys -> ~/.local/share/yuzu/keys/\n"
+                "    prod.keys -> ~/.local/share/eden/keys/\n"
+                "    prod.keys -> ~/.config/Ryujinx/system/\n"
+                "    aes_keys.txt -> Emulation/bios/citra/keys/\n\n"
+            ),
+            "retroarch": (
+                "\nHANDHELDS (Anbernic, Retroid, Miyoo, etc.)\n"
+                "  Copy the contents of \"system/\" to your SD card's\n"
+                "  BIOS folder (usually BIOS/ or system/).\n\n"
+            ),
+            "batocera": (
+                "\nDREAMCAST NOTE\n"
+                "  The flash memory file is named dc_nvmem.bin\n"
+                "  (Flycast's canonical name). If your setup asks for\n"
+                "  dc_flash.bin, it serves the same purpose.\n\n"
+            ),
+        }
+        extra_notes = platform_notes.get(platform_name, "")
+        # Lakka shares RetroArch notes
+        if platform_name == "lakka":
+            extra_notes = platform_notes.get("retroarch", "")
+
         readme_text = (
             f"{'=' * 43}\n"
             f"  RETROBIOS - {platform_display} BIOS Pack\n"
@@ -707,7 +737,8 @@ def generate_pack(
             f"  5. Paste (Ctrl+V)\n\n"
             f"IMPORTANT\n"
             f"  - Copy the FILES, not the folder itself\n"
-            f"  - If asked to replace, click Yes\n\n"
+            f"  - If asked to replace, click Yes\n"
+            f"{extra_notes}"
             f"AUTOMATIC INSTALL (recommended)\n"
             f"  curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
             f"PROJECT: https://github.com/Abdess/retrobios\n"
