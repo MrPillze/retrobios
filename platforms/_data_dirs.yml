@@ -205,6 +205,14 @@ data_directories:
     strip_components: 1
     description: "FinalBurn Neo per-game cheat definitions"
 
+  # ref: FBNeo src/burn/snd/samples.cpp — system/fbneo/samples/
+  fbneo-samples:
+    source_url: "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/fbneo-samples
+    description: "FinalBurn Neo per-game audio samples (45 arcade games)"
+
   # ref: dirksimple — system/
   dirksimple:
     source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"

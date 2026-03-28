@@ -254,6 +254,8 @@ systems:
       destination: fbneo
     - ref: fbneo-cheats
       destination: fbneo
+    - ref: fbneo-samples
+      destination: fbneo
     core: fbneo
     manufacturer: Various
     docs: https://docs.libretro.com/library/fbneo/
