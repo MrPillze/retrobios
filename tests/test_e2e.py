@@ -2113,6 +2113,100 @@ class TestE2E(unittest.TestCase):
         # --platform + --system is a valid combination
         self.assertTrue(has_platform and has_system)
 
+    # ── BizHawk scraper tests ──────────────────────────────────────
+
+    def test_150_bizhawk_scraper_parse_firmware_and_option(self):
+        """Parse FirmwareAndOption() one-liner pattern."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            FirmwareAndOption("DBEBD76A448447CB6E524AC3CB0FD19FC065D944", 256, "32X", "G", "32X_G_BIOS.BIN", "32x 68k BIOS");
+            FirmwareAndOption("1E5B0B2441A4979B6966D942B20CC76C413B8C5E", 2048, "32X", "M", "32X_M_BIOS.BIN", "32x SH2 MASTER BIOS");
+        '''
+        records, files = parse_firmware_database(fragment)
+        self.assertEqual(len(records), 2)
+        self.assertEqual(records[0]["system"], "32X")
+        self.assertEqual(records[0]["firmware_id"], "G")
+        self.assertEqual(records[0]["sha1"], "DBEBD76A448447CB6E524AC3CB0FD19FC065D944")
+        self.assertEqual(records[0]["name"], "32X_G_BIOS.BIN")
+        self.assertEqual(records[0]["size"], 256)
+
+    def test_151_bizhawk_scraper_parse_variable_refs(self):
+        """Parse var = File() + Firmware() + Option() pattern."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            var gbaNormal = File("300C20DF6731A33952DED8C436F7F186D25D3492", 16384, "GBA_bios.rom", "Bios (World)");
+            Firmware("GBA", "Bios", "Bios");
+            Option("GBA", "Bios", in gbaNormal, FirmwareOptionStatus.Ideal);
+        '''
+        records, files = parse_firmware_database(fragment)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["system"], "GBA")
+        self.assertEqual(records[0]["sha1"], "300C20DF6731A33952DED8C436F7F186D25D3492")
+        self.assertEqual(records[0]["name"], "GBA_bios.rom")
+        self.assertEqual(records[0]["status"], "Ideal")
+
+    def test_152_bizhawk_scraper_skips_comments(self):
+        """Commented-out blocks (PS2) are skipped."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            FirmwareAndOption("DBEBD76A448447CB6E524AC3CB0FD19FC065D944", 256, "32X", "G", "32X_G_BIOS.BIN", "32x 68k BIOS");
+            /*
+            Firmware("PS2", "BIOS", "PS2 Bios");
+            Option("PS2", "BIOS", File("FBD54BFC020AF34008B317DCB80B812DD29B3759", 4194304, "ps2.bin", "PS2 Bios"));
+            */
+        '''
+        records, files = parse_firmware_database(fragment)
+        systems = {r["system"] for r in records}
+        self.assertNotIn("PS2", systems)
+        self.assertEqual(len(records), 1)
+
+    def test_153_bizhawk_scraper_arithmetic_size(self):
+        """Size expressions like 4 * 1024 * 1024 are evaluated."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            FirmwareAndOption("BF861922DCB78C316360E3E742F4F70FF63C9BC3", 4 * 1024 * 1024, "N64DD", "IPL_JPN", "64DD_IPL.bin", "N64DD JPN IPL");
+        '''
+        records, _ = parse_firmware_database(fragment)
+        self.assertEqual(records[0]["size"], 4194304)
+
+    def test_154_bizhawk_scraper_dummy_hash(self):
+        """SHA1Checksum.Dummy entries get no sha1 field."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            FirmwareAndOption(SHA1Checksum.Dummy, 0, "3DS", "aes_keys", "aes_keys.txt", "AES Keys");
+        '''
+        records, _ = parse_firmware_database(fragment)
+        self.assertEqual(len(records), 1)
+        self.assertIsNone(records[0]["sha1"])
+
+    def test_155_bizhawk_scraper_multi_option_picks_ideal(self):
+        """When multiple options exist, Ideal is selected as canonical."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            var ss_100_j = File("2B8CB4F87580683EB4D760E4ED210813D667F0A2", 524288, "SAT_1.00-(J).bin", "Bios v1.00 (J)");
+            var ss_101_j = File("DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720", 524288, "SAT_1.01-(J).bin", "Bios v1.01 (J)");
+            Firmware("SAT", "J", "Bios (J)");
+            Option("SAT", "J", in ss_100_j);
+            Option("SAT", "J", in ss_101_j, FirmwareOptionStatus.Ideal);
+        '''
+        records, _ = parse_firmware_database(fragment)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["sha1"], "DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720")
+        self.assertEqual(records[0]["name"], "SAT_1.01-(J).bin")
+
+    def test_156_bizhawk_scraper_is_bad_excluded(self):
+        """Files with isBad: true are not selected as canonical."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+        fragment = '''
+            var good = File("AAAA", 100, "good.bin", "Good");
+            var bad = File("BBBB", 100, "bad.bin", "Bad", isBad: true);
+            Firmware("TEST", "X", "Test");
+            Option("TEST", "X", in bad);
+            Option("TEST", "X", in good, FirmwareOptionStatus.Ideal);
+        '''
+        records, _ = parse_firmware_database(fragment)
+        self.assertEqual(records[0]["name"], "good.bin")
+
 
 if __name__ == "__main__":
     unittest.main()
