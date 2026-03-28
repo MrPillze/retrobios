@@ -3,7 +3,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-28T17:21:13Z",
+  "generated": "2026-03-28T17:41:13Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -50,249 +50,249 @@
       }
     }
   ],
-  "total_files": 169,
-  "total_size": 447442569,
+  "total_files": 250,
+  "total_size": 772501129,
   "files": [
     {
-      "dest": "bios/colecovision.rom",
+      "dest": "colecovision.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
       "cores": null
     },
     {
-      "dest": "bios/aes_keys.txt",
+      "dest": "aes_keys.txt",
       "sha1": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
       "size": 4965,
       "repo_path": "bios/Nintendo/3DS/aes_keys.txt",
       "cores": null
     },
     {
-      "dest": "bios/64DD_IPL_US.n64",
+      "dest": "64DD_IPL_US.n64",
       "sha1": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_USA.bin",
       "cores": null
     },
     {
-      "dest": "bios/64DD_IPL_JP.n64",
+      "dest": "64DD_IPL_JP.n64",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
       "cores": null
     },
     {
-      "dest": "bios/64DD_IPL_DEV.n64",
+      "dest": "64DD_IPL_DEV.n64",
       "sha1": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_DEV.bin",
       "cores": null
     },
     {
-      "dest": "bios/bios7.bin",
+      "dest": "bios7.bin",
       "sha1": "24f67bdea115a2c847c8813a262502ee1607b7df",
       "size": 16384,
       "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
       "cores": null
     },
     {
-      "dest": "bios/bios9.bin",
+      "dest": "bios9.bin",
       "sha1": "bfaac75f101c135e32e2aaf541de6b1be4c8c62d",
       "size": 4096,
       "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
       "cores": null
     },
     {
-      "dest": "bios/firmware.bin",
+      "dest": "firmware.bin",
       "sha1": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
       "size": 262144,
       "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
       "cores": null
     },
     {
-      "dest": "bios/IPL.bin",
+      "dest": "IPL.bin",
       "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
       "size": 2097152,
       "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
       "cores": null
     },
     {
-      "dest": "bios/disksys.rom",
+      "dest": "disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
       "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
       "cores": null
     },
     {
-      "dest": "bios/prod.keys",
+      "dest": "prod.keys",
       "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
       "size": 16025,
       "repo_path": "bios/Nintendo/Switch/prod.keys",
       "cores": null
     },
     {
-      "dest": "bios/keys.txt",
+      "dest": "keys.txt",
       "sha1": "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae",
       "size": 449507,
       "repo_path": "bios/Nintendo/Wii U/keys.txt",
       "cores": null
     },
     {
-      "dest": "bios/panafz1.bin",
+      "dest": "panafz1.bin",
       "sha1": "34bf189111295f74d7b7dfc1f304d98b8d36325a",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz1.bin",
       "cores": null
     },
     {
-      "dest": "bios/dc/dc_boot.bin",
+      "dest": "dc/dc_boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "size": 2097152,
       "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
       "cores": null
     },
     {
-      "dest": "bios/dc/dc_flash.bin",
+      "dest": "dc/dc_flash.bin",
       "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
       "cores": null
     },
     {
-      "dest": "bios/dc/naomi.zip",
+      "dest": "dc/naomi.zip",
       "sha1": "788aee0f30ee80ea54dcd705afe93944accafc31",
       "size": 9651827,
       "repo_path": "bios/Arcade/Arcade/naomi.zip",
       "cores": null
     },
     {
-      "dest": "bios/bios_CD_E.bin",
+      "dest": "bios_CD_E.bin",
       "sha1": "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
       "cores": null
     },
     {
-      "dest": "bios/bios_CD_U.bin",
+      "dest": "bios_CD_U.bin",
       "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": null
     },
     {
-      "dest": "bios/bios_CD_J.bin",
+      "dest": "bios_CD_J.bin",
       "sha1": "4846f448160059a7da0215a5df12ca160f26dd69",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": null
     },
     {
-      "dest": "bios/sega_101.bin",
+      "dest": "sega_101.bin",
       "sha1": "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
       "cores": null
     },
     {
-      "dest": "bios/mpr-17933.bin",
+      "dest": "mpr-17933.bin",
       "sha1": "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
       "cores": null
     },
     {
-      "dest": "bios/saturn_bios.bin",
+      "dest": "saturn_bios.bin",
       "sha1": "2b8cb4f87580683eb4d760e4ed210813d667f0a2",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/sega_100.bin",
       "cores": null
     },
     {
-      "dest": "bios/neogeo.zip",
+      "dest": "neogeo.zip",
       "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
       "size": 1859335,
       "repo_path": "bios/Arcade/Arcade/neogeo.zip",
       "cores": null
     },
     {
-      "dest": "bios/neocdz.zip",
+      "dest": "neocdz.zip",
       "sha1": "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
       "size": 1181333,
       "repo_path": "bios/Arcade/Arcade/neocdz.zip",
       "cores": null
     },
     {
-      "dest": "bios/scph5500.bin",
+      "dest": "scph5500.bin",
       "sha1": "b05def971d8ec59f346f2d9ac21fb742e3eb6917",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5500.bin",
       "cores": null
     },
     {
-      "dest": "bios/scph5501.bin",
+      "dest": "scph5501.bin",
       "sha1": "0555c6fae8906f3f09baf5988f00e55f88e9f30b",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5501.bin",
       "cores": null
     },
     {
-      "dest": "bios/scph5502.bin",
+      "dest": "scph5502.bin",
       "sha1": "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5502.bin",
       "cores": null
     },
     {
-      "dest": "bios/SCPH-70004_BIOS_V12_EUR_200.BIN",
+      "dest": "SCPH-70004_BIOS_V12_EUR_200.BIN",
       "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
       "cores": null
     },
     {
-      "dest": "bios/SCPH-70004_BIOS_V12_EUR_200.EROM",
+      "dest": "SCPH-70004_BIOS_V12_EUR_200.EROM",
       "sha1": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "size": 3145728,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.EROM",
       "cores": null
     },
     {
-      "dest": "bios/SCPH-70004_BIOS_V12_EUR_200.ROM1",
+      "dest": "SCPH-70004_BIOS_V12_EUR_200.ROM1",
       "sha1": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
       "cores": null
     },
     {
-      "dest": "bios/SCPH-70004_BIOS_V12_EUR_200.ROM2",
+      "dest": "SCPH-70004_BIOS_V12_EUR_200.ROM2",
       "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
       "size": 8192,
       "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
       "cores": null
     },
     {
-      "dest": "bios/ppsspp.zip",
+      "dest": "ppsspp.zip",
       "sha1": "5c34edb64e86f90ecf2702f40f5c09e92892d2f2",
       "size": 10754518,
       "repo_path": "bios/Sony/PlayStation Portable/ppsspp.zip",
       "cores": null
     },
     {
-      "dest": "bios/mcpx_1.0.bin",
+      "dest": "mcpx_1.0.bin",
       "sha1": "5d270675b54eb8071b480e42d22a3015ac211cef",
       "size": 512,
       "repo_path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
       "cores": null
     },
     {
-      "dest": "bios/Complex_4627v1.03.bin",
+      "dest": "Complex_4627v1.03.bin",
       "sha1": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "size": 1048576,
       "repo_path": "bios/Microsoft/Xbox/Complex_4627.bin",
       "cores": null
     },
     {
-      "dest": "bios/sysdata/shared_font.bin",
+      "dest": "sysdata/shared_font.bin",
       "sha1": "60022d6d026c8df950722478aab25702a0dfa067",
       "size": 3145728,
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/shared_font.bin",
@@ -301,7 +301,7 @@
       ]
     },
     {
-      "dest": "bios/sysdata/seeddb.bin",
+      "dest": "sysdata/seeddb.bin",
       "sha1": "9e2c006997761082be87cf316e57c4da5cddbc62",
       "size": 53264,
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/seeddb.bin",
@@ -310,7 +310,7 @@
       ]
     },
     {
-      "dest": "bios/sysdata/otp.bin",
+      "dest": "sysdata/otp.bin",
       "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
       "size": 256,
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
@@ -319,7 +319,7 @@
       ]
     },
     {
-      "dest": "bios/nand/private/movable.sed",
+      "dest": "nand/private/movable.sed",
       "sha1": "6620b0a0c79dfe80be682fbd5c31c152ab570899",
       "size": 320,
       "repo_path": "bios/Nintendo/3DS/Citra/nand/private/movable.sed",
@@ -328,7 +328,7 @@
       ]
     },
     {
-      "dest": "bios/nand/rw/sys/SecureInfo_A",
+      "dest": "nand/rw/sys/SecureInfo_A",
       "sha1": "ff52883a0f61afcbbb3f8e59b9327ac52050e9a7",
       "size": 273,
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/SecureInfo_A",
@@ -337,7 +337,7 @@
       ]
     },
     {
-      "dest": "bios/nand/rw/sys/LocalFriendCodeSeed_B",
+      "dest": "nand/rw/sys/LocalFriendCodeSeed_B",
       "sha1": "3011ae55c3dc70203fd62aad98bf485e55d018ff",
       "size": 272,
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/LocalFriendCodeSeed_B",
@@ -346,7 +346,7 @@
       ]
     },
     {
-      "dest": "bios/seeprom.bin",
+      "dest": "seeprom.bin",
       "sha1": "d08ffcf19945b63c7baf35d9965a9cd6bf61332b",
       "size": 512,
       "repo_path": "bios/Nintendo/Wii U/seeprom.bin",
@@ -355,7 +355,7 @@
       ]
     },
     {
-      "dest": "bios/mlc01/sys/title/0005001b/10042400/content",
+      "dest": "mlc01/sys/title/0005001b/10042400/content",
       "sha1": "2d95227b9b3eaf1c74d9293ecd0d190ec7ffbbe3",
       "size": 9664448,
       "repo_path": "bios/Nintendo/Wii U/CafeCn.ttf",
@@ -364,7 +364,7 @@
       ]
     },
     {
-      "dest": "bios/mlc01/sys/title/0005001b/10054000/content/ccerts",
+      "dest": "mlc01/sys/title/0005001b/10054000/content/ccerts",
       "sha1": "b5cb90503a555c55d59374829b4202bd44d8839b",
       "size": 1224,
       "repo_path": "bios/Nintendo/Wii U/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_COMMON_1_CERT.der",
@@ -373,7 +373,7 @@
       ]
     },
     {
-      "dest": "bios/mlc01/sys/title/0005001b/10054000/content/scerts",
+      "dest": "mlc01/sys/title/0005001b/10054000/content/scerts",
       "sha1": "501b5c42652b659e0d0ef607c4337e457080e5a2",
       "size": 937,
       "repo_path": "bios/Nintendo/Wii U/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA.der",
@@ -382,7 +382,7 @@
       ]
     },
     {
-      "dest": "bios/GC/dsp_rom.bin",
+      "dest": "GC/dsp_rom.bin",
       "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
       "size": 8192,
       "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
@@ -391,7 +391,7 @@
       ]
     },
     {
-      "dest": "bios/GC/dsp_coef.bin",
+      "dest": "GC/dsp_coef.bin",
       "sha1": "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/dsp_coef.bin",
@@ -400,7 +400,7 @@
       ]
     },
     {
-      "dest": "bios/GC/font_western.bin",
+      "dest": "GC/font_western.bin",
       "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "size": 6478,
       "repo_path": "bios/Nintendo/GameCube/font_western.bin",
@@ -409,7 +409,7 @@
       ]
     },
     {
-      "dest": "bios/GC/font_japanese.bin",
+      "dest": "GC/font_japanese.bin",
       "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "size": 259626,
       "repo_path": "bios/Nintendo/GameCube/font_japanese.bin",
@@ -418,7 +418,7 @@
       ]
     },
     {
-      "dest": "bios/GBA/gba_bios.bin",
+      "dest": "GBA/gba_bios.bin",
       "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
       "size": 16384,
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
@@ -427,7 +427,7 @@
       ]
     },
     {
-      "dest": "bios/codehandler.bin",
+      "dest": "codehandler.bin",
       "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "size": 2880,
       "repo_path": "bios/Nintendo/GameCube/codehandler.bin",
@@ -436,7 +436,7 @@
       ]
     },
     {
-      "dest": "bios/scph1000.bin",
+      "dest": "scph1000.bin",
       "sha1": "343883a7b555646da8cee54aadd2795b6e7dd070",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1000.bin",
@@ -445,7 +445,7 @@
       ]
     },
     {
-      "dest": "bios/scph1001.bin",
+      "dest": "scph1001.bin",
       "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1001.bin",
@@ -454,7 +454,16 @@
       ]
     },
     {
-      "dest": "bios/scph1002b.bin",
+      "dest": "scph1002a.bin",
+      "sha1": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002b.bin",
       "sha1": "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
@@ -463,7 +472,7 @@
       ]
     },
     {
-      "dest": "bios/scph1002c.bin",
+      "dest": "scph1002c.bin",
       "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
@@ -472,7 +481,7 @@
       ]
     },
     {
-      "dest": "bios/dtlh1100.bin",
+      "dest": "dtlh1100.bin",
       "sha1": "73107d468fc7cb1d2c5b18b269715dd889ecef06",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/dtlh1100.bin",
@@ -481,7 +490,7 @@
       ]
     },
     {
-      "dest": "bios/scph3000.bin",
+      "dest": "scph3000.bin",
       "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph3000.bin",
@@ -490,7 +499,7 @@
       ]
     },
     {
-      "dest": "bios/scph1001_v20.bin",
+      "dest": "scph1001_v20.bin",
       "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
@@ -499,7 +508,7 @@
       ]
     },
     {
-      "dest": "bios/scph3500.bin",
+      "dest": "scph3500.bin",
       "sha1": "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph3500.bin",
@@ -508,7 +517,7 @@
       ]
     },
     {
-      "dest": "bios/scph1001_v21.bin",
+      "dest": "scph1001_v21.bin",
       "sha1": "ca7af30b50d9756cbd764640126c454cff658479",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
@@ -517,7 +526,7 @@
       ]
     },
     {
-      "dest": "bios/scph5000.bin",
+      "dest": "scph5000.bin",
       "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5000.bin",
@@ -526,7 +535,7 @@
       ]
     },
     {
-      "dest": "bios/scph7000.bin",
+      "dest": "scph7000.bin",
       "sha1": "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7000.bin",
@@ -535,7 +544,7 @@
       ]
     },
     {
-      "dest": "bios/scph7000w.bin",
+      "dest": "scph7000w.bin",
       "sha1": "1b0dbdb23da9dc0776aac58d0755dc80fea20975",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
@@ -544,7 +553,7 @@
       ]
     },
     {
-      "dest": "bios/scph7001.bin",
+      "dest": "scph7001.bin",
       "sha1": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7001.bin",
@@ -553,7 +562,7 @@
       ]
     },
     {
-      "dest": "bios/scph7002.bin",
+      "dest": "scph7002.bin",
       "sha1": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7002.bin",
@@ -562,7 +571,7 @@
       ]
     },
     {
-      "dest": "bios/scph100.bin",
+      "dest": "scph100.bin",
       "sha1": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph100.bin",
@@ -571,7 +580,7 @@
       ]
     },
     {
-      "dest": "bios/scph101_v44.bin",
+      "dest": "scph101_v44.bin",
       "sha1": "7771d6e90980408f753891648685def6dd42ef6d",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph101_v44.bin",
@@ -580,7 +589,34 @@
       ]
     },
     {
-      "dest": "bios/scph1000r.bin",
+      "dest": "scph101_v45.bin",
+      "sha1": "dcffe16bd90a723499ad46c641424981338d8378",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph101.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph102_v44.bin",
+      "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102A.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph102_v45.bin",
+      "sha1": "dbc7339e5d85827c095764fc077b41f78fd2ecae",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102B.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1000r.bin",
       "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
@@ -589,7 +625,7 @@
       ]
     },
     {
-      "dest": "bios/ps2_scph30003.bin",
+      "dest": "ps2_scph30003.bin",
       "sha1": "91cb6e3f9871454a0127ecb928ed7f1237742ea1",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/ps2_scph30003.bin",
@@ -598,7 +634,484 @@
       ]
     },
     {
-      "dest": "bios/ps2_scph70002_alt.bin",
+      "dest": "ps2_dtlh10000_0117.bin",
+      "sha1": "5b33170323ed6344e2363fed8115dc3918bb96a4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0100jd-20000117.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph10000_0117.bin",
+      "sha1": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh10000_0217.bin",
+      "sha1": "16f4a284d0e760ee13a2aff2f7dda928255e3080",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph10000_15000.bin",
+      "sha1": "916e02431bcd73140504da3355c9598143b77e11",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh10000_0224.bin",
+      "sha1": "4440b246bfde7bb31002c584a76c6ef384908e84",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30001.bin",
+      "sha1": "339c646cf0699268552df5b05f18f0a03a9f55ff",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_0727.bin",
+      "sha1": "20f6ce6693cf97e9494f8f0227f2b7988ffaf961",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_0902.bin",
+      "sha1": "dbc2318a1029347b5af3a0c74b0bdf88d19efee6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30002.bin",
+      "sha1": "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30102_0902.bin",
+      "sha1": "1b73dec999fcc2b92fa958110ff6bfe4d0af276e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002_0902.bin",
+      "sha1": "274c05fec654913a3f698d4b0d592085866a2cbd",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000_gh003.bin",
+      "sha1": "e481079eca752225555f0c26d14c9d0f94d9a8e9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000_gh008.bin",
+      "sha1": "a9f5d8ed56cfff18add1b599010493461fa02448",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30101.bin",
+      "sha1": "7284b9d16df9935afc384318e024c87ef0574fe5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_35001.bin",
+      "sha1": "5af5b5077d84a9c037ebe12bfab8a38b31d8a543",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30102_1228.bin",
+      "sha1": "d004326c9d8060812b4433c3f07646b04854d6c4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002_1228.bin",
+      "sha1": "e22ef231faf3661edd92f2ee449a71297c82a092",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30000.bin",
+      "sha1": "334e029fc7fd50222a399c50384ff42732652259",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30000_35000.bin",
+      "sha1": "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_0427.bin",
+      "sha1": "7331a40b4b4feb1b3f0f77b013b6d38483577baa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30000_0427.bin",
+      "sha1": "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_0704.bin",
+      "sha1": "ce92e8e8c88665f2f645a9522e337823d47a914a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002r_0704.bin",
+      "sha1": "3cbd048e437c785b5a05a0feced00117a8a42545",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_1004.bin",
+      "sha1": "d257bce6ecaf3bafb704c75a1b4741b910bd2d49",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002r_1004.bin",
+      "sha1": "ee34c3a87c53c75ca2a37d77b0042ca24d07831f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30005r.bin",
+      "sha1": "ba15dcf7aac13864c08222037e9321d7468c87d1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39001.bin",
+      "sha1": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-39001.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39002.bin",
+      "sha1": "bff2902bd0ce9729a060581132541e9fd1a9fab6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph37000_39000.bin",
+      "sha1": "003628c137dae577ff3b04b93ca1787b0c944702",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39008.bin",
+      "sha1": "d106b757ae2544dfe63f7e1924e59d5ad44c0c29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39005.bin",
+      "sha1": "e3a74125c426bcacabca00b513fab928665c8846",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50000.bin",
+      "sha1": "03c6531a1feba6da75a32c2a69c7bb89be61dcda",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50000_55000.bin",
+      "sha1": "d812ac65c357d392396ca9edee812dc41bed8bde",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50002.bin",
+      "sha1": "e220bb282378c1f48ea1b585b3675e51a6dca572",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50002_0227.bin",
+      "sha1": "ad15bd7eabd5bd81ba011516a5be44947d6641aa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50001_0325.bin",
+      "sha1": "c5bc6e893b4c43d528142e56c96073024de64157",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50001_0325.bin",
+      "sha1": "d269d1ed513227f3ef7133c76cf1b3a64f97b15d",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50009.bin",
+      "sha1": "2de87767008fc4a303af64a46251156e965d9065",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_desr5000.bin",
+      "sha1": "aa4a35c14ee342cf7a03b1dde294ca10e64889e1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph55000_0623.bin",
+      "sha1": "6a6ecfe6c10e42eff1ca056349def799b5629067",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50001_0623.bin",
+      "sha1": "fe19d2c52729e2ce4fea30e0e6a501587285d93f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50001_0623.bin",
+      "sha1": "c74d92a2952a2912b6698cbcf7742adac8f784d3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50002_0623.bin",
+      "sha1": "18b9ba833c469c4683676cc20da5124080d980bb",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50006.bin",
+      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50005.bin",
+      "sha1": "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50008.bin",
+      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50009.bin",
+      "sha1": "92d9eb4b11cef97bb69a275b2851b72f7b0023d6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50000_0822.bin",
+      "sha1": "0ea98a25a32145dda514de2f0d4bfbbd806bd00c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50004_0822.bin",
+      "sha1": "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50011.bin",
+      "sha1": "b68c05f5cd86bf03cb38a643a723b7a97b759531",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70000.bin",
+      "sha1": "224ab5704ab719edeb05ca1d835812252c97c1b3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70001.bin",
+      "sha1": "7a62e5f48603582707e9898eb055ea3eaee50d4c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200a-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70002.bin",
+      "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70002_alt.bin",
       "sha1": "3bbf6335b226932ee5a83d516acb0fafc62ac3ce",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/ps2_scph70002_alt.bin",
@@ -607,7 +1120,223 @@
       ]
     },
     {
-      "dest": "bios/openbios.bin",
+      "dest": "ps2_dtlh70002.bin",
+      "sha1": "902f4680b258abd40c0922f6b0d581cbd8f8a73e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70005.bin",
+      "sha1": "7f8e812cab7c7393c85eac6c42661e1fd0a642df",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_desr5500.bin",
+      "sha1": "bbb1af3085e77599691ec430d147810157da934f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh75000.bin",
+      "sha1": "458adf85d216856892d6480213575670894049c6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75000.bin",
+      "sha1": "7ffa75d142cb8eeea6c777dbcf263143655275d5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh75000a.bin",
+      "sha1": "7c7efdfcec7705f4e84bb47f45322104e39eed09",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75001.bin",
+      "sha1": "48d0445dffd1e879c7ae752c5166ec3101921555",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75002.bin",
+      "sha1": "929a85e974faf4b40d0a7785023b758402c43bd9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75006.bin",
+      "sha1": "0a071d1b46607a7694770407606d8599f62a372b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77000.bin",
+      "sha1": "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77001.bin",
+      "sha1": "92e488d5b2705e4cca83d4d1efbc421012faf83e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77002.bin",
+      "sha1": "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77006.bin",
+      "sha1": "fce2a24e5e0400cc6d98c08f426405d19173813e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh90000_j.bin",
+      "sha1": "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79000_90000.bin",
+      "sha1": "3baf847c1c217aa71ac6d298389c88edb3db32e2",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh90000_a.bin",
+      "sha1": "4191b5842f31a9985b5428bc9d2b733ce3abb583",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79001_90001.bin",
+      "sha1": "8361d615cc895962e0f0838489337574dbdc9173",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79002_90002.bin",
+      "sha1": "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79006_90006.bin",
+      "sha1": "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90000_0220.bin",
+      "sha1": "fbd54bfc020af34008b317dcb80b812dd29b3759",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90001_0220.bin",
+      "sha1": "f9229fe159d0353b9f0632f3fdc66819c9030458",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90002_0220.bin",
+      "sha1": "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90005_0220.bin",
+      "sha1": "a277b456849697abec11285c6b35bc734598c220",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_kdl22px300.bin",
+      "sha1": "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "openbios.bin",
       "sha1": "389df7981873d9e6e46c84c20cd43af0e4226cf8",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
@@ -616,7 +1345,7 @@
       ]
     },
     {
-      "dest": "bios/dc/dc_nvmem.bin",
+      "dest": "dc/dc_nvmem.bin",
       "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
@@ -625,7 +1354,7 @@
       ]
     },
     {
-      "dest": "bios/dc/naomi_boot.bin",
+      "dest": "dc/naomi_boot.bin",
       "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a",
       "size": 2097152,
       "repo_path": "bios/Sega/Dreamcast/naomi_boot.bin",
@@ -634,7 +1363,7 @@
       ]
     },
     {
-      "dest": "bios/dc/airlbios.zip",
+      "dest": "dc/airlbios.zip",
       "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
       "size": 718362,
       "repo_path": "bios/Arcade/MAME/airlbios.zip",
@@ -643,7 +1372,7 @@
       ]
     },
     {
-      "dest": "bios/dc/f355bios.zip",
+      "dest": "dc/f355bios.zip",
       "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
       "size": 1394278,
       "repo_path": "bios/Arcade/Arcade/f355bios.zip",
@@ -652,7 +1381,7 @@
       ]
     },
     {
-      "dest": "bios/dc/f355dlx.zip",
+      "dest": "dc/f355dlx.zip",
       "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
       "size": 2328436,
       "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
@@ -661,7 +1390,7 @@
       ]
     },
     {
-      "dest": "bios/dc/hod2bios.zip",
+      "dest": "dc/hod2bios.zip",
       "sha1": "07fd3fae7af650a37a3329ed09d039bd7360294f",
       "size": 1889870,
       "repo_path": "bios/Arcade/MAME/hod2bios.zip",
@@ -670,7 +1399,7 @@
       ]
     },
     {
-      "dest": "bios/dc/naomigd.zip",
+      "dest": "dc/naomigd.zip",
       "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
       "size": 3387512,
       "repo_path": "bios/Arcade/MAME/naomigd.zip",
@@ -679,7 +1408,7 @@
       ]
     },
     {
-      "dest": "bios/dc/awbios.zip",
+      "dest": "dc/awbios.zip",
       "sha1": "7940c7bf29eee85a5b2fdec78750b19aa22895dc",
       "size": 42296,
       "repo_path": "bios/Arcade/Arcade/awbios.zip",
@@ -688,7 +1417,7 @@
       ]
     },
     {
-      "dest": "bios/pgm.zip",
+      "dest": "pgm.zip",
       "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
       "size": 2094636,
       "repo_path": "bios/Arcade/Arcade/pgm.zip",
@@ -697,7 +1426,7 @@
       ]
     },
     {
-      "dest": "bios/naomi2.zip",
+      "dest": "naomi2.zip",
       "sha1": "46278151f85b74951592d57155441485fe3e0274",
       "size": 7038242,
       "repo_path": "bios/Arcade/Arcade/naomi2.zip",
@@ -706,7 +1435,7 @@
       ]
     },
     {
-      "dest": "bios/stvbios.zip",
+      "dest": "stvbios.zip",
       "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
       "size": 3455065,
       "repo_path": "bios/Arcade/Arcade/stvbios.zip",
@@ -715,7 +1444,7 @@
       ]
     },
     {
-      "dest": "bios/lindbios.zip",
+      "dest": "lindbios.zip",
       "sha1": "65a2f2cee74c316d5f40b68deda66787609df353",
       "size": 1462941,
       "repo_path": "bios/Arcade/Arcade/lindbios.zip",
@@ -724,7 +1453,7 @@
       ]
     },
     {
-      "dest": "bios/segasp.zip",
+      "dest": "segasp.zip",
       "sha1": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
       "size": 1281424,
       "repo_path": "bios/Arcade/Arcade/segasp.zip",
@@ -733,7 +1462,7 @@
       ]
     },
     {
-      "dest": "bios/hikaru.zip",
+      "dest": "hikaru.zip",
       "sha1": "041feccfae58fe052247119138098b51c26448ed",
       "size": 1049242,
       "repo_path": "bios/Arcade/Arcade/hikaru.zip",
@@ -742,7 +1471,7 @@
       ]
     },
     {
-      "dest": "bios/chihiro.zip",
+      "dest": "chihiro.zip",
       "sha1": "4fe94baf28d658dd2651de4055a0ac33aa42aa0e",
       "size": 2104141,
       "repo_path": "bios/Arcade/Arcade/chihiro.zip",
@@ -751,7 +1480,7 @@
       ]
     },
     {
-      "dest": "bios/triforce.zip",
+      "dest": "triforce.zip",
       "sha1": "84a6ec5f148b63cccc362b5d9a13a2717d18aa8a",
       "size": 2046778,
       "repo_path": "bios/Arcade/Arcade/triforce.zip",
@@ -760,7 +1489,7 @@
       ]
     },
     {
-      "dest": "bios/shtzone.zip",
+      "dest": "shtzone.zip",
       "sha1": "2adbde3ef74c431fbd700cffd4cd1d41251a8833",
       "size": 3332,
       "repo_path": "bios/Arcade/Arcade/shtzone.zip",
@@ -769,7 +1498,7 @@
       ]
     },
     {
-      "dest": "bios/sammymdl.zip",
+      "dest": "sammymdl.zip",
       "sha1": "2c178083ac2906cecb7e331d7111f7766a353052",
       "size": 24090,
       "repo_path": "bios/Arcade/Arcade/sammymdl.zip",
@@ -778,7 +1507,7 @@
       ]
     },
     {
-      "dest": "bios/megaplay.zip",
+      "dest": "megaplay.zip",
       "sha1": "c9ee16e26e03496195a7bff151efbdd89da01204",
       "size": 49978,
       "repo_path": "bios/Arcade/Arcade/megaplay.zip",
@@ -787,7 +1516,7 @@
       ]
     },
     {
-      "dest": "bios/megatech.zip",
+      "dest": "megatech.zip",
       "sha1": "be1bcca32794d0eb36c86ae32a2a43c92834cdc6",
       "size": 24831,
       "repo_path": "bios/Arcade/Arcade/megatech.zip",
@@ -796,7 +1525,7 @@
       ]
     },
     {
-      "dest": "bios/isgsm.zip",
+      "dest": "isgsm.zip",
       "sha1": "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
       "size": 10207,
       "repo_path": "bios/Arcade/Arcade/isgsm.zip",
@@ -805,7 +1534,7 @@
       ]
     },
     {
-      "dest": "bios/systemy2.zip",
+      "dest": "systemy2.zip",
       "sha1": "66caf13d6819b16eff03a14e3623c8c25b94742c",
       "size": 120272,
       "repo_path": "bios/Arcade/MAME/systemy2.zip",
@@ -814,7 +1543,7 @@
       ]
     },
     {
-      "dest": "bios/decocass.zip",
+      "dest": "decocass.zip",
       "sha1": "1b33cf0e730a6cde96479b0face108b6931d433e",
       "size": 22379,
       "repo_path": "bios/Arcade/Arcade/decocass.zip",
@@ -823,7 +1552,7 @@
       ]
     },
     {
-      "dest": "bios/playch10.zip",
+      "dest": "playch10.zip",
       "sha1": "125e74975da3f7ac643232210ab37c33e4ece9ca",
       "size": 23388,
       "repo_path": "bios/Arcade/Arcade/playch10.zip",
@@ -832,7 +1561,7 @@
       ]
     },
     {
-      "dest": "bios/nss.zip",
+      "dest": "nss.zip",
       "sha1": "68b780f40623e51a421faf374ae5a84a53a81279",
       "size": 50536,
       "repo_path": "bios/Arcade/Arcade/nss.zip",
@@ -841,7 +1570,7 @@
       ]
     },
     {
-      "dest": "bios/sfcbox.zip",
+      "dest": "sfcbox.zip",
       "sha1": "14311945b06a5d013d1df5ce961ab47fbd46fb2a",
       "size": 194344,
       "repo_path": "bios/Arcade/Arcade/sfcbox.zip",
@@ -850,7 +1579,7 @@
       ]
     },
     {
-      "dest": "bios/aleck64.zip",
+      "dest": "aleck64.zip",
       "sha1": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
       "size": 1804,
       "repo_path": "bios/Arcade/Arcade/aleck64.zip",
@@ -859,7 +1588,7 @@
       ]
     },
     {
-      "dest": "bios/cdibios.zip",
+      "dest": "cdibios.zip",
       "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
       "size": 472798,
       "repo_path": "bios/Arcade/Arcade/cdibios.zip",
@@ -868,7 +1597,7 @@
       ]
     },
     {
-      "dest": "bios/cubo.zip",
+      "dest": "cubo.zip",
       "sha1": "258d81f7d8afd46647c6b429ccdfc5a5388accb3",
       "size": 673549,
       "repo_path": "bios/Arcade/Arcade/cubo.zip",
@@ -877,7 +1606,7 @@
       ]
     },
     {
-      "dest": "bios/sys246.zip",
+      "dest": "sys246.zip",
       "sha1": "fbba87e9d6852862252d31dd919f943c8edd7eb7",
       "size": 580122,
       "repo_path": "bios/Arcade/Arcade/sys246.zip",
@@ -886,7 +1615,7 @@
       ]
     },
     {
-      "dest": "bios/sys256.zip",
+      "dest": "sys256.zip",
       "sha1": "721621a353051fea6de484c26b534cdec4de616e",
       "size": 582110,
       "repo_path": "bios/Arcade/Arcade/sys256.zip",
@@ -895,7 +1624,7 @@
       ]
     },
     {
-      "dest": "bios/sys573.zip",
+      "dest": "sys573.zip",
       "sha1": "9cfbcf50fe046c7e18b78d15af0db2bfe66f652c",
       "size": 225972,
       "repo_path": "bios/Arcade/Arcade/sys573.zip",
@@ -904,7 +1633,7 @@
       ]
     },
     {
-      "dest": "bios/konamigx.zip",
+      "dest": "konamigx.zip",
       "sha1": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
       "size": 8712,
       "repo_path": "bios/Arcade/Arcade/konamigx.zip",
@@ -913,7 +1642,7 @@
       ]
     },
     {
-      "dest": "bios/konamigv.zip",
+      "dest": "konamigv.zip",
       "sha1": "b4ff14ed8c3e37a4b45ce2d80c692961ffc88270",
       "size": 81391,
       "repo_path": "bios/Arcade/Arcade/konamigv.zip",
@@ -922,7 +1651,7 @@
       ]
     },
     {
-      "dest": "bios/kviper.zip",
+      "dest": "kviper.zip",
       "sha1": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
       "size": 33864,
       "repo_path": "bios/Arcade/Arcade/kviper.zip",
@@ -931,7 +1660,7 @@
       ]
     },
     {
-      "dest": "bios/gq863.zip",
+      "dest": "gq863.zip",
       "sha1": "975fbbbec0b578a495a8da9e1a5965d94d6d52e1",
       "size": 74462,
       "repo_path": "bios/Arcade/Arcade/gq863.zip",
@@ -940,7 +1669,7 @@
       ]
     },
     {
-      "dest": "bios/bubsys.zip",
+      "dest": "bubsys.zip",
       "sha1": "1c0ffcd308b0c8c6dbb74ad8b811a0767200d366",
       "size": 7950,
       "repo_path": "bios/Arcade/Arcade/bubsys.zip",
@@ -949,7 +1678,7 @@
       ]
     },
     {
-      "dest": "bios/konendev.zip",
+      "dest": "konendev.zip",
       "sha1": "b7a5124500b3a5bb0280b738d7f163947f2852fb",
       "size": 25691,
       "repo_path": "bios/Arcade/Arcade/konendev.zip",
@@ -958,7 +1687,7 @@
       ]
     },
     {
-      "dest": "bios/kpython.zip",
+      "dest": "kpython.zip",
       "sha1": "e0510fcbe8d6e073eab6cc30ac7f26922ba2979a",
       "size": 24831,
       "repo_path": "bios/Arcade/Arcade/kpython.zip",
@@ -967,7 +1696,7 @@
       ]
     },
     {
-      "dest": "bios/kpython2.zip",
+      "dest": "kpython2.zip",
       "sha1": "08364846b9730deeaf31c6efc68c808c07b7b549",
       "size": 2638808,
       "repo_path": "bios/Arcade/Arcade/kpython2.zip",
@@ -976,7 +1705,7 @@
       ]
     },
     {
-      "dest": "bios/coh1000c.zip",
+      "dest": "coh1000c.zip",
       "sha1": "9e156eee236b0077a50a2cda1ff0b874390ed8db",
       "size": 278470,
       "repo_path": "bios/Arcade/Arcade/coh1000c.zip",
@@ -985,7 +1714,7 @@
       ]
     },
     {
-      "dest": "bios/coh3002c.zip",
+      "dest": "coh3002c.zip",
       "sha1": "94d49033e2c45a2591331826559bc93b2bb0884f",
       "size": 137941,
       "repo_path": "bios/Arcade/Arcade/coh3002c.zip",
@@ -994,7 +1723,7 @@
       ]
     },
     {
-      "dest": "bios/coh1000t.zip",
+      "dest": "coh1000t.zip",
       "sha1": "c6d884d7b7ea46338efd116d6ddfa1392c624649",
       "size": 126274,
       "repo_path": "bios/Arcade/Arcade/coh1000t.zip",
@@ -1003,7 +1732,7 @@
       ]
     },
     {
-      "dest": "bios/coh1000a.zip",
+      "dest": "coh1000a.zip",
       "sha1": "c91f79c7ac73519c8b99c184b2fcbffae42fa324",
       "size": 126259,
       "repo_path": "bios/Arcade/Arcade/coh1000a.zip",
@@ -1012,7 +1741,7 @@
       ]
     },
     {
-      "dest": "bios/coh1000w.zip",
+      "dest": "coh1000w.zip",
       "sha1": "13bf28e3528c385b642046c2e0f96f44b33df0f2",
       "size": 126147,
       "repo_path": "bios/Arcade/Arcade/coh1000w.zip",
@@ -1021,7 +1750,7 @@
       ]
     },
     {
-      "dest": "bios/coh1001l.zip",
+      "dest": "coh1001l.zip",
       "sha1": "ab30bd19261c208e2c44c35de6f68cd415fb80e9",
       "size": 126185,
       "repo_path": "bios/Arcade/Arcade/coh1001l.zip",
@@ -1030,7 +1759,7 @@
       ]
     },
     {
-      "dest": "bios/coh1002v.zip",
+      "dest": "coh1002v.zip",
       "sha1": "5162fcac2fa5a92480a081b3397099ce4a3703c5",
       "size": 126314,
       "repo_path": "bios/Arcade/Arcade/coh1002v.zip",
@@ -1039,7 +1768,7 @@
       ]
     },
     {
-      "dest": "bios/coh1002e.zip",
+      "dest": "coh1002e.zip",
       "sha1": "1f15b3acc75031633387b372ea71e537f4f96220",
       "size": 128626,
       "repo_path": "bios/Arcade/Arcade/coh1002e.zip",
@@ -1048,7 +1777,7 @@
       ]
     },
     {
-      "dest": "bios/coh1002m.zip",
+      "dest": "coh1002m.zip",
       "sha1": "197337577f55ab4c237c3d545d63082e73748c47",
       "size": 138588,
       "repo_path": "bios/Arcade/Arcade/coh1002m.zip",
@@ -1057,7 +1786,7 @@
       ]
     },
     {
-      "dest": "bios/coh3002t.zip",
+      "dest": "coh3002t.zip",
       "sha1": "2c4f6d8d134a2e096e676821fad0a66ac32e6e5c",
       "size": 504337,
       "repo_path": "bios/Arcade/Arcade/coh3002t.zip",
@@ -1066,7 +1795,7 @@
       ]
     },
     {
-      "dest": "bios/coh1002t.zip",
+      "dest": "coh1002t.zip",
       "sha1": "bf92b9645651332fb680c954a6da050a8a773465",
       "size": 216727,
       "repo_path": "bios/Arcade/MAME/coh1002t.zip",
@@ -1075,7 +1804,7 @@
       ]
     },
     {
-      "dest": "bios/taitotz.zip",
+      "dest": "taitotz.zip",
       "sha1": "d7ccc6ea8b21f5178389543f5e14c06e4e6f3b57",
       "size": 77002,
       "repo_path": "bios/Arcade/Arcade/taitotz.zip",
@@ -1084,7 +1813,7 @@
       ]
     },
     {
-      "dest": "bios/skns.zip",
+      "dest": "skns.zip",
       "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
       "size": 924762,
       "repo_path": "bios/Arcade/Arcade/skns.zip",
@@ -1093,7 +1822,7 @@
       ]
     },
     {
-      "dest": "bios/mac2bios.zip",
+      "dest": "mac2bios.zip",
       "sha1": "829b2e10aff75a0857feb2b601f893db29877994",
       "size": 1292,
       "repo_path": "bios/Arcade/Arcade/mac2bios.zip",
@@ -1102,7 +1831,7 @@
       ]
     },
     {
-      "dest": "bios/macsbios.zip",
+      "dest": "macsbios.zip",
       "sha1": "4e0202f8430cb4842184df7b5418e32620156c7b",
       "size": 305290,
       "repo_path": "bios/Arcade/Arcade/macsbios.zip",
@@ -1111,7 +1840,7 @@
       ]
     },
     {
-      "dest": "bios/3dobios.zip",
+      "dest": "3dobios.zip",
       "sha1": "de463b0577dfd1027bf7de523ff67a0fff861cdb",
       "size": 2351546,
       "repo_path": "bios/Arcade/Arcade/3dobios.zip",
@@ -1120,7 +1849,7 @@
       ]
     },
     {
-      "dest": "bios/alg3do.zip",
+      "dest": "alg3do.zip",
       "sha1": "068b03741ec1095b326338e348377a2af6b41f02",
       "size": 84346,
       "repo_path": "bios/Arcade/Arcade/alg3do.zip",
@@ -1129,7 +1858,7 @@
       ]
     },
     {
-      "dest": "bios/hng64.zip",
+      "dest": "hng64.zip",
       "sha1": "98b92ece93d3e160c446a56ac859a8311333e36c",
       "size": 41210,
       "repo_path": "bios/Arcade/Arcade/hng64.zip",
@@ -1138,7 +1867,7 @@
       ]
     },
     {
-      "dest": "bios/ar_bios.zip",
+      "dest": "ar_bios.zip",
       "sha1": "df93e5943023cc8f7ddf0ffb956fd969e04a171a",
       "size": 681333,
       "repo_path": "bios/Arcade/Arcade/ar_bios.zip",
@@ -1147,7 +1876,7 @@
       ]
     },
     {
-      "dest": "bios/alg_bios.zip",
+      "dest": "alg_bios.zip",
       "sha1": "901e1927ebe87946e3e4bb6d0a825088a8a60490",
       "size": 143125,
       "repo_path": "bios/Arcade/Arcade/alg_bios.zip",
@@ -1156,7 +1885,7 @@
       ]
     },
     {
-      "dest": "bios/atarisy1.zip",
+      "dest": "atarisy1.zip",
       "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
       "size": 49385,
       "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
@@ -1165,7 +1894,7 @@
       ]
     },
     {
-      "dest": "bios/maxaflex.zip",
+      "dest": "maxaflex.zip",
       "sha1": "697551fcf9557ae33e31096b118a0c6769700a2e",
       "size": 13673,
       "repo_path": "bios/Arcade/Arcade/maxaflex.zip",
@@ -1174,7 +1903,7 @@
       ]
     },
     {
-      "dest": "bios/crysbios.zip",
+      "dest": "crysbios.zip",
       "sha1": "7f2d1c4e00ce1824ff91459d8ff6b59b2fb4b746",
       "size": 43480,
       "repo_path": "bios/Arcade/Arcade/crysbios.zip",
@@ -1183,7 +1912,7 @@
       ]
     },
     {
-      "dest": "bios/galgbios.zip",
+      "dest": "galgbios.zip",
       "sha1": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
       "size": 1345333,
       "repo_path": "bios/Arcade/Arcade/galgbios.zip",
@@ -1192,7 +1921,7 @@
       ]
     },
     {
-      "dest": "bios/aristmk5.zip",
+      "dest": "aristmk5.zip",
       "sha1": "81011bee956427e015cbb91e5d93364b6dc300dc",
       "size": 261435,
       "repo_path": "bios/Arcade/Arcade/aristmk5.zip",
@@ -1201,7 +1930,7 @@
       ]
     },
     {
-      "dest": "bios/aristmk6.zip",
+      "dest": "aristmk6.zip",
       "sha1": "e5a16ec95d54dd3ced17edccfdda049ac2f8f86f",
       "size": 22239668,
       "repo_path": "bios/Arcade/Arcade/aristmk6.zip",
@@ -1210,7 +1939,7 @@
       ]
     },
     {
-      "dest": "bios/aristmk7.zip",
+      "dest": "aristmk7.zip",
       "sha1": "0df3ef98871b655d1131d85c83826041da4d0d85",
       "size": 524288,
       "repo_path": "bios/Arcade/MAME/aristmk7.zip",
@@ -1219,7 +1948,7 @@
       ]
     },
     {
-      "dest": "bios/allied.zip",
+      "dest": "allied.zip",
       "sha1": "f44836072ec6ad9e5a7b46105985548181faab5b",
       "size": 2926,
       "repo_path": "bios/Arcade/Arcade/allied.zip",
@@ -1228,7 +1957,7 @@
       ]
     },
     {
-      "dest": "bios/gp_110.zip",
+      "dest": "gp_110.zip",
       "sha1": "6fdec00172233095cebb085b26214648d1093ecb",
       "size": 3140,
       "repo_path": "bios/Arcade/Arcade/gp_110.zip",
@@ -1237,7 +1966,7 @@
       ]
     },
     {
-      "dest": "bios/gts1.zip",
+      "dest": "gts1.zip",
       "sha1": "346cbf24af08f5bfd96e6a77abf27595477aace8",
       "size": 3734,
       "repo_path": "bios/Arcade/Arcade/gts1.zip",
@@ -1246,7 +1975,7 @@
       ]
     },
     {
-      "dest": "bios/recel.zip",
+      "dest": "recel.zip",
       "sha1": "9d15e223a123b753a853c6722fecdda40fda78d7",
       "size": 2156,
       "repo_path": "bios/Arcade/MAME/recel.zip",
@@ -1255,7 +1984,7 @@
       ]
     },
     {
-      "dest": "bios/slvrball.zip",
+      "dest": "slvrball.zip",
       "sha1": "f60759819fd1a87fb77ce974d96853f2ab91db17",
       "size": 30039638,
       "repo_path": "bios/Arcade/MAME/slvrball.zip",
@@ -1264,7 +1993,7 @@
       ]
     },
     {
-      "dest": "bios/nichidvd.zip",
+      "dest": "nichidvd.zip",
       "sha1": "b3ac40491e08639f3cb7a926ec0de36f67b1c6ac",
       "size": 49667,
       "repo_path": "bios/Arcade/Arcade/nichidvd.zip",
@@ -1273,7 +2002,7 @@
       ]
     },
     {
-      "dest": "bios/cedmag.zip",
+      "dest": "cedmag.zip",
       "sha1": "ef96ef15207789cdc75ed1836934934ad8c02883",
       "size": 1242,
       "repo_path": "bios/Arcade/Arcade/cedmag.zip",
@@ -1282,7 +2011,7 @@
       ]
     },
     {
-      "dest": "bios/iteagle.zip",
+      "dest": "iteagle.zip",
       "sha1": "7b5be2c65e378f736ee4689303349d80dc425f5f",
       "size": 3602204,
       "repo_path": "bios/Arcade/Arcade/iteagle.zip",
@@ -1291,7 +2020,7 @@
       ]
     },
     {
-      "dest": "bios/su2000.zip",
+      "dest": "su2000.zip",
       "sha1": "2e50b96a1d37e9407209e291d5f549233287ac77",
       "size": 90729,
       "repo_path": "bios/Arcade/Arcade/su2000.zip",
@@ -1300,7 +2029,7 @@
       ]
     },
     {
-      "dest": "bios/tourvis.zip",
+      "dest": "tourvis.zip",
       "sha1": "a1352d895578181532d13e81ac7a8fecad564d1a",
       "size": 29492,
       "repo_path": "bios/Arcade/Arcade/tourvis.zip",
@@ -1309,7 +2038,7 @@
       ]
     },
     {
-      "dest": "bios/v4bios.zip",
+      "dest": "v4bios.zip",
       "sha1": "9964f68aadd3eef4daa4c0d946422821b4352208",
       "size": 3775,
       "repo_path": "bios/Arcade/MAME/v4bios.zip",
@@ -1318,7 +2047,7 @@
       ]
     },
     {
-      "dest": "bios/miuchiz.zip",
+      "dest": "miuchiz.zip",
       "sha1": "5789d0c699800fa8fd3626543b283fb80e65387f",
       "size": 7286,
       "repo_path": "bios/Arcade/MAME/miuchiz.zip",
@@ -1327,7 +2056,7 @@
       ]
     },
     {
-      "dest": "bios/pumpitup.zip",
+      "dest": "pumpitup.zip",
       "sha1": "6c9139fe4e094088029e545ab62520052971906a",
       "size": 1838700,
       "repo_path": "bios/Arcade/Arcade/pumpitup.zip",
@@ -1336,7 +2065,7 @@
       ]
     },
     {
-      "dest": "bios/dsi_bios9.bin",
+      "dest": "dsi_bios9.bin",
       "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
       "size": 65536,
       "repo_path": "bios/Nintendo/DS/dsi_bios9.bin",
@@ -1345,7 +2074,7 @@
       ]
     },
     {
-      "dest": "bios/dsi_bios7.bin",
+      "dest": "dsi_bios7.bin",
       "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
       "size": 65536,
       "repo_path": "bios/Nintendo/DS/dsi_bios7.bin",
@@ -1354,7 +2083,7 @@
       ]
     },
     {
-      "dest": "bios/dsi_firmware.bin",
+      "dest": "dsi_firmware.bin",
       "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
       "size": 131072,
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
@@ -1363,7 +2092,7 @@
       ]
     },
     {
-      "dest": "bios/dsi_nand.bin",
+      "dest": "dsi_nand.bin",
       "sha1": "b48f44194fe918aaaec5298861479512b581d661",
       "size": 251658304,
       "repo_path": ".cache/large/dsi_nand.bin",
@@ -1374,7 +2103,7 @@
       "release_asset": "dsi_nand.bin"
     },
     {
-      "dest": "bios/dsi_sd_card.bin",
+      "dest": "dsi_sd_card.bin",
       "sha1": "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3",
       "size": 1048576,
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
@@ -1383,7 +2112,7 @@
       ]
     },
     {
-      "dest": "bios/gb_bios.bin",
+      "dest": "gb_bios.bin",
       "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
@@ -1392,7 +2121,7 @@
       ]
     },
     {
-      "dest": "bios/gbc_bios.bin",
+      "dest": "gbc_bios.bin",
       "sha1": "1293d68bf9643bc4f36954c1e80e38f39864528d",
       "size": 2304,
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_cgb.bin",
@@ -1401,7 +2130,7 @@
       ]
     },
     {
-      "dest": "bios/sgb_bios.bin",
+      "dest": "sgb_bios.bin",
       "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
@@ -1410,7 +2139,7 @@
       ]
     },
     {
-      "dest": "bios/Mupen64plus/IPL.n64",
+      "dest": "Mupen64plus/IPL.n64",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
@@ -1419,7 +2148,7 @@
       ]
     },
     {
-      "dest": "bios/Mupen64plus/font.ttf",
+      "dest": "Mupen64plus/font.ttf",
       "sha1": "1d7f6fa0c34e3d50be52c16a0816bebac309fe41",
       "size": 65932,
       "repo_path": "bios/Nintendo/Nintendo 64DD/Mupen64plus/font.ttf",
@@ -1428,7 +2157,7 @@
       ]
     },
     {
-      "dest": "bios/PPSSPP/ppge_atlas.zim",
+      "dest": "PPSSPP/ppge_atlas.zim",
       "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "size": 666530,
       "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
@@ -1437,7 +2166,7 @@
       ]
     },
     {
-      "dest": "bios/PPSSPP/ppge_atlas.meta",
+      "dest": "PPSSPP/ppge_atlas.meta",
       "sha1": "ab398f667d6fd778859307c105fe16388b8fdf63",
       "size": 50242,
       "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.meta",
@@ -1446,43 +2175,43 @@
       ]
     },
     {
-      "dest": "bios/scummvm/extra/MT32_CONTROL.ROM",
+      "dest": "scummvm/extra/MT32_CONTROL.ROM",
       "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
       "size": 65536,
-      "repo_path": "bios/Roland/MT32_CONTROL.ROM",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
-      "dest": "bios/scummvm/extra/MT32_PCM.ROM",
+      "dest": "scummvm/extra/MT32_PCM.ROM",
       "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
       "size": 524288,
-      "repo_path": "bios/Roland/MT32_PCM.ROM",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
-      "dest": "bios/scummvm/extra/CM32L_CONTROL.ROM",
+      "dest": "scummvm/extra/CM32L_CONTROL.ROM",
       "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
-      "repo_path": "bios/Roland/CM32L_CONTROL.ROM",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
-      "dest": "bios/scummvm/extra/CM32L_PCM.ROM",
+      "dest": "scummvm/extra/CM32L_PCM.ROM",
       "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
       "size": 1048576,
-      "repo_path": "bios/Roland/CM32L_PCM.ROM",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
-      "dest": "bios/shadps4/sys_modules",
+      "dest": "shadps4/sys_modules",
       "sha1": "18ec2a5fc30dc55a401385736ebd7d38f2215b2f",
       "size": 1543640,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceLibcInternal.sprx",
@@ -1491,7 +2220,7 @@
       ]
     },
     {
-      "dest": "bios/Complex_4627.bin",
+      "dest": "Complex_4627.bin",
       "sha1": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "size": 1048576,
       "repo_path": "bios/Microsoft/Xbox/Complex_4627.bin",
@@ -1500,7 +2229,7 @@
       ]
     },
     {
-      "dest": "bios/xbox_hdd.qcow2",
+      "dest": "xbox_hdd.qcow2",
       "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "size": 1638400,
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",

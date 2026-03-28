@@ -1799,7 +1799,7 @@ def generate_manifest(
             repo_path = _get_repo_path(sha1, db) if sha1 else ""
 
             entry: dict = {
-                "dest": full_dest,
+                "dest": dest,
                 "sha1": sha1,
                 "size": file_size,
                 "repo_path": repo_path,
@@ -1855,7 +1855,7 @@ def generate_manifest(
         source_emu = fe.get("source_emulator", "")
 
         entry = {
-            "dest": full_dest,
+            "dest": dest,
             "sha1": sha1,
             "size": file_size,
             "repo_path": repo_path,

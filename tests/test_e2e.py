@@ -2520,7 +2520,11 @@ class TestE2E(unittest.TestCase):
             "test_existence", self.platforms_dir, self.db, self.bios_dir,
             registry_path, emulators_dir=self.emulators_dir,
         )
-        manifest_dests = {f["dest"] for f in manifest["files"]}
+        base = manifest.get("base_destination", "")
+        manifest_dests = set()
+        for f in manifest["files"]:
+            d = f"{base}/{f['dest']}" if base else f["dest"]
+            manifest_dests.add(d)
 
         self.assertEqual(manifest_dests, zip_names)
 

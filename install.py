@@ -507,6 +507,22 @@ def main() -> None:
 
     os_type = detect_os()
 
+    # Early exit for listing
+    if args.list_platforms:
+        available = [
+            "retroarch", "batocera", "recalbox", "retrobat",
+            "emudeck", "lakka", "retrodeck", "romm", "bizhawk",
+        ]
+        print("Available platforms:")
+        for p in available:
+            print(f"  {p}")
+        detected = detect_platforms(os_type)
+        if detected:
+            print("\nDetected on this system:")
+            for name, path in detected:
+                print(f"  {name}: {path}")
+        return
+
     # Platform detection or override
     if args.platform and args.dest:
         platforms = [(args.platform, args.dest)]
@@ -531,13 +547,6 @@ def main() -> None:
             sys.exit(1)
         for name, path in platforms:
             print(f"  Found {name.capitalize()} at {path}")
-
-    if args.list_platforms:
-        if not platforms:
-            platforms = detect_platforms(os_type)
-        for name, path in platforms:
-            print(f"  {name}: {path}")
-        return
 
     if len(platforms) > 1 and not args.list_targets and sys.stdin.isatty():
         platforms = _prompt_platform_choice(platforms)
