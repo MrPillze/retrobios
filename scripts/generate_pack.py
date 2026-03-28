@@ -1055,21 +1055,36 @@ def generate_split_packs(
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
     base_dest = config.get("base_destination", "")
-    all_extras = _collect_emulator_extras(
-        config, emulators_dir, db, set(), base_dest, emu_profiles,
-        target_cores=target_cores,
-    )
-    # Map each extra to matching systems via source_emulator
+    if emu_profiles:
+        all_extras = _collect_emulator_extras(
+            config, emulators_dir, db, set(), base_dest, emu_profiles,
+            target_cores=target_cores,
+        )
+    else:
+        all_extras = []
+    # Map each extra to matching systems via source_emulator.
+    # Index by both profile key AND display name (source_emulator uses display).
+    from common import _norm_system_id
     emu_system_map: dict[str, set[str]] = {}
     for name, p in emu_profiles.items():
-        emu_system_map[name] = set(p.get("systems", []))
+        raw = set(p.get("systems", []))
+        norm = {_norm_system_id(s) for s in raw}
+        combined = raw | norm
+        emu_system_map[name] = combined
+        display = p.get("emulator", "")
+        if display and display != name:
+            emu_system_map[display] = combined
+
+    plat_norm = {_norm_system_id(s): s for s in systems}
 
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_sys_set = set(group_system_ids)
+        group_norm = {_norm_system_id(s) for s in group_system_ids}
+        group_match = group_sys_set | group_norm
         group_extras = [
             fe for fe in all_extras
-            if emu_system_map.get(fe.get("source_emulator", ""), set()) & group_sys_set
+            if emu_system_map.get(fe.get("source_emulator", ""), set()) & group_match
         ]
         zip_path = generate_pack(
             platform_name, platforms_dir, db, bios_dir, split_dir,
@@ -1089,6 +1104,21 @@ def generate_split_packs(
                 os.rename(zip_path, new_path)
                 zip_path = new_path
             results.append(zip_path)
+
+    # Warn about extras that couldn't be distributed (emulators without systems: field)
+    all_groups_match = set()
+    for group_system_ids in groups.values():
+        group_norm = {_norm_system_id(s) for s in group_system_ids}
+        all_groups_match |= set(group_system_ids) | group_norm
+    undistributed = [
+        fe for fe in all_extras
+        if not emu_system_map.get(fe.get("source_emulator", ""), set()) & all_groups_match
+    ]
+    if undistributed:
+        emus = sorted({fe.get("source_emulator", "?") for fe in undistributed})
+        print(f"  NOTE: {len(undistributed)} core extras from {len(emus)} emulators "
+              f"not in split packs (missing systems: field in profiles: "
+              f"{', '.join(emus[:5])}{'...' if len(emus) > 5 else ''})")
 
     return results
 
