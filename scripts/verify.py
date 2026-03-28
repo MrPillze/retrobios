@@ -246,8 +246,9 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
         expected["adler32"] = adler_val
     return expected
 
-def _name_in_index(name: str, by_name: dict, by_path_suffix: dict | None = None) -> bool:
-    """Check if a name is resolvable in the database indexes."""
+def _name_in_index(name: str, by_name: dict, by_path_suffix: dict | None = None,
+                    data_names: set[str] | None = None) -> bool:
+    """Check if a name is resolvable in the database indexes or data directories."""
     if name in by_name:
         return True
     basename = name.rsplit("/", 1)[-1]
@@ -255,6 +256,11 @@ def _name_in_index(name: str, by_name: dict, by_path_suffix: dict | None = None)
         return True
     if by_path_suffix and name in by_path_suffix:
         return True
+    if data_names:
+        if name in data_names or name.lower() in data_names:
+            return True
+        if basename != name and (basename in data_names or basename.lower() in data_names):
+            return True
     return False
 
 
@@ -264,6 +270,7 @@ def find_undeclared_files(
     db: dict,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
+    data_names: set[str] | None = None,
 ) -> list[dict]:
     """Find files needed by cores but not declared in platform config."""
     # Collect all filenames declared by this platform
@@ -333,7 +340,7 @@ def find_undeclared_files(
             # Archived files are grouped by archive
             if archive:
                 if archive not in archive_entries:
-                    in_repo = _name_in_index(archive, by_name, by_path_suffix)
+                    in_repo = _name_in_index(archive, by_name, by_path_suffix, data_names)
                     archive_entries[archive] = {
                         "emulator": profile.get("emulator", emu_name),
                         "name": archive,
@@ -364,10 +371,10 @@ def find_undeclared_files(
                 dest = f.get("path") or fname
 
             # Resolution: try name, then path basename, then path_suffix
-            in_repo = _name_in_index(fname, by_name, by_path_suffix)
+            in_repo = _name_in_index(fname, by_name, by_path_suffix, data_names)
             if not in_repo and dest != fname:
                 path_base = dest.rsplit("/", 1)[-1]
-                in_repo = _name_in_index(path_base, by_name, by_path_suffix)
+                in_repo = _name_in_index(path_base, by_name, by_path_suffix, data_names)
 
             checks = _parse_validation(f.get("validation"))
             undeclared.append({
@@ -587,7 +594,10 @@ def verify_platform(
         status_counts[s] = status_counts.get(s, 0) + 1
 
     # Cross-reference undeclared files
-    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
+    from cross_reference import _build_data_dir_index
+    data_names = _build_data_dir_index()
+    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles,
+                                       target_cores=target_cores, data_names=data_names)
     exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles, target_cores=target_cores)
 
     # Ground truth coverage

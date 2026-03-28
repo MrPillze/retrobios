@@ -50,7 +50,21 @@ def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[s
     return declared, platform_data_dirs
 
 
-def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str, str]) -> bool:
+def _build_data_dir_index(data_root: str = "data") -> set[str]:
+    """Build a set of filenames available in data/ directories."""
+    names: set[str] = set()
+    root_path = Path(data_root)
+    if not root_path.is_dir():
+        return names
+    for fpath in root_path.rglob("*"):
+        if fpath.is_file() and not fpath.name.startswith("."):
+            names.add(fpath.name)
+            names.add(fpath.name.lower())
+    return names
+
+
+def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str, str],
+                  data_names: set[str] | None = None) -> bool:
     if fname in by_name:
         return True
     basename = fname.rsplit("/", 1)[-1] if "/" in fname else None
@@ -63,6 +77,11 @@ def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str,
         key = basename.lower()
         if key in by_name_lower:
             return True
+    if data_names:
+        if fname in data_names or key in data_names:
+            return True
+        if basename and (basename in data_names or basename.lower() in data_names):
+            return True
     return False
 
 
@@ -71,12 +90,14 @@ def cross_reference(
     declared: dict[str, set[str]],
     db: dict,
     platform_data_dirs: dict[str, set[str]] | None = None,
+    data_names: set[str] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
     Returns a report with gaps (files emulators need but platforms don't list)
     and coverage stats. Files covered by matching data_directories between
     emulator profile and platform config are not reported as gaps.
+    Checks both bios/ (via database) and data/ (via data_names index).
     """
     platform_data_dirs = platform_data_dirs or {}
     by_name = db.get("indexes", {}).get("by_name", {})
@@ -106,7 +127,7 @@ def cross_reference(
                 continue
 
             in_platform = fname in platform_names
-            in_repo = _find_in_repo(fname, by_name, by_name_lower)
+            in_repo = _find_in_repo(fname, by_name, by_name_lower, data_names)
 
             entry = {
                 "name": fname,
@@ -205,7 +226,8 @@ def main():
 
     declared, plat_data_dirs = load_platform_files(args.platforms_dir)
     db = load_database(args.db)
-    report = cross_reference(profiles, declared, db, plat_data_dirs)
+    data_names = _build_data_dir_index()
+    report = cross_reference(profiles, declared, db, plat_data_dirs, data_names)
 
     if args.json:
         print(json.dumps(report, indent=2))
