@@ -313,6 +313,14 @@ def resolve_local_file(
     aliases = file_entry.get("aliases", [])
     names_to_try = [name] + [a for a in aliases if a != name]
 
+    # When dest_hint contains a path, also try its basename as a name
+    # (handles emulator profiles where name: is descriptive and path: is
+    # the actual filename, e.g. name: "MDA font ROM", path: "mda.rom")
+    if dest_hint:
+        hint_base = dest_hint.rsplit("/", 1)[-1] if "/" in dest_hint else dest_hint
+        if hint_base and hint_base not in names_to_try:
+            names_to_try.append(hint_base)
+
     md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
