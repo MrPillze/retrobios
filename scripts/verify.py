@@ -7,6 +7,7 @@ Replicates the exact verification logic of each platform:
 - Recalbox: MD5 + mandatory/hashMatchMandatory, 3-color severity (Bios.cpp:109-130)
 - RetroBat: same as Batocera
 - EmuDeck: MD5 whitelist per system
+- BizHawk: SHA1 firmware hash verification
 
 Cross-references emulator profiles to detect undeclared files used by available cores.
 
@@ -159,6 +160,31 @@ def verify_entry_md5(
             "reason": f"expected {md5_list[0][:12]}… got {actual_md5[:12]}…"}
 
 
+def verify_entry_sha1(
+    file_entry: dict,
+    local_path: str | None,
+) -> dict:
+    """SHA1 verification — BizHawk firmware hash check."""
+    name = file_entry.get("name", "")
+    expected_sha1 = file_entry.get("sha1", "")
+    required = file_entry.get("required", True)
+    base = {"name": name, "required": required}
+
+    if not local_path:
+        return {**base, "status": Status.MISSING}
+
+    if not expected_sha1:
+        return {**base, "status": Status.OK, "path": local_path}
+
+    hashes = compute_hashes(local_path)
+    actual_sha1 = hashes["sha1"].lower()
+    if actual_sha1 == expected_sha1.lower():
+        return {**base, "status": Status.OK, "path": local_path}
+
+    return {**base, "status": Status.UNTESTED, "path": local_path,
+            "reason": f"expected {expected_sha1[:12]}… got {actual_sha1[:12]}…"}
+
+
 # ---------------------------------------------------------------------------
 # Severity mapping per platform
 # ---------------------------------------------------------------------------
@@ -170,8 +196,8 @@ def compute_severity(
 
     Based on native platform behavior + emulator HLE capability:
     - RetroArch (existence): required+missing = warning, optional+missing = info
-    - Batocera (md5): no required distinction (batocera-systems has no mandatory field)
-    - Recalbox (md5): mandatory+missing = critical, optional+missing = warning
+    - Batocera/Recalbox/RetroBat/EmuDeck (md5): hash-based verification
+    - BizHawk (sha1): same severity rules as md5
     - hle_fallback: core works without this file via HLE → always INFO when missing
     """
     if status == Status.OK:
@@ -448,6 +474,8 @@ def verify_platform(
                 result = verify_entry_existence(
                     file_entry, local_path, validation_index,
                 )
+            elif mode == "sha1":
+                result = verify_entry_sha1(file_entry, local_path)
             else:
                 result = verify_entry_md5(file_entry, local_path, resolve_status)
                 # Emulator-level validation: informational for platform packs.

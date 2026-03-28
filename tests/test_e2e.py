@@ -112,6 +112,7 @@ class TestE2E(unittest.TestCase):
         self._create_md5_platform()
         self._create_shared_groups()
         self._create_inherited_platform()
+        self._create_sha1_platform()
 
         # -- Create emulator YAMLs --
         self._create_emulator_profiles()
@@ -283,6 +284,31 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.platforms_dir, "test_inherited.yml"), "w") as fh:
             yaml.dump(child, fh)
+
+    def _create_sha1_platform(self):
+        f = self.files
+        config = {
+            "platform": "TestSHA1",
+            "verification_mode": "sha1",
+            "base_destination": "system",
+            "systems": {
+                "sys-sha1": {
+                    "files": [
+                        {"name": "correct_hash.bin", "destination": "correct_hash.bin",
+                         "sha1": f["correct_hash.bin"]["sha1"], "required": True},
+                        {"name": "wrong_hash.bin", "destination": "wrong_hash.bin",
+                         "sha1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "required": True},
+                        {"name": "missing_sha1.bin", "destination": "missing_sha1.bin",
+                         "sha1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "required": True},
+                        {"name": "optional_missing_sha1.bin", "destination": "optional_missing_sha1.bin",
+                         "sha1": "cccccccccccccccccccccccccccccccccccccccc", "required": False},
+                        {"name": "no_md5.bin", "destination": "no_md5.bin", "required": True},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_sha1.yml"), "w") as fh:
+            yaml.dump(config, fh)
 
     def _create_emulator_profiles(self):
         # Regular emulator with aliases, standalone file, undeclared file
@@ -519,6 +545,38 @@ class TestE2E(unittest.TestCase):
         result = verify_platform(config, self.db, self.emulators_dir)
         c = result["severity_counts"]
         self.assertGreater(c[Severity.WARNING], 0)
+
+    def test_25_verify_sha1_platform(self):
+        config = load_platform_config("test_sha1", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        self.assertEqual(result["total_files"], 5)
+        self.assertEqual(result["verification_mode"], "sha1")
+        ok_count = result["severity_counts"][Severity.OK]
+        self.assertEqual(ok_count, 2)
+
+    def test_26_sha1_mismatch_is_warning(self):
+        config = load_platform_config("test_sha1", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        by_name = {d["name"]: d for d in result["details"]}
+        self.assertEqual(by_name["wrong_hash.bin"]["status"], Status.UNTESTED)
+
+    def test_27_sha1_missing_required_is_critical(self):
+        config = load_platform_config("test_sha1", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        c = result["severity_counts"]
+        self.assertGreater(c[Severity.CRITICAL], 0)
+
+    def test_28_sha1_missing_optional_is_warning(self):
+        config = load_platform_config("test_sha1", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        c = result["severity_counts"]
+        self.assertGreater(c[Severity.WARNING], 0)
+
+    def test_29_sha1_no_hash_is_existence_check(self):
+        config = load_platform_config("test_sha1", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        by_name = {d["name"]: d for d in result["details"]}
+        self.assertEqual(by_name["no_md5.bin"]["status"], Status.OK)
 
     def test_30_inheritance_inherits_systems(self):
         config = load_platform_config("test_inherited", self.platforms_dir)
