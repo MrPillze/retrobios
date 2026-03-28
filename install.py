@@ -26,7 +26,10 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-BASE_URL = "https://raw.githubusercontent.com/Abdess/retrobios/main"
+BASE_URL = os.environ.get(
+    "RETROBIOS_BASE_URL",
+    "https://raw.githubusercontent.com/Abdess/retrobios/main",
+)
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
 RAW_FILE_URL = f"{BASE_URL}/{{path}}"
@@ -176,7 +179,7 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
 
         # EmuDeck (Linux/SteamOS)
         home = Path.home()
-        emudeck_settings = home / "emudeck" / "settings.sh"
+        emudeck_settings = home / ".config" / "EmuDeck" / "settings.sh"
         if emudeck_settings.exists():
             emu_path = _parse_bash_var(emudeck_settings, "emulationPath")
             if emu_path:
@@ -220,7 +223,7 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     if os_type in ("windows", "wsl"):
         # EmuDeck Windows
         home = Path.home()
-        emudeck_ps1 = home / "emudeck" / "settings.ps1"
+        emudeck_ps1 = Path(os.environ.get("APPDATA", "")) / "EmuDeck" / "settings.ps1"
         if emudeck_ps1.exists():
             emu_path = _parse_ps1_var(emudeck_ps1, "$emulationPath")
             if emu_path:
