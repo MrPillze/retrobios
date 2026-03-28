@@ -116,21 +116,25 @@ files:
 
   # Super Game Boy
   - name: "SGB1.sfc/sgb1.boot.rom"
+    path: "SGB1.sfc/sgb1.boot.rom"
     system: nintendo-sgb
     required: false
     source_ref: "nSide/gb/system/system.cpp:54-65"
 
   - name: "SGB1.sfc/program.rom"
+    path: "SGB1.sfc/program.rom"
     system: nintendo-sgb
     required: false
     source_ref: "nSide/target-libretro/libretro-sfc.cpp:179-215"
 
   - name: "SGB2.sfc/sgb2.boot.rom"
+    path: "SGB2.sfc/sgb2.boot.rom"
     system: nintendo-sgb
     required: false
     source_ref: "nSide/gb/system/system.cpp:54-65"
 
   - name: "SGB2.sfc/program.rom"
+    path: "SGB2.sfc/program.rom"
     system: nintendo-sgb
     required: false
     source_ref: "nSide/target-libretro/libretro-sfc.cpp:179-215"

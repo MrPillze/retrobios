@@ -36,3 +36,23 @@ bios/Nintendo/DS/DSi_Nand_USA.bin
 bios/Nintendo/DS/DSi_Nand_AUS.bin
 bios/Nintendo/DS/DSi_Nand_CHN.bin
 bios/Nintendo/DS/DSi_Nand_KOR.bin
+
+# QEMU EDK2 firmware (64MB each)
+bios/QEMU/edk2-aarch64-code.fd
+bios/QEMU/edk2-arm-code.fd
+bios/QEMU/edk2-arm-vars.fd
+
+# ScummVM data bundle (79MB, fetched from large-files release)
+bios/ScummVM/scummvm.zip
+
+# Arcade BIOS ZIPs > 100MB
+bios/Arcade/Arcade/svcpcb.zip
+bios/Arcade/Arcade/ps2.zip
+bios/Arcade/Arcade/kf2k3pcb.zip
+bios/Arcade/Arcade/ms5pcb.zip
+
+# EasyRPG soundfont (142MB)
+bios/RPG Maker/easyrpg/easyrpg.soundfont
+
+# Temporary files
+tmp/

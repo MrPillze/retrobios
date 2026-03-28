@@ -107,12 +107,14 @@ nav:
   - Nokia: systems/nokia.md
   - Oric: systems/oric.md
   - Other: systems/other.md
+  - PC: systems/pc.md
   - Palm: systems/palm.md
   - Philips: systems/philips.md
   - Pioneer: systems/pioneer.md
   - QEMU: systems/qemu.md
   - RPG Maker: systems/rpg-maker.md
   - Ringo: systems/ringo.md
+  - Roland: systems/roland.md
   - SNK: systems/snk.md
   - ScummVM: systems/scummvm.md
   - Sega: systems/sega.md
@@ -127,7 +129,6 @@ nav:
   - Timex: systems/timex.md
   - Tomy: systems/tomy.md
   - VTech: systems/vtech.md
-  - Videoton: systems/videoton.md
   - Vircon: systems/vircon.md
   - ZC: systems/zc.md
   - xrick: systems/xrick.md

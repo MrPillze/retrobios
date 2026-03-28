@@ -141,6 +141,33 @@ data_directories:
     local_cache: data/mame2003-plus
     description: "MAME 2003-Plus samples + cheat + history"
 
+  # ref: sdlpal/main.c — system/sdlpal/ (Chinese Paladin / 仙剑奇侠传)
+  # Not on buildbot — sourced from large-files release asset
+  sdlpal:
+    source_url: "https://github.com/Abdess/retrobios/releases/download/large-files/sdlpal-data.zip"
+    source_type: zip
+    local_cache: data/sdlpal
+    description: "SDLPAL Chinese Paladin game data (.mkf archives)"
+
+  # ref: OpenTyrian2000 — system/opentyrian/tyrian/
+  # Tyrian 2.1 freeware data (also on buildbot as OpenTyrian.zip)
+  opentyrian:
+    source_url: "https://buildbot.libretro.com/assets/system/OpenTyrian%20%28Game%20Data%29.zip"
+    source_type: zip
+    for_platforms: [retroarch, lakka, retropie]
+    local_cache: data/opentyrian
+    description: "OpenTyrian Tyrian 2.1 freeware game data"
+
+  # ref: syobonaction — system/syobonaction/
+  # Freeware game data from OpenSyobonAction
+  syobonaction:
+    source_url: "https://github.com/akemin-dayo/OpenSyobonAction"
+    source_type: git_subtree
+    source_path: "res"
+    version: master
+    local_cache: data/syobonaction
+    description: "Syobon Action (Cat Mario) game data (sprites, BGM, SE)"
+
   # =========================================================================
   # Upstream repo sources (not on buildbot, available to all platforms)
   # =========================================================================
