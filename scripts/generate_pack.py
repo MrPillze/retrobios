@@ -1338,6 +1338,8 @@ def main():
                         help="Hash(es) to look up or pack (comma-separated)")
     parser.add_argument("--from-md5-file",
                         help="File with hashes (one per line)")
+    parser.add_argument("--manifest", action="store_true",
+                        help="Output JSON manifests instead of ZIP packs")
     args = parser.parse_args()
 
     if args.list:
@@ -1403,6 +1405,12 @@ def main():
         parser.error("--target requires --platform or --all")
     if args.target and has_emulator:
         parser.error("--target is incompatible with --emulator")
+    if args.manifest and not (has_platform or has_all):
+        parser.error("--manifest requires --platform or --all")
+    if args.manifest and has_emulator:
+        parser.error("--manifest is incompatible with --emulator")
+    if args.manifest and args.split:
+        parser.error("--manifest is incompatible with --split")
 
     # Hash lookup / pack mode
     if has_from_md5:
@@ -1506,6 +1514,29 @@ def main():
     groups = group_identical_platforms(platforms, args.platforms_dir,
                                       target_cores_cache if args.target else None)
 
+    # Manifest mode: JSON output instead of ZIP
+    if args.manifest:
+        registry_path = os.path.join(args.platforms_dir, "_registry.yml")
+        os.makedirs(args.output_dir, exist_ok=True)
+        for group_platforms, representative in groups:
+            print(f"\nGenerating manifest for {representative}...")
+            try:
+                tc = target_cores_cache.get(representative) if args.target else None
+                manifest = generate_manifest(
+                    representative, args.platforms_dir, db, args.bios_dir,
+                    registry_path, emulators_dir=args.emulators_dir,
+                    zip_contents=zip_contents, emu_profiles=emu_profiles,
+                    target_cores=tc,
+                )
+                out_path = os.path.join(args.output_dir, f"{representative}.json")
+                with open(out_path, "w") as f:
+                    json.dump(manifest, f, indent=2)
+                print(f"  {out_path}: {manifest['total_files']} files, "
+                      f"{manifest['total_size']} bytes")
+            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
+                print(f"  ERROR: {e}")
+        return
+
     for group_platforms, representative in groups:
         variants = [p for p in group_platforms if p != representative]
         if variants:
@@ -1565,6 +1596,236 @@ def main():
         if not all_ok:
             print("WARNING: some packs have verification errors")
             sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# Manifest generation (JSON inventory for install.py)
+# ---------------------------------------------------------------------------
+
+_GITIGNORE_ENTRIES: set[str] | None = None
+
+
+def _load_gitignore_entries(repo_root: str) -> set[str]:
+    """Load gitignored paths (large files) from .gitignore at repo root."""
+    global _GITIGNORE_ENTRIES
+    if _GITIGNORE_ENTRIES is not None:
+        return _GITIGNORE_ENTRIES
+    gitignore = os.path.join(repo_root, ".gitignore")
+    entries: set[str] = set()
+    if os.path.exists(gitignore):
+        with open(gitignore) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    entries.add(line)
+    _GITIGNORE_ENTRIES = entries
+    return entries
+
+
+def _is_large_file(local_path: str, repo_root: str) -> bool:
+    """Check if a file is a large file (>50MB or in .gitignore)."""
+    if local_path and os.path.exists(local_path):
+        if os.path.getsize(local_path) > 50_000_000:
+            return True
+    gitignore = _load_gitignore_entries(repo_root)
+    # Check if the path relative to repo root is in .gitignore
+    try:
+        rel = os.path.relpath(local_path, repo_root)
+    except ValueError:
+        rel = ""
+    return rel in gitignore
+
+
+def _get_repo_path(sha1: str, db: dict) -> str:
+    """Get the repo path for a file by SHA1 lookup."""
+    entry = db.get("files", {}).get(sha1, {})
+    return entry.get("path", "")
+
+
+def generate_manifest(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    registry_path: str,
+    emulators_dir: str = "emulators",
+    zip_contents: dict | None = None,
+    emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
+) -> dict:
+    """Generate a JSON manifest for a platform (same resolution as generate_pack).
+
+    Returns a dict ready for JSON serialization with file inventory,
+    install hints, and download metadata.
+    """
+    config = load_platform_config(platform_name, platforms_dir)
+    if zip_contents is None:
+        zip_contents = {}
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(emulators_dir)
+
+    platform_display = config.get("platform", platform_name)
+    base_dest = config.get("base_destination", "")
+    case_insensitive = config.get("case_insensitive_fs", False)
+
+    # Load registry for install metadata
+    registry: dict = {}
+    if os.path.exists(registry_path):
+        with open(registry_path) as f:
+            registry = yaml.safe_load(f) or {}
+    plat_registry = registry.get("platforms", {}).get(platform_name, {})
+    install_section = plat_registry.get("install", {})
+    detect = install_section.get("detect", [])
+    standalone_copies = install_section.get("standalone_copies", [])
+
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # Filter systems by target
+    from common import resolve_platform_cores
+    plat_cores = resolve_platform_cores(config, emu_profiles) if target_cores else None
+    pack_systems = filter_systems_by_target(
+        config.get("systems", {}),
+        emu_profiles,
+        target_cores,
+        platform_cores=plat_cores,
+    )
+
+    seen_destinations: set[str] = set()
+    seen_lower: set[str] = set()
+    seen_parents: set[str] = set()
+    manifest_files: list[dict] = []
+    total_size = 0
+
+    # Phase 1: baseline files
+    for sys_id, system in sorted(pack_systems.items()):
+        for file_entry in system.get("files", []):
+            dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+            if not dest:
+                continue
+            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+
+            dedup_key = full_dest
+            if dedup_key in seen_destinations:
+                continue
+            if case_insensitive and dedup_key.lower() in seen_lower:
+                continue
+            if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+                continue
+
+            storage = file_entry.get("storage", "embedded")
+            if storage == "user_provided":
+                continue
+
+            local_path, status = resolve_file(file_entry, db, bios_dir, zip_contents)
+            if status in ("not_found", "external"):
+                continue
+
+            # Get SHA1 and size
+            sha1 = file_entry.get("sha1", "")
+            file_size = 0
+            if local_path and os.path.exists(local_path):
+                file_size = os.path.getsize(local_path)
+                if not sha1:
+                    hashes = compute_hashes(local_path)
+                    sha1 = hashes["sha1"]
+
+            repo_path = _get_repo_path(sha1, db) if sha1 else ""
+
+            entry: dict = {
+                "dest": full_dest,
+                "sha1": sha1,
+                "size": file_size,
+                "repo_path": repo_path,
+                "cores": None,
+            }
+
+            if _is_large_file(local_path or "", repo_root):
+                entry["storage"] = "release"
+                entry["release_asset"] = os.path.basename(local_path) if local_path else file_entry["name"]
+
+            manifest_files.append(entry)
+            total_size += file_size
+            seen_destinations.add(dedup_key)
+            _register_path(dedup_key, seen_destinations, seen_parents)
+            if case_insensitive:
+                seen_lower.add(dedup_key.lower())
+
+    # Phase 2: core complement (emulator extras)
+    core_files = _collect_emulator_extras(
+        config, emulators_dir, db,
+        seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
+    )
+    for fe in core_files:
+        dest = _sanitize_path(fe.get("destination", fe["name"]))
+        if not dest:
+            continue
+        if base_dest:
+            full_dest = f"{base_dest}/{dest}"
+        elif "/" not in dest:
+            full_dest = f"bios/{dest}"
+        else:
+            full_dest = dest
+
+        if full_dest in seen_destinations:
+            continue
+        if case_insensitive and full_dest.lower() in seen_lower:
+            continue
+        if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+            continue
+
+        local_path, status = resolve_file(fe, db, bios_dir, zip_contents)
+        if status in ("not_found", "external", "user_provided"):
+            continue
+
+        sha1 = ""
+        file_size = 0
+        if local_path and os.path.exists(local_path):
+            file_size = os.path.getsize(local_path)
+            hashes = compute_hashes(local_path)
+            sha1 = hashes["sha1"]
+
+        repo_path = _get_repo_path(sha1, db) if sha1 else ""
+        source_emu = fe.get("source_emulator", "")
+
+        entry = {
+            "dest": full_dest,
+            "sha1": sha1,
+            "size": file_size,
+            "repo_path": repo_path,
+            "cores": [source_emu] if source_emu else [],
+        }
+
+        if _is_large_file(local_path or "", repo_root):
+            entry["storage"] = "release"
+            entry["release_asset"] = os.path.basename(local_path) if local_path else fe["name"]
+
+        manifest_files.append(entry)
+        total_size += file_size
+        seen_destinations.add(full_dest)
+        _register_path(full_dest, seen_destinations, seen_parents)
+        if case_insensitive:
+            seen_lower.add(full_dest.lower())
+
+    # No phase 3 (data directories) — skipped for manifest
+
+    now = __import__("datetime").datetime.now(
+        __import__("datetime").timezone.utc
+    ).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    result: dict = {
+        "manifest_version": 1,
+        "platform": platform_name,
+        "display_name": platform_display,
+        "version": "1.0",
+        "generated": now,
+        "base_destination": base_dest,
+        "detect": detect,
+        "standalone_copies": standalone_copies,
+        "total_files": len(manifest_files),
+        "total_size": total_size,
+        "files": manifest_files,
+    }
+    return result
 
 
 # ---------------------------------------------------------------------------

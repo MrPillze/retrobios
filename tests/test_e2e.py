@@ -2437,6 +2437,92 @@ class TestE2E(unittest.TestCase):
             "standalone_copies", registry["platforms"]["emudeck"]["install"],
         )
 
+    def test_91_generate_manifest(self):
+        """generate_manifest returns valid manifest dict with expected fields."""
+        from generate_pack import generate_manifest
+
+        # Create a minimal registry file for the test
+        registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
+        registry_data = {
+            "platforms": {
+                "test_existence": {
+                    "install": {
+                        "detect": [{"os": "linux", "method": "path_exists",
+                                    "path": "/test/bios"}],
+                    },
+                },
+            },
+        }
+        with open(registry_path, "w") as fh:
+            yaml.dump(registry_data, fh)
+
+        manifest = generate_manifest(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            registry_path, emulators_dir=self.emulators_dir,
+        )
+
+        self.assertEqual(manifest["manifest_version"], 1)
+        self.assertEqual(manifest["platform"], "test_existence")
+        self.assertEqual(manifest["display_name"], "TestExistence")
+        self.assertIn("generated", manifest)
+        self.assertIn("files", manifest)
+        self.assertIsInstance(manifest["files"], list)
+        self.assertEqual(manifest["total_files"], len(manifest["files"]))
+        self.assertGreater(len(manifest["files"]), 0)
+        self.assertEqual(manifest["base_destination"], "system")
+        self.assertEqual(manifest["detect"], registry_data["platforms"]["test_existence"]["install"]["detect"])
+
+        for f in manifest["files"]:
+            self.assertIn("dest", f)
+            self.assertIn("sha1", f)
+            self.assertIn("size", f)
+            self.assertIn("repo_path", f)
+            self.assertIn("cores", f)
+            self.assertIsInstance(f["size"], int)
+            self.assertGreater(len(f["sha1"]), 0)
+
+    def test_92_manifest_matches_zip(self):
+        """Manifest file destinations match ZIP contents (excluding metadata)."""
+        from generate_pack import generate_manifest, generate_pack
+
+        registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
+        registry_data = {
+            "platforms": {
+                "test_existence": {
+                    "install": {"detect": []},
+                },
+            },
+        }
+        with open(registry_path, "w") as fh:
+            yaml.dump(registry_data, fh)
+
+        # Generate ZIP
+        output_dir = os.path.join(self.root, "pack_manifest_cmp")
+        os.makedirs(output_dir, exist_ok=True)
+        zip_path = generate_pack(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            output_dir, emulators_dir=self.emulators_dir,
+        )
+        self.assertIsNotNone(zip_path)
+
+        # Get ZIP file destinations (exclude metadata)
+        with zipfile.ZipFile(zip_path) as zf:
+            zip_names = {
+                n for n in zf.namelist()
+                if not n.startswith("INSTRUCTIONS_")
+                and n != "manifest.json"
+                and n != "README.txt"
+            }
+
+        # Generate manifest
+        manifest = generate_manifest(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            registry_path, emulators_dir=self.emulators_dir,
+        )
+        manifest_dests = {f["dest"] for f in manifest["files"]}
+
+        self.assertEqual(manifest_dests, zip_names)
+
 
 if __name__ == "__main__":
     unittest.main()
