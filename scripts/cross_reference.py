@@ -141,6 +141,10 @@ def cross_reference(
 
             in_platform = fname in platform_names
             in_repo = _find_in_repo(fname, by_name, by_name_lower, data_names)
+            if not in_repo:
+                path_field = f.get("path", "")
+                if path_field and path_field != fname:
+                    in_repo = _find_in_repo(path_field, by_name, by_name_lower, data_names)
 
             entry = {
                 "name": fname,
