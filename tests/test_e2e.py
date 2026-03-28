@@ -103,6 +103,11 @@ class TestE2E(unittest.TestCase):
         self._make_zip("composite.zip", {"b.rom": b"BBBB", "a.rom": b"AAAA"})
         # ZIP for multi-hash
         self._make_zip("multi.zip", {"rom.bin": b"MULTI_HASH_DATA"})
+        # Archive BIOS ZIP (like neogeo.zip) containing multiple ROMs
+        self._make_zip("test_archive.zip", {
+            "rom_a.bin": b"ARCHIVE_ROM_A",
+            "rom_b.bin": b"ARCHIVE_ROM_B",
+        })
 
         # -- Build synthetic database --
         self.db = self._build_db()
@@ -370,6 +375,35 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "test_emu_dd.yml"), "w") as fh:
             yaml.dump(emu_dd, fh)
+
+        # Emulator with archived files (like FBNeo with neogeo.zip)
+        emu_archive = {
+            "emulator": "TestArchiveEmu",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "rom_a.bin", "required": True, "archive": "test_archive.zip"},
+                {"name": "rom_b.bin", "required": False, "archive": "test_archive.zip"},
+                {"name": "missing_rom.bin", "required": True, "archive": "missing_archive.zip"},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_archive_emu.yml"), "w") as fh:
+            yaml.dump(emu_archive, fh)
+
+        # Emulator with descriptive name and path (like QEMU SeaBIOS)
+        emu_descriptive = {
+            "emulator": "TestDescriptive",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "Descriptive BIOS Name", "required": True,
+                 "path": "present_req.bin"},
+                {"name": "Missing Descriptive", "required": True,
+                 "path": "nonexistent_path.bin"},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_descriptive.yml"), "w") as fh:
+            yaml.dump(emu_descriptive, fh)
 
         # Emulator with validation checks (size, crc32)
         emu_val = {
@@ -2286,6 +2320,103 @@ class TestE2E(unittest.TestCase):
                             for n in names))
         # Nested conflict should NOT be present
         self.assertFalse(any("nested.rom" in n for n in names))
+
+
+    # ---------------------------------------------------------------
+    # Archive cross-reference and descriptive name tests
+    # ---------------------------------------------------------------
+
+    def test_159_cross_ref_archive_in_repo(self):
+        """Archived files group by archive; in_repo=True when archive exists."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        # test_archive.zip should appear as a single grouped entry
+        archive_entries = [u for u in undeclared if u.get("archive") == "test_archive.zip"]
+        self.assertEqual(len(archive_entries), 1)
+        entry = archive_entries[0]
+        self.assertTrue(entry["in_repo"])
+        self.assertEqual(entry["name"], "test_archive.zip")
+        self.assertEqual(entry["archive_file_count"], 2)
+        self.assertTrue(entry["required"])  # at least one file is required
+
+    def test_160_cross_ref_archive_missing(self):
+        """Missing archive reported as single entry with in_repo=False."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        missing_entries = [u for u in undeclared if u.get("archive") == "missing_archive.zip"]
+        self.assertEqual(len(missing_entries), 1)
+        entry = missing_entries[0]
+        self.assertFalse(entry["in_repo"])
+        self.assertEqual(entry["name"], "missing_archive.zip")
+        self.assertEqual(entry["archive_file_count"], 1)
+
+    def test_161_cross_ref_archive_not_individual_roms(self):
+        """Individual ROM names from archived files should NOT appear as separate entries."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        names = {u["name"] for u in undeclared}
+        # Individual ROMs should NOT be in the undeclared list
+        self.assertNotIn("rom_a.bin", names)
+        self.assertNotIn("rom_b.bin", names)
+        self.assertNotIn("missing_rom.bin", names)
+
+    def test_162_cross_ref_descriptive_name_resolved_by_path(self):
+        """Descriptive name with path: fallback resolves via path basename."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        desc_entries = {u["name"]: u for u in undeclared
+                        if u["emulator"] == "TestDescriptive"}
+        # "Descriptive BIOS Name" has path: "present_req.bin" which IS in by_name
+        self.assertIn("Descriptive BIOS Name", desc_entries)
+        self.assertTrue(desc_entries["Descriptive BIOS Name"]["in_repo"])
+        # "Missing Descriptive" has path: "nonexistent_path.bin" which is NOT in by_name
+        self.assertIn("Missing Descriptive", desc_entries)
+        self.assertFalse(desc_entries["Missing Descriptive"]["in_repo"])
+
+    def test_163_cross_ref_archive_declared_by_platform_skipped(self):
+        """Archive files whose archive is declared by platform are skipped."""
+        # Create a platform that declares test_archive.zip
+        config = {
+            "platform": "TestArchivePlatform",
+            "verification_mode": "existence",
+            "systems": {
+                "console-a": {
+                    "files": [
+                        {"name": "test_archive.zip", "destination": "test_archive.zip",
+                         "required": True},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_archive_platform.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        config = load_platform_config("test_archive_platform", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        # test_archive.zip is declared → its archived ROMs should be skipped
+        archive_entries = [u for u in undeclared if u.get("archive") == "test_archive.zip"]
+        self.assertEqual(len(archive_entries), 0)
+
+    def test_164_pack_extras_use_archive_name(self):
+        """Pack extras for archived files use archive name, not individual ROM."""
+        from generate_pack import _collect_emulator_extras
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db,
+            set(), "", profiles,
+        )
+        extra_names = {e["name"] for e in extras}
+        # Archive name should be present, not individual ROMs
+        self.assertIn("test_archive.zip", extra_names)
+        self.assertNotIn("rom_a.bin", extra_names)
+        self.assertNotIn("rom_b.bin", extra_names)
+        # Missing archive should NOT be in extras (in_repo=False)
+        self.assertNotIn("missing_archive.zip", extra_names)
 
 
 if __name__ == "__main__":

@@ -246,6 +246,18 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
         expected["adler32"] = adler_val
     return expected
 
+def _name_in_index(name: str, by_name: dict, by_path_suffix: dict | None = None) -> bool:
+    """Check if a name is resolvable in the database indexes."""
+    if name in by_name:
+        return True
+    basename = name.rsplit("/", 1)[-1]
+    if basename != name and basename in by_name:
+        return True
+    if by_path_suffix and name in by_path_suffix:
+        return True
+    return False
+
+
 def find_undeclared_files(
     config: dict,
     emulators_dir: str,
@@ -271,12 +283,16 @@ def find_undeclared_files(
                 declared_dd.add(ref)
 
     by_name = db.get("indexes", {}).get("by_name", {})
+    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = set(str(c) for c in config.get("standalone_cores", []))
     undeclared = []
-    seen = set()
+    seen_files: set[str] = set()
+    # Track archives: archive_name -> {in_repo, emulator, files: [...], ...}
+    archive_entries: dict[str, dict] = {}
+
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -290,7 +306,7 @@ def find_undeclared_files(
 
         for f in profile.get("files", []):
             fname = f.get("name", "")
-            if not fname or fname in seen:
+            if not fname or fname in seen_files:
                 continue
             # Skip pattern placeholders (e.g., <user-selected>.bin)
             if "<" in fname or ">" in fname or "*" in fname:
@@ -301,7 +317,44 @@ def find_undeclared_files(
                 continue
             if file_mode == "libretro" and is_standalone:
                 continue
+
+            archive = f.get("archive")
+
+            # Skip files declared by the platform (by name or archive)
             if fname in declared_names:
+                seen_files.add(fname)
+                continue
+            if archive and archive in declared_names:
+                seen_files.add(fname)
+                continue
+
+            seen_files.add(fname)
+
+            # Archived files are grouped by archive
+            if archive:
+                if archive not in archive_entries:
+                    in_repo = _name_in_index(archive, by_name, by_path_suffix)
+                    archive_entries[archive] = {
+                        "emulator": profile.get("emulator", emu_name),
+                        "name": archive,
+                        "archive": archive,
+                        "path": archive,
+                        "required": False,
+                        "hle_fallback": False,
+                        "category": f.get("category", "bios"),
+                        "in_repo": in_repo,
+                        "note": "",
+                        "checks": [],
+                        "source_ref": None,
+                        "expected": {},
+                        "archive_file_count": 0,
+                        "archive_required_count": 0,
+                    }
+                entry = archive_entries[archive]
+                entry["archive_file_count"] += 1
+                if f.get("required", False):
+                    entry["archive_required_count"] += 1
+                    entry["required"] = True
                 continue
 
             # Determine destination path based on mode
@@ -310,8 +363,12 @@ def find_undeclared_files(
             else:
                 dest = f.get("path") or fname
 
-            in_repo = fname in by_name or fname.rsplit("/", 1)[-1] in by_name
-            seen.add(fname)
+            # Resolution: try name, then path basename, then path_suffix
+            in_repo = _name_in_index(fname, by_name, by_path_suffix)
+            if not in_repo and dest != fname:
+                path_base = dest.rsplit("/", 1)[-1]
+                in_repo = _name_in_index(path_base, by_name, by_path_suffix)
+
             checks = _parse_validation(f.get("validation"))
             undeclared.append({
                 "emulator": profile.get("emulator", emu_name),
@@ -326,6 +383,10 @@ def find_undeclared_files(
                 "source_ref": f.get("source_ref"),
                 "expected": _build_expected(f, checks),
             })
+
+    # Append grouped archive entries
+    for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
+        undeclared.append(entry)
 
     return undeclared
 
@@ -715,7 +776,12 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
         # Required NOT in repo = critical
         if req_not_in_repo:
             for u in req_not_in_repo:
-                print(f"    MISSING (required): {u['emulator']} needs {u['name']}")
+                arc_count = u.get("archive_file_count")
+                if arc_count:
+                    label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
+                else:
+                    label = u["name"]
+                print(f"    MISSING (required): {u['emulator']} needs {label}")
                 checks = u.get("checks", [])
                 if checks:
                     if verbose:
@@ -733,7 +799,12 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
                         print(f"      [{checks_label}]")
         if req_hle_not_in_repo:
             for u in req_hle_not_in_repo:
-                print(f"    MISSING (required, HLE fallback): {u['emulator']} needs {u['name']}")
+                arc_count = u.get("archive_file_count")
+                if arc_count:
+                    label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
+                else:
+                    label = u["name"]
+                print(f"    MISSING (required, HLE fallback): {u['emulator']} needs {label}")
                 checks = u.get("checks", [])
                 if checks:
                     if verbose:

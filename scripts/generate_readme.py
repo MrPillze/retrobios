@@ -128,6 +128,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "RetroArch": "`system/`",
         "Lakka": "`system/`",
         "Batocera": "`/userdata/bios/`",
+        "BizHawk": "`Firmware/`",
         "Recalbox": "`/recalbox/share/bios/`",
         "RetroBat": "`bios/`",
         "RetroPie": "`BIOS/`",

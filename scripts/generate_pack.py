@@ -337,8 +337,10 @@ def _collect_emulator_extras(
     for u in undeclared:
         if not u["in_repo"]:
             continue
-        name = u["name"]
-        dest = u.get("path") or name
+        # For archive entries, use the archive name for resolution
+        archive = u.get("archive")
+        name = archive if archive else u["name"]
+        dest = archive if archive else (u.get("path") or u["name"])
         full_dest = f"{base_dest}/{dest}" if base_dest else dest
         if full_dest in seen:
             continue
