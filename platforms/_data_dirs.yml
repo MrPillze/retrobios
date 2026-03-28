@@ -196,6 +196,15 @@ data_directories:
     local_cache: data/stonesoup
     description: "DCSS game data (tiles, fonts, databases, lua, level descriptions)"
 
+  # ref: FBNeo src/burner/libretro/libretro.cpp — system/fbneo/cheats/
+  fbneo-cheats:
+    source_url: "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/{version}.zip"
+    source_type: zip
+    version: master
+    local_cache: data/fbneo-cheats
+    strip_components: 1
+    description: "FinalBurn Neo per-game cheat definitions"
+
   # ref: dirksimple — system/
   dirksimple:
     source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"

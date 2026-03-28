@@ -252,6 +252,8 @@ systems:
     data_directories:
     - ref: fbneo-hiscore
       destination: fbneo
+    - ref: fbneo-cheats
+      destination: fbneo
     core: fbneo
     manufacturer: Various
     docs: https://docs.libretro.com/library/fbneo/

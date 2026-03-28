@@ -33,6 +33,11 @@ systems:
   - taito-cchip
   - ym2608
 
+data_directories:
+  - ref: fbneo-cheats
+    destination: fbneo/cheats
+    source_ref: "src/burner/conc.cpp:167"
+
 notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
   expected as MAME-format ZIP archives containing individual ROM chips. The
