@@ -43,7 +43,7 @@ notes: |
     - cubetxtN.dat (datacube text for story mode)
 
   The game engine also loads shape files on demand:
-    - shapesX.dat where X is a character from a 34-entry lookup table
+    - shapesX.dat where X is a character read from the level file (5 used: ), W, X, Y, Z)
       (lvlmast.c:23-27, tyrian2.c:3079). Characters used:
       2,4,7,8,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,5,#,V,0,@,3,^,9
     - newshX.shp loaded via JE_loadCompShapes (sprite.c:469-481) using the
@@ -236,220 +236,48 @@ files:
     source_ref: "episodes.c:262"
 
   # -----------------------------------------------------------
-  # Shape data files (loaded per-level, character from lookup)
+  # Level tileset shapes (loaded per-level from .lvl data)
+  # The level file specifies a character via fgetc() at tyrian2.c:3039,
+  # which maps to shapes{char}.dat at tyrian2.c:3079.
+  # Only 5 characters are used by actual levels: ), W, X, Y, Z.
+  # Note: shapeFile[34] in lvlmast.c is a DIFFERENT mechanism —
+  # it maps indices to characters for newsh?.shp (enemy sprites),
+  # NOT for shapes?.dat (level tilesets).
   # -----------------------------------------------------------
-  - name: "shapes2.dat"
+  - name: "shapes).dat"
     category: game_data
     system: tyrian
-    description: "Level tileset shapes (character '2')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+    required: true
+    source_ref: "tyrian2.c:3039-3079"
 
-  - name: "shapes3.dat"
+  - name: "shapesw.dat"
     category: game_data
     system: tyrian
-    description: "Level tileset shapes (character '3')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+    required: true
+    source_ref: "tyrian2.c:3039-3079"
 
-  - name: "shapes4.dat"
+  - name: "shapesx.dat"
     category: game_data
     system: tyrian
-    description: "Level tileset shapes (character '4')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+    required: true
+    source_ref: "tyrian2.c:3039-3079"
 
-  - name: "shapes5.dat"
+  - name: "shapesy.dat"
     category: game_data
     system: tyrian
-    description: "Level tileset shapes (character '5')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+    required: true
+    source_ref: "tyrian2.c:3039-3079"
 
-  - name: "shapes7.dat"
+  - name: "shapesz.dat"
     category: game_data
     system: tyrian
-    description: "Level tileset shapes (character '7')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapes8.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character '8')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapes9.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character '9')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapes0.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character '0')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesa.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'A')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesb.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'B')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesc.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'C')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesd.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'D')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapese.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'E')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesf.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'F')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesg.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'G')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesh.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'H')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesi.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'I')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesj.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'J')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesk.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'K')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesl.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'L')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesm.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'M')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesn.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'N')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapeso.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'O')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesp.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'P')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesq.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'Q')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesr.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'R')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapess.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'S')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapest.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'T')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesu.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'U')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
-
-  - name: "shapesv.dat"
-    category: game_data
-    system: tyrian
-    description: "Level tileset shapes (character 'V')"
-    required: false
-    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+    required: true
+    source_ref: "tyrian2.c:3039-3079"
 
   # -----------------------------------------------------------
   # Compressed shape files (newshX.shp, loaded per-level)
+  # shapeFile[34] in lvlmast.c maps indices to characters for
+  # these files via JE_loadCompShapes (sprite.c:469).
   # -----------------------------------------------------------
   - name: "newsh1.shp"
     category: game_data
