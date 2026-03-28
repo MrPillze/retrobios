@@ -51,16 +51,37 @@ Verification modes per platform:
 Build platform-specific BIOS ZIP packs.
 
 ```bash
+# Full platform packs
 python scripts/generate_pack.py --all --output-dir dist/
 python scripts/generate_pack.py --platform batocera
 python scripts/generate_pack.py --emulator dolphin
 python scripts/generate_pack.py --system atari-lynx
+
+# Granular options
+python scripts/generate_pack.py --platform retroarch --system sony-playstation
+python scripts/generate_pack.py --platform batocera --required-only
+python scripts/generate_pack.py --platform retroarch --split
+python scripts/generate_pack.py --platform retroarch --split --group-by manufacturer
+
+# Hash-based lookup and custom packs
+python scripts/generate_pack.py --from-md5 d8f1206299c48946e6ec5ef96d014eaa
+python scripts/generate_pack.py --platform batocera --from-md5-file missing.txt
+python scripts/generate_pack.py --platform retroarch --list-systems
 ```
 
 Packs include platform baseline files plus files required by the platform's cores.
 When a file passes platform verification but fails emulator validation,
 the tool searches for a variant that satisfies both.
 If none exists, the platform version is kept and the discrepancy is reported.
+
+**Granular options:**
+
+- `--system` with `--platform`: filter to specific systems within a platform pack
+- `--required-only`: exclude optional files, keep only required
+- `--split`: generate one ZIP per system instead of one big pack
+- `--split --group-by manufacturer`: group split packs by manufacturer (Sony, Nintendo, Sega...)
+- `--from-md5`: look up a hash in the database, or build a custom pack with `--platform`/`--emulator`
+- `--from-md5-file`: same, reading hashes from a file (one per line, comments with #)
 
 ### cross_reference.py
 
