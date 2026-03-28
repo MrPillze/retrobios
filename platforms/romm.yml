@@ -960,8 +960,8 @@ systems:
     - name: NstDatabase.xml
       destination: nes/NstDatabase.xml
       required: true
-      sha1: 26322f182540211e9b5e3647675b7c593706ae2b
-      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
+      sha1: f92312bae56e29c5bf00a5103105fce78472bf5c
+      md5: 0ee6cbdc6f5c96ce9c8aa5edb59066f4
       crc32: ebb2196c
       size: 1009534
   nintendo-pokemon-mini:

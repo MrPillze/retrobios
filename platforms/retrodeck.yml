@@ -7310,7 +7310,7 @@ systems:
     - name: NstDatabase.xml
       destination: bios/NstDatabase.xml
       required: false
-      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
+      md5: 0ee6cbdc6f5c96ce9c8aa5edb59066f4
   nintendo-pokemon-mini:
     files:
     - name: bios.min
