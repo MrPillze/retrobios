@@ -60,3 +60,7 @@ bios/RPG Maker/easyrpg/easyrpg.soundfont
 
 # Temporary files
 tmp/
+
+# FBA2012 Toaplan samples (>100MB)
+bios/Arcade/fba2012/samples/ghox.zip
+bios/Arcade/fba2012/samples/tekipaki.zip
