@@ -51,6 +51,10 @@ bios/Arcade/Arcade/ps2.zip
 bios/Arcade/Arcade/kf2k3pcb.zip
 bios/Arcade/Arcade/ms5pcb.zip
 
+# Dolphin/Ishiiruka SD card images (128MB each)
+bios/Nintendo/Wii/WiiSD.raw
+bios/Nintendo/Wii/sd.raw
+
 # EasyRPG soundfont (142MB)
 bios/RPG Maker/easyrpg/easyrpg.soundfont
 
