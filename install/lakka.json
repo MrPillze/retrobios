@@ -1,34 +1,16 @@
 {
   "manifest_version": 1,
-  "platform": "retroarch",
-  "display_name": "RetroArch",
+  "platform": "lakka",
+  "display_name": "Lakka",
   "version": "1.0",
   "generated": "2026-03-28T17:57:43Z",
   "base_destination": "system",
   "detect": [
     {
       "os": "linux",
-      "method": "config_file",
-      "config": "$HOME/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg",
-      "parse_key": "system_directory"
-    },
-    {
-      "os": "linux",
-      "method": "config_file",
-      "config": "$HOME/.config/retroarch/retroarch.cfg",
-      "parse_key": "system_directory"
-    },
-    {
-      "os": "darwin",
-      "method": "config_file",
-      "config": "$HOME/Library/Application Support/RetroArch/retroarch.cfg",
-      "parse_key": "system_directory"
-    },
-    {
-      "os": "windows",
-      "method": "config_file",
-      "config": "%APPDATA%\\RetroArch\\retroarch.cfg",
-      "parse_key": "system_directory"
+      "method": "os_release",
+      "id": "lakka",
+      "bios_path": "/storage/system"
     }
   ],
   "standalone_copies": [],

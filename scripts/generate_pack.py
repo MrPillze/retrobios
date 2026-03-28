@@ -1585,6 +1585,10 @@ def main():
     if args.manifest:
         registry_path = os.path.join(args.platforms_dir, "_registry.yml")
         os.makedirs(args.output_dir, exist_ok=True)
+        registry: dict = {}
+        if os.path.exists(registry_path):
+            with open(registry_path) as _rf:
+                registry = yaml.safe_load(_rf) or {}
         for group_platforms, representative in groups:
             print(f"\nGenerating manifest for {representative}...")
             try:
@@ -1600,6 +1604,21 @@ def main():
                     json.dump(manifest, f, indent=2)
                 print(f"  {out_path}: {manifest['total_files']} files, "
                       f"{manifest['total_size']} bytes")
+                # Create aliases for grouped platforms (e.g., lakka → retroarch)
+                for alias_plat in group_platforms:
+                    if alias_plat != representative:
+                        alias_path = os.path.join(args.output_dir, f"{alias_plat}.json")
+                        alias_manifest = dict(manifest)
+                        alias_manifest["platform"] = alias_plat
+                        alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
+                        alias_manifest["display_name"] = alias_cfg.get("platform", alias_plat)
+                        alias_registry = registry.get("platforms", {}).get(alias_plat, {})
+                        alias_install = alias_registry.get("install", {})
+                        alias_manifest["detect"] = alias_install.get("detect", [])
+                        alias_manifest["standalone_copies"] = alias_install.get("standalone_copies", [])
+                        with open(alias_path, "w") as f:
+                            json.dump(alias_manifest, f, indent=2)
+                        print(f"  {alias_path}: alias of {representative}")
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}")
         return
