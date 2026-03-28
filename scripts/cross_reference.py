@@ -52,16 +52,33 @@ def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[s
 
 def _build_supplemental_index(data_root: str = "data",
                                bios_root: str = "bios") -> set[str]:
-    """Build a set of filenames in data/ directories and inside bios/ ZIPs."""
+    """Build a set of filenames and directory names in data/ and inside bios/ ZIPs."""
     names: set[str] = set()
     root_path = Path(data_root)
     if root_path.is_dir():
         for fpath in root_path.rglob("*"):
-            if fpath.is_file() and not fpath.name.startswith("."):
-                names.add(fpath.name)
-                names.add(fpath.name.lower())
+            if fpath.name.startswith("."):
+                continue
+            names.add(fpath.name)
+            names.add(fpath.name.lower())
+            if fpath.is_dir():
+                # Also index relative path from data/subdir/ for directory entries
+                parts = fpath.relative_to(root_path).parts
+                if len(parts) > 1:
+                    rel = "/".join(parts[1:])
+                    names.add(rel)
+                    names.add(rel + "/")
+                    names.add(rel.lower())
+                    names.add(rel.lower() + "/")
     bios_path = Path(bios_root)
     if bios_path.is_dir():
+        # Index directory names for directory-type entries (e.g., "nestopia/samples/moepro/")
+        for dpath in bios_path.rglob("*"):
+            if dpath.is_dir() and not dpath.name.startswith("."):
+                names.add(dpath.name)
+                names.add(dpath.name.lower())
+                names.add(dpath.name + "/")
+                names.add(dpath.name.lower() + "/")
         import zipfile
         for zpath in bios_path.rglob("*.zip"):
             try:
@@ -80,7 +97,9 @@ def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str,
                   data_names: set[str] | None = None) -> bool:
     if fname in by_name:
         return True
-    basename = fname.rsplit("/", 1)[-1] if "/" in fname else None
+    # For directory entries or paths, extract the meaningful basename
+    stripped = fname.rstrip("/")
+    basename = stripped.rsplit("/", 1)[-1] if "/" in stripped else None
     if basename and basename in by_name:
         return True
     key = fname.lower()
@@ -127,14 +146,17 @@ def cross_reference(
 
         gaps = []
         covered = []
+        by_md5 = db.get("indexes", {}).get("by_md5", {})
         for f in emu_files:
             fname = f.get("name", "")
             if not fname:
                 continue
 
-            # Skip standalone-only files when comparing against libretro
-            # platforms (RetroArch, Lakka, etc.). These files are embedded
-            # in the core and don't need to be in the platform pack.
+            # Skip pattern placeholders (e.g., <bios>.bin, <user-selected>.bin)
+            if "<" in fname or ">" in fname:
+                continue
+
+            # Skip standalone-only files
             file_mode = f.get("mode", "both")
             if file_mode == "standalone":
                 continue
@@ -145,6 +167,20 @@ def cross_reference(
                 path_field = f.get("path", "")
                 if path_field and path_field != fname:
                     in_repo = _find_in_repo(path_field, by_name, by_name_lower, data_names)
+            # Try MD5 hash match (handles files that exist under different names)
+            if not in_repo:
+                md5_raw = f.get("md5", "")
+                if md5_raw:
+                    for md5_val in md5_raw.split(","):
+                        md5_val = md5_val.strip().lower()
+                        if md5_val and by_md5.get(md5_val):
+                            in_repo = True
+                            break
+            # Try SHA1 hash match
+            if not in_repo:
+                sha1 = f.get("sha1", "")
+                if sha1 and sha1 in db.get("files", {}):
+                    in_repo = True
 
             entry = {
                 "name": fname,
