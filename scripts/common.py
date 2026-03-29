@@ -1171,7 +1171,8 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
         record = db["files"].get(sha1)
     if record is None and md5:
         by_md5 = db.get("by_md5", {})
-        ref_sha1 = by_md5.get(md5.lower())
+        md5_str = md5 if isinstance(md5, str) else md5[0] if md5 else ""
+        ref_sha1 = by_md5.get(md5_str.lower()) if md5_str else None
         if ref_sha1 and db.get("files"):
             record = db["files"].get(ref_sha1)
     if record is None:
@@ -1197,9 +1198,12 @@ def _merge_file_into_system(
 
     if existing is not None:
         existing["_cores"] = existing.get("_cores", set()) | {emu_name}
-        existing["_source_refs"] = existing.get("_source_refs", set()) | (
-            {file_entry["source_ref"]} if file_entry.get("source_ref") else set()
-        )
+        sr = file_entry.get("source_ref")
+        if sr is not None:
+            sr_key = str(sr) if not isinstance(sr, str) else sr
+            existing["_source_refs"] = existing.get("_source_refs", set()) | {sr_key}
+        else:
+            existing.setdefault("_source_refs", set())
         if file_entry.get("required") and not existing.get("required"):
             existing["required"] = True
         for h in ("sha1", "md5", "sha256", "crc32"):
@@ -1226,8 +1230,10 @@ def _merge_file_into_system(
         if val is not None:
             entry[field] = val
     entry["_cores"] = {emu_name}
-    if file_entry.get("source_ref"):
-        entry["_source_refs"] = {file_entry["source_ref"]}
+    sr = file_entry.get("source_ref")
+    if sr is not None:
+        sr_key = str(sr) if not isinstance(sr, str) else sr
+        entry["_source_refs"] = {sr_key}
     else:
         entry["_source_refs"] = set()
 
