@@ -18,6 +18,7 @@ from common import (
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
+    load_platform_config,
     load_target_config,
 )
 
@@ -98,8 +99,17 @@ def main(argv: list[str] | None = None) -> None:
                 print(f"  {name}: no target config, skipped")
                 continue
 
+        # Load platform config (with inheritance) and registry entry
+        try:
+            config = load_platform_config(name, args.platforms_dir)
+        except FileNotFoundError:
+            print(f"  {name}: no platform config, skipped")
+            continue
+        registry_entry = registry.get(name, {})
+
         result = generate_platform_truth(
-            name, registry, profiles, db=db, target_cores=target_cores,
+            name, config, registry_entry, profiles,
+            db=db, target_cores=target_cores,
         )
 
         out_path = os.path.join(args.output_dir, f"{name}.yml")

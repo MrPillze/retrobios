@@ -2526,14 +2526,10 @@ class TestE2E(unittest.TestCase):
         _emulator_profiles_cache.clear()
 
         profiles = load_emulator_profiles(self.emulators_dir)
-        registry = {
-            "testplat": {
-                "cores": ["testcore"],
-            },
-        }
+        config = {"cores": ["testcore"]}
 
         result = generate_platform_truth(
-            "testplat", registry, profiles, db=None,
+            "testplat", config, {}, profiles, db=None,
         )
 
         self.assertEqual(result["platform"], "testplat")
@@ -2573,9 +2569,9 @@ class TestE2E(unittest.TestCase):
 
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
-        registry = {"testplat": {"cores": "all_libretro"}}
+        config = {"cores": "all_libretro"}
 
-        result = generate_platform_truth("testplat", registry, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles)
         names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
 
         self.assertIn("both.bin", names)
@@ -2605,14 +2601,12 @@ class TestE2E(unittest.TestCase):
 
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
-        registry = {
-            "testplat": {
-                "cores": ["dualcore"],
-                "standalone_cores": ["dualcore"],
-            },
+        config = {
+            "cores": ["dualcore"],
+            "standalone_cores": ["dualcore"],
         }
 
-        result = generate_platform_truth("testplat", registry, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles)
         names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
 
         self.assertIn("sa_file.bin", names)
@@ -2649,9 +2643,9 @@ class TestE2E(unittest.TestCase):
 
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
-        registry = {"testplat": {"cores": ["core_a", "core_b"]}}
+        config = {"cores": ["core_a", "core_b"]}
 
-        result = generate_platform_truth("testplat", registry, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles)
         sys_files = result["systems"]["test-system"]["files"]
         self.assertEqual(len(sys_files), 1)
 
@@ -2682,9 +2676,9 @@ class TestE2E(unittest.TestCase):
 
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
-        registry = {"testplat": {"cores": ["profiled_core", "unprofiled_core"]}}
+        config = {"cores": ["profiled_core", "unprofiled_core"]}
 
-        result = generate_platform_truth("testplat", registry, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles)
         cov = result["_coverage"]
 
         self.assertEqual(cov["cores_profiled"], 1)
@@ -3113,13 +3107,11 @@ class TestE2E(unittest.TestCase):
 
     def test_truth_diff_integration(self):
         """Full chain: generate truth from profiles, diff against scraped data."""
-        # Registry: one platform with two cores, only core_a has a profile
-        registry = {
-            "testplat": {
-                "cores": ["core_a", "core_b"],
-                "hash_type": "md5",
-                "verification_mode": "md5",
-            },
+        # Config: platform with two cores, only core_a has a profile
+        config = {"cores": ["core_a", "core_b"]}
+        registry_entry = {
+            "hash_type": "md5",
+            "verification_mode": "md5",
         }
 
         # Emulator profile for core_a with 2 files
@@ -3161,7 +3153,7 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn("core_b", profiles)
 
         # Generate truth
-        truth = generate_platform_truth("testplat", registry, profiles, db=None)
+        truth = generate_platform_truth("testplat", config, registry_entry, profiles, db=None)
 
         # Verify truth structure
         self.assertIn("test-system", truth["systems"])

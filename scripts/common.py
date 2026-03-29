@@ -1156,6 +1156,8 @@ def _determine_core_mode(
             return "standalone"
         return "libretro"
     ptype = profile.get("type", "libretro")
+    if "standalone" in ptype and "libretro" in ptype:
+        return "both"
     if "standalone" in ptype:
         return "standalone"
     return "libretro"
@@ -1245,35 +1247,41 @@ def _merge_file_into_system(
 
 def generate_platform_truth(
     platform_name: str,
-    registry: dict,
+    config: dict,
+    registry_entry: dict,
     profiles: dict[str, dict],
     db: dict | None = None,
     target_cores: set[str] | None = None,
 ) -> dict:
     """Generate ground-truth system data for a platform from emulator profiles.
 
+    Args:
+        platform_name: platform identifier
+        config: loaded platform config (via load_platform_config), has cores,
+                systems, standalone_cores with inheritance resolved
+        registry_entry: registry metadata for hash_type, verification_mode, etc.
+        profiles: all loaded emulator profiles
+        db: optional database for hash enrichment
+        target_cores: optional hardware target core filter
+
     Returns a dict with platform metadata, systems, and per-file details
     including which cores reference each file.
     """
-    plat_entry = registry.get(platform_name, {})
-    cores_config = plat_entry.get("cores")
-
-    # Build a synthetic config dict for resolve_platform_cores
-    synthetic_config: dict = {"cores": cores_config}
-    if "systems" in plat_entry:
-        synthetic_config["systems"] = plat_entry["systems"]
+    cores_config = config.get("cores")
 
     # Resolve standalone set for mode determination
     standalone_set: set[str] | None = None
-    standalone_cores = plat_entry.get("standalone_cores")
+    standalone_cores = config.get("standalone_cores")
     if isinstance(standalone_cores, list):
         standalone_set = {str(c) for c in standalone_cores}
 
-    resolved = resolve_platform_cores(synthetic_config, profiles, target_cores)
+    resolved = resolve_platform_cores(config, profiles, target_cores)
 
     systems: dict[str, dict] = {}
     cores_profiled: set[str] = set()
     cores_unprofiled: set[str] = set()
+    # Track which cores contribute to each system
+    system_cores: dict[str, dict[str, set[str]]] = {}
 
     for emu_name in sorted(resolved):
         profile = profiles.get(emu_name)
@@ -1284,7 +1292,10 @@ def generate_platform_truth(
 
         mode = _determine_core_mode(emu_name, profile, cores_config, standalone_set)
         raw_files = profile.get("files", [])
-        filtered = filter_files_by_mode(raw_files, standalone=(mode == "standalone"))
+        if mode == "both":
+            filtered = raw_files
+        else:
+            filtered = filter_files_by_mode(raw_files, standalone=(mode == "standalone"))
 
         for fe in filtered:
             sys_id = fe.get("system", "")
@@ -1293,12 +1304,31 @@ def generate_platform_truth(
                 sys_id = sys_ids[0] if sys_ids else "unknown"
             system = systems.setdefault(sys_id, {})
             _merge_file_into_system(system, fe, emu_name, db)
+            # Track core contribution per system
+            sys_cov = system_cores.setdefault(sys_id, {
+                "profiled": set(), "unprofiled": set(),
+            })
+            sys_cov["profiled"].add(emu_name)
+
+    # Track unprofiled cores per system based on profile system lists
+    for emu_name in cores_unprofiled:
+        for sys_id in systems:
+            sys_cov = system_cores.setdefault(sys_id, {
+                "profiled": set(), "unprofiled": set(),
+            })
+            sys_cov["unprofiled"].add(emu_name)
 
     # Convert sets to sorted lists for serialization
-    for sys_data in systems.values():
+    for sys_id, sys_data in systems.items():
         for fe in sys_data.get("files", []):
             fe["_cores"] = sorted(fe.get("_cores", set()))
             fe["_source_refs"] = sorted(fe.get("_source_refs", set()))
+        # Add per-system coverage
+        cov = system_cores.get(sys_id, {})
+        sys_data["_coverage"] = {
+            "cores_profiled": sorted(cov.get("profiled", set())),
+            "cores_unprofiled": sorted(cov.get("unprofiled", set())),
+        }
 
     return {
         "platform": platform_name,
