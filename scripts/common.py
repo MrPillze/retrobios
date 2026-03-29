@@ -1360,6 +1360,19 @@ def generate_platform_truth(
             })
             sys_cov["profiled"].add(emu_name)
 
+    # Ensure all systems of resolved cores have entries (even with 0 files).
+    # This documents that the system is covered — the core was analyzed and
+    # needs no external files for this system.
+    for emu_name in cores_profiled:
+        profile = profiles[emu_name]
+        for prof_sid in profile.get("systems", []):
+            sys_id = _map_sys_id(prof_sid)
+            systems.setdefault(sys_id, {})
+            sys_cov = system_cores.setdefault(sys_id, {
+                "profiled": set(), "unprofiled": set(),
+            })
+            sys_cov["profiled"].add(emu_name)
+
     # Track unprofiled cores per system based on profile system lists
     for emu_name in cores_unprofiled:
         for sys_id in systems:
