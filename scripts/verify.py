@@ -674,6 +674,122 @@ def _format_ground_truth_verbose(ground_truth: list[dict]) -> list[str]:
     return lines
 
 
+def _print_ground_truth(gt: list[dict], verbose: bool) -> None:
+    """Print ground truth lines for a file entry."""
+    if not gt:
+        return
+    if verbose:
+        for line in _format_ground_truth_verbose(gt):
+            print(f"    {line}")
+    else:
+        print(f"    {_format_ground_truth_aggregate(gt)}")
+
+
+def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) -> None:
+    """Print UNTESTED, MISSING, and DISCREPANCY entries from verification details."""
+    for d in details:
+        if d["status"] == Status.UNTESTED:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen:
+                continue
+            seen.add(key)
+            req = "required" if d.get("required", True) else "optional"
+            hle = ", HLE available" if d.get("hle_fallback") else ""
+            reason = d.get("reason", "")
+            print(f"  UNTESTED ({req}{hle}): {key} — {reason}")
+            _print_ground_truth(d.get("ground_truth", []), verbose)
+    for d in details:
+        if d["status"] == Status.MISSING:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen:
+                continue
+            seen.add(key)
+            req = "required" if d.get("required", True) else "optional"
+            hle = ", HLE available" if d.get("hle_fallback") else ""
+            print(f"  MISSING ({req}{hle}): {key}")
+            _print_ground_truth(d.get("ground_truth", []), verbose)
+    for d in details:
+        disc = d.get("discrepancy")
+        if disc:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen:
+                continue
+            seen.add(key)
+            print(f"  DISCREPANCY: {key} — {disc}")
+            _print_ground_truth(d.get("ground_truth", []), verbose)
+
+    if verbose:
+        for d in details:
+            if d["status"] == Status.OK:
+                key = f"{d['system']}/{d['name']}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                gt = d.get("ground_truth", [])
+                if gt:
+                    req = "required" if d.get("required", True) else "optional"
+                    print(f"  OK ({req}): {key}")
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+
+
+def _print_undeclared_entry(u: dict, prefix: str, verbose: bool) -> None:
+    """Print a single undeclared file entry with its validation checks."""
+    arc_count = u.get("archive_file_count")
+    if arc_count:
+        name_label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
+    else:
+        name_label = u["name"]
+    print(f"    {prefix}: {u['emulator']} needs {name_label}")
+    checks = u.get("checks", [])
+    if checks:
+        if verbose:
+            expected = u.get("expected", {})
+            if expected:
+                vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
+                ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                print(f"      validates {vals}{ref_part}")
+            else:
+                checks_label = "+".join(checks)
+                ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                print(f"      validates {checks_label}{ref_part}")
+        else:
+            print(f"      [{'+'.join(checks)}]")
+
+
+def _print_undeclared_section(result: dict, verbose: bool) -> None:
+    """Print cross-reference section for undeclared files used by cores."""
+    undeclared = result.get("undeclared_files", [])
+    if not undeclared:
+        return
+
+    bios_files = [u for u in undeclared if u.get("category", "bios") == "bios"]
+    game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
+
+    req_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and not u.get("hle_fallback")]
+    req_hle_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and u.get("hle_fallback")]
+    req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
+    opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
+    opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
+
+    core_in_pack = len(req_in_repo) + len(opt_in_repo)
+    core_missing_req = len(req_not_in_repo) + len(req_hle_not_in_repo)
+    core_missing_opt = len(opt_not_in_repo)
+
+    print(f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, {core_missing_opt} optional missing")
+
+    for u in req_not_in_repo:
+        _print_undeclared_entry(u, "MISSING (required)", verbose)
+    for u in req_hle_not_in_repo:
+        _print_undeclared_entry(u, "MISSING (required, HLE fallback)", verbose)
+
+    if game_data:
+        gd_missing = [u for u in game_data if not u["in_repo"]]
+        gd_present = [u for u in game_data if u["in_repo"]]
+        if gd_missing or gd_present:
+            print(f"  Game data: {len(gd_present)} in pack, {len(gd_missing)} missing")
+
+
 def print_platform_result(result: dict, group: list[str], verbose: bool = False) -> None:
     mode = result["verification_mode"]
     total = result["total_files"]
@@ -682,7 +798,7 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
     ok_count = c[Severity.OK]
     problems = total - ok_count
 
-    # Summary line — platform-native terminology
+    # Summary line
     if mode == "existence":
         if problems:
             missing = c.get(Severity.WARNING, 0) + c.get(Severity.CRITICAL, 0)
@@ -705,153 +821,16 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
             parts.append(f"{missing} missing")
     print(f"{label}: {', '.join(parts)} [{mode}]")
 
-    # Detail non-OK entries with required/optional
-    seen_details = set()
-    for d in result["details"]:
-        if d["status"] == Status.UNTESTED:
-            key = f"{d['system']}/{d['name']}"
-            if key in seen_details:
-                continue
-            seen_details.add(key)
-            req = "required" if d.get("required", True) else "optional"
-            hle = ", HLE available" if d.get("hle_fallback") else ""
-            reason = d.get("reason", "")
-            print(f"  UNTESTED ({req}{hle}): {key} — {reason}")
-            gt = d.get("ground_truth", [])
-            if gt:
-                if verbose:
-                    for line in _format_ground_truth_verbose(gt):
-                        print(f"    {line}")
-                else:
-                    print(f"    {_format_ground_truth_aggregate(gt)}")
-    for d in result["details"]:
-        if d["status"] == Status.MISSING:
-            key = f"{d['system']}/{d['name']}"
-            if key in seen_details:
-                continue
-            seen_details.add(key)
-            req = "required" if d.get("required", True) else "optional"
-            hle = ", HLE available" if d.get("hle_fallback") else ""
-            print(f"  MISSING ({req}{hle}): {key}")
-            gt = d.get("ground_truth", [])
-            if gt:
-                if verbose:
-                    for line in _format_ground_truth_verbose(gt):
-                        print(f"    {line}")
-                else:
-                    print(f"    {_format_ground_truth_aggregate(gt)}")
-    for d in result["details"]:
-        disc = d.get("discrepancy")
-        if disc:
-            key = f"{d['system']}/{d['name']}"
-            if key in seen_details:
-                continue
-            seen_details.add(key)
-            print(f"  DISCREPANCY: {key} — {disc}")
-            gt = d.get("ground_truth", [])
-            if gt:
-                if verbose:
-                    for line in _format_ground_truth_verbose(gt):
-                        print(f"    {line}")
-                else:
-                    print(f"    {_format_ground_truth_aggregate(gt)}")
+    seen_details: set[str] = set()
+    _print_detail_entries(result["details"], seen_details, verbose)
+    _print_undeclared_section(result, verbose)
 
-    if verbose:
-        for d in result["details"]:
-            if d["status"] == Status.OK:
-                key = f"{d['system']}/{d['name']}"
-                if key in seen_details:
-                    continue
-                seen_details.add(key)
-                gt = d.get("ground_truth", [])
-                if gt:
-                    req = "required" if d.get("required", True) else "optional"
-                    print(f"  OK ({req}): {key}")
-                    for line in _format_ground_truth_verbose(gt):
-                        print(f"    {line}")
-
-    # Cross-reference: undeclared files used by cores
-    undeclared = result.get("undeclared_files", [])
-    if undeclared:
-        bios_files = [u for u in undeclared if u.get("category", "bios") == "bios"]
-        game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
-
-        req_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and not u.get("hle_fallback")]
-        req_hle_not_in_repo = [u for u in bios_files if u["required"] and not u["in_repo"] and u.get("hle_fallback")]
-        req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
-        opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
-        opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
-
-        # Core coverage: files from emulator profiles not declared by the platform
-        core_in_pack = len(req_in_repo) + len(opt_in_repo)
-        core_missing_req = len(req_not_in_repo) + len(req_hle_not_in_repo)
-        core_missing_opt = len(opt_not_in_repo)
-        core_total = len(bios_files)
-
-        print(f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, {core_missing_opt} optional missing")
-
-        # Required NOT in repo = critical
-        if req_not_in_repo:
-            for u in req_not_in_repo:
-                arc_count = u.get("archive_file_count")
-                if arc_count:
-                    label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
-                else:
-                    label = u["name"]
-                print(f"    MISSING (required): {u['emulator']} needs {label}")
-                checks = u.get("checks", [])
-                if checks:
-                    if verbose:
-                        expected = u.get("expected", {})
-                        if expected:
-                            vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
-                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
-                            print(f"      validates {vals}{ref_part}")
-                        else:
-                            checks_label = "+".join(checks)
-                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
-                            print(f"      validates {checks_label}{ref_part}")
-                    else:
-                        checks_label = "+".join(checks)
-                        print(f"      [{checks_label}]")
-        if req_hle_not_in_repo:
-            for u in req_hle_not_in_repo:
-                arc_count = u.get("archive_file_count")
-                if arc_count:
-                    label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
-                else:
-                    label = u["name"]
-                print(f"    MISSING (required, HLE fallback): {u['emulator']} needs {label}")
-                checks = u.get("checks", [])
-                if checks:
-                    if verbose:
-                        expected = u.get("expected", {})
-                        if expected:
-                            vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
-                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
-                            print(f"      validates {vals}{ref_part}")
-                        else:
-                            checks_label = "+".join(checks)
-                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
-                            print(f"      validates {checks_label}{ref_part}")
-                    else:
-                        checks_label = "+".join(checks)
-                        print(f"      [{checks_label}]")
-
-        if game_data:
-            gd_missing = [u for u in game_data if not u["in_repo"]]
-            gd_present = [u for u in game_data if u["in_repo"]]
-            if gd_missing or gd_present:
-                print(f"  Game data: {len(gd_present)} in pack, {len(gd_missing)} missing")
-
-    # No external files (explain why certain emulator files are NOT included)
     exclusions = result.get("exclusion_notes", [])
     if exclusions:
         print(f"  No external files ({len(exclusions)}):")
         for ex in exclusions:
             print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
 
-    # Ground truth coverage footer
     gt_cov = result.get("ground_truth_coverage")
     if gt_cov and gt_cov["total"] > 0:
         pct = gt_cov["with_validation"] * 100 // gt_cov["total"]
