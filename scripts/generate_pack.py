@@ -402,6 +402,10 @@ def _collect_emulator_extras(
                 continue
             if file_mode == "libretro" and is_standalone:
                 continue
+            # Skip files loaded from non-system directories (save_dir, content_dir)
+            load_from = f.get("load_from", "")
+            if load_from and load_from != "system_dir":
+                continue
             if is_standalone:
                 dest = f.get("standalone_path") or f.get("path") or fname
             else:

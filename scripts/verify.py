@@ -327,6 +327,10 @@ def find_undeclared_files(
                 continue
             if file_mode == "libretro" and is_standalone:
                 continue
+            # Skip files loaded from non-system directories (save_dir, content_dir)
+            load_from = f.get("load_from", "")
+            if load_from and load_from != "system_dir":
+                continue
 
             archive = f.get("archive")
 
