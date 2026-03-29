@@ -458,15 +458,19 @@ def resolve_local_file(
             if not cache_dir or not os.path.isdir(cache_dir):
                 continue
             for try_name in names_to_try:
+                # Exact relative path
                 candidate = os.path.join(cache_dir, try_name)
                 if os.path.isfile(candidate):
                     return candidate, "data_dir"
-                if "/" in try_name:
-                    basename_candidate = os.path.join(
-                        cache_dir, try_name.rsplit("/", 1)[-1],
-                    )
-                    if os.path.isfile(basename_candidate):
-                        return basename_candidate, "data_dir"
+            # Basename walk: find file anywhere in cache tree
+            basename_targets = {
+                (n.rsplit("/", 1)[-1] if "/" in n else n)
+                for n in names_to_try
+            }
+            for root, _dirs, fnames in os.walk(cache_dir):
+                for fn in fnames:
+                    if fn in basename_targets:
+                        return os.path.join(root, fn), "data_dir"
 
     return None, "not_found"
 
