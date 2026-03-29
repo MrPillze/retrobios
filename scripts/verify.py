@@ -30,11 +30,11 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    build_zip_contents_index, check_inside_zip, compute_hashes,
-    filter_systems_by_target, group_identical_platforms, list_emulator_profiles,
-    list_system_ids, load_data_dir_registry, load_emulator_profiles,
-    load_platform_config, md5sum, md5_composite, require_yaml, resolve_local_file,
-    resolve_platform_cores,
+    build_target_cores_cache, build_zip_contents_index, check_inside_zip,
+    compute_hashes, filter_systems_by_target, group_identical_platforms,
+    list_emulator_profiles, list_system_ids, load_data_dir_registry,
+    load_emulator_profiles, load_platform_config, md5sum, md5_composite,
+    require_yaml, resolve_local_file, resolve_platform_cores,
 )
 
 yaml = require_yaml()
@@ -504,6 +504,7 @@ def verify_platform(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     data_dir_registry: dict | None = None,
+    supplemental_names: set[str] | None = None,
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps."""
     mode = config.get("verification_mode", "existence")
@@ -601,10 +602,11 @@ def verify_platform(
         status_counts[s] = status_counts.get(s, 0) + 1
 
     # Cross-reference undeclared files
-    from cross_reference import _build_supplemental_index
-    data_names = _build_supplemental_index()
+    if supplemental_names is None:
+        from cross_reference import _build_supplemental_index
+        supplemental_names = _build_supplemental_index()
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles,
-                                       target_cores=target_cores, data_names=data_names)
+                                       target_cores=target_cores, data_names=supplemental_names)
     exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles, target_cores=target_cores)
 
     # Ground truth coverage
@@ -1260,29 +1262,20 @@ def main():
 
     target_cores_cache: dict[str, set[str] | None] = {}
     if args.target:
-        from common import load_target_config
-        skip = []
-        for p in platforms:
-            try:
-                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
-            except FileNotFoundError:
-                if args.all:
-                    target_cores_cache[p] = None
-                else:
-                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
-                    sys.exit(1)
-            except ValueError as e:
-                if args.all:
-                    print(f"INFO: Skipping {p}: {e}")
-                    skip.append(p)
-                else:
-                    print(f"ERROR: {e}", file=sys.stderr)
-                    sys.exit(1)
-        platforms = [p for p in platforms if p not in skip]
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms, args.target, args.platforms_dir, is_all=args.all,
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
 
     # Group identical platforms (same function as generate_pack)
     groups = group_identical_platforms(platforms, args.platforms_dir,
                                       target_cores_cache if args.target else None)
+    from cross_reference import _build_supplemental_index
+    suppl_names = _build_supplemental_index()
+
     all_results = {}
     group_results: list[tuple[dict, list[str]]] = []
     for group_platforms, representative in groups:
@@ -1291,6 +1284,7 @@ def main():
         result = verify_platform(
             config, db, args.emulators_dir, emu_profiles,
             target_cores=tc, data_dir_registry=data_registry,
+            supplemental_names=suppl_names,
         )
         names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
         group_results.append((result, names))

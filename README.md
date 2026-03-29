@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,245** verified files across **357** systems, ready to extract into your emulator's BIOS directory.
+**7,244** verified files across **387** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -45,13 +45,13 @@ Each file is checked against the emulator's source code to match what the code a
 
 - **10 platforms** supported with platform-specific verification
 - **328 emulators** profiled from source (RetroArch cores + standalone)
-- **357 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,245 files** verified with MD5, SHA1, CRC32 checksums
+- **387 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **7,244 files** verified with MD5, SHA1, CRC32 checksums
 - **9266 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 323+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 353+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-29T14:15:30Z*
+*Auto-generated on 2026-03-29T21:00:40Z*

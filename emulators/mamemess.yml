@@ -17,6 +17,7 @@ systems:
   - coleco-adam
   - crvision
   - entex-advision
+  - bandai-rx78
   - mattel-aquarius
   - camplynx
   - cgenie
@@ -38,6 +39,7 @@ systems:
   - mz80k
   - pegasus
   - supracan
+  - trs80
 
 notes: |
   SUBTARGET=mess build from libretro/mame. Same source, same CORE_NAME ("mame"),
@@ -60,9 +62,9 @@ notes: |
   Astrocade, Casio Loopy, Casio PV-2000, Coleco Adam, VTech CreatiVision, Entex
   Adventure Vision, EACA Colour Genie, Acorn Atom, Tiger game.com,
   Bit Corporation Gamate, Epoch Game Pocket Computer, Hartung Game
-  Master, Funtech Super A'Can, Technosys Aamber Pegasus and VTech
-  Laser 310 system ROMs required for software loading (not IS_BIOS_ROOT
-  but functionally BIOS).
+  Master, Funtech Super A'Can, Technosys Aamber Pegasus, VTech
+  Laser 310 and TRS-80 family system ROMs required for software loading
+  (not IS_BIOS_ROOT but functionally BIOS).
 
   Apple II: 4 machine ROM sets (apple2, apple2p, apple2e, apple2ee) plus
   5 peripheral device ROM sets (disk controllers, CompactFlash, speech).
@@ -697,6 +699,19 @@ files:
         description: "National COP411L sound CPU ROM"
         size: 512
         crc32: 81e95975
+
+  # Bandai RX-78
+  - name: rx78.zip
+    required: true
+    category: bios_zip
+    system: bandai-rx78
+    source_ref: "src/mame/bandai/rx78.cpp:559"
+    note: "MACHINE_NOT_WORKING."
+    contents:
+      - name: ipl.rom
+        description: "IPL boot ROM"
+        size: 8192
+        crc32: a194ea53
 
   # VTech CreatiVision
   - name: crvision.zip
@@ -1593,3 +1608,260 @@ files:
         description: "Lockout chip ROM key"
         size: 16
         crc32: 0ba78597
+
+  # Tandy TRS-80 family
+  # Model I (trs80.cpp): trs80 (Level I, parent, WORKING), trs80l2 (Level II, parent),
+  # eg3003 (EACA Video Genie, parent), sys80/sys80p (clones), ht1080z/ht1080z2/ht108064 (clones).
+  # Model III/4/4P (trs80m3.cpp): trs80m3 (parent), trs80m4/trs80m4p/cp500 (clones).
+  # Z80-based home computers (1977-1983). Only trs80 (Level I) is MACHINE_SUPPORTS_SAVE;
+  # all others MACHINE_NOT_WORKING. Software lists: trs80_cass, trs80_flop, trs80_quik.
+  - name: trs80.zip
+    required: true
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:567-584"
+    note: "TRS-80 Model I Level I Basic (1977). Only fully working TRS-80 machine in MAME."
+    contents:
+      - name: level1.rom
+        description: "Level I BASIC ROM (4KB)"
+        size: 4096
+        crc32: 70d06dff
+      - name: mcm6670p.z29
+        description: "MCM6670P character generator ROM"
+        size: 1024
+        crc32: 0033f2b9
+
+  - name: trs80l2.zip
+    required: true
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:587-603"
+    note: |
+      TRS-80 Model I Level II Basic (1978). Separate parent machine from trs80 (Level I).
+      2 BIOS variants: Radio Shack Level II and R/S L2 (alternate dumps).
+      MACHINE_NOT_WORKING.
+    contents:
+      - name: rom-a.z1
+        description: "Level II ROM A (default)"
+        size: 4096
+        crc32: 37c59db2
+      - name: rom-b.z2
+        description: "Level II ROM B (default)"
+        size: 4096
+        crc32: "05818718"
+      - name: rom-c.z3
+        description: "Level II ROM C (default)"
+        size: 4096
+        crc32: 306e5d66
+      - name: rom-a_alt.z1
+        description: "Level II ROM A (alternate dump)"
+        size: 4096
+        crc32: be46faf5
+      - name: rom-b_alt.z2
+        description: "Level II ROM B (alternate dump)"
+        size: 4096
+        crc32: 6c791c2d
+      - name: rom-c_alt.z3
+        description: "Level II ROM C (alternate dump)"
+        size: 4096
+        crc32: 55b3ad13
+      - name: mcm6670p.z29
+        description: "MCM6670P character generator ROM"
+        size: 1024
+        crc32: 0033f2b9
+
+  - name: eg3003.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:608-617"
+    note: |
+      EACA Video Genie EG3003 (1980). TRS-80 Level II compatible clone.
+      Parent for sys80/sys80p/ht1080z/ht1080z2/ht108064 clones.
+      MACHINE_NOT_WORKING.
+    contents:
+      - name: 3001.z10
+        description: "ROM A (BASIC part 1)"
+        size: 4096
+        crc32: 8f5214de
+      - name: 3002.z11
+        description: "ROM B (BASIC part 2)"
+        size: 4096
+        crc32: 46e88fbf
+      - name: 3003.z12
+        description: "ROM C (BASIC part 3)"
+        size: 4096
+        crc32: 306e5d66
+      - name: tcs-ext.z13
+        description: "TCS extension ROM"
+        size: 2048
+        crc32: 8f2ac112
+      - name: tcs-ext.z25
+        description: "TCS character generator ROM"
+        size: 2048
+        crc32: 150c5f1f
+
+  - name: sys80.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:620-632"
+    note: "EACA System-80 (1980). Clone of eg3003 with different extension ROM. sys80p (50 Hz) shares ROMs."
+    contents:
+      - name: sys80.z13
+        description: "System-80 extension ROM"
+        size: 2048
+        crc32: 2a851e33
+      - name: 2513.z25
+        description: "Character generator ROM"
+        size: 1024
+        crc32: 0033f2b9
+
+  - name: ht1080z.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:637-646"
+    note: "Hiradastechnika HT-1080Z Series I (1983). Hungarian clone of eg3003."
+    contents:
+      - name: ht1080z.z25
+        description: "HT-1080Z character generator ROM"
+        size: 2048
+        crc32: e8c59d4f
+
+  - name: ht1080z2.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:649-658"
+    note: "Hiradastechnika HT-1080Z Series II (1984). Clone of eg3003."
+    contents:
+      - name: ht1080z2.z13
+        description: "HT-1080Z II extension ROM"
+        size: 2048
+        crc32: "07415ac6"
+      - name: ht1080z2.z25
+        description: "HT-1080Z II character generator ROM"
+        size: 2048
+        crc32: 6728f0ab
+
+  - name: ht108064.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80.cpp:661-670"
+    note: "Hiradastechnika HT-1080Z/64 (1985). 64-column clone of eg3003."
+    contents:
+      - name: 3001_64.z10
+        description: "ROM A (64-col BASIC part 1)"
+        size: 4096
+        crc32: 59ec132e
+      - name: 3002_64.z11
+        description: "ROM B (64-col BASIC part 2)"
+        size: 4096
+        crc32: a7a73e8c
+      - name: ht108064.z13
+        description: "HT-1080Z/64 extension ROM"
+        size: 2048
+        crc32: fc12bd28
+      - name: ht108064.z25
+        description: "HT-1080Z/64 character generator ROM"
+        size: 2048
+        crc32: e76b73a4
+
+  - name: trs80m3.zip
+    required: true
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80m3.cpp:483-519"
+    note: |
+      TRS-80 Model III (1980). Parent for trs80m4/trs80m4p/cp500 clones.
+      4 BIOS variants: Level 2 ROM C Rev C (default), Rev B, Network III v2 (student),
+      Level 1. MACHINE_NOT_WORKING.
+    contents:
+      - name: 8041364.u104
+        description: "Level 2 ROM A"
+        size: 8192
+        crc32: ec0c6daa
+      - name: 8040332.u105
+        description: "Level 2 ROM B"
+        size: 4096
+        crc32: ed4ee921
+      - name: 8040316c.u106
+        description: "Level 2 ROM C Rev C (default)"
+        size: 2048
+        crc32: c8f79433
+      - name: 8040316b.u106
+        description: "Level 2 ROM C Rev B"
+        size: 2048
+        crc32: 84a5702d
+      - name: 276a.u106
+        description: "Network III v2 ROM C"
+        size: 2048
+        crc32: 7d38720a
+      - name: 8040032.u104
+        description: "Level 1 BIOS"
+        size: 4096
+        crc32: 6418d641
+      - name: 8044316a.u36
+        description: "Character generator ROM (rev A)"
+        size: 2048
+        crc32: 444c8b60
+
+  - name: trs80m4.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80m3.cpp:522-528"
+    note: |
+      TRS-80 Model 4 (1980). Clone of trs80m3. BAD_DUMP combined ROM
+      (should be split into 3 like trs80m3). MACHINE_NOT_WORKING.
+    contents:
+      - name: trs80m4.rom
+        description: "Combined system ROM (BAD_DUMP)"
+        size: 14336
+        crc32: 1a92d54d
+      - name: 8044316a.u36
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 444c8b60
+
+  - name: trs80m4p.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80m3.cpp:530-539"
+    note: |
+      TRS-80 Model 4P (1983). Clone of trs80m3. Completely different memory map;
+      Model III ROMs loaded from boot disk, only a bootloader ROM on board.
+      2 BIOS variants: gate array (default) and disk loader hack.
+      MACHINE_NOT_WORKING.
+    contents:
+      - name: 8075332.u69
+        description: "Bootloader ROM"
+        size: 4096
+        crc32: 3a738aa9
+      - name: trs80m4p_loader_hack.rom
+        description: "Disk loader hack ROM"
+        size: 504
+        crc32: 7ff336f4
+      - name: 8049007.u103
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 1ac44bea
+
+  - name: cp500.zip
+    required: false
+    category: bios_zip
+    system: trs80
+    source_ref: "src/mame/trs/trs80m3.cpp:541-550"
+    note: "Prologica CP-500 (1982). Brazilian TRS-80 Model III clone. MACHINE_NOT_WORKING."
+    contents:
+      - name: s_8407_cn62516n_cp500a_prologica_83.ci111
+        description: "Combined system + boot ROM"
+        size: 16384
+        crc32: c2fc1b92
+      - name: 100.105.ci36
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 1765931e

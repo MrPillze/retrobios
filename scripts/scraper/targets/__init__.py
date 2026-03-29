@@ -6,18 +6,20 @@ from __future__ import annotations
 
 import importlib
 import pkgutil
+from abc import ABC, abstractmethod
 from pathlib import Path
 
 
-class BaseTargetScraper:
+class BaseTargetScraper(ABC):
     """Base class for target scrapers."""
 
     def __init__(self, url: str = ""):
         self.url = url
 
+    @abstractmethod
     def fetch_targets(self) -> dict:
         """Fetch targets and their core lists. Returns dict matching target YAML format."""
-        raise NotImplementedError
+        ...
 
     def write_output(self, data: dict, output_path: str) -> None:
         """Write target data to YAML file."""

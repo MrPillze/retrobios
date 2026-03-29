@@ -27,9 +27,9 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     MANUFACTURER_PREFIXES,
-    build_zip_contents_index, check_inside_zip, compute_hashes,
-    fetch_large_file, group_identical_platforms, list_emulator_profiles,
-    list_platform_system_ids, list_registered_platforms,
+    build_target_cores_cache, build_zip_contents_index, check_inside_zip,
+    compute_hashes, fetch_large_file, group_identical_platforms,
+    list_emulator_profiles, list_platform_system_ids, list_registered_platforms,
     filter_systems_by_target, list_system_ids, load_database,
     load_data_dir_registry, load_emulator_profiles, load_platform_config,
     md5_composite, require_yaml, resolve_local_file,
@@ -950,7 +950,7 @@ def generate_pack(
                         src = os.path.join(root, fname)
                         rel = os.path.relpath(src, local_path)
                         full = f"{dd_prefix}/{rel}"
-                        if full in seen_destinations or full.lower() in seen_lower and case_insensitive:
+                        if full in seen_destinations or (full.lower() in seen_lower and case_insensitive):
                             continue
                         if _has_path_conflict(full, seen_destinations, seen_parents):
                             continue
@@ -1913,25 +1913,13 @@ def main():
 
     target_cores_cache: dict[str, set[str] | None] = {}
     if args.target:
-        from common import load_target_config
-        skip = []
-        for p in platforms:
-            try:
-                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
-            except FileNotFoundError:
-                if args.all:
-                    target_cores_cache[p] = None
-                else:
-                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
-                    sys.exit(1)
-            except ValueError as e:
-                if args.all:
-                    print(f"INFO: Skipping {p}: {e}")
-                    skip.append(p)
-                else:
-                    print(f"ERROR: {e}", file=sys.stderr)
-                    sys.exit(1)
-        platforms = [p for p in platforms if p not in skip]
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms, args.target, args.platforms_dir, is_all=args.all,
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
 
     groups = group_identical_platforms(platforms, args.platforms_dir,
                                       target_cores_cache if args.target else None)

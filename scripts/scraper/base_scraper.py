@@ -47,6 +47,24 @@ class ChangeSet:
         return ", ".join(parts) if parts else "no changes"
 
 
+MAX_RESPONSE_SIZE = 50 * 1024 * 1024  # 50 MB
+
+
+def _read_limited(resp: object, max_bytes: int = MAX_RESPONSE_SIZE) -> bytes:
+    """Read an HTTP response with a size limit to prevent OOM."""
+    chunks: list[bytes] = []
+    total = 0
+    while True:
+        chunk = resp.read(65536)  # type: ignore[union-attr]
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise ValueError(f"Response exceeds {max_bytes} byte limit")
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
 class BaseScraper(ABC):
     """Abstract base class for platform BIOS requirement scrapers."""
 
@@ -63,7 +81,7 @@ class BaseScraper(ABC):
         try:
             req = urllib.request.Request(self.url, headers={"User-Agent": "retrobios-scraper/1.0"})
             with urllib.request.urlopen(req, timeout=30) as resp:
-                self._raw_data = resp.read().decode("utf-8")
+                self._raw_data = _read_limited(resp).decode("utf-8")
                 return self._raw_data
         except urllib.error.URLError as e:
             raise ConnectionError(f"Failed to fetch {self.url}: {e}") from e

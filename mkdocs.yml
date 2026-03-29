@@ -194,7 +194,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (108):
+  - Community forks (109):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - Anarch: emulators/anarch.md
@@ -236,6 +236,7 @@ nav:
     - Gambatte: emulators/gambatte.md
     - Genesis Plus GX: emulators/genesis_plus_gx.md
     - gpSP: emulators/gpsp.md
+    - GSplus: emulators/gsplus.md
     - Handy: emulators/handy.md
     - higan (SFC Accuracy): emulators/higan_sfc.md
     - LRPS2: emulators/lrps2.md
@@ -427,7 +428,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (25):
+  - Other (24):
     - ares: emulators/ares.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - BigPEmu: emulators/bigpemu.md
@@ -436,7 +437,6 @@ nav:
     - Demul: emulators/demul.md
     - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
-    - GSplus: emulators/gsplus.md
     - Lexaloffle: emulators/lexaloffle.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md

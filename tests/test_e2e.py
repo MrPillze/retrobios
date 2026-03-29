@@ -1494,7 +1494,7 @@ class TestE2E(unittest.TestCase):
 
     def test_112_build_ground_truth(self):
         """build_ground_truth returns per-emulator detail for a filename."""
-        from common import build_ground_truth
+        from validation import build_ground_truth
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         gt = build_ground_truth("present_req.bin", index)
@@ -1510,7 +1510,7 @@ class TestE2E(unittest.TestCase):
 
     def test_113_build_ground_truth_empty(self):
         """build_ground_truth returns [] for unknown filename."""
-        from common import build_ground_truth
+        from validation import build_ground_truth
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         gt = build_ground_truth("nonexistent.bin", index)
@@ -3010,7 +3010,7 @@ class TestE2E(unittest.TestCase):
 
     def test_104_diff_truth_normalized_system_ids(self):
         """Diff matches systems with different ID formats via normalization."""
-        from common import diff_platform_truth
+        from truth import diff_platform_truth
 
         truth = {
             "systems": {

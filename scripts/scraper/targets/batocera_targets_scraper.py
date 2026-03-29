@@ -152,7 +152,7 @@ def _condition_holds(condition: str, active: frozenset[str]) -> bool:
     try:
         result, _ = _check_condition(tokens, 0, active)
         return result
-    except Exception:
+    except (IndexError, ValueError, TypeError):
         return True  # conservative: include on parse failure
 
 
