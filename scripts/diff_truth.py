@@ -16,7 +16,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import diff_platform_truth, list_registered_platforms, load_platform_config
+from common import list_registered_platforms, load_platform_config
+from truth import diff_platform_truth
 
 try:
     import yaml

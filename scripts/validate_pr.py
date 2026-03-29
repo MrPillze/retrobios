@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, list_registered_platforms, load_database as _load_database
+from common import compute_hashes, list_registered_platforms, load_database
 
 try:
     import yaml
@@ -88,16 +88,6 @@ class ValidationResult:
                 lines.append(f"- ℹ️ {message}")
 
         return "\n".join(lines)
-
-
-def load_database(db_path: str) -> dict | None:
-    try:
-        return _load_database(db_path)
-    except FileNotFoundError:
-        return None
-    except json.JSONDecodeError as e:
-        print(f"WARNING: corrupt database.json: {e}", file=sys.stderr)
-        return None
 
 
 def load_platform_hashes(platforms_dir: str) -> dict:
@@ -241,7 +231,13 @@ def main():
     if not files:
         parser.error("No files specified. Use --changed or provide file paths.")
 
-    db = load_database(args.db)
+    try:
+        db = load_database(args.db)
+    except FileNotFoundError:
+        db = None
+    except json.JSONDecodeError as e:
+        print(f"WARNING: corrupt database.json: {e}", file=sys.stderr)
+        db = None
     platform_hashes = load_platform_hashes(args.platforms_dir)
 
     results = []

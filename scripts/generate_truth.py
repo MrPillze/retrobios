@@ -14,13 +14,13 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    generate_platform_truth,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
     load_platform_config,
     load_target_config,
 )
+from truth import generate_platform_truth
 
 try:
     import yaml

@@ -27,13 +27,15 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     MANUFACTURER_PREFIXES,
-    _build_validation_index, build_zip_contents_index, check_file_validation,
-    check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
-    group_identical_platforms, list_emulator_profiles, list_platform_system_ids,
-    list_registered_platforms,
+    build_zip_contents_index, check_inside_zip, compute_hashes,
+    fetch_large_file, group_identical_platforms, list_emulator_profiles,
+    list_platform_system_ids, list_registered_platforms,
     filter_systems_by_target, list_system_ids, load_database,
     load_data_dir_registry, load_emulator_profiles, load_platform_config,
     md5_composite, resolve_local_file,
+)
+from validation import (
+    _build_validation_index, check_file_validation, filter_files_by_mode,
 )
 from deterministic_zip import rebuild_zip_deterministic
 

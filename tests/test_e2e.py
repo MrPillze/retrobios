@@ -30,14 +30,15 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import yaml
 from common import (
-    _build_validation_index, build_zip_contents_index, check_file_validation,
-    check_inside_zip, compute_hashes, diff_platform_truth,
-    filter_files_by_mode,
-    generate_platform_truth,
+    build_zip_contents_index, check_inside_zip, compute_hashes,
     group_identical_platforms, load_emulator_profiles, load_platform_config,
     md5_composite, md5sum, parse_md5_list, resolve_local_file,
     resolve_platform_cores, safe_extract_zip,
 )
+from validation import (
+    _build_validation_index, check_file_validation, filter_files_by_mode,
+)
+from truth import diff_platform_truth, generate_platform_truth
 from verify import (
     Severity, Status, verify_platform, find_undeclared_files, find_exclusion_notes,
     verify_emulator, _effective_validation_label,
