@@ -1349,7 +1349,14 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
         for h in ("sha1", "md5", "crc32"):
             t_hash = t_entry.get(h, "")
             s_hash = s_entry.get(h, "")
-            if t_hash and s_hash and t_hash.lower() != s_hash.lower():
+            if not t_hash or not s_hash:
+                continue
+            # Normalize to list for multi-hash support
+            t_list = t_hash if isinstance(t_hash, list) else [t_hash]
+            s_list = s_hash if isinstance(s_hash, list) else [s_hash]
+            t_set = {v.lower() for v in t_list}
+            s_set = {v.lower() for v in s_list}
+            if not t_set & s_set:
                 hash_mismatch.append({
                     "name": s_entry["name"],
                     "hash_type": h,
