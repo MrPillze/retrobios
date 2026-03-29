@@ -38,7 +38,7 @@ data_directories:
     destination: fbneo/cheats
     source_ref: "src/burner/conc.cpp:167"
   - ref: fbneo-samples
-    destination: fbneo/samples
+    destination: fbneo
     source_ref: "src/burn/snd/samples.cpp:21-35"
 
 notes: |
