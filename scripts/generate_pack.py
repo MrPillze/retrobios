@@ -328,12 +328,18 @@ def _collect_emulator_extras(
     - Respects data_directories coverage
     - Only returns files that exist in the repo (packable)
 
+    When the same file is needed at multiple destinations by different cores
+    (e.g. cdimono1.zip at root for cdi2015 and at same_cdi/bios/ for same_cdi),
+    all destinations are included so every core finds its files.
+
     Works for ANY platform (RetroArch, Batocera, Recalbox, etc.)
     """
+    from common import resolve_platform_cores
     from verify import find_undeclared_files
 
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
     extras = []
+    seen_dests: set[str] = set(seen)
     for u in undeclared:
         if not u["in_repo"]:
             continue
@@ -342,8 +348,9 @@ def _collect_emulator_extras(
         name = archive if archive else u["name"]
         dest = archive if archive else (u.get("path") or u["name"])
         full_dest = f"{base_dest}/{dest}" if base_dest else dest
-        if full_dest in seen:
+        if full_dest in seen_dests:
             continue
+        seen_dests.add(full_dest)
         extras.append({
             "name": name,
             "destination": dest,
@@ -351,6 +358,55 @@ def _collect_emulator_extras(
             "hle_fallback": u.get("hle_fallback", False),
             "source_emulator": u.get("emulator", ""),
         })
+
+    # Second pass: find alternative destinations for files already in the pack.
+    # A file declared by the platform or emitted above may also be needed at a
+    # different path by another core (e.g. neocd/ vs root, same_cdi/bios/ vs root).
+    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+    relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
+    standalone_set = {str(c) for c in config.get("standalone_cores", [])}
+    by_name = db.get("indexes", {}).get("by_name", {})
+    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        if emu_name not in relevant:
+            continue
+        is_standalone = emu_name in standalone_set or bool(
+            standalone_set & {str(c) for c in profile.get("cores", [])}
+        )
+        for f in profile.get("files", []):
+            fname = f.get("name", "")
+            if not fname:
+                continue
+            file_mode = f.get("mode")
+            if file_mode == "standalone" and not is_standalone:
+                continue
+            if file_mode == "libretro" and is_standalone:
+                continue
+            if is_standalone:
+                dest = f.get("standalone_path") or f.get("path") or fname
+            else:
+                dest = f.get("path") or fname
+            if dest == fname:
+                continue  # no alternative destination
+            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            if full_dest in seen_dests:
+                continue
+            # Check file exists in repo
+            if not (by_name.get(fname) or by_name.get(dest.rsplit("/", 1)[-1])
+                    or by_path_suffix.get(dest)):
+                continue
+            seen_dests.add(full_dest)
+            extras.append({
+                "name": fname,
+                "destination": dest,
+                "required": f.get("required", False),
+                "hle_fallback": f.get("hle_fallback", False),
+                "source_emulator": profile.get("emulator", emu_name),
+            })
+
     return extras
 
 

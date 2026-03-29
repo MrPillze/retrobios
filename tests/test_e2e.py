@@ -462,6 +462,31 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "test_validation.yml"), "w") as fh:
             yaml.dump(emu_val, fh)
 
+        # Emulator A: declares present_req.bin at root (no path)
+        emu_root = {
+            "emulator": "TestRootCore",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "present_req.bin", "required": True},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_root_core.yml"), "w") as fh:
+            yaml.dump(emu_root, fh)
+
+        # Emulator B: declares same file at a subdirectory path
+        emu_subdir = {
+            "emulator": "TestSubdirCore",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "present_req.bin", "required": True,
+                 "path": "subcore/bios/present_req.bin"},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_subdir_core.yml"), "w") as fh:
+            yaml.dump(emu_subdir, fh)
+
     # ---------------------------------------------------------------
     # THE TEST — one method per feature area, all using same fixtures
     # ---------------------------------------------------------------
@@ -2419,6 +2444,38 @@ class TestE2E(unittest.TestCase):
         # Missing archive should NOT be in extras (in_repo=False)
         self.assertNotIn("missing_archive.zip", extra_names)
 
+
+    def test_165_pack_extras_multi_dest_cross_ref(self):
+        """Same file at different paths from two profiles produces both destinations."""
+        from generate_pack import _collect_emulator_extras
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db,
+            set(), "", profiles,
+        )
+        extra_dests = {e["destination"] for e in extras}
+        # Root destination (from test_emu or test_root_core, no path)
+        self.assertIn("present_req.bin", extra_dests)
+        # Subdirectory destination (from test_subdir_core)
+        self.assertIn("subcore/bios/present_req.bin", extra_dests)
+
+    def test_166_pack_extras_multi_dest_platform_declared(self):
+        """Profile with path different from platform destination adds alternative."""
+        from generate_pack import _collect_emulator_extras
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        # Simulate platform already having present_req.bin at root
+        seen = {"present_req.bin"}
+        extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db,
+            seen, "", profiles,
+        )
+        extra_dests = {e["destination"] for e in extras}
+        # Root is already in pack (in seen), should NOT be duplicated
+        self.assertNotIn("present_req.bin", extra_dests)
+        # Subdirectory destination should be added
+        self.assertIn("subcore/bios/present_req.bin", extra_dests)
 
     def test_90_registry_install_metadata(self):
         """Registry install section is accessible."""
