@@ -1457,3 +1457,31 @@ files:
     required: false
     note: "High score database, enables persistent high scores across all arcade games"
     source_ref: "src/burn/hiscore.cpp:406"
+
+  # Large audio samples (>50MB, stored as release assets)
+  - name: "donpachi.zip"
+    path: "fbneo/samples/donpachi.zip"
+    required: false
+    category: game_data
+    storage: release
+    size: 209000000
+    note: "DonPachi CD-quality soundtrack samples (14 WAVs)"
+    source_ref: "src/burn/snd/samples.cpp"
+
+  - name: "sfz3mix.zip"
+    path: "fbneo/samples/sfz3mix.zip"
+    required: false
+    category: game_data
+    storage: release
+    size: 116000000
+    note: "Street Fighter Zero 3 Mix custom audio samples (43 WAVs)"
+    source_ref: "src/burn/snd/samples.cpp"
+
+  - name: "twotiger.zip"
+    path: "fbneo/samples/twotiger.zip"
+    required: false
+    category: game_data
+    storage: release
+    size: 155000000
+    note: "Two Tigers with Journey CD audio samples (2 WAVs)"
+    source_ref: "src/burn/snd/samples.cpp"

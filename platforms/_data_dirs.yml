@@ -211,7 +211,7 @@ data_directories:
     source_type: zip
     for_platforms: [retroarch, lakka, retropie]
     local_cache: data/fbneo-samples
-    description: "FinalBurn Neo per-game audio samples (45 arcade games)"
+    description: "FinalBurn Neo per-game audio samples (49 arcade games)"
 
   # ref: dirksimple — system/
   dirksimple:
