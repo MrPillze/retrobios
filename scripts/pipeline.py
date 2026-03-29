@@ -143,6 +143,8 @@ def main():
     parser.add_argument("--include-extras", action="store_true",
                         help="(no-op) Core requirements are always included")
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument("--check-buildbot", action="store_true",
+                        help="Check buildbot system directory for changes")
     args = parser.parse_args()
 
     results = {}
@@ -170,6 +172,16 @@ def main():
     else:
         print("\n--- 2/9 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
+
+    # Step 2b: Check buildbot system directory (non-blocking)
+    if args.check_buildbot and not args.offline:
+        ok, _ = run(
+            [sys.executable, "scripts/check_buildbot_system.py"],
+            "2b check buildbot system",
+        )
+        results["check_buildbot"] = ok
+    elif args.check_buildbot:
+        print("\n--- 2b check buildbot system: SKIPPED (--offline) ---")
 
     # Step 3: Verify
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
