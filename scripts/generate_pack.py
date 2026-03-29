@@ -1478,82 +1478,8 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
     print(f"Generated {count} target manifest(s) in {output_dir}")
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
-    parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
-    parser.add_argument("--all", action="store_true", help="Generate packs for all active platforms")
-    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
-    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
-    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
-    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
-    parser.add_argument("--list-systems", action="store_true", help="List available systems")
-    parser.add_argument("--include-archived", action="store_true", help="Include archived platforms")
-    parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
-    parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
-    parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
-    parser.add_argument("--output-dir", "-o", default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--include-extras", action="store_true",
-                        help="(no-op) Core requirements are always included")
-    parser.add_argument("--emulators-dir", default="emulators")
-    parser.add_argument("--offline", action="store_true",
-                        help="Skip data directory freshness check, use cache only")
-    parser.add_argument("--refresh-data", action="store_true",
-                        help="Force re-download all data directories")
-    parser.add_argument("--list", action="store_true", help="List available platforms")
-    parser.add_argument("--required-only", action="store_true",
-                        help="Only include required files, skip optional")
-    parser.add_argument("--split", action="store_true",
-                        help="Generate one ZIP per system/manufacturer")
-    parser.add_argument("--group-by", choices=["system", "manufacturer"],
-                        default="system",
-                        help="Grouping for --split (default: system)")
-    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
-    parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
-    parser.add_argument("--from-md5",
-                        help="Hash(es) to look up or pack (comma-separated)")
-    parser.add_argument("--from-md5-file",
-                        help="File with hashes (one per line)")
-    parser.add_argument("--manifest", action="store_true",
-                        help="Output JSON manifests instead of ZIP packs")
-    parser.add_argument("--manifest-targets", action="store_true",
-                        help="Convert target YAMLs to installer JSON")
-    args = parser.parse_args()
-
-    if args.manifest_targets:
-        generate_target_manifests(
-            os.path.join(args.platforms_dir, "targets"),
-            args.output_dir,
-        )
-        return
-
-    if args.list:
-        platforms = list_platforms(args.platforms_dir)
-        for p in platforms:
-            print(p)
-        return
-    if args.list_emulators:
-        list_emulator_profiles(args.emulators_dir)
-        return
-    if args.list_systems:
-        if args.platform:
-            list_platform_system_ids(args.platform, args.platforms_dir)
-        else:
-            list_system_ids(args.emulators_dir)
-        return
-    if args.list_targets:
-        if not args.platform:
-            parser.error("--list-targets requires --platform")
-        from common import list_available_targets
-        targets = list_available_targets(args.platform, args.platforms_dir)
-        if not targets:
-            print(f"No targets configured for platform '{args.platform}'")
-            return
-        for t in targets:
-            aliases = f" (aliases: {', '.join(t['aliases'])})" if t['aliases'] else ""
-            print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
-        return
-
-    # Mode validation
+def _validate_args(args, parser):
+    """Validate argument combinations and mutual exclusion rules."""
     has_platform = bool(args.platform)
     has_all = args.all
     has_emulator = bool(args.emulator)
@@ -1596,150 +1522,52 @@ def main():
     if args.manifest and args.split:
         parser.error("--manifest is incompatible with --split")
 
-    # Hash lookup / pack mode
-    if has_from_md5:
-        if args.from_md5:
-            hashes = parse_hash_input(args.from_md5)
-        else:
-            hashes = parse_hash_file(args.from_md5_file)
-        if not hashes:
-            print("No valid hashes found in input", file=sys.stderr)
-            sys.exit(1)
-        db = load_database(args.db)
-        if not has_platform and not has_emulator:
-            lookup_hashes(hashes, db, args.bios_dir, args.emulators_dir,
-                         args.platforms_dir)
-            return
-        zip_contents = build_zip_contents_index(db)
-        result = generate_md5_pack(
-            hashes=hashes, db=db, bios_dir=args.bios_dir,
-            output_dir=args.output_dir, zip_contents=zip_contents,
-            platform_name=args.platform, platforms_dir=args.platforms_dir,
-            emulator_name=args.emulator, emulators_dir=args.emulators_dir,
-            standalone=getattr(args, "standalone", False),
-        )
-        if not result:
-            sys.exit(1)
-        return
 
-    db = load_database(args.db)
-    zip_contents = build_zip_contents_index(db)
+def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_cores_cache):
+    """Generate JSON manifests instead of ZIP packs."""
+    registry_path = os.path.join(args.platforms_dir, "_registry.yml")
+    os.makedirs(args.output_dir, exist_ok=True)
+    registry: dict = {}
+    if os.path.exists(registry_path):
+        with open(registry_path) as _rf:
+            registry = yaml.safe_load(_rf) or {}
+    for group_platforms, representative in groups:
+        print(f"\nGenerating manifest for {representative}...")
+        try:
+            tc = target_cores_cache.get(representative) if args.target else None
+            manifest = generate_manifest(
+                representative, args.platforms_dir, db, args.bios_dir,
+                registry_path, emulators_dir=args.emulators_dir,
+                zip_contents=zip_contents, emu_profiles=emu_profiles,
+                target_cores=tc,
+            )
+            out_path = os.path.join(args.output_dir, f"{representative}.json")
+            with open(out_path, "w") as f:
+                json.dump(manifest, f, indent=2)
+            print(f"  {out_path}: {manifest['total_files']} files, "
+                  f"{manifest['total_size']} bytes")
+            # Create aliases for grouped platforms (e.g., lakka -> retroarch)
+            for alias_plat in group_platforms:
+                if alias_plat != representative:
+                    alias_path = os.path.join(args.output_dir, f"{alias_plat}.json")
+                    alias_manifest = dict(manifest)
+                    alias_manifest["platform"] = alias_plat
+                    alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
+                    alias_manifest["display_name"] = alias_cfg.get("platform", alias_plat)
+                    alias_registry = registry.get("platforms", {}).get(alias_plat, {})
+                    alias_install = alias_registry.get("install", {})
+                    alias_manifest["detect"] = alias_install.get("detect", [])
+                    alias_manifest["standalone_copies"] = alias_install.get("standalone_copies", [])
+                    with open(alias_path, "w") as f:
+                        json.dump(alias_manifest, f, indent=2)
+                    print(f"  {alias_path}: alias of {representative}")
+        except (FileNotFoundError, OSError, yaml.YAMLError) as e:
+            print(f"  ERROR: {e}")
 
-    # Emulator mode
-    if args.emulator:
-        names = [n.strip() for n in args.emulator.split(",") if n.strip()]
-        result = generate_emulator_pack(
-            names, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents, required_only=args.required_only,
-        )
-        if not result:
-            sys.exit(1)
-        return
 
-    # System mode (standalone, without platform context)
-    if has_system and not has_platform and not has_all:
-        system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
-        result = generate_system_pack(
-            system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents, required_only=args.required_only,
-        )
-        if not result:
-            sys.exit(1)
-        return
-
-    system_filter = None
-    if args.system:
-        system_filter = [s.strip() for s in args.system.split(",") if s.strip()]
-
-    # Platform mode (existing)
-    if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived,
-        )
-    elif args.platform:
-        platforms = [args.platform]
-    else:
-        parser.error("Specify --platform or --all")
-        return
-
-    data_registry = load_data_dir_registry(args.platforms_dir)
-    if data_registry and not args.offline:
-        from refresh_data_dirs import refresh_all, load_registry
-        registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
-        results = refresh_all(registry, force=args.refresh_data)
-        updated = sum(1 for v in results.values() if v)
-        if updated:
-            print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
-
-    emu_profiles = load_emulator_profiles(args.emulators_dir)
-
-    target_cores_cache: dict[str, set[str] | None] = {}
-    if args.target:
-        from common import load_target_config
-        skip = []
-        for p in platforms:
-            try:
-                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
-            except FileNotFoundError:
-                if args.all:
-                    target_cores_cache[p] = None
-                else:
-                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
-                    sys.exit(1)
-            except ValueError as e:
-                if args.all:
-                    print(f"INFO: Skipping {p}: {e}")
-                    skip.append(p)
-                else:
-                    print(f"ERROR: {e}", file=sys.stderr)
-                    sys.exit(1)
-        platforms = [p for p in platforms if p not in skip]
-
-    groups = group_identical_platforms(platforms, args.platforms_dir,
-                                      target_cores_cache if args.target else None)
-
-    # Manifest mode: JSON output instead of ZIP
-    if args.manifest:
-        registry_path = os.path.join(args.platforms_dir, "_registry.yml")
-        os.makedirs(args.output_dir, exist_ok=True)
-        registry: dict = {}
-        if os.path.exists(registry_path):
-            with open(registry_path) as _rf:
-                registry = yaml.safe_load(_rf) or {}
-        for group_platforms, representative in groups:
-            print(f"\nGenerating manifest for {representative}...")
-            try:
-                tc = target_cores_cache.get(representative) if args.target else None
-                manifest = generate_manifest(
-                    representative, args.platforms_dir, db, args.bios_dir,
-                    registry_path, emulators_dir=args.emulators_dir,
-                    zip_contents=zip_contents, emu_profiles=emu_profiles,
-                    target_cores=tc,
-                )
-                out_path = os.path.join(args.output_dir, f"{representative}.json")
-                with open(out_path, "w") as f:
-                    json.dump(manifest, f, indent=2)
-                print(f"  {out_path}: {manifest['total_files']} files, "
-                      f"{manifest['total_size']} bytes")
-                # Create aliases for grouped platforms (e.g., lakka → retroarch)
-                for alias_plat in group_platforms:
-                    if alias_plat != representative:
-                        alias_path = os.path.join(args.output_dir, f"{alias_plat}.json")
-                        alias_manifest = dict(manifest)
-                        alias_manifest["platform"] = alias_plat
-                        alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
-                        alias_manifest["display_name"] = alias_cfg.get("platform", alias_plat)
-                        alias_registry = registry.get("platforms", {}).get(alias_plat, {})
-                        alias_install = alias_registry.get("install", {})
-                        alias_manifest["detect"] = alias_install.get("detect", [])
-                        alias_manifest["standalone_copies"] = alias_install.get("standalone_copies", [])
-                        with open(alias_path, "w") as f:
-                            json.dump(alias_manifest, f, indent=2)
-                        print(f"  {alias_path}: alias of {representative}")
-            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
-                print(f"  ERROR: {e}")
-        return
-
+def _run_platform_packs(args, groups, db, zip_contents, data_registry,
+                        emu_profiles, target_cores_cache, system_filter):
+    """Generate ZIP packs for platform groups and verify."""
     for group_platforms, representative in groups:
         variants = [p for p in group_platforms if p != representative]
         if variants:
@@ -1782,25 +1610,197 @@ def main():
         except (FileNotFoundError, OSError, yaml.YAMLError) as e:
             print(f"  ERROR: {e}")
 
-    # Post-generation: verify all packs + inject manifests + SHA256SUMS
-    if not args.list_emulators and not args.list_systems:
-        print("\nVerifying packs and generating manifests...")
-        # Skip platform conformance for filtered/split/custom packs
-        skip_conf = bool(system_filter or args.split)
-        all_ok = verify_and_finalize_packs(args.output_dir, db,
-                                            skip_conformance=skip_conf,
-                                            data_registry=data_registry)
-        # Also verify split subdirectories
-        if args.split:
-            for entry in os.listdir(args.output_dir):
-                sub = os.path.join(args.output_dir, entry)
-                if os.path.isdir(sub) and entry.endswith("_Split"):
-                    ok = verify_and_finalize_packs(sub, db, skip_conformance=True,
-                                                   data_registry=data_registry)
-                    all_ok = all_ok and ok
-        if not all_ok:
-            print("WARNING: some packs have verification errors")
+    print("\nVerifying packs and generating manifests...")
+    skip_conf = bool(system_filter or args.split)
+    all_ok = verify_and_finalize_packs(args.output_dir, db,
+                                        skip_conformance=skip_conf,
+                                        data_registry=data_registry)
+    if args.split:
+        for entry in os.listdir(args.output_dir):
+            sub = os.path.join(args.output_dir, entry)
+            if os.path.isdir(sub) and entry.endswith("_Split"):
+                ok = verify_and_finalize_packs(sub, db, skip_conformance=True,
+                                               data_registry=data_registry)
+                all_ok = all_ok and ok
+    if not all_ok:
+        print("WARNING: some packs have verification errors")
+        sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
+    parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
+    parser.add_argument("--all", action="store_true", help="Generate packs for all active platforms")
+    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
+    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
+    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
+    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
+    parser.add_argument("--list-systems", action="store_true", help="List available systems")
+    parser.add_argument("--include-archived", action="store_true", help="Include archived platforms")
+    parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
+    parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
+    parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
+    parser.add_argument("--output-dir", "-o", default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--include-extras", action="store_true",
+                        help="(no-op) Core requirements are always included")
+    parser.add_argument("--emulators-dir", default="emulators")
+    parser.add_argument("--offline", action="store_true",
+                        help="Skip data directory freshness check, use cache only")
+    parser.add_argument("--refresh-data", action="store_true",
+                        help="Force re-download all data directories")
+    parser.add_argument("--list", action="store_true", help="List available platforms")
+    parser.add_argument("--required-only", action="store_true",
+                        help="Only include required files, skip optional")
+    parser.add_argument("--split", action="store_true",
+                        help="Generate one ZIP per system/manufacturer")
+    parser.add_argument("--group-by", choices=["system", "manufacturer"],
+                        default="system",
+                        help="Grouping for --split (default: system)")
+    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
+    parser.add_argument("--from-md5",
+                        help="Hash(es) to look up or pack (comma-separated)")
+    parser.add_argument("--from-md5-file",
+                        help="File with hashes (one per line)")
+    parser.add_argument("--manifest", action="store_true",
+                        help="Output JSON manifests instead of ZIP packs")
+    parser.add_argument("--manifest-targets", action="store_true",
+                        help="Convert target YAMLs to installer JSON")
+    args = parser.parse_args()
+
+    # Quick-exit modes
+    if args.manifest_targets:
+        generate_target_manifests(
+            os.path.join(args.platforms_dir, "targets"), args.output_dir)
+        return
+    if args.list:
+        for p in list_platforms(args.platforms_dir):
+            print(p)
+        return
+    if args.list_emulators:
+        list_emulator_profiles(args.emulators_dir)
+        return
+    if args.list_systems:
+        if args.platform:
+            list_platform_system_ids(args.platform, args.platforms_dir)
+        else:
+            list_system_ids(args.emulators_dir)
+        return
+    if args.list_targets:
+        if not args.platform:
+            parser.error("--list-targets requires --platform")
+        from common import list_available_targets
+        targets = list_available_targets(args.platform, args.platforms_dir)
+        if not targets:
+            print(f"No targets configured for platform '{args.platform}'")
+            return
+        for t in targets:
+            aliases = f" (aliases: {', '.join(t['aliases'])})" if t['aliases'] else ""
+            print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
+        return
+
+    _validate_args(args, parser)
+
+    # Hash lookup / pack mode
+    has_from_md5 = bool(args.from_md5 or getattr(args, 'from_md5_file', None))
+    if has_from_md5:
+        hashes = parse_hash_input(args.from_md5) if args.from_md5 else parse_hash_file(args.from_md5_file)
+        if not hashes:
+            print("No valid hashes found in input", file=sys.stderr)
             sys.exit(1)
+        db = load_database(args.db)
+        if not args.platform and not args.emulator:
+            lookup_hashes(hashes, db, args.bios_dir, args.emulators_dir,
+                         args.platforms_dir)
+            return
+        zip_contents = build_zip_contents_index(db)
+        result = generate_md5_pack(
+            hashes=hashes, db=db, bios_dir=args.bios_dir,
+            output_dir=args.output_dir, zip_contents=zip_contents,
+            platform_name=args.platform, platforms_dir=args.platforms_dir,
+            emulator_name=args.emulator, emulators_dir=args.emulators_dir,
+            standalone=getattr(args, "standalone", False),
+        )
+        if not result:
+            sys.exit(1)
+        return
+
+    db = load_database(args.db)
+    zip_contents = build_zip_contents_index(db)
+
+    # Emulator mode
+    if args.emulator:
+        names = [n.strip() for n in args.emulator.split(",") if n.strip()]
+        if not generate_emulator_pack(
+            names, args.emulators_dir, db, args.bios_dir, args.output_dir,
+            args.standalone, zip_contents, required_only=args.required_only,
+        ):
+            sys.exit(1)
+        return
+
+    # System mode (standalone, without platform context)
+    if args.system and not args.platform and not args.all:
+        system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+        if not generate_system_pack(
+            system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
+            args.standalone, zip_contents, required_only=args.required_only,
+        ):
+            sys.exit(1)
+        return
+
+    system_filter = [s.strip() for s in args.system.split(",") if s.strip()] if args.system else None
+
+    # Platform mode
+    if args.all:
+        platforms = list_registered_platforms(
+            args.platforms_dir, include_archived=args.include_archived)
+    elif args.platform:
+        platforms = [args.platform]
+    else:
+        parser.error("Specify --platform or --all")
+        return
+
+    data_registry = load_data_dir_registry(args.platforms_dir)
+    if data_registry and not args.offline:
+        from refresh_data_dirs import refresh_all, load_registry
+        registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
+        results = refresh_all(registry, force=args.refresh_data)
+        updated = sum(1 for v in results.values() if v)
+        if updated:
+            print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
+
+    emu_profiles = load_emulator_profiles(args.emulators_dir)
+
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        from common import load_target_config
+        skip = []
+        for p in platforms:
+            try:
+                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
+            except FileNotFoundError:
+                if args.all:
+                    target_cores_cache[p] = None
+                else:
+                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
+                    sys.exit(1)
+            except ValueError as e:
+                if args.all:
+                    print(f"INFO: Skipping {p}: {e}")
+                    skip.append(p)
+                else:
+                    print(f"ERROR: {e}", file=sys.stderr)
+                    sys.exit(1)
+        platforms = [p for p in platforms if p not in skip]
+
+    groups = group_identical_platforms(platforms, args.platforms_dir,
+                                      target_cores_cache if args.target else None)
+
+    if args.manifest:
+        _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_cores_cache)
+    else:
+        _run_platform_packs(args, groups, db, zip_contents, data_registry,
+                            emu_profiles, target_cores_cache, system_filter)
 
 
 # ---------------------------------------------------------------------------
