@@ -23,9 +23,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 
-# ---------------------------------------------------------------------------
 # Key file parsing (keys.txt / aes_keys.txt format)
-# ---------------------------------------------------------------------------
 
 def parse_keys_file(path: str | Path) -> dict[str, dict[str, bytes]]:
     """Parse a 3DS keys file with :AES, :RSA, :ECC sections.
@@ -67,9 +65,7 @@ def find_keys_file(bios_dir: str | Path) -> Path | None:
     return None
 
 
-# ---------------------------------------------------------------------------
 # Pure Python RSA-2048 PKCS1v15 SHA256 verification (zero dependencies)
-# ---------------------------------------------------------------------------
 
 def _rsa_verify_pkcs1v15_sha256(
     message: bytes,
@@ -79,7 +75,7 @@ def _rsa_verify_pkcs1v15_sha256(
 ) -> bool:
     """Verify RSA-2048 PKCS#1 v1.5 with SHA-256.
 
-    Pure Python — uses Python's native int for modular exponentiation.
+    Pure Python -uses Python's native int for modular exponentiation.
     Reproduces CryptoPP::RSASS<PKCS1v15, SHA256>::Verifier.
     """
     n = int.from_bytes(modulus, "big")
@@ -124,9 +120,7 @@ def _rsa_verify_pkcs1v15_sha256(
     return em == expected_em
 
 
-# ---------------------------------------------------------------------------
 # AES-128-CBC decryption (with fallback)
-# ---------------------------------------------------------------------------
 
 def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
     """Decrypt AES-128-CBC without padding."""
@@ -166,9 +160,7 @@ def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
         )
 
 
-# ---------------------------------------------------------------------------
 # File verification functions
-# ---------------------------------------------------------------------------
 
 def verify_secure_info_a(
     filepath: str | Path,
@@ -347,7 +339,7 @@ def verify_otp(
     if computed_hash != stored_hash:
         return False, "SHA-256 hash mismatch (OTP corrupted)"
 
-    # --- ECC certificate verification (sect233r1) ---
+    # ECC certificate verification (sect233r1)
     ecc_keys = keys.get("ECC", {})
     root_public_xy = ecc_keys.get("rootPublicXY")
     if not root_public_xy or len(root_public_xy) != 60:
@@ -414,9 +406,7 @@ def verify_otp(
     return False, "decrypted, magic+SHA256 valid, but ECC cert signature invalid"
 
 
-# ---------------------------------------------------------------------------
 # Unified verification interface for verify.py
-# ---------------------------------------------------------------------------
 
 # Map from (filename, validation_type) to verification function
 _CRYPTO_VERIFIERS: dict[str, Callable] = {

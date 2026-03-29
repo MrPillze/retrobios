@@ -56,7 +56,7 @@ TARGETS: list[tuple[str, str, str]] = [
     ("nintendo/wiiu/latest", "nintendo-wiiu", "ppc"),
     ("playstation/ps2/latest", "playstation-ps2", "mips"),
     ("playstation/psp/latest", "playstation-psp", "mips"),
-    # vita: only VPK bundles on buildbot — cores listed via libretro-super recipes
+    # vita: only VPK bundles on buildbot -cores listed via libretro-super recipes
 ]
 
 # Recipe-based targets: (recipe_path_under_RECIPE_BASE_URL, target_name, architecture)

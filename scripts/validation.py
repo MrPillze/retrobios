@@ -12,7 +12,7 @@ import os
 from common import compute_hashes
 
 # Validation types that require console-specific cryptographic keys.
-# verify.py cannot reproduce these — size checks still apply if combined.
+# verify.py cannot reproduce these -size checks still apply if combined.
 _CRYPTO_CHECKS = frozenset({"signature", "crypto"})
 
 # All reproducible validation types.
@@ -85,7 +85,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 if f.get("max_size") is not None:
                     cur = index[fname]["max_size"]
                     index[fname]["max_size"] = max(cur, f["max_size"]) if cur is not None else f["max_size"]
-            # Hash checks — collect all accepted hashes as sets (multiple valid
+            # Hash checks -collect all accepted hashes as sets (multiple valid
             # versions of the same file, e.g. MT-32 ROM versions)
             if "crc32" in checks and f.get("crc32"):
                 crc_val = f["crc32"]
@@ -103,7 +103,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                             index[fname][hash_type].add(str(h).lower())
                     else:
                         index[fname][hash_type].add(str(val).lower())
-            # Adler32 — stored as known_hash_adler32 field (not in validation: list
+            # Adler32 -stored as known_hash_adler32 field (not in validation: list
             # for Dolphin, but support it in both forms for future profiles)
             adler_val = f.get("known_hash_adler32") or f.get("adler32")
             if adler_val:
@@ -186,7 +186,7 @@ def check_file_validation(
         return None
     checks = entry["checks"]
 
-    # Size checks — sizes is a set of accepted values
+    # Size checks -sizes is a set of accepted values
     if "size" in checks:
         actual_size = os.path.getsize(local_path)
         if entry["sizes"] and actual_size not in entry["sizes"]:
@@ -197,7 +197,7 @@ def check_file_validation(
         if entry["max_size"] is not None and actual_size > entry["max_size"]:
             return f"size too large: max {entry['max_size']}, got {actual_size}"
 
-    # Hash checks — compute once, reuse for all hash types.
+    # Hash checks -compute once, reuse for all hash types.
     # Each hash field is a set of accepted values (multiple valid ROM versions).
     need_hashes = (
         any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256"))

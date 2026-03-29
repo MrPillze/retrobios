@@ -230,10 +230,10 @@ class TestE2E(unittest.TestCase):
                         # Correct hash
                         {"name": "correct_hash.bin", "destination": "correct_hash.bin",
                          "md5": f["correct_hash.bin"]["md5"], "required": True},
-                        # Wrong hash on disk → untested
+                        # Wrong hash on disk ->untested
                         {"name": "wrong_hash.bin", "destination": "wrong_hash.bin",
                          "md5": "ffffffffffffffffffffffffffffffff", "required": True},
-                        # No MD5 → OK (existence within md5 platform)
+                        # No MD5 ->OK (existence within md5 platform)
                         {"name": "no_md5.bin", "destination": "no_md5.bin", "required": False},
                         # Missing required
                         {"name": "gone_req.bin", "destination": "gone_req.bin",
@@ -259,7 +259,7 @@ class TestE2E(unittest.TestCase):
                         # Truncated MD5 (Batocera 29 chars)
                         {"name": "truncated.bin", "destination": "truncated.bin",
                          "md5": truncated_md5, "required": True},
-                        # Same destination from different entry → worst status wins
+                        # Same destination from different entry ->worst status wins
                         {"name": "correct_hash.bin", "destination": "dedup_target.bin",
                          "md5": f["correct_hash.bin"]["md5"], "required": True},
                         {"name": "correct_hash.bin", "destination": "dedup_target.bin",
@@ -367,7 +367,7 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "test_alias.yml"), "w") as fh:
             yaml.dump(alias, fh)
 
-        # Emulator with data_dir that matches platform → gaps suppressed
+        # Emulator with data_dir that matches platform ->gaps suppressed
         emu_dd = {
             "emulator": "TestEmuDD",
             "type": "libretro",
@@ -415,39 +415,39 @@ class TestE2E(unittest.TestCase):
             "type": "libretro",
             "systems": ["console-a", "sys-md5"],
             "files": [
-                # Size validation — correct size (16 bytes = len(b"PRESENT_REQUIRED"))
+                # Size validation -correct size (16 bytes = len(b"PRESENT_REQUIRED"))
                 {"name": "present_req.bin", "required": True,
                  "validation": ["size"], "size": 16,
                  "source_ref": "test.c:10-20"},
-                # Size validation — wrong expected size
+                # Size validation -wrong expected size
                 {"name": "present_opt.bin", "required": False,
                  "validation": ["size"], "size": 9999},
-                # CRC32 validation — correct crc32
+                # CRC32 validation -correct crc32
                 {"name": "correct_hash.bin", "required": True,
                  "validation": ["crc32"], "crc32": "91d0b1d3",
                  "source_ref": "hash.c:42"},
-                # CRC32 validation — wrong crc32
+                # CRC32 validation -wrong crc32
                 {"name": "no_md5.bin", "required": False,
                  "validation": ["crc32"], "crc32": "deadbeef"},
                 # CRC32 starting with '0' (regression: lstrip("0x") bug)
                 {"name": "leading_zero_crc.bin", "required": True,
                  "validation": ["crc32"], "crc32": "0179e92e"},
-                # MD5 validation — correct md5
+                # MD5 validation -correct md5
                 {"name": "correct_hash.bin", "required": True,
                  "validation": ["md5"], "md5": "4a8db431e3b1a1acacec60e3424c4ce8"},
-                # SHA1 validation — correct sha1
+                # SHA1 validation -correct sha1
                 {"name": "correct_hash.bin", "required": True,
                  "validation": ["sha1"], "sha1": "a2ab6c95c5bbd191b9e87e8f4e85205a47be5764"},
-                # MD5 validation — wrong md5
+                # MD5 validation -wrong md5
                 {"name": "alias_target.bin", "required": False,
                  "validation": ["md5"], "md5": "0000000000000000000000000000dead"},
-                # Adler32 — known_hash_adler32 field
+                # Adler32 -known_hash_adler32 field
                 {"name": "present_req.bin", "required": True,
                  "known_hash_adler32": None},  # placeholder, set below
                 # Min/max size range validation
                 {"name": "present_req.bin", "required": True,
                  "validation": ["size"], "min_size": 10, "max_size": 100},
-                # Signature — crypto check we can't reproduce, but size applies
+                # Signature -crypto check we can't reproduce, but size applies
                 {"name": "correct_hash.bin", "required": True,
                  "validation": ["size", "signature"], "size": 17},
             ],
@@ -491,7 +491,7 @@ class TestE2E(unittest.TestCase):
             yaml.dump(emu_subdir, fh)
 
     # ---------------------------------------------------------------
-    # THE TEST — one method per feature area, all using same fixtures
+    # THE TEST -one method per feature area, all using same fixtures
     # ---------------------------------------------------------------
 
     def test_01_resolve_sha1(self):
@@ -676,7 +676,7 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
         names = {u["name"] for u in undeclared}
-        # dd_covered.bin is a file entry, not data_dir content — still undeclared
+        # dd_covered.bin is a file entry, not data_dir content -still undeclared
         self.assertIn("dd_covered.bin", names)
 
     def test_44_cross_ref_skips_launchers(self):
@@ -688,7 +688,7 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn("launcher_bios.bin", names)
 
     def test_45_hle_fallback_downgrades_severity(self):
-        """Missing file with hle_fallback=true → INFO severity, not CRITICAL."""
+        """Missing file with hle_fallback=true ->INFO severity, not CRITICAL."""
         from verify import compute_severity, Severity
         # required + missing + NO HLE = CRITICAL
         sev = compute_severity("missing", True, "md5", hle_fallback=False)
@@ -723,7 +723,7 @@ class TestE2E(unittest.TestCase):
         groups = group_identical_platforms(
             ["test_existence", "test_inherited"], self.platforms_dir
         )
-        # Different base_destination → separate groups
+        # Different base_destination ->separate groups
         self.assertEqual(len(groups), 2)
 
     def test_51_platform_grouping_same(self):
@@ -1064,7 +1064,7 @@ class TestE2E(unittest.TestCase):
     def test_95_verify_emulator_validation_applied(self):
         """Emulator mode applies validation checks as primary verification."""
         result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
-        # present_opt.bin has wrong size → UNTESTED
+        # present_opt.bin has wrong size ->UNTESTED
         for d in result["details"]:
             if d["name"] == "present_opt.bin":
                 self.assertEqual(d["status"], Status.UNTESTED)
@@ -1092,13 +1092,13 @@ class TestE2E(unittest.TestCase):
     def test_98_verify_emulator_validation_label(self):
         """Validation label reflects the checks used."""
         result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
-        # test_validation has crc32, md5, sha1, size → all listed
+        # test_validation has crc32, md5, sha1, size ->all listed
         self.assertEqual(result["verification_mode"], "crc32+md5+sha1+signature+size")
 
     def test_99filter_files_by_mode(self):
         """filter_files_by_mode correctly filters standalone/libretro."""
         files = [
-            {"name": "a.bin"},                         # no mode → both
+            {"name": "a.bin"},                         # no mode ->both
             {"name": "b.bin", "mode": "libretro"},     # libretro only
             {"name": "c.bin", "mode": "standalone"},   # standalone only
             {"name": "d.bin", "mode": "both"},         # explicit both
@@ -1126,7 +1126,7 @@ class TestE2E(unittest.TestCase):
         self.assertTrue(len(notes) > 0)
 
     def test_101_verify_emulator_severity_missing_required(self):
-        """Missing required file in emulator mode → WARNING severity."""
+        """Missing required file in emulator mode ->WARNING severity."""
         result = verify_emulator(["test_emu"], self.emulators_dir, self.db)
         # undeclared_req.bin is required and missing
         for d in result["details"]:
@@ -1642,7 +1642,7 @@ class TestE2E(unittest.TestCase):
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         result = verify_platform(config, self.db, self.emulators_dir, profiles)
-        # Simulate --json filtering (non-OK only) — ground_truth must survive
+        # Simulate --json filtering (non-OK only) -ground_truth must survive
         filtered = [d for d in result["details"] if d["status"] != Status.OK]
         for d in filtered:
             self.assertIn("ground_truth", d)
@@ -2426,7 +2426,7 @@ class TestE2E(unittest.TestCase):
         config = load_platform_config("test_archive_platform", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
-        # test_archive.zip is declared → its archived ROMs should be skipped
+        # test_archive.zip is declared ->its archived ROMs should be skipped
         archive_entries = [u for u in undeclared if u.get("archive") == "test_archive.zip"]
         self.assertEqual(len(archive_entries), 0)
 

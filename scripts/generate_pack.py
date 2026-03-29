@@ -248,7 +248,7 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     if path and status != "hash_mismatch":
         return path, status
 
-    # Large files from GitHub release assets — tried when local file is
+    # Large files from GitHub release assets -tried when local file is
     # missing OR has a hash mismatch (wrong variant on disk)
     name = file_entry.get("name", "")
     sha1 = file_entry.get("sha1")
@@ -362,7 +362,7 @@ def _collect_emulator_extras(
     # Second pass: find alternative destinations for files already in the pack.
     # A file declared by the platform or emitted above may also be needed at a
     # different path by another core (e.g. neocd/ vs root, same_cdi/bios/ vs root).
-    # Only adds a copy when the file is ALREADY covered at a different path —
+    # Only adds a copy when the file is ALREADY covered at a different path -
     # never introduces a file that wasn't selected by the first pass.
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
@@ -831,7 +831,7 @@ def generate_pack(
 
                 # Emulator-level validation: informational only for platform packs.
                 # Platform verification (existence/md5) is the authority for pack status.
-                # Emulator checks are supplementary — logged but don't downgrade.
+                # Emulator checks are supplementary -logged but don't downgrade.
                 # When a discrepancy is found, try to find a file satisfying both.
                 if (file_status.get(dedup_key) == "ok"
                         and local_path and validation_index):
@@ -892,7 +892,7 @@ def generate_pack(
             if base_dest:
                 full_dest = f"{base_dest}/{dest}"
             elif "/" not in dest:
-                # Bare filename with empty base_destination — infer bios/ prefix
+                # Bare filename with empty base_destination -infer bios/ prefix
                 # to match platform conventions (RetroDECK: ~/retrodeck/bios/)
                 full_dest = f"bios/{dest}"
             else:
@@ -936,7 +936,7 @@ def generate_pack(
                     continue
                 local_path = entry.get("local_cache", "")
                 if not local_path or not os.path.isdir(local_path):
-                    print(f"  WARNING: data directory '{ref_key}' not cached at {local_path} — run refresh_data_dirs.py")
+                    print(f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py")
                     continue
                 dd_dest = dd.get("destination", "")
                 if base_dest and dd_dest:
@@ -961,7 +961,7 @@ def generate_pack(
                         zf.write(src, full)
                         total_files += 1
 
-        # README.txt for users — personalized step-by-step per platform
+        # README.txt for users -personalized step-by-step per platform
         num_systems = len(pack_systems)
         readme_text = _build_readme(platform_name, platform_display,
                                     base_dest, total_files, num_systems)
@@ -983,7 +983,7 @@ def generate_pack(
     for key, reason in sorted(file_reasons.items()):
         status = file_status.get(key, "")
         label = "UNTESTED" if status == "untested" else "DISCREPANCY"
-        print(f"  {label}: {key} — {reason}")
+        print(f"  {label}: {key} -{reason}")
     for name in missing_files:
         print(f"  MISSING: {name}")
     return zip_path
@@ -1011,7 +1011,7 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
     the normalized version into the pack.
 
     This ensures:
-    - Same ROMs → same ZIP hash in every pack build
+    - Same ROMs -> same ZIP hash in every pack build
     - No dependency on how the user built their MAME ROM set
     - Bit-identical ZIPs across platforms and build times
     """
@@ -1025,9 +1025,7 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
         os.unlink(tmp_path)
 
 
-# ---------------------------------------------------------------------------
 # Emulator/system mode pack generation
-# ---------------------------------------------------------------------------
 
 def _resolve_destination(file_entry: dict, pack_structure: dict | None,
                          standalone: bool) -> str:
@@ -1081,11 +1079,11 @@ def generate_emulator_pack(
         p = all_profiles[name]
         if p.get("type") == "alias":
             alias_of = p.get("alias_of", "?")
-            print(f"Error: {name} is an alias of {alias_of} — use --emulator {alias_of}",
+            print(f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
                   file=sys.stderr)
             return None
         if p.get("type") == "launcher":
-            print(f"Error: {name} is a launcher — use the emulator it launches",
+            print(f"Error: {name} is a launcher -use the emulator it launches",
                   file=sys.stderr)
             return None
         ptype = p.get("type", "libretro")
@@ -1931,9 +1929,7 @@ def main():
                             emu_profiles, target_cores_cache, system_filter)
 
 
-# ---------------------------------------------------------------------------
 # Manifest generation (JSON inventory for install.py)
-# ---------------------------------------------------------------------------
 
 _GITIGNORE_ENTRIES: set[str] | None = None
 
@@ -2139,7 +2135,7 @@ def generate_manifest(
         if case_insensitive:
             seen_lower.add(full_dest.lower())
 
-    # No phase 3 (data directories) — skipped for manifest
+    # No phase 3 (data directories) -skipped for manifest
 
     now = __import__("datetime").datetime.now(
         __import__("datetime").timezone.utc
@@ -2161,9 +2157,7 @@ def generate_manifest(
     return result
 
 
-# ---------------------------------------------------------------------------
 # Post-generation pack verification + manifest + SHA256SUMS
-# ---------------------------------------------------------------------------
 
 def verify_pack(zip_path: str, db: dict,
                 data_registry: dict | None = None) -> tuple[bool, dict]:
@@ -2462,7 +2456,7 @@ def verify_pack_against_platform(
 
                 if full in zip_set or full.lower() in zip_lower:
                     core_present += 1
-                # Not an error if missing — some get deduped or filtered
+                # Not an error if missing -some get deduped or filtered
 
         checked = baseline_checked + core_checked
         present = baseline_present + core_present

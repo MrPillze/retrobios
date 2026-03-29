@@ -141,8 +141,8 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
 def _path_suffix(rel_path: str) -> str:
     """Extract the path suffix after bios/Manufacturer/Console/.
 
-    bios/Nintendo/GameCube/GC/USA/IPL.bin → GC/USA/IPL.bin
-    bios/Sony/PlayStation/scph5501.bin → scph5501.bin
+    bios/Nintendo/GameCube/GC/USA/IPL.bin -> GC/USA/IPL.bin
+    bios/Sony/PlayStation/scph5501.bin -> scph5501.bin
     """
     parts = rel_path.replace("\\", "/").split("/")
     # Skip: bios / Manufacturer / Console (3 segments)

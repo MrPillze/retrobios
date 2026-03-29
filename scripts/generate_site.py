@@ -189,9 +189,7 @@ def _status_icon(pct: float) -> str:
     return "partial"
 
 
-# ---------------------------------------------------------------------------
 # Home page
-# ---------------------------------------------------------------------------
 
 def generate_home(db: dict, coverages: dict, profiles: dict,
                    registry: dict | None = None) -> str:
@@ -303,9 +301,7 @@ def generate_home(db: dict, coverages: dict, profiles: dict,
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
 # Platform pages
-# ---------------------------------------------------------------------------
 
 def generate_platform_index(coverages: dict) -> str:
     lines = [
@@ -478,9 +474,7 @@ def generate_platform_page(name: str, cov: dict, registry: dict | None = None,
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
 # System pages
-# ---------------------------------------------------------------------------
 
 def _group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
     """Group files by manufacturer -> console -> files."""
@@ -572,9 +566,7 @@ def generate_system_page(
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
 # Emulator pages
-# ---------------------------------------------------------------------------
 
 def generate_emulators_index(profiles: dict) -> str:
     unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
@@ -1011,9 +1003,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
 # Contributing page
-# ---------------------------------------------------------------------------
 
 def generate_gap_analysis(
     profiles: dict,
@@ -1367,9 +1357,7 @@ The CI automatically:
 """
 
 
-# ---------------------------------------------------------------------------
 # Wiki pages
-# ---------------------------------------------------------------------------
 
 def generate_wiki_index() -> str:
     """Generate wiki landing page."""
@@ -1924,9 +1912,7 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
 # Build cross-reference indexes
-# ---------------------------------------------------------------------------
 
 def _build_platform_file_index(coverages: dict) -> dict[str, set]:
     """Map platform_name -> set of declared file names."""
@@ -1954,9 +1940,7 @@ def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
     return index
 
 
-# ---------------------------------------------------------------------------
 # mkdocs.yml nav generator
-# ---------------------------------------------------------------------------
 
 def generate_mkdocs_nav(
     coverages: dict,
@@ -2028,9 +2012,7 @@ def generate_mkdocs_nav(
     ]
 
 
-# ---------------------------------------------------------------------------
 # Main
-# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(description="Generate MkDocs site from project data")
@@ -2053,14 +2035,12 @@ def main():
     for d in GENERATED_DIRS:
         (docs / d).mkdir(parents=True, exist_ok=True)
 
-    # Load registry for platform metadata (logos, etc.)
     registry_path = Path(args.platforms_dir) / "_registry.yml"
     registry = {}
     if registry_path.exists():
         with open(registry_path) as f:
             registry = (yaml.safe_load(f) or {}).get("platforms", {})
 
-    # Load platform configs
     platform_names = list_registered_platforms(args.platforms_dir, include_archived=True)
 
     print("Computing platform coverage...")
@@ -2073,7 +2053,6 @@ def main():
         except FileNotFoundError as e:
             print(f"  {name}: skipped ({e})", file=sys.stderr)
 
-    # Load emulator profiles
     print("Loading emulator profiles...")
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     unique_count = sum(1 for p in profiles.values() if p.get("type") != "alias")

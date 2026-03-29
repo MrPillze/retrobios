@@ -1,7 +1,7 @@
 """Deterministic ZIP builder for MAME BIOS archives.
 
 Creates byte-identical ZIP files from individual ROM atoms, enabling:
-- Reproducible builds: same ROMs → same ZIP hash, always
+- Reproducible builds: same ROMs -> same ZIP hash, always
 - Version-agnostic assembly: build neogeo.zip for any MAME version
 - Deduplication: store ROM atoms once, assemble any ZIP on demand
 

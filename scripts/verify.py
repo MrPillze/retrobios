@@ -47,9 +47,7 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_EMULATORS_DIR = "emulators"
 
 
-# ---------------------------------------------------------------------------
-# Status model — aligned with Batocera BiosStatus (batocera-systems:967-969)
-# ---------------------------------------------------------------------------
+# Status model -aligned with Batocera BiosStatus (batocera-systems:967-969)
 
 class Status:
     OK = "ok"
@@ -68,15 +66,13 @@ _STATUS_ORDER = {Status.OK: 0, Status.UNTESTED: 1, Status.MISSING: 2}
 _SEVERITY_ORDER = {Severity.OK: 0, Severity.INFO: 1, Severity.WARNING: 2, Severity.CRITICAL: 3}
 
 
-# ---------------------------------------------------------------------------
 # Verification functions
-# ---------------------------------------------------------------------------
 
 def verify_entry_existence(
     file_entry: dict, local_path: str | None,
     validation_index: dict[str, dict] | None = None,
 ) -> dict:
-    """RetroArch verification: path_is_valid() — file exists = OK."""
+    """RetroArch verification: path_is_valid() -file exists = OK."""
     name = file_entry.get("name", "")
     required = file_entry.get("required", True)
     if not local_path:
@@ -96,7 +92,7 @@ def verify_entry_md5(
     local_path: str | None,
     resolve_status: str = "",
 ) -> dict:
-    """MD5 verification — Batocera md5sum + Recalbox multi-hash + Md5Composite."""
+    """MD5 verification -Batocera md5sum + Recalbox multi-hash + Md5Composite."""
     name = file_entry.get("name", "")
     expected_md5 = file_entry.get("md5", "")
     zipped_file = file_entry.get("zipped_file")
@@ -162,7 +158,7 @@ def verify_entry_sha1(
     file_entry: dict,
     local_path: str | None,
 ) -> dict:
-    """SHA1 verification — BizHawk firmware hash check."""
+    """SHA1 verification -BizHawk firmware hash check."""
     name = file_entry.get("name", "")
     expected_sha1 = file_entry.get("sha1", "")
     required = file_entry.get("required", True)
@@ -183,20 +179,18 @@ def verify_entry_sha1(
             "reason": f"expected {expected_sha1[:12]}… got {actual_sha1[:12]}…"}
 
 
-# ---------------------------------------------------------------------------
 # Severity mapping per platform
-# ---------------------------------------------------------------------------
 
 def compute_severity(
     status: str, required: bool, mode: str, hle_fallback: bool = False,
 ) -> str:
-    """Map (status, required, verification_mode, hle_fallback) → severity.
+    """Map (status, required, verification_mode, hle_fallback) -> severity.
 
     Based on native platform behavior + emulator HLE capability:
     - RetroArch (existence): required+missing = warning, optional+missing = info
     - Batocera/Recalbox/RetroBat/EmuDeck (md5): hash-based verification
     - BizHawk (sha1): same severity rules as md5
-    - hle_fallback: core works without this file via HLE → always INFO when missing
+    - hle_fallback: core works without this file via HLE -> always INFO when missing
     """
     if status == Status.OK:
         return Severity.OK
@@ -218,13 +212,9 @@ def compute_severity(
     return Severity.OK
 
 
-# ---------------------------------------------------------------------------
 # ZIP content index
-# ---------------------------------------------------------------------------
 
-# ---------------------------------------------------------------------------
 # Cross-reference: undeclared files used by cores
-# ---------------------------------------------------------------------------
 
 
 def _build_expected(file_entry: dict, checks: list[str]) -> dict:
@@ -447,7 +437,7 @@ def find_exclusion_notes(
             })
             continue
 
-        # Count standalone-only files — but only report as excluded if the
+        # Count standalone-only files -but only report as excluded if the
         # platform does NOT use this emulator in standalone mode
         standalone_set = set(str(c) for c in config.get("standalone_cores", []))
         is_standalone = emu_name in standalone_set or bool(
@@ -466,9 +456,7 @@ def find_exclusion_notes(
     return notes
 
 
-# ---------------------------------------------------------------------------
 # Platform verification
-# ---------------------------------------------------------------------------
 
 def _find_best_variant(
     file_entry: dict, db: dict, current_path: str,
@@ -640,9 +628,7 @@ def verify_platform(
     }
 
 
-# ---------------------------------------------------------------------------
 # Output
-# ---------------------------------------------------------------------------
 
 def _format_ground_truth_aggregate(ground_truth: list[dict]) -> str:
     """Format ground truth as a single aggregated line.
@@ -698,7 +684,7 @@ def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) ->
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
             reason = d.get("reason", "")
-            print(f"  UNTESTED ({req}{hle}): {key} — {reason}")
+            print(f"  UNTESTED ({req}{hle}): {key} -{reason}")
             _print_ground_truth(d.get("ground_truth", []), verbose)
     for d in details:
         if d["status"] == Status.MISSING:
@@ -717,7 +703,7 @@ def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) ->
             if key in seen:
                 continue
             seen.add(key)
-            print(f"  DISCREPANCY: {key} — {disc}")
+            print(f"  DISCREPANCY: {key} -{disc}")
             _print_ground_truth(d.get("ground_truth", []), verbose)
 
     if verbose:
@@ -831,7 +817,7 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
     if exclusions:
         print(f"  No external files ({len(exclusions)}):")
         for ex in exclusions:
-            print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
+            print(f"    {ex['emulator']} -{ex['detail']} [{ex['reason']}]")
 
     gt_cov = result.get("ground_truth_coverage")
     if gt_cov and gt_cov["total"] > 0:
@@ -841,9 +827,7 @@ def print_platform_result(result: dict, group: list[str], verbose: bool = False)
             print(f"    {gt_cov['platform_only']} platform-only (no emulator profile)")
 
 
-# ---------------------------------------------------------------------------
 # Emulator/system mode verification
-# ---------------------------------------------------------------------------
 
 def _effective_validation_label(details: list[dict], validation_index: dict) -> str:
     """Determine the bracket label for the report.
@@ -892,11 +876,11 @@ def verify_emulator(
         p = all_profiles[name]
         if p.get("type") == "alias":
             alias_of = p.get("alias_of", "?")
-            print(f"Error: {name} is an alias of {alias_of} — use --emulator {alias_of}",
+            print(f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
                   file=sys.stderr)
             sys.exit(1)
         if p.get("type") == "launcher":
-            print(f"Error: {name} is a launcher — use the emulator it launches",
+            print(f"Error: {name} is a launcher -use the emulator it launches",
                   file=sys.stderr)
             sys.exit(1)
         # Check standalone capability
@@ -1117,7 +1101,7 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
             reason = d.get("reason", "")
-            print(f"  UNTESTED ({req}{hle}): {d['name']} — {reason}")
+            print(f"  UNTESTED ({req}{hle}): {d['name']} -{reason}")
             gt = d.get("ground_truth", [])
             if gt:
                 if verbose:

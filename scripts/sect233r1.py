@@ -3,7 +3,7 @@
 Implements GF(2^233) field arithmetic, elliptic curve point operations,
 and ECDSA-SHA256 verification for Nintendo 3DS OTP certificate checking.
 
-Zero external dependencies — uses only Python stdlib.
+Zero external dependencies -uses only Python stdlib.
 
 Curve: sect233r1 (NIST B-233, SEC 2 v2)
 Field: GF(2^233) with irreducible polynomial t^233 + t^74 + 1
@@ -13,9 +13,7 @@ from __future__ import annotations
 
 import hashlib
 
-# ---------------------------------------------------------------------------
 # sect233r1 curve parameters (SEC 2 v2)
-# ---------------------------------------------------------------------------
 
 _M = 233
 _F = (1 << 233) | (1 << 74) | 1  # irreducible polynomial
@@ -34,9 +32,7 @@ _N_BITLEN = _N.bit_length()  # 233
 _H = 2
 
 
-# ---------------------------------------------------------------------------
 # GF(2^233) field arithmetic
-# ---------------------------------------------------------------------------
 
 def _gf_reduce(a: int) -> int:
     """Reduce polynomial a modulo t^233 + t^74 + 1."""
@@ -85,7 +81,7 @@ def _gf_inv(a: int) -> int:
             q ^= 1 << shift
             temp ^= r << shift
         remainder = temp
-        # Multiply q * s in GF(2)[x] (no reduction — working in polynomial ring)
+        # Multiply q * s in GF(2)[x] (no reduction -working in polynomial ring)
         qs = 0
         qt = q
         st = s
@@ -102,10 +98,8 @@ def _gf_inv(a: int) -> int:
     return _gf_reduce(old_s)
 
 
-# ---------------------------------------------------------------------------
 # Elliptic curve point operations on sect233r1
 # y^2 + xy = x^3 + ax^2 + b (a=1)
-# ---------------------------------------------------------------------------
 
 # Point at infinity
 _INF = None
@@ -175,9 +169,7 @@ def _ec_mul(k: int, p: tuple[int, int] | None) -> tuple[int, int] | None:
     return result
 
 
-# ---------------------------------------------------------------------------
 # ECDSA-SHA256 verification
-# ---------------------------------------------------------------------------
 
 def _modinv(a: int, m: int) -> int:
     """Modular inverse of a modulo m (integers, not GF(2^m))."""

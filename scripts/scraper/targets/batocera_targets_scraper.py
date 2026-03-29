@@ -136,7 +136,7 @@ def _check_atom(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bo
     if tok.startswith('"'):
         pos += 1
         return True, pos
-    # Unknown token — treat as true to avoid false negatives
+    # Unknown token -treat as true to avoid false negatives
     pos += 1
     return True, pos
 

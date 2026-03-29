@@ -471,7 +471,7 @@ def resolve_local_file(
             if valid:
                 primary = [p for p, _ in valid if "/.variants/" not in p]
                 return (primary[0] if primary else valid[0][0]), "hash_mismatch"
-            # No candidate contains the zipped_file — fall through to step 5
+            # No candidate contains the zipped_file -fall through to step 5
         else:
             primary = [p for p, _ in candidates if "/.variants/" not in p]
             return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
@@ -550,7 +550,7 @@ def _get_mame_clone_map() -> dict[str, str]:
 
 
 def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
-    """Check a ROM inside a ZIP — replicates Batocera checkInsideZip().
+    """Check a ROM inside a ZIP -replicates Batocera checkInsideZip().
 
     Returns "ok", "untested", "not_in_zip", or "error".
     """
@@ -765,7 +765,7 @@ MANUFACTURER_PREFIXES = (
     "snk-", "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
     "hartung-", "tiger-", "magnavox-", "philips-", "bandai-", "casio-",
     "coleco-", "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
-    "gce-", "texas-instruments-",
+    "gce-", "interton-", "texas-instruments-",
 )
 
 
@@ -869,20 +869,20 @@ def filter_systems_by_target(
         plat_cores_here = norm_plat_system_cores.get(norm_key, set())
 
         if not all_cores and not plat_cores_here:
-            # No profile maps to this system — keep it
+            # No profile maps to this system -keep it
             filtered[sys_id] = sys_data
         elif all_cores & expanded_target:
             # At least one core is on the target
             filtered[sys_id] = sys_data
         elif not plat_cores_here:
-            # Platform resolution didn't find cores for this system — keep it
+            # Platform resolution didn't find cores for this system -keep it
             filtered[sys_id] = sys_data
-        # else: known cores exist but none are on the target — exclude
+        # else: known cores exist but none are on the target -exclude
     return filtered
 
 
 
-# Validation and mode filtering — extracted to validation.py for SoC.
+# Validation and mode filtering -extracted to validation.py for SoC.
 # Re-exported below for backward compatibility.
 
 
