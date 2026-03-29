@@ -2547,6 +2547,154 @@ class TestE2E(unittest.TestCase):
         self.assertIn("testcore", fe["_cores"])
         self.assertIn("main.cpp:42", fe["_source_refs"])
 
+    def test_169_generate_truth_mode_filtering(self):
+        """generate_platform_truth excludes standalone-only files for all_libretro."""
+        import yaml as _yaml
+        from common import _emulator_profiles_cache
+
+        profile = {
+            "emulator": "DualMode",
+            "type": "standalone + libretro",
+            "systems": ["test-system"],
+            "cores": ["dualmode"],
+            "files": [
+                {"name": "both.bin", "system": "test-system", "required": True,
+                 "mode": "both"},
+                {"name": "lr_only.bin", "system": "test-system", "required": True,
+                 "mode": "libretro"},
+                {"name": "sa_only.bin", "system": "test-system", "required": True,
+                 "mode": "standalone"},
+                {"name": "nomode.bin", "system": "test-system", "required": True},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "dualmode.yml"), "w") as f:
+            _yaml.dump(profile, f)
+
+        _emulator_profiles_cache.clear()
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry = {"testplat": {"cores": "all_libretro"}}
+
+        result = generate_platform_truth("testplat", registry, profiles)
+        names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
+
+        self.assertIn("both.bin", names)
+        self.assertIn("lr_only.bin", names)
+        self.assertIn("nomode.bin", names)
+        self.assertNotIn("sa_only.bin", names)
+
+    def test_170_generate_truth_standalone_cores(self):
+        """generate_platform_truth uses standalone mode for standalone_cores."""
+        import yaml as _yaml
+        from common import _emulator_profiles_cache
+
+        profile = {
+            "emulator": "DualCore",
+            "type": "standalone + libretro",
+            "systems": ["test-system"],
+            "cores": ["dualcore"],
+            "files": [
+                {"name": "lr_file.bin", "system": "test-system", "required": True,
+                 "mode": "libretro"},
+                {"name": "sa_file.bin", "system": "test-system", "required": True,
+                 "mode": "standalone"},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "dualcore.yml"), "w") as f:
+            _yaml.dump(profile, f)
+
+        _emulator_profiles_cache.clear()
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry = {
+            "testplat": {
+                "cores": ["dualcore"],
+                "standalone_cores": ["dualcore"],
+            },
+        }
+
+        result = generate_platform_truth("testplat", registry, profiles)
+        names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
+
+        self.assertIn("sa_file.bin", names)
+        self.assertNotIn("lr_file.bin", names)
+
+    def test_171_generate_truth_dedup_required_wins(self):
+        """Dedup merges cores; required=True wins over required=False."""
+        import yaml as _yaml
+        from common import _emulator_profiles_cache
+
+        core_a = {
+            "emulator": "CoreA",
+            "type": "libretro",
+            "systems": ["test-system"],
+            "cores": ["core_a"],
+            "files": [
+                {"name": "shared.bin", "system": "test-system",
+                 "required": False, "source_ref": "a.cpp:10"},
+            ],
+        }
+        core_b = {
+            "emulator": "CoreB",
+            "type": "libretro",
+            "systems": ["test-system"],
+            "cores": ["core_b"],
+            "files": [
+                {"name": "shared.bin", "system": "test-system",
+                 "required": True, "source_ref": "b.cpp:20"},
+            ],
+        }
+        for name, data in [("core_a", core_a), ("core_b", core_b)]:
+            with open(os.path.join(self.emulators_dir, f"{name}.yml"), "w") as f:
+                _yaml.dump(data, f)
+
+        _emulator_profiles_cache.clear()
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry = {"testplat": {"cores": ["core_a", "core_b"]}}
+
+        result = generate_platform_truth("testplat", registry, profiles)
+        sys_files = result["systems"]["test-system"]["files"]
+        self.assertEqual(len(sys_files), 1)
+
+        fe = sys_files[0]
+        self.assertEqual(fe["name"], "shared.bin")
+        self.assertTrue(fe["required"])
+        self.assertIn("core_a", fe["_cores"])
+        self.assertIn("core_b", fe["_cores"])
+        self.assertIn("a.cpp:10", fe["_source_refs"])
+        self.assertIn("b.cpp:20", fe["_source_refs"])
+
+    def test_172_generate_truth_coverage_metadata(self):
+        """Coverage tracks profiled vs unprofiled cores."""
+        import yaml as _yaml
+        from common import _emulator_profiles_cache
+
+        profile = {
+            "emulator": "ProfiledCore",
+            "type": "libretro",
+            "systems": ["test-system"],
+            "cores": ["profiled_core"],
+            "files": [
+                {"name": "fw.bin", "system": "test-system", "required": True},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "profiled_core.yml"), "w") as f:
+            _yaml.dump(profile, f)
+
+        _emulator_profiles_cache.clear()
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry = {"testplat": {"cores": ["profiled_core", "unprofiled_core"]}}
+
+        result = generate_platform_truth("testplat", registry, profiles)
+        cov = result["_coverage"]
+
+        self.assertEqual(cov["cores_profiled"], 1)
+        self.assertNotIn("unprofiled_core", [
+            name for name in profiles if name == "unprofiled_core"
+        ])
+        # unprofiled_core has no profile YAML so resolve_platform_cores
+        # won't include it; cores_resolved reflects only matched profiles
+        self.assertEqual(cov["cores_resolved"], 1)
+        self.assertNotIn("unprofiled_core", cov["cores_unprofiled"])
+
     def test_90_registry_install_metadata(self):
         """Registry install section is accessible."""
         import yaml
