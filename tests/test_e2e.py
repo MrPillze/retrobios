@@ -3107,6 +3107,127 @@ class TestE2E(unittest.TestCase):
         self.assertIn("retroarch", exporters)
         self.assertIs(exporters["retroarch"], SystemDatExporter)
 
+    # ---------------------------------------------------------------
+    # Full truth + diff integration test
+    # ---------------------------------------------------------------
+
+    def test_truth_diff_integration(self):
+        """Full chain: generate truth from profiles, diff against scraped data."""
+        # Registry: one platform with two cores, only core_a has a profile
+        registry = {
+            "testplat": {
+                "cores": ["core_a", "core_b"],
+                "hash_type": "md5",
+                "verification_mode": "md5",
+            },
+        }
+
+        # Emulator profile for core_a with 2 files
+        core_a_profile = {
+            "emulator": "CoreA",
+            "type": "libretro",
+            "systems": ["test-system"],
+            "files": [
+                {
+                    "name": "bios_a.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "md5": "a" * 32,
+                    "sha1": "b" * 40,
+                    "size": 1024,
+                    "path": "bios_a.bin",
+                    "source_ref": "src/a.c:10",
+                },
+                {
+                    "name": "shared.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "md5": "c" * 32,
+                    "path": "shared.bin",
+                    "source_ref": "src/a.c:20",
+                },
+            ],
+        }
+        profile_path = os.path.join(self.emulators_dir, "core_a.yml")
+        with open(profile_path, "w") as f:
+            yaml.dump(core_a_profile, f)
+
+        # No profile for core_b (unprofiled)
+        # Clear cache so the new profile is picked up
+        from common import _emulator_profiles_cache
+        _emulator_profiles_cache.clear()
+        profiles = load_emulator_profiles(self.emulators_dir)
+        self.assertIn("core_a", profiles)
+        self.assertNotIn("core_b", profiles)
+
+        # Generate truth
+        truth = generate_platform_truth("testplat", registry, profiles, db=None)
+
+        # Verify truth structure
+        self.assertIn("test-system", truth["systems"])
+        sys_files = truth["systems"]["test-system"]["files"]
+        self.assertEqual(len(sys_files), 2)
+        file_names = {f["name"] for f in sys_files}
+        self.assertEqual(file_names, {"bios_a.bin", "shared.bin"})
+
+        # Verify coverage metadata
+        cov = truth["_coverage"]
+        self.assertEqual(cov["cores_profiled"], 1)
+        # core_b has no profile YAML, so resolve_platform_cores never
+        # includes it; cores_resolved reflects only matched profiles
+        self.assertEqual(cov["cores_resolved"], 1)
+
+        # Inject unprofiled info into system-level coverage for diff.
+        # In production, core_b would be tracked as unprofiled by a
+        # higher-level orchestrator that knows the declared core list.
+        injected_cov = {
+            "cores_profiled": ["core_a"],
+            "cores_unprofiled": ["core_b"],
+        }
+        for sys_data in truth["systems"].values():
+            sys_data["_coverage"] = injected_cov
+
+        # Build scraped dict: shared.bin with wrong hash, phantom.bin extra,
+        # bios_a.bin missing
+        scraped = {
+            "systems": {
+                "test-system": {
+                    "files": [
+                        {
+                            "name": "shared.bin",
+                            "required": True,
+                            "md5": "d" * 32,
+                        },
+                        {
+                            "name": "phantom.bin",
+                            "required": False,
+                            "md5": "e" * 32,
+                        },
+                    ],
+                },
+            },
+        }
+
+        # Diff
+        result = diff_platform_truth(truth, scraped)
+        summary = result["summary"]
+
+        # bios_a.bin not in scraped -> missing
+        self.assertEqual(summary["total_missing"], 1)
+        # shared.bin md5 mismatch (truth "c"*32 vs scraped "d"*32)
+        self.assertEqual(summary["total_hash_mismatch"], 1)
+        # phantom.bin extra, core_b unprofiled -> extra_unprofiled
+        self.assertEqual(summary["total_extra_unprofiled"], 1)
+        # Unprofiled cores present, so extras are unprofiled not phantom
+        self.assertEqual(summary["total_extra_phantom"], 0)
+
+        # Verify divergence details
+        div = result["divergences"]["test-system"]
+        self.assertEqual(div["missing"][0]["name"], "bios_a.bin")
+        self.assertEqual(div["hash_mismatch"][0]["name"], "shared.bin")
+        self.assertEqual(div["extra_unprofiled"][0]["name"], "phantom.bin")
+        self.assertNotIn("extra_phantom", div)
+
 
 if __name__ == "__main__":
     unittest.main()
