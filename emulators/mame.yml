@@ -67,11 +67,12 @@ systems:
   - pegasus
   - pcw
   - interton-vc4000
+  - ti99
   - trs80
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  80 BIOS root sets + 23 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, trs80). romload.cpp
+  80 BIOS root sets + 24 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, ti99_4a, trs80). romload.cpp
   unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
@@ -80,6 +81,16 @@ notes: |
   BIOS root set names follow current MAME conventions. ZN-based boards
   renamed from legacy names (cpzn1 → coh1000c, atpsx → coh1000a, etc.).
   File structure uses vendor-based paths (src/mame/{vendor}/).
+
+  TI-99/4A: 6 machines in ti99_4x.cpp — ti99_4 parent (TI-99/4 1979),
+  ti99_4e clone (Europe), ti99_4a parent (TI-99/4A 1981), ti99_4ae clone
+  (Europe), ti99_4qi clone (QI version 1983), ti99_4ev clone (with EVPC
+  1994). 5 ROMs per parent set: 3 GROMs (u500-u502) + 2 CPU ROMs
+  (u610-u611, 16-bit interleaved). Speech Synthesizer sidecar device
+  (speechsyn.cpp) with 2 TMS6100 vocabulary ROMs. Software list
+  "ti99_cart". Peripheral Expansion Box with optional device ROMs (FDC,
+  RS232, HFDC, P-Code, EVPC, etc.) — all PEB devices require user
+  configuration, none loaded by default.
 
 files:
   # SNK Neo Geo MVS/AES
