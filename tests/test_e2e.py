@@ -32,6 +32,7 @@ import yaml
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, filter_files_by_mode,
+    generate_platform_truth,
     group_identical_platforms, load_emulator_profiles, load_platform_config,
     md5_composite, md5sum, parse_md5_list, resolve_local_file,
     resolve_platform_cores, safe_extract_zip,
@@ -2492,6 +2493,59 @@ class TestE2E(unittest.TestCase):
         self.assertIsNotNone(path)
         self.assertEqual(os.path.basename(path), "data_only.bin")
         self.assertEqual(status, "data_dir")
+
+    def test_168_generate_truth_basic(self):
+        """generate_platform_truth resolves cores and builds system truth."""
+        import yaml as _yaml
+
+        profile = {
+            "emulator": "TestCore",
+            "type": "libretro",
+            "systems": ["test-system"],
+            "cores": ["testcore"],
+            "files": [
+                {
+                    "name": "bios.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "sha1": "aabbccdd" * 5,
+                    "md5": "11223344" * 4,
+                    "size": 1024,
+                    "path": "TestConsole/bios.bin",
+                    "source_ref": "main.cpp:42",
+                },
+            ],
+        }
+        profile_path = os.path.join(self.emulators_dir, "testcore.yml")
+        with open(profile_path, "w") as f:
+            _yaml.dump(profile, f)
+
+        # Clear profile cache so fresh load picks up our file
+        from common import _emulator_profiles_cache
+        _emulator_profiles_cache.clear()
+
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry = {
+            "testplat": {
+                "cores": ["testcore"],
+            },
+        }
+
+        result = generate_platform_truth(
+            "testplat", registry, profiles, db=None,
+        )
+
+        self.assertEqual(result["platform"], "testplat")
+        self.assertTrue(result["generated"])
+        self.assertIn("test-system", result["systems"])
+        sys_files = result["systems"]["test-system"]["files"]
+        self.assertEqual(len(sys_files), 1)
+        fe = sys_files[0]
+        self.assertEqual(fe["name"], "bios.bin")
+        self.assertTrue(fe["required"])
+        self.assertEqual(fe["sha1"], "aabbccdd" * 5)
+        self.assertIn("testcore", fe["_cores"])
+        self.assertIn("main.cpp:42", fe["_source_refs"])
 
     def test_90_registry_install_metadata(self):
         """Registry install section is accessible."""

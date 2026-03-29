@@ -1136,3 +1136,171 @@ def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
         mfr = systems[sys_id].get("manufacturer", "")
         mfr_display = f"  [{mfr.split('|')[0]}]" if mfr else ""
         print(f"  {sys_id:35s} ({file_count} file{'s' if file_count != 1 else ''}){mfr_display}")
+
+
+# ---------------------------------------------------------------
+# Truth generation — build ground-truth YAML from emulator profiles
+# ---------------------------------------------------------------
+
+def _determine_core_mode(
+    emu_name: str, profile: dict,
+    cores_config: str | list | None,
+    standalone_set: set[str] | None,
+) -> str:
+    """Determine effective mode (libretro/standalone) for a resolved core."""
+    if cores_config == "all_libretro":
+        return "libretro"
+    if standalone_set is not None:
+        profile_names = {emu_name} | {str(c) for c in profile.get("cores", [])}
+        if profile_names & standalone_set:
+            return "standalone"
+        return "libretro"
+    ptype = profile.get("type", "libretro")
+    if "standalone" in ptype:
+        return "standalone"
+    return "libretro"
+
+
+def _enrich_hashes(entry: dict, db: dict) -> None:
+    """Fill missing hash fields from the database."""
+    sha1 = entry.get("sha1", "")
+    md5 = entry.get("md5", "")
+
+    record = None
+    if sha1 and db.get("files"):
+        record = db["files"].get(sha1)
+    if record is None and md5:
+        by_md5 = db.get("by_md5", {})
+        ref_sha1 = by_md5.get(md5.lower())
+        if ref_sha1 and db.get("files"):
+            record = db["files"].get(ref_sha1)
+    if record is None:
+        return
+
+    for field in ("sha1", "md5", "sha256", "crc32"):
+        if not entry.get(field) and record.get(field):
+            entry[field] = record[field]
+
+
+def _merge_file_into_system(
+    system: dict, file_entry: dict, emu_name: str, db: dict | None,
+) -> None:
+    """Merge a file entry into a system's file list, deduplicating by name."""
+    files = system.setdefault("files", [])
+    name_lower = file_entry["name"].lower()
+
+    existing = None
+    for f in files:
+        if f["name"].lower() == name_lower:
+            existing = f
+            break
+
+    if existing is not None:
+        existing["_cores"] = existing.get("_cores", set()) | {emu_name}
+        existing["_source_refs"] = existing.get("_source_refs", set()) | (
+            {file_entry["source_ref"]} if file_entry.get("source_ref") else set()
+        )
+        if file_entry.get("required") and not existing.get("required"):
+            existing["required"] = True
+        for h in ("sha1", "md5", "sha256", "crc32"):
+            theirs = file_entry.get(h, "")
+            ours = existing.get(h, "")
+            if theirs and ours and theirs.lower() != ours.lower():
+                import sys as _sys
+                print(
+                    f"WARNING: hash conflict for {file_entry['name']} "
+                    f"({h}: {ours} vs {theirs}, core {emu_name})",
+                    file=_sys.stderr,
+                )
+            elif theirs and not ours:
+                existing[h] = theirs
+        return
+
+    entry: dict = {"name": file_entry["name"]}
+    if file_entry.get("required") is not None:
+        entry["required"] = file_entry["required"]
+    for field in ("sha1", "md5", "sha256", "crc32", "size", "path",
+                  "description", "hle_fallback", "category", "note",
+                  "validation", "min_size", "max_size", "aliases"):
+        val = file_entry.get(field)
+        if val is not None:
+            entry[field] = val
+    entry["_cores"] = {emu_name}
+    if file_entry.get("source_ref"):
+        entry["_source_refs"] = {file_entry["source_ref"]}
+    else:
+        entry["_source_refs"] = set()
+
+    if db:
+        _enrich_hashes(entry, db)
+
+    files.append(entry)
+
+
+def generate_platform_truth(
+    platform_name: str,
+    registry: dict,
+    profiles: dict[str, dict],
+    db: dict | None = None,
+    target_cores: set[str] | None = None,
+) -> dict:
+    """Generate ground-truth system data for a platform from emulator profiles.
+
+    Returns a dict with platform metadata, systems, and per-file details
+    including which cores reference each file.
+    """
+    plat_entry = registry.get(platform_name, {})
+    cores_config = plat_entry.get("cores")
+
+    # Build a synthetic config dict for resolve_platform_cores
+    synthetic_config: dict = {"cores": cores_config}
+    if "systems" in plat_entry:
+        synthetic_config["systems"] = plat_entry["systems"]
+
+    # Resolve standalone set for mode determination
+    standalone_set: set[str] | None = None
+    standalone_cores = plat_entry.get("standalone_cores")
+    if isinstance(standalone_cores, list):
+        standalone_set = {str(c) for c in standalone_cores}
+
+    resolved = resolve_platform_cores(synthetic_config, profiles, target_cores)
+
+    systems: dict[str, dict] = {}
+    cores_profiled: set[str] = set()
+    cores_unprofiled: set[str] = set()
+
+    for emu_name in sorted(resolved):
+        profile = profiles.get(emu_name)
+        if not profile:
+            cores_unprofiled.add(emu_name)
+            continue
+        cores_profiled.add(emu_name)
+
+        mode = _determine_core_mode(emu_name, profile, cores_config, standalone_set)
+        raw_files = profile.get("files", [])
+        filtered = filter_files_by_mode(raw_files, standalone=(mode == "standalone"))
+
+        for fe in filtered:
+            sys_id = fe.get("system", "")
+            if not sys_id:
+                sys_ids = profile.get("systems", [])
+                sys_id = sys_ids[0] if sys_ids else "unknown"
+            system = systems.setdefault(sys_id, {})
+            _merge_file_into_system(system, fe, emu_name, db)
+
+    # Convert sets to sorted lists for serialization
+    for sys_data in systems.values():
+        for fe in sys_data.get("files", []):
+            fe["_cores"] = sorted(fe.get("_cores", set()))
+            fe["_source_refs"] = sorted(fe.get("_source_refs", set()))
+
+    return {
+        "platform": platform_name,
+        "generated": True,
+        "systems": systems,
+        "_coverage": {
+            "cores_resolved": len(resolved),
+            "cores_profiled": len(cores_profiled),
+            "cores_unprofiled": sorted(cores_unprofiled),
+        },
+    }
