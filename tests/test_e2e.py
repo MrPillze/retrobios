@@ -31,7 +31,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import yaml
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
-    check_inside_zip, compute_hashes, filter_files_by_mode,
+    check_inside_zip, compute_hashes, diff_platform_truth,
+    filter_files_by_mode,
     generate_platform_truth,
     group_identical_platforms, load_emulator_profiles, load_platform_config,
     md5_composite, md5sum, parse_md5_list, resolve_local_file,
@@ -2883,6 +2884,133 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(skipped, 1)
         self.assertTrue((yuzu_dir / "prod.keys").exists())
         self.assertFalse((missing_dir / "prod.keys").exists())
+
+
+    # ---------------------------------------------------------------
+    # diff_platform_truth tests
+    # ---------------------------------------------------------------
+
+    def test_98_diff_truth_missing(self):
+        """Truth has 2 files, scraped has 1 -> 1 missing with cores/source_refs."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+            "files": [
+                {"name": "bios_a.bin", "required": True, "md5": "aaa",
+                 "_cores": ["core_a"], "_source_refs": ["src/a.c:10"]},
+                {"name": "bios_b.bin", "required": False, "md5": "bbb",
+                 "_cores": ["core_a"], "_source_refs": ["src/b.c:20"]},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [{"name": "bios_a.bin", "md5": "aaa"}],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_missing"], 1)
+        div = result["divergences"]["test-sys"]
+        self.assertEqual(len(div["missing"]), 1)
+        m = div["missing"][0]
+        self.assertEqual(m["name"], "bios_b.bin")
+        self.assertEqual(m["cores"], ["core_a"])
+        self.assertEqual(m["source_refs"], ["src/b.c:20"])
+
+    def test_99_diff_truth_extra_phantom(self):
+        """All cores profiled, scraped has extra file -> extra_phantom."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+            "files": [
+                {"name": "bios.bin", "md5": "aaa",
+                 "_cores": ["core_a"], "_source_refs": []},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [
+                {"name": "bios.bin", "md5": "aaa"},
+                {"name": "phantom.bin", "md5": "zzz"},
+            ],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_extra_phantom"], 1)
+        div = result["divergences"]["test-sys"]
+        self.assertEqual(len(div["extra_phantom"]), 1)
+        self.assertEqual(div["extra_phantom"][0]["name"], "phantom.bin")
+
+    def test_100_diff_truth_extra_unprofiled(self):
+        """Some cores unprofiled, scraped has extra -> extra_unprofiled."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"],
+                          "cores_unprofiled": ["core_b"]},
+            "files": [
+                {"name": "bios.bin", "md5": "aaa",
+                 "_cores": ["core_a"], "_source_refs": []},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [
+                {"name": "bios.bin", "md5": "aaa"},
+                {"name": "extra.bin", "md5": "yyy"},
+            ],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_extra_unprofiled"], 1)
+        div = result["divergences"]["test-sys"]
+        self.assertEqual(len(div["extra_unprofiled"]), 1)
+        self.assertEqual(div["extra_unprofiled"][0]["name"], "extra.bin")
+
+    def test_101_diff_truth_alias_matching(self):
+        """Truth file with aliases, scraped uses alias -> not extra or missing."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+            "files": [
+                {"name": "bios.bin", "md5": "aaa", "aliases": ["alt.bin"],
+                 "_cores": ["core_a"], "_source_refs": []},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [{"name": "alt.bin", "md5": "aaa"}],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_missing"], 0)
+        self.assertEqual(result["summary"]["total_extra_phantom"], 0)
+        self.assertNotIn("test-sys", result.get("divergences", {}))
+
+    def test_102_diff_truth_case_insensitive(self):
+        """Truth 'BIOS.ROM', scraped 'bios.rom' -> match, no missing."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+            "files": [
+                {"name": "BIOS.ROM", "md5": "aaa",
+                 "_cores": ["core_a"], "_source_refs": []},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [{"name": "bios.rom", "md5": "aaa"}],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_missing"], 0)
+        self.assertNotIn("test-sys", result.get("divergences", {}))
+
+    def test_103_diff_truth_hash_mismatch(self):
+        """Same file, different md5 -> hash_mismatch with truth_cores."""
+        truth = {"systems": {"test-sys": {
+            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+            "files": [
+                {"name": "bios.bin", "md5": "truth_hash",
+                 "_cores": ["core_a", "core_b"],
+                 "_source_refs": ["src/x.c:5"]},
+            ],
+        }}}
+        scraped = {"systems": {"test-sys": {
+            "files": [{"name": "bios.bin", "md5": "scraped_hash"}],
+        }}}
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["total_hash_mismatch"], 1)
+        div = result["divergences"]["test-sys"]
+        self.assertEqual(len(div["hash_mismatch"]), 1)
+        hm = div["hash_mismatch"][0]
+        self.assertEqual(hm["name"], "bios.bin")
+        self.assertEqual(hm["truth_cores"], ["core_a", "core_b"])
+        self.assertEqual(hm["truth_md5"], "truth_hash")
+        self.assertEqual(hm["scraped_md5"], "scraped_hash")
 
 
 if __name__ == "__main__":
