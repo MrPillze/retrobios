@@ -292,6 +292,7 @@ def resolve_local_file(
     zip_contents: dict | None = None,
     dest_hint: str = "",
     _depth: int = 0,
+    data_dir_registry: dict | None = None,
 ) -> tuple[str | None, str]:
     """Resolve a BIOS file to its local path using database.json.
 
@@ -445,9 +446,27 @@ def resolve_local_file(
             canonical_entry = {"name": canonical}
             result = resolve_local_file(
                 canonical_entry, db, zip_contents, dest_hint, _depth=_depth + 1,
+                data_dir_registry=data_dir_registry,
             )
             if result[0]:
                 return result[0], "mame_clone"
+
+    # Data directory fallback: scan data/ caches for matching filename
+    if data_dir_registry:
+        for _dd_key, dd_entry in data_dir_registry.items():
+            cache_dir = dd_entry.get("local_cache", "")
+            if not cache_dir or not os.path.isdir(cache_dir):
+                continue
+            for try_name in names_to_try:
+                candidate = os.path.join(cache_dir, try_name)
+                if os.path.isfile(candidate):
+                    return candidate, "data_dir"
+                if "/" in try_name:
+                    basename_candidate = os.path.join(
+                        cache_dir, try_name.rsplit("/", 1)[-1],
+                    )
+                    if os.path.isfile(basename_candidate):
+                        return basename_candidate, "data_dir"
 
     return None, "not_found"
 

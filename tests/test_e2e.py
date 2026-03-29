@@ -2477,6 +2477,22 @@ class TestE2E(unittest.TestCase):
         # Subdirectory destination should be added
         self.assertIn("subcore/bios/present_req.bin", extra_dests)
 
+    def test_167_resolve_local_file_data_dir_fallback(self):
+        """resolve_local_file finds files in data directories when not in bios/."""
+        data_dir = os.path.join(self.root, "data", "test-data")
+        os.makedirs(data_dir, exist_ok=True)
+        data_file = os.path.join(data_dir, "data_only.bin")
+        with open(data_file, "wb") as f:
+            f.write(b"DATA_DIR_CONTENT")
+
+        registry = {"test-data": {"local_cache": data_dir}}
+
+        fe = {"name": "data_only.bin"}
+        path, status = resolve_local_file(fe, self.db, data_dir_registry=registry)
+        self.assertIsNotNone(path)
+        self.assertEqual(os.path.basename(path), "data_only.bin")
+        self.assertEqual(status, "data_dir")
+
     def test_90_registry_install_metadata(self):
         """Registry install section is accessible."""
         import yaml

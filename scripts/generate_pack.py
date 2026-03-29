@@ -230,7 +230,8 @@ def _register_path(dest: str, seen_files: set[str],
 
 def resolve_file(file_entry: dict, db: dict, bios_dir: str,
                   zip_contents: dict | None = None,
-                  dest_hint: str = "") -> tuple[str | None, str]:
+                  dest_hint: str = "",
+                  data_dir_registry: dict | None = None) -> tuple[str | None, str]:
     """Resolve a BIOS file with storage tiers and release asset fallback.
 
     Wraps common.resolve_local_file() with pack-specific logic for
@@ -244,7 +245,8 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
         return None, "external"
 
     path, status = resolve_local_file(file_entry, db, zip_contents,
-                                      dest_hint=dest_hint)
+                                      dest_hint=dest_hint,
+                                      data_dir_registry=data_dir_registry)
     if path and status != "hash_mismatch":
         return path, status
 
@@ -545,7 +547,10 @@ def generate_pack(
                     total_files += 1
                     continue
 
-                local_path, status = resolve_file(file_entry, db, bios_dir, zip_contents)
+                local_path, status = resolve_file(
+                    file_entry, db, bios_dir, zip_contents,
+                    data_dir_registry=data_registry,
+                )
 
                 if status == "external":
                     file_ext = os.path.splitext(file_entry["name"])[1] or ""
@@ -688,7 +693,10 @@ def generate_pack(
             if _has_path_conflict(full_dest, seen_destinations, seen_parents):
                 continue
 
-            local_path, status = resolve_file(fe, db, bios_dir, zip_contents)
+            local_path, status = resolve_file(
+                fe, db, bios_dir, zip_contents,
+                data_dir_registry=data_registry,
+            )
             if status in ("not_found", "external", "user_provided"):
                 continue
 
@@ -1009,7 +1017,10 @@ def generate_emulator_pack(
                     continue
 
                 archive_entry = {"name": archive_name}
-                local_path, status = resolve_file(archive_entry, db, bios_dir, zip_contents)
+                local_path, status = resolve_file(
+                    archive_entry, db, bios_dir, zip_contents,
+                    data_dir_registry=data_registry,
+                )
                 if local_path and status not in ("not_found",):
                     if local_path.endswith(".zip"):
                         _normalize_zip_for_pack(local_path, archive_dest, zf)
@@ -1050,8 +1061,10 @@ def generate_emulator_pack(
                     continue
 
                 dest_hint = fe.get("path", "")
-                local_path, status = resolve_file(fe, db, bios_dir, zip_contents,
-                                                  dest_hint=dest_hint)
+                local_path, status = resolve_file(
+                    fe, db, bios_dir, zip_contents,
+                    dest_hint=dest_hint, data_dir_registry=data_registry,
+                )
 
                 if status == "external":
                     file_ext = os.path.splitext(fe["name"])[1] or ""

@@ -501,6 +501,7 @@ def verify_platform(
     emulators_dir: str = DEFAULT_EMULATORS_DIR,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
+    data_dir_registry: dict | None = None,
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps."""
     mode = config.get("verification_mode", "existence")
@@ -540,6 +541,7 @@ def verify_platform(
         for file_entry in system.get("files", []):
             local_path, resolve_status = resolve_local_file(
                 file_entry, db, zip_contents,
+                data_dir_registry=data_dir_registry,
             )
             if mode == "existence":
                 result = verify_entry_existence(
@@ -965,7 +967,10 @@ def verify_emulator(
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
                 archive_entry = {"name": archive}
-                local_path, _ = resolve_local_file(archive_entry, db, zip_contents)
+                local_path, _ = resolve_local_file(
+                    archive_entry, db, zip_contents,
+                    data_dir_registry=data_registry,
+                )
                 required = any(
                     f.get("archive") == archive and f.get("required", True)
                     for f in files
@@ -999,6 +1004,7 @@ def verify_emulator(
             dest_hint = file_entry.get("path", "")
             local_path, resolve_status = resolve_local_file(
                 file_entry, db, zip_contents, dest_hint=dest_hint,
+                data_dir_registry=data_registry,
             )
             name = file_entry.get("name", "")
             required = file_entry.get("required", True)
@@ -1269,6 +1275,7 @@ def main():
 
     # Load emulator profiles once for cross-reference (not per-platform)
     emu_profiles = load_emulator_profiles(args.emulators_dir)
+    data_registry = load_data_dir_registry(args.platforms_dir)
 
     target_cores_cache: dict[str, set[str] | None] = {}
     if args.target:
@@ -1300,7 +1307,10 @@ def main():
     for group_platforms, representative in groups:
         config = load_platform_config(representative, args.platforms_dir)
         tc = target_cores_cache.get(representative) if args.target else None
-        result = verify_platform(config, db, args.emulators_dir, emu_profiles, target_cores=tc)
+        result = verify_platform(
+            config, db, args.emulators_dir, emu_profiles,
+            target_cores=tc, data_dir_registry=data_registry,
+        )
         names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
         group_results.append((result, names))
         for p in group_platforms:
