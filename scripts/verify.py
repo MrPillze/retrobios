@@ -318,6 +318,9 @@ def find_undeclared_files(
             # Skip pattern placeholders (e.g., <user-selected>.bin)
             if "<" in fname or ">" in fname or "*" in fname:
                 continue
+            # Skip UI-imported files with explicit path: null (not resolvable by pack)
+            if "path" in f and f["path"] is None:
+                continue
             # Mode filtering: skip files incompatible with platform's usage
             file_mode = f.get("mode")
             if file_mode == "standalone" and not is_standalone:

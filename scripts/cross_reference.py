@@ -156,6 +156,10 @@ def cross_reference(
             if "<" in fname or ">" in fname:
                 continue
 
+            # Skip UI-imported files with explicit path: null (not resolvable by pack)
+            if "path" in f and f["path"] is None:
+                continue
+
             # Skip standalone-only files
             file_mode = f.get("mode", "both")
             if file_mode == "standalone":
