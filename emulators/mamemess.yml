@@ -29,6 +29,7 @@ systems:
   - hartung-game-master
   - fm7
   - laser310
+  - vtech-socrates
   - casio-loopy
   - casio-pv2000
   - mz700
@@ -39,6 +40,7 @@ systems:
   - mz80k
   - pegasus
   - supracan
+  - interton-vc4000
   - trs80
 
 notes: |
@@ -63,7 +65,7 @@ notes: |
   Adventure Vision, EACA Colour Genie, Acorn Atom, Tiger game.com,
   Bit Corporation Gamate, Epoch Game Pocket Computer, Hartung Game
   Master, Funtech Super A'Can, Technosys Aamber Pegasus, VTech
-  Laser 310 and TRS-80 family system ROMs required for software loading
+  Laser 310, VTech Socrates and TRS-80 family system ROMs required for software loading
   (not IS_BIOS_ROOT but functionally BIOS).
 
   Apple II: 4 machine ROM sets (apple2, apple2p, apple2e, apple2ee) plus
@@ -781,6 +783,35 @@ files:
         description: "BASIC V2.1 ROM (hack)"
         size: 16384
         crc32: f7df980f
+
+  # VTech Socrates Educational Video System
+  - name: socrates.zip
+    required: true
+    category: bios_zip
+    system: vtech-socrates
+    source_ref: "src/mame/vtech/socrates.cpp:1546-1596"
+    note: "MACHINE_NOT_WORKING | MACHINE_IMPERFECT_SOUND. Clones: socratfc (French Canadian), profweis (German PAL)."
+    contents:
+      - name: 27-00817-000-000.u1
+        description: "Main CPU ROM (256KB)"
+        size: 262144
+        crc32: 80f5aa20
+      - name: speech_eng_internal.bin
+        description: "TC8802AF speech chip internal data (optional, English)"
+        size: 8192
+        crc32: edc1fb3f
+      - name: speech_eng_vsm1.bin
+        description: "T6684F VSM serial ROM 1 (optional, English)"
+        size: 16384
+        crc32: 888e3ddd
+      - name: speech_eng_vsm2.bin
+        description: "T6684F VSM serial ROM 2 (optional, English)"
+        size: 16384
+        crc32: de4ac89d
+      - name: speech_eng_vsm3.bin
+        description: "T6684F VSM serial ROM 3 (optional, English)"
+        size: 16384
+        crc32: 972384aa
 
   # Mattel Aquarius
   - name: aquarius.zip
