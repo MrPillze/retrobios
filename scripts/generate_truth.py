@@ -19,14 +19,11 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     load_target_config,
+    require_yaml,
 )
 from truth import generate_platform_truth
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
+yaml = require_yaml()
 
 DEFAULT_OUTPUT_DIR = "dist/truth"
 DEFAULT_PLATFORMS_DIR = "platforms"

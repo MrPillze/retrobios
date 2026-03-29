@@ -19,14 +19,10 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
-
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config
+from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config, require_yaml
+
+yaml = require_yaml()
 from generate_readme import compute_coverage
 from verify import verify_platform
 

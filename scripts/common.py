@@ -21,6 +21,17 @@ except ImportError:
     yaml = None
 
 
+def require_yaml():
+    """Import and return yaml, exiting if PyYAML is not installed."""
+    try:
+        import yaml as _yaml
+        return _yaml
+    except ImportError:
+        import sys
+        print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
+        sys.exit(1)
+
+
 def compute_hashes(filepath: str | Path) -> dict[str, str]:
     """Compute SHA1, MD5, SHA256, CRC32, Adler32 for a file."""
     sha1 = hashlib.sha1()

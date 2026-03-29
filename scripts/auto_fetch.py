@@ -26,13 +26,9 @@ import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import list_registered_platforms, load_database, load_platform_config
+from common import list_registered_platforms, load_database, load_platform_config, require_yaml
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
+yaml = require_yaml()
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"

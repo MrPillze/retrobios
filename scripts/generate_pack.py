@@ -32,18 +32,14 @@ from common import (
     list_platform_system_ids, list_registered_platforms,
     filter_systems_by_target, list_system_ids, load_database,
     load_data_dir_registry, load_emulator_profiles, load_platform_config,
-    md5_composite, resolve_local_file,
+    md5_composite, require_yaml, resolve_local_file,
 )
 from validation import (
     _build_validation_index, check_file_validation, filter_files_by_mode,
 )
 from deterministic_zip import rebuild_zip_deterministic
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
+yaml = require_yaml()
 
 DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB_FILE = "database.json"

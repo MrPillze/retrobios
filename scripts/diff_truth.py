@@ -16,14 +16,10 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_platform_config
+from common import list_registered_platforms, load_platform_config, require_yaml
 from truth import diff_platform_truth
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
+yaml = require_yaml()
 
 
 def _load_truth(truth_dir: str, platform: str) -> dict | None:

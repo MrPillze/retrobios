@@ -28,20 +28,16 @@ import sys
 import zipfile
 from pathlib import Path
 
-try:
-    import yaml
-except ImportError:
-    print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-    sys.exit(1)
-
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     build_zip_contents_index, check_inside_zip, compute_hashes,
     filter_systems_by_target, group_identical_platforms, list_emulator_profiles,
     list_system_ids, load_data_dir_registry, load_emulator_profiles,
-    load_platform_config, md5sum, md5_composite, resolve_local_file,
+    load_platform_config, md5sum, md5_composite, require_yaml, resolve_local_file,
     resolve_platform_cores,
 )
+
+yaml = require_yaml()
 from validation import (
     _build_validation_index, _parse_validation, build_ground_truth,
     check_file_validation, filter_files_by_mode,
