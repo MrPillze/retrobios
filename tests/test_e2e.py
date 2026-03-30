@@ -3500,5 +3500,109 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(status, "agnostic_fallback")
 
 
+    def test_179_batocera_exporter_round_trip(self):
+        """Batocera exporter produces valid Python dict format."""
+        from exporter.batocera_exporter import Exporter
+
+        truth = {
+            "systems": {
+                "sony-playstation": {
+                    "_coverage": {"cores_profiled": ["c"]},
+                    "files": [
+                        {"name": "scph5501.bin", "destination": "scph5501.bin",
+                         "required": True, "md5": "b" * 32,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "sony-playstation": {"native_id": "psx", "files": []},
+            }
+        }
+        out = os.path.join(self.root, "batocera-systems")
+        exp = Exporter()
+        exp.export(truth, out, scraped_data=scraped)
+
+        content = open(out).read()
+        self.assertIn('"psx"', content)
+        self.assertIn("scph5501.bin", content)
+        self.assertIn("b" * 32, content)
+        self.assertEqual(exp.validate(truth, out), [])
+
+    def test_180_recalbox_exporter_round_trip(self):
+        """Recalbox exporter produces valid es_bios.xml."""
+        from exporter.recalbox_exporter import Exporter
+
+        truth = {
+            "systems": {
+                "sony-playstation": {
+                    "_coverage": {"cores_profiled": ["c"]},
+                    "files": [
+                        {"name": "scph5501.bin", "destination": "scph5501.bin",
+                         "required": True, "md5": "b" * 32,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "sony-playstation": {"native_id": "psx", "files": []},
+            }
+        }
+        out = os.path.join(self.root, "es_bios.xml")
+        exp = Exporter()
+        exp.export(truth, out, scraped_data=scraped)
+
+        content = open(out).read()
+        self.assertIn("<biosList>", content)
+        self.assertIn('platform="psx"', content)
+        self.assertIn("scph5501.bin", content)
+        self.assertIn('mandatory="true"', content)
+        self.assertEqual(exp.validate(truth, out), [])
+
+    def test_181_retrobat_exporter_round_trip(self):
+        """RetroBat exporter produces valid JSON."""
+        import json as _json
+        from exporter.retrobat_exporter import Exporter
+
+        truth = {
+            "systems": {
+                "sony-playstation": {
+                    "_coverage": {"cores_profiled": ["c"]},
+                    "files": [
+                        {"name": "scph5501.bin", "destination": "scph5501.bin",
+                         "required": True, "md5": "b" * 32,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "sony-playstation": {"native_id": "psx", "files": []},
+            }
+        }
+        out = os.path.join(self.root, "batocera-systems.json")
+        exp = Exporter()
+        exp.export(truth, out, scraped_data=scraped)
+
+        data = _json.loads(open(out).read())
+        self.assertIn("psx", data)
+        self.assertTrue(any("scph5501" in bf["file"] for bf in data["psx"]["biosFiles"]))
+        self.assertEqual(exp.validate(truth, out), [])
+
+    def test_182_exporter_discovery(self):
+        """All exporters are discovered by the plugin system."""
+        from exporter import discover_exporters
+        exporters = discover_exporters()
+        self.assertIn("retroarch", exporters)
+        self.assertIn("batocera", exporters)
+        self.assertIn("recalbox", exporters)
+        self.assertIn("retrobat", exporters)
+
+
 if __name__ == "__main__":
     unittest.main()
