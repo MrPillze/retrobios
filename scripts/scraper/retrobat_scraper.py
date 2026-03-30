@@ -27,6 +27,14 @@ SOURCE_URL = (
 
 GITHUB_REPO = "RetroBat-Official/retrobat"
 
+# Map RetroBat system keys to our normalized system IDs
+SYSTEM_SLUG_MAP = {
+    "ps2": "sony-playstation-2",
+    "ps3": "sony-playstation-3",
+    "psvita": "sony-playstation-vita",
+    "gsplus": "apple-iigs",
+}
+
 
 class Scraper(BaseScraper):
     """Scraper for RetroBat batocera-systems.json."""
@@ -83,7 +91,7 @@ class Scraper(BaseScraper):
 
                 requirements.append(BiosRequirement(
                     name=name,
-                    system=sys_key,
+                    system=SYSTEM_SLUG_MAP.get(sys_key, sys_key),
                     md5=md5 or None,
                     destination=file_path,
                     required=True,
