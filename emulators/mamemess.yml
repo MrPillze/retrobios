@@ -42,6 +42,7 @@ systems:
   - supracan
   - ti99
   - interton-vc4000
+  - tandy-vis
   - trs80
 
 notes: |
@@ -1659,6 +1660,24 @@ files:
         description: "Lockout chip ROM key"
         size: 16
         crc32: 0ba78597
+
+  # Tandy VIS (Video Information System)
+  # vis.cpp: vis (parent, WORKING). Tandy/Memorex MD-2500 (1992).
+  # CD-ROM-based multimedia system built on modified 286 PC hardware.
+  - name: vis.zip
+    required: true
+    category: bios_zip
+    system: tandy-vis
+    source_ref: "src/mame/trs/vis.cpp:1062-1066"
+    contents:
+      - name: p513bk0b.bin
+        description: "BIOS bank 0"
+        size: 524288
+        crc32: 364e3f74
+      - name: p513bk1b.bin
+        description: "BIOS bank 1"
+        size: 524288
+        crc32: e18239c4
 
   # Tandy TRS-80 family
   # Model I (trs80.cpp): trs80 (Level I, parent, WORKING), trs80l2 (Level II, parent),

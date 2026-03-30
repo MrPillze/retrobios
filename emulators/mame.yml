@@ -71,12 +71,13 @@ systems:
   - philips-vg5k
   - ti99
   - tutor
+  - tandy-vis
   - trs80
   - vgmplay
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  80 BIOS root sets + 27 system ROM sets + 3 device ROMs (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, ti99_4a, trs80, tutor, vg5k, vsmile). romload.cpp
+  81 BIOS root sets + 28 system ROM sets + 3 device ROMs (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, ti99_4a, trs80, tutor, vg5k, vis, vsmile). romload.cpp
   unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
@@ -1310,6 +1311,24 @@ files:
         description: "i8041 daisywheel printer MCU"
         size: 8192
         crc32: a64d450a
+
+  # Tandy VIS (Video Information System)
+  # vis.cpp: vis (parent, WORKING). Tandy/Memorex MD-2500 (1992).
+  # CD-ROM-based multimedia system built on modified 286 PC hardware.
+  - name: vis.zip
+    required: true
+    category: bios_zip
+    system: tandy-vis
+    source_ref: "src/mame/trs/vis.cpp:1062-1066"
+    contents:
+      - name: p513bk0b.bin
+        description: "BIOS bank 0"
+        size: 524288
+        crc32: 364e3f74
+      - name: p513bk1b.bin
+        description: "BIOS bank 1"
+        size: 524288
+        crc32: e18239c4
 
   # Tandy TRS-80 family
   # Model I (trs80.cpp): trs80 (Level I, parent, WORKING), trs80l2 (Level II, parent),
