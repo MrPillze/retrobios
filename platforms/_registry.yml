@@ -7,6 +7,9 @@ platforms:
     source_url: https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat
     source_format: clrmamepro_dat
     hash_type: sha1
+    verification_mode: existence
+    base_destination: system
+    case_insensitive_fs: true
     schedule: weekly
     cores: all_libretro
     target_scraper: retroarch_targets

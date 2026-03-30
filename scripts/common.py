@@ -191,10 +191,9 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                             system.setdefault("files", []).append(gf)
                             existing.add(key)
 
-    # Merge cores from _registry.yml if the registry has a broader list.
-    # The scraped YAML may have an incomplete cores list; the registry is
-    # our curated source and supplements it. This affects all consumers:
-    # generate_pack, verify, generate_truth, diff_truth.
+    # Merge metadata from _registry.yml. The registry is our curated source;
+    # the scraped YAML may be incomplete (missing cores, metadata fields).
+    # Registry fields supplement (not replace) the scraped config.
     registry_path = os.path.join(platforms_dir, "_registry.yml")
     if os.path.exists(registry_path):
         reg_real = os.path.realpath(registry_path)
@@ -203,17 +202,24 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                 _shared_yml_cache[reg_real] = yaml.safe_load(f) or {}
         reg = _shared_yml_cache[reg_real]
         reg_entry = reg.get("platforms", {}).get(platform_name, {})
+
+        # Merge cores (union for lists, override for all_libretro)
         reg_cores = reg_entry.get("cores")
         if reg_cores is not None:
             cfg_cores = config.get("cores")
             if reg_cores == "all_libretro":
                 config["cores"] = "all_libretro"
             elif isinstance(reg_cores, list) and isinstance(cfg_cores, list):
-                # Union: registry supplements scraped cores
                 merged_set = {str(c) for c in cfg_cores} | {str(c) for c in reg_cores}
                 config["cores"] = sorted(merged_set)
             elif isinstance(reg_cores, list) and cfg_cores is None:
                 config["cores"] = reg_cores
+
+        # Merge other metadata: registry supplements missing fields
+        for field in ("hash_type", "verification_mode", "base_destination",
+                      "case_insensitive_fs", "standalone_cores"):
+            if field in reg_entry and field not in config:
+                config[field] = reg_entry[field]
 
     _platform_config_cache[cache_key] = config
     return config
