@@ -19,6 +19,9 @@ OUTPUT_FILENAMES: dict[str, str] = {
     "batocera": "batocera-systems",
     "recalbox": "es_bios.xml",
     "retrobat": "batocera-systems.json",
+    "emudeck": "checkBIOS.sh",
+    "retrodeck": "component_manifest.json",
+    "romm": "known_bios_files.json",
 }
 
 
