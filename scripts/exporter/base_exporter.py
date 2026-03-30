@@ -25,3 +25,8 @@ class BaseExporter(ABC):
     @abstractmethod
     def validate(self, truth_data: dict, output_path: str) -> list[str]:
         """Validate exported file against truth data, return list of issues."""
+
+    @staticmethod
+    def _is_pattern(name: str) -> bool:
+        """Check if a filename is a placeholder pattern (not a real file)."""
+        return "<" in name or ">" in name or "*" in name

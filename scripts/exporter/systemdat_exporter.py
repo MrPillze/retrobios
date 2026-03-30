@@ -1,4 +1,8 @@
-"""Exporter for libretro System.dat (clrmamepro DAT format)."""
+"""Exporter for libretro System.dat (clrmamepro DAT format).
+
+Produces a single 'game' block with all ROMs grouped by system,
+matching the exact format of libretro-database/dat/System.dat.
+"""
 
 from __future__ import annotations
 
@@ -13,7 +17,7 @@ from .base_exporter import BaseExporter
 
 
 def _slug_to_native(slug: str) -> str:
-    """Convert a system slug to a native 'Manufacturer - Console' name."""
+    """Convert a system slug to 'Manufacturer - Console' format."""
     parts = slug.split("-", 1)
     if len(parts) == 1:
         return parts[0].title()
@@ -42,45 +46,54 @@ class Exporter(BaseExporter):
                 if nid:
                     native_map[sys_id] = nid
 
-        lines: list[str] = []
-        lines.append('clrmamepro (')
-        lines.append('\tname "System.dat"')
-        lines.append(')')
+        lines: list[str] = [
+            "clrmamepro (",
+            '\tname "System"',
+            '\tdescription "System"',
+            '\tcomment "System, firmware, and BIOS files used by libretro cores."',
+            ")",
+            "",
+            "game (",
+            '\tname "System"',
+        ]
 
         systems = truth_data.get("systems", {})
         for sys_id in sorted(systems):
             sys_data = systems[sys_id]
-            native_name = native_map.get(sys_id, _slug_to_native(sys_id))
+            files = sys_data.get("files", [])
+            if not files:
+                continue
 
-            for fe in sys_data.get("files", []):
+            native_name = native_map.get(sys_id, _slug_to_native(sys_id))
+            lines.append("")
+            lines.append(f'\tcomment "{native_name}"')
+
+            for fe in files:
                 name = fe.get("name", "")
-                if name.startswith("_"):
+                if name.startswith("_") or self._is_pattern(name):
                     continue
 
-                dest = fe.get("path", name)
-                size = fe.get("size", 0)
+                rom_parts = [f"name {name}"]
+                size = fe.get("size")
+                if size:
+                    rom_parts.append(f"size {size}")
                 crc = fe.get("crc32", "")
-                md5 = fe.get("md5", "")
-                sha1 = fe.get("sha1", "")
-
-                rom_parts = [f'name "{name}"']
-                rom_parts.append(f"size {size}")
                 if crc:
-                    rom_parts.append(f"crc {crc}")
+                    rom_parts.append(f"crc {crc.upper()}")
+                md5 = fe.get("md5", "")
+                if isinstance(md5, list):
+                    md5 = md5[0] if md5 else ""
                 if md5:
                     rom_parts.append(f"md5 {md5}")
+                sha1 = fe.get("sha1", "")
+                if isinstance(sha1, list):
+                    sha1 = sha1[0] if sha1 else ""
                 if sha1:
                     rom_parts.append(f"sha1 {sha1}")
-                rom_str = " ".join(rom_parts)
 
-                game_name = f"{native_name}/{dest}"
-                lines.append("")
-                lines.append("game (")
-                lines.append(f'\tname "{game_name}"')
-                lines.append(f'\tdescription "{name}"')
-                lines.append(f"\trom ( {rom_str} )")
-                lines.append(")")
+                lines.append(f"\trom ( {' '.join(rom_parts)} )")
 
+        lines.append(")")
         lines.append("")
         Path(output_path).write_text("\n".join(lines), encoding="utf-8")
 
@@ -93,12 +106,11 @@ class Exporter(BaseExporter):
             exported_names.add(rom.name)
 
         issues: list[str] = []
-        for sys_id, sys_data in truth_data.get("systems", {}).items():
+        for sys_data in truth_data.get("systems", {}).values():
             for fe in sys_data.get("files", []):
                 name = fe.get("name", "")
-                if name.startswith("_"):
+                if name.startswith("_") or self._is_pattern(name):
                     continue
                 if name not in exported_names:
-                    issues.append(f"missing: {name} (system {sys_id})")
-
+                    issues.append(f"missing: {name}")
         return issues

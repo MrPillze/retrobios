@@ -3170,7 +3170,8 @@ class TestE2E(unittest.TestCase):
         self.assertIn("Sony - PlayStation", content)
         self.assertIn("scph5501.bin", content)
         self.assertIn("b056ee5a4d65937e1a3a17e1e78f3258ea49c38e", content)
-        self.assertIn('name "System.dat"', content)
+        self.assertIn('name "System"', content)
+        self.assertIn("71AF80B4", content)  # CRC uppercase
 
         issues = exporter.validate(truth, out_path)
         self.assertEqual(issues, [])
@@ -3557,10 +3558,13 @@ class TestE2E(unittest.TestCase):
         exp.export(truth, out, scraped_data=scraped)
 
         content = open(out).read()
-        self.assertIn("<biosList>", content)
+        self.assertIn("<biosList", content)
         self.assertIn('platform="psx"', content)
+        self.assertIn('fullname=', content)
         self.assertIn("scph5501.bin", content)
-        self.assertIn('mandatory="true"', content)
+        # mandatory="true" is the default, not emitted (matching Recalbox format)
+        self.assertNotIn('mandatory="false"', content)
+        self.assertIn('core="libretro/c"', content)
         self.assertEqual(exp.validate(truth, out), [])
 
     def test_181_retrobat_exporter_round_trip(self):
