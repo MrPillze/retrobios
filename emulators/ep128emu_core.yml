@@ -4,7 +4,7 @@ core_classification: community_fork
 display_name: "Enterprise - 64/128 (ep128emu)"
 source: https://github.com/libretro/ep128emu-core
 upstream: https://github.com/istvan-v/ep128emu
-profiled_date: "2026-03-23"
+profiled_date: "2026-03-30"
 core_version: "1.2.10"
 
 cores:

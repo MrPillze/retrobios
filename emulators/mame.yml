@@ -61,18 +61,22 @@ systems:
   - fm7
   - laser310
   - vtech-socrates
+  - vtech-vsmile
   - casio-loopy
   - casio-pv1000
   - casio-pv2000
   - pegasus
   - pcw
   - interton-vc4000
+  - philips-vg5k
   - ti99
+  - tutor
   - trs80
+  - vgmplay
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  80 BIOS root sets + 24 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, ti99_4a, trs80). romload.cpp
+  80 BIOS root sets + 27 system ROM sets + 3 device ROMs (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000, rx78, segaai, socrates, ti99_4a, trs80, tutor, vg5k, vsmile). romload.cpp
   unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
@@ -91,6 +95,22 @@ notes: |
   "ti99_cart". Peripheral Expansion Box with optional device ROMs (FDC,
   RS232, HFDC, P-Code, EVPC, etc.) — all PEB devices require user
   configuration, none loaded by default.
+
+  VGMPlay: virtual driver (src/mame/virtual/vgmplay.cpp) for playing VGM
+  music files. Standalone MAME only — not included in libretro/mame build.
+  Uses MAME sound chip devices (QSound, YM2413/OPLL, YM2608/OPNA, etc.).
+
+  V.Smile: 2 machines in vsmile.cpp — vsmile parent (V.Smile 2005),
+  vsmilem clone (V.Smile Motion 2008). SunPlus SPG24x CPU, 3 BIOS
+  alternatives (v100, v102, v103). Clone vsmilem has 2 alternate
+  BIOSes. Software lists "vsmile_cart", "vsmilem_cart". vsmileb.cpp
+  is V.Smile Baby (separate parent, MACHINE_NOT_WORKING).
+  vsmilepro.cpp is V.Smile Pro (skeleton, MACHINE_NOT_WORKING).
+
+  Device ROMs: sound chip ROM data loaded by MAME device emulation.
+  qsound.zip (QSound DSP program), ym2413.zip (OPLL instrument table),
+  ym2608.zip (OPNA ADPCM rhythm samples). Shared across all drivers
+  using these chips, not specific to vgmplay.
 
 files:
   # SNK Neo Geo MVS/AES
@@ -1027,6 +1047,28 @@ files:
         size: 16384
         crc32: 972384aa
 
+  # VTech V.Smile Console
+  - name: vsmile.zip
+    required: true
+    category: bios_zip
+    system: vtech-vsmile
+    source_ref: "src/mame/vtech/vsmile.cpp:374-404"
+    note: "MACHINE_IMPERFECT_SOUND | MACHINE_IMPERFECT_GRAPHICS. Clone: vsmilem (V.Smile Motion)."
+    validation: [crc32]
+    contents:
+      - name: vsmile_v103.bin
+        description: "System ROM v1.03 (default, also used on V.Smile Pocket)"
+        size: 2097152
+        crc32: 387fbc24
+      - name: vsmile_v102.bin
+        description: "System ROM v1.02 (found in fat model systems)"
+        size: 2097152
+        crc32: 0cd0bdf5
+      - name: vsmile_v100.bin
+        description: "System ROM v1.00"
+        size: 2097152
+        crc32: "205c5296"
+
   # Bit Corporation Gamate
   - name: gamate.zip
     required: true
@@ -1571,3 +1613,92 @@ files:
         size: 16384
         crc32: 65d00401
 
+  # Tomy Tutor
+  - name: tutor.zip
+    required: true
+    category: bios_zip
+    system: tutor
+    source_ref: "src/mame/tomy/tutor.cpp:800-803"
+    note: >-
+      Tomy Tutor home computer (1983). TMS9995 CPU @10.7MHz, TMS9928A VDP,
+      SN76489AN sound. 3 machines: tutor (parent, US/UK), pyuuta (clone,
+      Japan 1982), pyuutajr (separate parent, handheld 1983). Software list
+      "tutor".
+    contents:
+      - name: tutor1.bin
+        description: "System ROM"
+        size: 32768
+        crc32: 702c38ba
+      - name: tutor2.bin
+        description: "BASIC ROM"
+        size: 16384
+        crc32: 05f228f5
+
+  # Philips VG-5000
+  - name: vg5k.zip
+    required: true
+    category: bios_zip
+    system: philips-vg5k
+    source_ref: "src/mame/philips/vg5k.cpp:463-472"
+    note: >-
+      Philips VG-5000mu home computer (1984). Z80 @4MHz, EF9345 video,
+      24KB RAM. AZERTY keyboard. Variants: Radiola VG5000, Schneider
+      VG5000. MACHINE_NOT_WORKING | MACHINE_SUPPORTS_SAVE. Two BASIC
+      ROM versions (v1.0, v1.1). Software list "vg5k" (cassettes).
+    contents:
+      - name: vg5k11.bin
+        description: "BASIC v1.1 ROM (default)"
+        size: 16384
+        crc32: a6f4a0ea
+      - name: vg5k10.bin
+        description: "BASIC v1.0 ROM (BAD_DUMP)"
+        size: 16384
+        crc32: 57983260
+      - name: charset.rom
+        description: "EF9345 character generator (BAD_DUMP, from DCVG5K)"
+        size: 8192
+        crc32: b2f49eb3
+
+  # Device ROMs — sound chip ROM data
+  - name: qsound.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/devices/sound/qsound.cpp:121-125"
+    note: >-
+      QSound DSP program ROM. Required by qsound_device and
+      qsound_hle_device for Capcom QSound audio (CPS-2, CPS-3, ZN).
+    validation: [crc32]
+    contents:
+      - name: dl-1425.bin
+        description: "QSound DSP microcode"
+        size: 24576
+        crc32: d6cf5ef5
+
+  - name: ym2413.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/devices/sound/ymopl.cpp:218-223"
+    note: >-
+      YM2413 (OPLL) instrument ROM table. Required by ym2413_device
+      for FM synthesis preset instruments.
+    validation: [crc32]
+    contents:
+      - name: ym2413_instruments.bin
+        description: "OPLL preset instrument table"
+        size: 144
+        crc32: 6f582d01
+
+  - name: ym2608.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/devices/sound/ymopn.cpp:76-91"
+    note: >-
+      YM2608 (OPNA) ADPCM rhythm sample ROM. Required by ym2608_device
+      for internal rhythm sound source (bass drum, snare, cymbal, hi-hat,
+      tom, rim shot).
+    validation: [crc32]
+    contents:
+      - name: ym2608_adpcm_rom.bin
+        description: "OPNA ADPCM rhythm samples"
+        size: 8192
+        crc32: 23c9e0d8

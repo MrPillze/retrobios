@@ -662,11 +662,6 @@ systems:
     - name: prod.keys
       destination: prod.keys
       required: true
-  wiiuroms:
-    files:
-    - name: keys.txt
-      destination: keys.txt
-      required: true
   nintendo-wii-u:
     files:
     - name: keys.txt

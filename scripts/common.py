@@ -765,7 +765,7 @@ MANUFACTURER_PREFIXES = (
     "snk-", "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
     "hartung-", "tiger-", "magnavox-", "philips-", "bandai-", "casio-",
     "coleco-", "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
-    "gce-", "interton-", "texas-instruments-",
+    "gce-", "interton-", "texas-instruments-", "videoton-",
 )
 
 
@@ -797,6 +797,7 @@ SYSTEM_ALIASES: dict[str, str] = {
     "atarist": "atari-st",
     "sega32x": "sega-32x",
     "segastv": "sega-stv",
+    "ti994a": "ti99",
 }
 
 

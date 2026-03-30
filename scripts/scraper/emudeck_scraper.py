@@ -274,7 +274,7 @@ class Scraper(BaseScraper):
                     system_col = self._clean_markdown((row[key] or ""))
                     break
             slug = None
-            for part in re.split(r'[`\s]+', folder_col):
+            for part in re.split(r'[`\s/]+', folder_col):
                 part = part.strip().strip('`').lower()
                 if part and part in SYSTEM_SLUG_MAP:
                     slug = SYSTEM_SLUG_MAP[part]

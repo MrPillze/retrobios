@@ -3,13 +3,13 @@ type: libretro
 core_classification: game_engine
 source: "https://github.com/libretro/xrick-libretro"
 upstream: "https://github.com/fabiensanglard/xrick"
-profiled_date: "2026-03-25"
+profiled_date: "2026-03-30"
 core_version: "1.0.0.6"
 display_name: "Rick Dangerous (XRick)"
 cores:
   - xrick
 systems:
-  - rick-dangerous
+  - xrick
 
 notes: |
   XRick is an open-source reimplementation of the Rick Dangerous engine (Core Design, 1989),
@@ -52,7 +52,7 @@ notes: |
 files:
   - name: "xrick/data.zip"
     category: game_data
-    system: rick-dangerous
+    system: xrick
     description: "Rick Dangerous sound data (29 WAV files: sfx and music tracks)"
     required: true
     size: 1457440
