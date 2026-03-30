@@ -303,12 +303,25 @@ class Scraper(BaseScraper):
         """Generate a platform YAML config dict from scraped data."""
         requirements = self.fetch_requirements()
 
+        # Parse source to extract display names per system
+        raw = self._fetch_raw()
+        source_dict = self._extract_systems_dict(raw)
+        display_names: dict[str, str] = {}
+        for sys_key, sys_data in source_dict.items():
+            dname = sys_data.get("name", "")
+            if dname:
+                slug = SYSTEM_SLUG_MAP.get(sys_key, sys_key)
+                display_names[slug] = dname
+
         systems = {}
         for req in requirements:
             if req.system not in systems:
                 sys_entry: dict = {"files": []}
                 if req.native_id:
                     sys_entry["native_id"] = req.native_id
+                dname = display_names.get(req.system)
+                if dname:
+                    sys_entry["name"] = dname
                 systems[req.system] = sys_entry
 
             entry = {

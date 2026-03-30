@@ -30,3 +30,26 @@ class BaseExporter(ABC):
     def _is_pattern(name: str) -> bool:
         """Check if a filename is a placeholder pattern (not a real file)."""
         return "<" in name or ">" in name or "*" in name
+
+    @staticmethod
+    def _display_name(
+        sys_id: str, scraped_sys: dict | None = None,
+    ) -> str:
+        """Get display name for a system from scraped data or slug."""
+        if scraped_sys:
+            name = scraped_sys.get("name")
+            if name:
+                return name
+        # Fallback: convert slug to display name with acronym handling
+        _UPPER = {
+            "3do", "cps1", "cps2", "cps3", "dos", "gba", "gbc", "msx",
+            "nes", "nds", "ngp", "psp", "psx", "sms", "snes", "tvc",
+        }
+        parts = sys_id.replace("-", " ").split()
+        result = []
+        for p in parts:
+            if p.lower() in _UPPER:
+                result.append(p.upper())
+            else:
+                result.append(p.capitalize())
+        return " ".join(result)

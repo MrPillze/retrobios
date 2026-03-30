@@ -11,9 +11,6 @@ from pathlib import Path
 from .base_exporter import BaseExporter
 
 
-def _slug_to_display(slug: str) -> str:
-    """Convert slug to display name: 'atari-5200' -> 'Atari 5200'."""
-    return slug.replace("-", " ").title()
 
 
 class Exporter(BaseExporter):
@@ -31,15 +28,11 @@ class Exporter(BaseExporter):
     ) -> None:
         # Build native_id and display name maps from scraped data
         native_map: dict[str, str] = {}
-        display_map: dict[str, str] = {}
         if scraped_data:
             for sys_id, sys_data in scraped_data.get("systems", {}).items():
                 nid = sys_data.get("native_id")
                 if nid:
                     native_map[sys_id] = nid
-                dname = sys_data.get("name")
-                if dname:
-                    display_map[sys_id] = dname
 
         lines: list[str] = ["systems = {", ""]
 
@@ -51,7 +44,8 @@ class Exporter(BaseExporter):
                 continue
 
             native_id = native_map.get(sys_id, sys_id)
-            display_name = display_map.get(sys_id, _slug_to_display(sys_id))
+            scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            display_name = self._display_name(sys_id, scraped_sys)
 
             # Build biosFiles entries as compact single-line dicts
             bios_parts: list[str] = []

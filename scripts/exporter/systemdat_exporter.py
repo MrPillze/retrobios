@@ -46,16 +46,28 @@ class Exporter(BaseExporter):
                 if nid:
                     native_map[sys_id] = nid
 
+        # Match exact header format of libretro-database/dat/System.dat
+        version = ""
+        if scraped_data:
+            version = scraped_data.get("dat_version", scraped_data.get("version", ""))
         lines: list[str] = [
             "clrmamepro (",
             '\tname "System"',
             '\tdescription "System"',
             '\tcomment "System, firmware, and BIOS files used by libretro cores."',
+        ]
+        if version:
+            lines.append(f"\tversion {version}")
+        lines.extend([
+            '\tauthor "libretro"',
+            '\thomepage "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"',
+            '\turl "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"',
             ")",
             "",
             "game (",
             '\tname "System"',
-        ]
+            '\tcomment "System"',
+        ])
 
         systems = truth_data.get("systems", {})
         for sys_id in sorted(systems):

@@ -15,9 +15,6 @@ from pathlib import Path
 from .base_exporter import BaseExporter
 
 
-def _slug_to_display(slug: str) -> str:
-    """Convert slug to display name."""
-    return slug.replace("-", " ").title()
 
 
 class Exporter(BaseExporter):
@@ -34,15 +31,11 @@ class Exporter(BaseExporter):
         scraped_data: dict | None = None,
     ) -> None:
         native_map: dict[str, str] = {}
-        display_map: dict[str, str] = {}
         if scraped_data:
             for sys_id, sys_data in scraped_data.get("systems", {}).items():
                 nid = sys_data.get("native_id")
                 if nid:
                     native_map[sys_id] = nid
-                dname = sys_data.get("name")
-                if dname:
-                    display_map[sys_id] = dname
 
         output: OrderedDict[str, dict] = OrderedDict()
 
@@ -54,7 +47,8 @@ class Exporter(BaseExporter):
                 continue
 
             native_id = native_map.get(sys_id, sys_id)
-            display_name = display_map.get(sys_id, _slug_to_display(sys_id))
+            scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            display_name = self._display_name(sys_id, scraped_sys)
             bios_files: list[OrderedDict] = []
 
             for fe in files:
