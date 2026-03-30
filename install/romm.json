@@ -3,7 +3,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-03-29T14:04:16Z",
+  "generated": "2026-03-30T07:40:45Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -13,8 +13,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 545,
-  "total_size": 1197706137,
+  "total_files": 638,
+  "total_size": 1316397979,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -2623,12 +2623,21 @@
       "cores": null
     },
     {
-      "dest": "psxonpsp660.bin",
-      "sha1": "96880d1ca92a016ff054be5159bb06fe03cb4e14",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/psxonpsp660.bin",
+      "dest": "BB01R4_OS.ROM",
+      "sha1": "decde89fbae90adb591ad2fc553d35f49030c129",
+      "size": 16384,
+      "repo_path": "bios/Atari/400-800/BB01R4_OS.ROM",
       "cores": [
-        "Beetle PSX (Mednafen PSX)"
+        "Atari800"
+      ]
+    },
+    {
+      "dest": "XEGAME.ROM",
+      "sha1": "a107db7f16a1129cf9d933c9cf4f013b068c9e82",
+      "size": 8192,
+      "repo_path": "bios/Atari/400-800/XEGAME.ROM",
+      "cores": [
+        "Atari800"
       ]
     },
     {
@@ -2638,6 +2647,98 @@
       "repo_path": "bios/Sony/PlayStation/ps1_rom.bin",
       "cores": [
         "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
+      "dest": "openbios.bin",
+      "sha1": "389df7981873d9e6e46c84c20cd43af0e4226cf8",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/openbios.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
+      "dest": "cromwell_1024.bin",
+      "sha1": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
+      "size": 1048576,
+      "repo_path": "bios/Microsoft/Xbox/cromwell_1024.bin",
+      "cores": [
+        "DirectXBox"
+      ]
+    },
+    {
+      "dest": "GC/dsp_rom.bin",
+      "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/dsp_coef.bin",
+      "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
+      "size": 4096,
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/shared2/sys/SYSCONF",
+      "sha1": "3256c026284a24fb99d2ec1558d95db3b5dcc2e9",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Wii/SYSCONF",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/title/00000001/00000002/data/setting.txt",
+      "sha1": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Wii/setting.txt",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Load/WiiSD.raw",
+      "sha1": "90d83d6c084deceeeb0466ac00723723ccfd0c6d",
+      "size": 134217728,
+      "repo_path": "bios/Nintendo/Wii/WiiSD.raw",
+      "cores": [
+        "Dolphin"
+      ],
+      "storage": "release",
+      "release_asset": "WiiSD.raw"
+    },
+    {
+      "dest": "Wii/clientca.pem",
+      "sha1": "4b937d4e81de11574b926386dd5f768aa23bf177",
+      "size": 1005,
+      "repo_path": "bios/Nintendo/Wii/clientca.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/clientcakey.pem",
+      "sha1": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
+      "size": 609,
+      "repo_path": "bios/Nintendo/Wii/clientcakey.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/rootca.pem",
+      "sha1": "b5229455dd26c1f53c73060e9089b391389e1f75",
+      "size": 897,
+      "repo_path": "bios/Nintendo/Wii/rootca.pem",
+      "cores": [
+        "Dolphin"
       ]
     },
     {
@@ -2692,6 +2793,33 @@
       "repo_path": "bios/DOS/DOSBox/DOSBOX.SF2",
       "cores": [
         "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exdos14isdos10uk.rom",
+      "sha1": "b82e21b6e3214432b6dc13f650e97de88fc90a72",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exdos14isdos10uk.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/epdos16f.rom",
+      "sha1": "9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/epdos16f.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx128.rom",
+      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zx128.rom",
+      "cores": [
+        "ep128emu-core"
       ]
     },
     {
@@ -3064,6 +3192,53 @@
       ]
     },
     {
+      "dest": "hatari/BOOT.ST",
+      "sha1": "5bcabba35bb8fbfe5a65b85efccf5ed657388308",
+      "size": 737280,
+      "repo_path": "bios/Atari/ST/hatari/BOOT.ST",
+      "cores": [
+        "Hatari"
+      ]
+    },
+    {
+      "dest": "Wii/sd.raw",
+      "sha1": "8c8134f08b2e3baa603206ede30d3935365009b8",
+      "size": 134217728,
+      "repo_path": "bios/Nintendo/Wii/sd.raw",
+      "cores": [
+        "Ishiiruka"
+      ],
+      "storage": "release",
+      "release_asset": "sd.raw"
+    },
+    {
+      "dest": "pcsx2/resources/GameIndex.yaml",
+      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
+      "size": 2669341,
+      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
+      "cores": [
+        "LRPS2"
+      ]
+    },
+    {
+      "dest": "pcsx2/resources/cheats_ws.zip",
+      "sha1": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
+      "size": 1273296,
+      "repo_path": "bios/Sony/PlayStation 2/cheats_ws.zip",
+      "cores": [
+        "LRPS2"
+      ]
+    },
+    {
+      "dest": "pcsx2/resources/cheats_ni.zip",
+      "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
+      "size": 42525,
+      "repo_path": "bios/Sony/PlayStation 2/cheats_ni.zip",
+      "cores": [
+        "LRPS2"
+      ]
+    },
+    {
       "dest": "mame2003/cheat.dat",
       "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
       "size": 7971360,
@@ -3235,23 +3410,21 @@
       ]
     },
     {
-      "dest": "dsi_nand.bin",
-      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
-      "size": 251658304,
-      "repo_path": ".cache/large/dsi_nand.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "dsi_nand.bin"
-    },
-    {
       "dest": "dsi_sd_card.bin",
       "sha1": "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3",
       "size": 1048576,
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
       "cores": [
         "melonDS"
+      ]
+    },
+    {
+      "dest": "MacIIx.ROM",
+      "sha1": "753b94351d94c369616c2c87b19d568dc5e2764e",
+      "size": 262144,
+      "repo_path": "bios/Apple/Macintosh II/MacIIx.ROM",
+      "cores": [
+        "Mini vMac"
       ]
     },
     {
@@ -3273,12 +3446,66 @@
       ]
     },
     {
+      "dest": "np2/bios9821.rom",
+      "sha1": "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
+      "size": 98304,
+      "repo_path": "bios/NEC/PC-98/bios9821.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/scsi.rom",
+      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/scsi.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/sasi.rom",
+      "sha1": "b607707d74b5a7d3ba211825de31a8f32aec8146",
+      "size": 4096,
+      "repo_path": "bios/NEC/PC-98/sasi.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
       "dest": "custom.pal",
       "sha1": "c7635019127aa28d84d28ae48304bfca6d5baefb",
       "size": 192,
       "repo_path": "bios/Nintendo/NES/MesenPalette.pal",
       "cores": [
         "Nestopia UE"
+      ]
+    },
+    {
+      "dest": "np2kai/ide.rom",
+      "sha1": "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/ide.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/pci.rom",
+      "sha1": "1246203bebf9f04e3bac2df7fc64719304f9f1bd",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-98/pci.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "eeprom.dat",
+      "sha1": "ffc6261e487efa8c7442069f71acfc4aa826993d",
+      "size": 64,
+      "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
+      "cores": [
+        "PCSX2"
       ]
     },
     {
@@ -3516,6 +3743,15 @@
       ]
     },
     {
+      "dest": "keropi/cgrom.tmp",
+      "sha1": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
+      "size": 786432,
+      "repo_path": "bios/Sharp/X68000/cgrom.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
       "dest": "same_cdi/bios/cdimono1.zip",
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "size": 660996,
@@ -3561,12 +3797,93 @@
       ]
     },
     {
-      "dest": "BIOS.col",
-      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
-      "size": 8192,
-      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "dest": "squirreljme-0.3.0-fast.jar",
+      "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
+      "size": 2367241,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-fast.jar",
       "cores": [
-        "SMS Plus GX"
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-test.jar",
+      "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
+      "size": 3396757,
+      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-slow.jar",
+      "sha1": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
+      "size": 3129653,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-slow-test.jar",
+      "sha1": "b411c128bfd8411f339a49bbcb1c9e97189c2161",
+      "size": 3772058,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-fast.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme.jar",
+      "sha1": "6933bbe1fc29f58581a7f64f859f756db9ef78a7",
+      "size": 4700395,
+      "repo_path": "bios/Java/J2ME/squirreljme.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-test.jar",
+      "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
+      "size": 3396757,
+      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-slow.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-slow-test.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
       ]
     },
     {
@@ -3720,6 +4037,51 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "VICE xvic"
+      ]
+    },
+    {
+      "dest": "xmil/IPLROM.X1",
+      "sha1": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
+      "size": 4096,
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1.c4db9a6e",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
+      "dest": "xmil/IPLROM.X1T",
+      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
+      "size": 32768,
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
+      "dest": "xmil/FNT0816.X1",
+      "sha1": "4f06d20c997a79ee6af954b69498147789bf1847",
+      "size": 4096,
+      "repo_path": "bios/Sharp/X1/FNT0816.X1",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
+      "dest": "xmil/FNT1616.X1",
+      "sha1": "b9e6c320611f0842df6f45673c47c3e23bc14272",
+      "size": 306176,
+      "repo_path": "bios/Sharp/X1/FNT1616.X1",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
+      "dest": "xbox_hdd.qcow2",
+      "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
+      "size": 1638400,
+      "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
+      "cores": [
+        "Xemu"
       ]
     },
     {
@@ -4128,6 +4490,213 @@
       ]
     },
     {
+      "dest": "GC/USA/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/EUR/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/JAP/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GBA/gba_bios.bin",
+      "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos21.rom",
+      "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos21.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos20.rom",
+      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos20.bin",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos24uk.rom",
+      "sha1": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
+      "size": 65536,
+      "repo_path": "bios/Enterprise/64-128/exos24uk.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/basic21.rom",
+      "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/basic21.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/basic20.rom",
+      "sha1": "61d0987b906146e21b94f265d5b51b4938c986a9",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/basic20.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exdos13.rom",
+      "sha1": "cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exdos13.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/epfileio.rom",
+      "sha1": "2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/epfileio.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zt19uk.rom",
+      "sha1": "b7af62f0bc95fdca4b31d236f8327dafc80f83b7",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zt19uk.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/hun.rom",
+      "sha1": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/hun.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/brd.rom",
+      "sha1": "f34f0c330b44dbf2548329bea954d5991dec30ca",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/brd.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_sys.rom",
+      "sha1": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc22_sys.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_ext.rom",
+      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvcfileio.rom",
+      "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvcfileio.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc_dos12d.rom",
+      "sha1": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc_dos12d.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc464.rom",
+      "sha1": "56d39c463da60968d93e58b4ba0e675829412a20",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc464.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc664.rom",
+      "sha1": "073a7665527b5bd8a148747a3947dbd3328682c8",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc664.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc6128.rom",
+      "sha1": "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc6128.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc_amsdos.rom",
+      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
+      "size": 16384,
+      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
       "dest": "fbneo/hiscore.dat",
       "sha1": "7381472bf046126257e51a0124e4553282f020e5",
       "size": 322458,
@@ -4179,6 +4748,276 @@
       "repo_path": "bios/Arcade/MAME/mameinfo.dat",
       "cores": [
         "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "np2/bios.rom",
+      "sha1": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "size": 65536,
+      "repo_path": "bios/IBM/PC/ibmpcjr/bios.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/font.bmp",
+      "sha1": "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5",
+      "size": 524350,
+      "repo_path": "bios/NEC/PC-98/font.bmp",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/sound.rom",
+      "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef",
+      "size": 16384,
+      "repo_path": "bios/NEC/PC-98/sound.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_bd.wav",
+      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
+      "size": 19192,
+      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_sd.wav",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_top.wav",
+      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
+      "size": 57016,
+      "repo_path": "bios/NEC/PC-98/2608_top.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_hh.wav",
+      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
+      "size": 36722,
+      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_tom.wav",
+      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
+      "size": 23092,
+      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_rim.wav",
+      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
+      "size": 5288,
+      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2kai/bios.rom",
+      "sha1": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "size": 65536,
+      "repo_path": "bios/IBM/PC/ibmpcjr/bios.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/font.bmp",
+      "sha1": "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5",
+      "size": 524350,
+      "repo_path": "bios/NEC/PC-98/font.bmp",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/sound.rom",
+      "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef",
+      "size": 16384,
+      "repo_path": "bios/NEC/PC-98/sound.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_bd.wav",
+      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
+      "size": 19192,
+      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_sd.wav",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_top.wav",
+      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
+      "size": 57016,
+      "repo_path": "bios/NEC/PC-98/2608_top.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_hh.wav",
+      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
+      "size": 36722,
+      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_tom.wav",
+      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
+      "size": 23092,
+      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/2608_rim.wav",
+      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
+      "size": 5288,
+      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/scsi.rom",
+      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/scsi.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/sasi.rom",
+      "sha1": "b607707d74b5a7d3ba211825de31a8f32aec8146",
+      "size": 4096,
+      "repo_path": "bios/NEC/PC-98/sasi.rom",
+      "cores": [
+        "NP2kai"
+      ]
+    },
+    {
+      "dest": "keropi/iplrom.dat",
+      "sha1": "0ed038ed2133b9f78c6e37256807424e0d927560",
+      "size": 131072,
+      "repo_path": "bios/Sharp/X68000/iplrom.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
+      "dest": "keropi/iplrom30.dat",
+      "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
+      "size": 131072,
+      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
+      "dest": "keropi/iplromco.dat",
+      "sha1": "77511fc58798404701f66b6bbc9cbde06596eba7",
+      "size": 131072,
+      "repo_path": "bios/Sharp/X68000/iplromco.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
+      "dest": "keropi/iplromxv.dat",
+      "sha1": "e33cdcdb69cd257b0b211ef46e7a8b144637db57",
+      "size": 131072,
+      "repo_path": "bios/Sharp/X68000/iplromxv.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
+      "dest": "keropi/cgrom.dat",
+      "sha1": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
+      "size": 786432,
+      "repo_path": "bios/Sharp/X68000/cgrom.dat",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/MT32_CONTROL.ROM",
+      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "cores": [
+        "ScummVM"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/MT32_PCM.ROM",
+      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
+      "cores": [
+        "ScummVM"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/CM32L_CONTROL.ROM",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "cores": [
+        "ScummVM"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/CM32L_PCM.ROM",
+      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
+      "size": 1048576,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "cores": [
+        "ScummVM"
+      ]
+    },
+    {
+      "dest": "xmil/FNT0808.X1",
+      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "size": 2048,
+      "repo_path": "bios/Sharp/X1/FNT0808.X1",
+      "cores": [
+        "X Millennium"
       ]
     }
   ]

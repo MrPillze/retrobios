@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,244** verified files across **387** systems, ready to extract into your emulator's BIOS directory.
+**7,239** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -27,14 +27,14 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 
 | Platform | BIOS files | Extract to | Download |
 |----------|-----------|-----------|----------|
-| Batocera | 359 | `/userdata/bios/` | [Download](../../releases/latest) |
+| Batocera | 362 | `/userdata/bios/` | [Download](../../releases/latest) |
 | BizHawk | 118 | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 161 | `Emulation/bios/` | [Download](../../releases/latest) |
 | Lakka | 448 | `system/` | [Download](../../releases/latest) |
 | Recalbox | 346 | `/recalbox/share/bios/` | [Download](../../releases/latest) |
 | RetroArch | 448 | `system/` | [Download](../../releases/latest) |
-| RetroBat | 331 | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 2007 | `~/retrodeck/bios/` | [Download](../../releases/latest) |
+| RetroBat | 339 | `bios/` | [Download](../../releases/latest) |
+| RetroDECK | 2006 | `~/retrodeck/bios/` | [Download](../../releases/latest) |
 | RetroPie | 448 | `BIOS/` | [Download](../../releases/latest) |
 | RomM | 374 | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
@@ -44,14 +44,14 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Each file is checked against the emulator's source code to match what the code actually loads at runtime.
 
 - **10 platforms** supported with platform-specific verification
-- **328 emulators** profiled from source (RetroArch cores + standalone)
-- **387 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,244 files** verified with MD5, SHA1, CRC32 checksums
-- **9266 MB** total collection size
+- **329 emulators** profiled from source (RetroArch cores + standalone)
+- **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **7,239 files** verified with MD5, SHA1, CRC32 checksums
+- **8144 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 353+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 362+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -59,15 +59,15 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
-| Batocera | 359/359 (100.0%) | 354 | 5 | 0 |
+| Batocera | 356/362 (98.3%) | 349 | 7 | 6 |
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
-| Lakka | 443/448 (98.9%) | 443 | 0 | 5 |
-| Recalbox | 276/346 (79.8%) | 273 | 3 | 70 |
-| RetroArch | 443/448 (98.9%) | 443 | 0 | 5 |
-| RetroBat | 330/331 (99.7%) | 326 | 4 | 1 |
-| RetroDECK | 1958/2007 (97.6%) | 1932 | 26 | 49 |
-| RetroPie | 443/448 (98.9%) | 443 | 0 | 5 |
+| Lakka | 442/448 (98.7%) | 442 | 0 | 6 |
+| Recalbox | 277/346 (80.1%) | 274 | 3 | 69 |
+| RetroArch | 442/448 (98.7%) | 442 | 0 | 6 |
+| RetroBat | 337/339 (99.4%) | 333 | 4 | 2 |
+| RetroDECK | 1960/2006 (97.7%) | 1934 | 26 | 46 |
+| RetroPie | 442/448 (98.7%) | 442 | 0 | 6 |
 | RomM | 372/374 (99.5%) | 372 | 0 | 2 |
 
 ## Build your own pack
@@ -104,7 +104,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 10 platforms and 328 emulators
+- **Cross-reference** mapping files across 10 platforms and 329 emulators
 
 ## How it works
 
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-29T21:00:40Z*
+*Auto-generated on 2026-03-30T07:40:45Z*

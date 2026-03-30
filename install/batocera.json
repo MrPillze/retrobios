@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-29T14:02:30Z",
+  "generated": "2026-03-30T07:37:55Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 854,
-  "total_size": 1444718819,
+  "total_files": 1228,
+  "total_size": 1928497242,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -155,6 +155,76 @@
       "sha1": "d2cce3ff07afa9d13ea371499495f4df9611420c",
       "size": 6896,
       "repo_path": "bios/APF/Imagination Machine/apfm1000.zip",
+      "cores": null
+    },
+    {
+      "dest": "apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": null
+    },
+    {
+      "dest": "apple2ee.zip",
+      "sha1": "0bd2026795d117c33a5967b68fed8c54b3d95502",
+      "size": 560142,
+      "repo_path": "bios/Apple/Apple II/apple2ee.zip",
+      "cores": null
+    },
+    {
+      "dest": "apple2p.zip",
+      "sha1": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "size": 11756,
+      "repo_path": "bios/Apple/Apple II/apple2p.zip",
+      "cores": null
+    },
+    {
+      "dest": "a2diskiing.zip",
+      "sha1": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "size": 371,
+      "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
+      "cores": null
+    },
+    {
+      "dest": "a2cffa02.zip",
+      "sha1": "e8af33c0904b422841080a5ee25935f5ea1f3781",
+      "size": 2371,
+      "repo_path": "bios/Apple/Apple II/a2cffa02.zip",
+      "cores": null
+    },
+    {
+      "dest": "votrsc01.zip",
+      "sha1": "a57f14469867ce0d0865995a645b69f41a0ea718",
+      "size": 588,
+      "repo_path": "bios/Apple/Apple II/votrsc01.zip",
+      "cores": null
+    },
+    {
+      "dest": "votrsc01a.zip",
+      "sha1": "14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524",
+      "size": 590,
+      "repo_path": "bios/Arcade/Arcade/votrax.zip",
+      "cores": null
+    },
+    {
+      "dest": "d2fdc.zip",
+      "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
+      "size": 262,
+      "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
+      "cores": null
+    },
+    {
+      "dest": "ROM1",
+      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
+      "size": 131072,
+      "repo_path": "bios/Apple/Apple IIGS/ROM",
+      "cores": null
+    },
+    {
+      "dest": "apple2gs.zip",
+      "sha1": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
+      "size": 174124,
+      "repo_path": "bios/Apple/Apple II/apple2gs.zip",
       "cores": null
     },
     {
@@ -326,69 +396,6 @@
       "cores": null
     },
     {
-      "dest": "apple2e.zip",
-      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
-      "size": 15975,
-      "repo_path": "bios/Apple/Apple II/apple2e.zip",
-      "cores": null
-    },
-    {
-      "dest": "apple2ee.zip",
-      "sha1": "0bd2026795d117c33a5967b68fed8c54b3d95502",
-      "size": 560142,
-      "repo_path": "bios/Apple/Apple II/apple2ee.zip",
-      "cores": null
-    },
-    {
-      "dest": "apple2p.zip",
-      "sha1": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
-      "size": 11756,
-      "repo_path": "bios/Apple/Apple II/apple2p.zip",
-      "cores": null
-    },
-    {
-      "dest": "a2diskiing.zip",
-      "sha1": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
-      "size": 371,
-      "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
-      "cores": null
-    },
-    {
-      "dest": "a2cffa02.zip",
-      "sha1": "e8af33c0904b422841080a5ee25935f5ea1f3781",
-      "size": 2371,
-      "repo_path": "bios/Apple/Apple II/a2cffa02.zip",
-      "cores": null
-    },
-    {
-      "dest": "votrsc01.zip",
-      "sha1": "a57f14469867ce0d0865995a645b69f41a0ea718",
-      "size": 588,
-      "repo_path": "bios/Apple/Apple II/votrsc01.zip",
-      "cores": null
-    },
-    {
-      "dest": "votrsc01a.zip",
-      "sha1": "14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524",
-      "size": 590,
-      "repo_path": "bios/Arcade/Arcade/votrax.zip",
-      "cores": null
-    },
-    {
-      "dest": "d2fdc.zip",
-      "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
-      "size": 262,
-      "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
-      "cores": null
-    },
-    {
-      "dest": "apple2gs.zip",
-      "sha1": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
-      "size": 174124,
-      "repo_path": "bios/Apple/Apple II/apple2gs.zip",
-      "cores": null
-    },
-    {
       "dest": "aa310.zip",
       "sha1": "db67429100680a7a991822b8e2b1ca958df1e140",
       "size": 6536273,
@@ -420,7 +427,7 @@
       "dest": "ATARIOSB.ROM",
       "sha1": "db1031585968cfc6ec2ecda5c9a5a52f61444a3b",
       "size": 10240,
-      "repo_path": "bios/Atari/400-800/.variants/ATARIOSB.ROM.0e86d61d",
+      "repo_path": "bios/Atari/400-800/ROM_OS_B_NTSC",
       "cores": null
     },
     {
@@ -852,6 +859,13 @@
     },
     {
       "dest": "bk/MONIT10.ROM",
+      "sha1": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
+      "size": 8192,
+      "repo_path": "bios/Elektronika/BK/MONIT10.ROM",
+      "cores": null
+    },
+    {
+      "dest": "bk0010.zip",
       "sha1": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
       "size": 8192,
       "repo_path": "bios/Elektronika/BK/MONIT10.ROM",
@@ -1418,13 +1432,6 @@
       "cores": null
     },
     {
-      "dest": "ROM1",
-      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
-      "size": 131072,
-      "repo_path": "bios/Apple/Apple IIGS/ROM",
-      "cores": null
-    },
-    {
       "dest": "hikaru.zip",
       "sha1": "8ce366388c9e09c5d218d639f19d1d816b59395d",
       "size": 1049493,
@@ -1544,55 +1551,6 @@
       "cores": null
     },
     {
-      "dest": "openmsx/px-7_pbasic.rom",
-      "sha1": "665d805f96616e1037f1823050657b7849899283",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/openmsx/px-7_pbasic.rom",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/px-7_basic-bios1.rom",
-      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/fs-a1gt_firmware.rom",
-      "sha1": "e779c338eb91a7dea3ff75f3fde76b8af22c4a3a",
-      "size": 4194304,
-      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1gt_firmware.rom",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/fs-a1gt_kanjifont.rom",
-      "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
-      "size": 262144,
-      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/ide250.zip",
-      "sha1": "15df3303fcb0204c4f9cffe371220b66b65b944d",
-      "size": 45968,
-      "repo_path": "bios/Microsoft/MSX/openmsx/ide250.zip",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/phc-70fd2_basickun.rom",
-      "sha1": "22b3191d865010264001b9d896186a9818478a6b",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/openmsx/phc-70fd2_basickun.rom",
-      "cores": null
-    },
-    {
-      "dest": "openmsx/yrw801.rom",
-      "sha1": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
-      "size": 2097152,
-      "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
-      "cores": null
-    },
-    {
       "dest": "openmsx/fs-a1wsx_kanjifont.rom",
       "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
       "size": 262144,
@@ -1639,6 +1597,55 @@
       "sha1": "3330d9b6b76e3c4ccb7cf252496ed15d08b95d3f",
       "size": 2097152,
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_firmware.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/phc-70fd2_basickun.rom",
+      "sha1": "22b3191d865010264001b9d896186a9818478a6b",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/openmsx/phc-70fd2_basickun.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/yrw801.rom",
+      "sha1": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "size": 2097152,
+      "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/px-7_pbasic.rom",
+      "sha1": "665d805f96616e1037f1823050657b7849899283",
+      "size": 8192,
+      "repo_path": "bios/Microsoft/MSX/openmsx/px-7_pbasic.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/px-7_basic-bios1.rom",
+      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/fs-a1gt_firmware.rom",
+      "sha1": "e779c338eb91a7dea3ff75f3fde76b8af22c4a3a",
+      "size": 4194304,
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1gt_firmware.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/fs-a1gt_kanjifont.rom",
+      "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
+      "size": 262144,
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
+      "cores": null
+    },
+    {
+      "dest": "openmsx/ide250.zip",
+      "sha1": "15df3303fcb0204c4f9cffe371220b66b65b944d",
+      "size": 45968,
+      "repo_path": "bios/Microsoft/MSX/openmsx/ide250.zip",
       "cores": null
     },
     {
@@ -1841,7 +1848,7 @@
       "dest": "dsi_nand.bin",
       "sha1": "b48f44194fe918aaaec5298861479512b581d661",
       "size": 251658304,
-      "repo_path": ".cache/large/dsi_nand.bin",
+      "repo_path": "",
       "cores": null,
       "storage": "release",
       "release_asset": "dsi_nand.bin"
@@ -1980,6 +1987,13 @@
       "cores": null
     },
     {
+      "dest": "pc8001.zip",
+      "sha1": "88ad52740cd0b8a0e927abbfb84601aa099bcfbc",
+      "size": 129455,
+      "repo_path": "bios/NEC/PC-8001/pc8001mk2sr.zip",
+      "cores": null
+    },
+    {
       "dest": "pc8001mk2sr.zip",
       "sha1": "88ad52740cd0b8a0e927abbfb84601aa099bcfbc",
       "size": 129455,
@@ -1999,33 +2013,6 @@
       "size": 2625,
       "repo_path": "bios/Amstrad/PCW/pcw9512.zip",
       "cores": null
-    },
-    {
-      "dest": "PS3UPDAT.PUP",
-      "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
-      "size": 206126236,
-      "repo_path": ".cache/large/PS3UPDAT.PUP",
-      "cores": null,
-      "storage": "release",
-      "release_asset": "PS3UPDAT.PUP"
-    },
-    {
-      "dest": "psvita/PSP2UPDAT.PUP",
-      "sha1": "ed3a4cb264fff283209f10ae58c96c6090fed187",
-      "size": 56778752,
-      "repo_path": ".cache/large/PSP2UPDAT.PUP",
-      "cores": null,
-      "storage": "release",
-      "release_asset": "PSP2UPDAT.PUP"
-    },
-    {
-      "dest": "psvita/PSVUPDAT.PUP",
-      "sha1": "cc72dfcc964577cc29112ef368c28f55277c237c",
-      "size": 133834240,
-      "repo_path": ".cache/large/PSVUPDAT.PUP",
-      "cores": null,
-      "storage": "release",
-      "release_asset": "PSVUPDAT.PUP"
     },
     {
       "dest": "pv2000.zip",
@@ -2308,6 +2295,33 @@
       "cores": null
     },
     {
+      "dest": "PS3UPDAT.PUP",
+      "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
+      "size": 206126236,
+      "repo_path": "",
+      "cores": null,
+      "storage": "release",
+      "release_asset": "PS3UPDAT.PUP"
+    },
+    {
+      "dest": "psvita/PSP2UPDAT.PUP",
+      "sha1": "ed3a4cb264fff283209f10ae58c96c6090fed187",
+      "size": 56778752,
+      "repo_path": "",
+      "cores": null,
+      "storage": "release",
+      "release_asset": "PSP2UPDAT.PUP"
+    },
+    {
+      "dest": "psvita/PSVUPDAT.PUP",
+      "sha1": "cc72dfcc964577cc29112ef368c28f55277c237c",
+      "size": 133834240,
+      "repo_path": "",
+      "cores": null,
+      "storage": "release",
+      "release_asset": "PSVUPDAT.PUP"
+    },
+    {
       "dest": "STBIOS.bin",
       "sha1": "ef86ea192eed03d5c413fdbbfd46043be1d7a127",
       "size": 262144,
@@ -2319,6 +2333,13 @@
       "sha1": "1af645230c3f1741fb1f7efef05e9efe768e9dcc",
       "size": 1733,
       "repo_path": "bios/Arcade/Arcade/supracan.zip",
+      "cores": null
+    },
+    {
+      "dest": "vis.zip",
+      "sha1": "beff39b4edb449c66b704e1c64ee6ed58e30a868",
+      "size": 605047,
+      "repo_path": "bios/Tandy/VIS/vis.zip",
       "cores": null
     },
     {
@@ -2420,10 +2441,10 @@
       "cores": null
     },
     {
-      "dest": "vis.zip",
-      "sha1": "beff39b4edb449c66b704e1c64ee6ed58e30a868",
-      "size": 605047,
-      "repo_path": "bios/Tandy/VIS/vis.zip",
+      "dest": "tvc64.zip",
+      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
       "cores": null
     },
     {
@@ -2539,6 +2560,177 @@
       "cores": null
     },
     {
+      "dest": "kick13.rom",
+      "sha1": "90933936cce43ca9bc6bf375662c076b27e3c458",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick13.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "kick12.rom",
+      "sha1": "afcf89ba9888657703055750287834c042be9287",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick12.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "kick20.rom",
+      "sha1": "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-204.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "kick205.rom",
+      "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "kick.rom",
+      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "cd32.rom",
+      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "cd32ext.rom",
+      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "cdtv.rom",
+      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "cdtvext.rom",
+      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "aros-ext.bin",
+      "sha1": "e8b274faca7ffa4c064706ba15318885d8645695",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/aros-ext.bin",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "aros-rom.bin",
+      "sha1": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/aros-rom.bin",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "rom.key",
+      "sha1": "801bbab32e3d37386dd1636d4f1d6fa7e21d5874",
+      "size": 2069,
+      "repo_path": "bios/Commodore/Amiga/rom.key",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "6570-036.rom",
+      "sha1": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
+      "size": 2048,
+      "repo_path": "bios/Commodore/Amiga/6570-036.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "68HC05.rom",
+      "sha1": "301ec6a69404457d912c89e3fc54095eda9f0e93",
+      "size": 8192,
+      "repo_path": "bios/Commodore/Amiga/68HC05.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "D8039HLC.rom",
+      "sha1": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
+      "size": 2048,
+      "repo_path": "bios/Commodore/Amiga/D8039HLC.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "mt32-roms/mt32_control.rom",
+      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "mt32-roms/pcm_mt32.rom",
+      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "mt32-roms/cm32l_control.rom",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "mt32-roms/pcm_cm32l.rom",
+      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
+      "size": 1048576,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
       "dest": "BB01R4_OS.ROM",
       "sha1": "decde89fbae90adb591ad2fc553d35f49030c129",
       "size": 16384,
@@ -2620,12 +2812,48 @@
       ]
     },
     {
+      "dest": "ps1_rom.bin",
+      "sha1": "c40146361eb8cf670b19fdc9759190257803cab7",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps1_rom.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
+      "dest": "openbios.bin",
+      "sha1": "389df7981873d9e6e46c84c20cd43af0e4226cf8",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/openbios.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
+      "dest": "satar4mp.bin",
+      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "bk/TERAK.ROM",
       "sha1": "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
       "size": 128,
       "repo_path": "bios/Elektronika/BK/TERAK.ROM",
       "cores": [
         "bk-emulator"
+      ]
+    },
+    {
+      "dest": "rom.db",
+      "sha1": "02c287d10da6de579af7a4ce73b134bbdf23c970",
+      "size": 17742,
+      "repo_path": "bios/Sega/Mega Drive/rom.db",
+      "cores": [
+        "BlastEm"
       ]
     },
     {
@@ -2759,6 +2987,15 @@
       "sha1": "c3efedda7ab947a06d9345f7b8261076fa7ceeef",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/nms8250_disk.rom",
+      "cores": [
+        "blueMSX"
+      ]
+    },
+    {
+      "dest": "Machines/Shared Roms/NATIONALDISK.rom",
+      "sha1": "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/fs-5500_disk.rom",
       "cores": [
         "blueMSX"
       ]
@@ -3412,15 +3649,6 @@
       ]
     },
     {
-      "dest": "Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
       "dest": "AmstradCPC/os464.rom",
       "sha1": "475c8080065a7aa9984daca0415a3d70a5305be2",
       "size": 16384,
@@ -3475,15 +3703,6 @@
       ]
     },
     {
-      "dest": "AmstradCPC/amsdos.rom",
-      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
-      "size": 16384,
-      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
       "dest": "AppleII/apple2o.rom",
       "sha1": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "size": 12288,
@@ -3520,33 +3739,6 @@
       ]
     },
     {
-      "dest": "AppleII/apple2-character.rom",
-      "sha1": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
-      "size": 2048,
-      "repo_path": "bios/Apple/Apple II/apple2-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleII/apple2eu-character.rom",
-      "sha1": "7060de104046736529c1e8a687a0dd7b84f8c51b",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleII/apple2e-character.rom",
-      "sha1": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2e-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
       "dest": "AppleII/scsi.rom",
       "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
       "size": 8192,
@@ -3574,24 +3766,6 @@
       ]
     },
     {
-      "dest": "AppleIIgs/apple2gs.chr",
-      "sha1": "34e2443e2ef960a36c047a09ed5a93f471797f89",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2gs.chr",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleIIgs/341s0632-2",
-      "sha1": "141d18c36a617ab9dce668445440d34354be0672",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/341s0632-2",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
       "dest": "AtariST/tos100.img",
       "sha1": "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2",
       "size": 196608,
@@ -3605,15 +3779,6 @@
       "sha1": "dbe6ceeb5a5d7f2a3ef9777478b26a7fbc2ba0f6",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/exos10.bin",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "Enterprise/exos20.bin",
-      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos20.bin",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -3731,15 +3896,6 @@
       "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX.ROM",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "MSX/msx-japanese.rom",
-      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4197,6 +4353,888 @@
       ]
     },
     {
+      "dest": "scph1000.bin",
+      "sha1": "343883a7b555646da8cee54aadd2795b6e7dd070",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002a.bin",
+      "sha1": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002b.bin",
+      "sha1": "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002c.bin",
+      "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "dtlh1100.bin",
+      "sha1": "73107d468fc7cb1d2c5b18b269715dd889ecef06",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/dtlh1100.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph3000.bin",
+      "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph3000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph3500.bin",
+      "sha1": "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph3500.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1001_v21.bin",
+      "sha1": "ca7af30b50d9756cbd764640126c454cff658479",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph5000.bin",
+      "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph5000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7000.bin",
+      "sha1": "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7000w.bin",
+      "sha1": "1b0dbdb23da9dc0776aac58d0755dc80fea20975",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7002.bin",
+      "sha1": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7002.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph100.bin",
+      "sha1": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph100.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph101_v44.bin",
+      "sha1": "7771d6e90980408f753891648685def6dd42ef6d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph101_v44.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph101_v45.bin",
+      "sha1": "dcffe16bd90a723499ad46c641424981338d8378",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph101.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph102_v44.bin",
+      "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph102_v45.bin",
+      "sha1": "dbc7339e5d85827c095764fc077b41f78fd2ecae",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102B.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1000r.bin",
+      "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000.bin",
+      "sha1": "d7d6be084f51354bc951d8fa2d8d912aa70abc5e",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps2-50j.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30003.bin",
+      "sha1": "91cb6e3f9871454a0127ecb928ed7f1237742ea1",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps2_scph30003.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh10000_0117.bin",
+      "sha1": "5b33170323ed6344e2363fed8115dc3918bb96a4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0100jd-20000117.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph10000_0117.bin",
+      "sha1": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh10000_0217.bin",
+      "sha1": "16f4a284d0e760ee13a2aff2f7dda928255e3080",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph10000_15000.bin",
+      "sha1": "916e02431bcd73140504da3355c9598143b77e11",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh10000_0224.bin",
+      "sha1": "4440b246bfde7bb31002c584a76c6ef384908e84",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30001.bin",
+      "sha1": "339c646cf0699268552df5b05f18f0a03a9f55ff",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_0727.bin",
+      "sha1": "20f6ce6693cf97e9494f8f0227f2b7988ffaf961",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_0902.bin",
+      "sha1": "dbc2318a1029347b5af3a0c74b0bdf88d19efee6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30002.bin",
+      "sha1": "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30102_0902.bin",
+      "sha1": "1b73dec999fcc2b92fa958110ff6bfe4d0af276e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002_0902.bin",
+      "sha1": "274c05fec654913a3f698d4b0d592085866a2cbd",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000_gh003.bin",
+      "sha1": "e481079eca752225555f0c26d14c9d0f94d9a8e9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000_gh008.bin",
+      "sha1": "a9f5d8ed56cfff18add1b599010493461fa02448",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30101.bin",
+      "sha1": "7284b9d16df9935afc384318e024c87ef0574fe5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001_35001.bin",
+      "sha1": "5af5b5077d84a9c037ebe12bfab8a38b31d8a543",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30102_1228.bin",
+      "sha1": "d004326c9d8060812b4433c3f07646b04854d6c4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002_1228.bin",
+      "sha1": "e22ef231faf3661edd92f2ee449a71297c82a092",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh30000.bin",
+      "sha1": "334e029fc7fd50222a399c50384ff42732652259",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30000_35000.bin",
+      "sha1": "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_0427.bin",
+      "sha1": "7331a40b4b4feb1b3f0f77b013b6d38483577baa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30000_0427.bin",
+      "sha1": "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_0704.bin",
+      "sha1": "ce92e8e8c88665f2f645a9522e337823d47a914a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002r_0704.bin",
+      "sha1": "3cbd048e437c785b5a05a0feced00117a8a42545",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30001r_1004.bin",
+      "sha1": "d257bce6ecaf3bafb704c75a1b4741b910bd2d49",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30002r_1004.bin",
+      "sha1": "ee34c3a87c53c75ca2a37d77b0042ca24d07831f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph30005r.bin",
+      "sha1": "ba15dcf7aac13864c08222037e9321d7468c87d1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39001.bin",
+      "sha1": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-39001.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39002.bin",
+      "sha1": "bff2902bd0ce9729a060581132541e9fd1a9fab6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph37000_39000.bin",
+      "sha1": "003628c137dae577ff3b04b93ca1787b0c944702",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39008.bin",
+      "sha1": "d106b757ae2544dfe63f7e1924e59d5ad44c0c29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph39005.bin",
+      "sha1": "e3a74125c426bcacabca00b513fab928665c8846",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50000.bin",
+      "sha1": "03c6531a1feba6da75a32c2a69c7bb89be61dcda",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50000_55000.bin",
+      "sha1": "d812ac65c357d392396ca9edee812dc41bed8bde",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50002.bin",
+      "sha1": "e220bb282378c1f48ea1b585b3675e51a6dca572",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50002_0227.bin",
+      "sha1": "ad15bd7eabd5bd81ba011516a5be44947d6641aa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50001_0325.bin",
+      "sha1": "c5bc6e893b4c43d528142e56c96073024de64157",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50001_0325.bin",
+      "sha1": "d269d1ed513227f3ef7133c76cf1b3a64f97b15d",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50009.bin",
+      "sha1": "2de87767008fc4a303af64a46251156e965d9065",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_desr5000.bin",
+      "sha1": "aa4a35c14ee342cf7a03b1dde294ca10e64889e1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph55000_0623.bin",
+      "sha1": "6a6ecfe6c10e42eff1ca056349def799b5629067",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh50001_0623.bin",
+      "sha1": "fe19d2c52729e2ce4fea30e0e6a501587285d93f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50001_0623.bin",
+      "sha1": "c74d92a2952a2912b6698cbcf7742adac8f784d3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50002_0623.bin",
+      "sha1": "18b9ba833c469c4683676cc20da5124080d980bb",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50006.bin",
+      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50005.bin",
+      "sha1": "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50008.bin",
+      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50009.bin",
+      "sha1": "92d9eb4b11cef97bb69a275b2851b72f7b0023d6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50000_0822.bin",
+      "sha1": "0ea98a25a32145dda514de2f0d4bfbbd806bd00c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50004_0822.bin",
+      "sha1": "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph50011.bin",
+      "sha1": "b68c05f5cd86bf03cb38a643a723b7a97b759531",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70000.bin",
+      "sha1": "224ab5704ab719edeb05ca1d835812252c97c1b3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70001.bin",
+      "sha1": "7a62e5f48603582707e9898eb055ea3eaee50d4c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200a-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70002.bin",
+      "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70002_alt.bin",
+      "sha1": "3bbf6335b226932ee5a83d516acb0fafc62ac3ce",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps2_scph70002_alt.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh70002.bin",
+      "sha1": "902f4680b258abd40c0922f6b0d581cbd8f8a73e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph70005.bin",
+      "sha1": "7f8e812cab7c7393c85eac6c42661e1fd0a642df",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_desr5500.bin",
+      "sha1": "bbb1af3085e77599691ec430d147810157da934f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh75000.bin",
+      "sha1": "458adf85d216856892d6480213575670894049c6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75000.bin",
+      "sha1": "7ffa75d142cb8eeea6c777dbcf263143655275d5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh75000a.bin",
+      "sha1": "7c7efdfcec7705f4e84bb47f45322104e39eed09",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75001.bin",
+      "sha1": "48d0445dffd1e879c7ae752c5166ec3101921555",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75002.bin",
+      "sha1": "929a85e974faf4b40d0a7785023b758402c43bd9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph75006.bin",
+      "sha1": "0a071d1b46607a7694770407606d8599f62a372b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77000.bin",
+      "sha1": "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77001.bin",
+      "sha1": "92e488d5b2705e4cca83d4d1efbc421012faf83e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77002.bin",
+      "sha1": "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph77006.bin",
+      "sha1": "fce2a24e5e0400cc6d98c08f426405d19173813e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh90000_j.bin",
+      "sha1": "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79000_90000.bin",
+      "sha1": "3baf847c1c217aa71ac6d298389c88edb3db32e2",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_dtlh90000_a.bin",
+      "sha1": "4191b5842f31a9985b5428bc9d2b733ce3abb583",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79001_90001.bin",
+      "sha1": "8361d615cc895962e0f0838489337574dbdc9173",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79002_90002.bin",
+      "sha1": "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph79006_90006.bin",
+      "sha1": "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90000_0220.bin",
+      "sha1": "fbd54bfc020af34008b317dcb80b812dd29b3759",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90001_0220.bin",
+      "sha1": "f9229fe159d0353b9f0632f3fdc66819c9030458",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90002_0220.bin",
+      "sha1": "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph90005_0220.bin",
+      "sha1": "a277b456849697abec11285c6b35bc734598c220",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_kdl22px300.bin",
+      "sha1": "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
       "dest": "easyrpg.soundfont",
       "sha1": "4fd467afcb45c8b4cfd1eadac9372a819e35d46d",
       "size": 148398306,
@@ -4277,6 +5315,168 @@
       "repo_path": "bios/Sega/Dreamcast/naomi_boot.bin",
       "cores": [
         "Flycast"
+      ]
+    },
+    {
+      "dest": "MSX2P.ROM",
+      "sha1": "e2fbd56e42da637609d23ae9df9efd1b4241b18a",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2P.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "DISK.ROM",
+      "sha1": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/DISK.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "FMPAC.ROM",
+      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "KANJI.ROM",
+      "sha1": "84a645becec0a25d3ab7a909cde1b242699a8662",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/KANJI.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "MSXDOS2.ROM",
+      "sha1": "c36c9e0f96738a340381e23b4f97245388801a46",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/MSXDOS2.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "PAINTER.ROM",
+      "sha1": "7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/PAINTER.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "GMASTER2.ROM",
+      "sha1": "5c00f9e3a48411e08fac89b1dfdd2a6e95853919",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/GMASTER2.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "GMASTER.ROM",
+      "sha1": "4fe90868376704336fbf45619a47ce18736ff1b2",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/GMASTER.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "CMOS.ROM",
+      "sha1": "2f1050adf64f33298ff0ce423eb86d4728441b21",
+      "size": 52,
+      "repo_path": "bios/Microsoft/MSX/CMOS.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "DEFAULT.FNT",
+      "sha1": "000ac11b702a4c42e40f135df12fa5f2f13e20a1",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/CYRILLIC.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "ITALIC.FNT",
+      "sha1": "401dd6692dc80628e5f68b7c79be0b0ebbc4d3ee",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/ITALIC.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "INTERNAT.FNT",
+      "sha1": "e2127084f40f9d19fe9bf4e35b5a7470f95ea4ab",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/INTERNAT.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "CYRILLIC.FNT",
+      "sha1": "000ac11b702a4c42e40f135df12fa5f2f13e20a1",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/CYRILLIC.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "KOREAN.FNT",
+      "sha1": "0ef27e3599370e179b6fceaa22431fb97f5e7e61",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/KOREAN.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "JAPANESE.FNT",
+      "sha1": "c9377d76adedee1ba581ef71f263f35402980448",
+      "size": 2048,
+      "repo_path": "bios/Microsoft/MSX/JAPANESE.FNT",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "CARTS.SHA",
+      "sha1": "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81",
+      "size": 33152,
+      "repo_path": "bios/Microsoft/MSX/CARTS.SHA",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
+      "dest": "freej2me-lr.jar",
+      "sha1": "fb231192894e2fd17a5799fbbdf86a4696951bce",
+      "size": 552042,
+      "repo_path": "bios/Java/J2ME/freej2me-lr.jar",
+      "cores": [
+        "FreeJ2ME"
+      ]
+    },
+    {
+      "dest": "cd32fmv.rom",
+      "sha1": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/cd32fmv.rom",
+      "cores": [
+        "FS-UAE"
       ]
     },
     {
@@ -4694,21 +5894,21 @@
       ]
     },
     {
-      "dest": "ROM",
-      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
-      "size": 131072,
-      "repo_path": "bios/Apple/Apple IIGS/ROM",
-      "cores": [
-        "GSplus"
-      ]
-    },
-    {
       "dest": "c600.rom",
       "sha1": "d4181c9f046aafc3fb326b381baac809d9e38d16",
       "size": 256,
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "GSplus"
+      ]
+    },
+    {
+      "dest": "howard.o",
+      "sha1": "bdca7bbb647066cf7555ce5d555ce09de4ebc41b",
+      "size": 513,
+      "repo_path": "bios/Atari/Lynx/howard.o",
+      "cores": [
+        "Handy"
       ]
     },
     {
@@ -4721,19 +5921,19 @@
       ]
     },
     {
-      "dest": "pgm.zip",
-      "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
-      "size": 2094636,
-      "repo_path": "bios/Arcade/MAME/pgm.zip",
-      "cores": [
-        "MAME"
-      ]
-    },
-    {
       "dest": "stvbios.zip",
       "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
       "size": 3455065,
       "repo_path": "bios/Arcade/Arcade/stvbios.zip",
+      "cores": [
+        "Kronos"
+      ]
+    },
+    {
+      "dest": "pgm.zip",
+      "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
+      "size": 2094636,
+      "repo_path": "bios/Arcade/MAME/pgm.zip",
       "cores": [
         "MAME"
       ]
@@ -5387,6 +6587,33 @@
       ]
     },
     {
+      "dest": "segaai_soundbox.zip",
+      "sha1": "d90e0b3545e60c59c20a7fb32d0785f6c3abbf60",
+      "size": 47380,
+      "repo_path": "bios/Arcade/MAME/segaai_soundbox.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "pegasus.zip",
+      "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
+      "size": 27305,
+      "repo_path": "bios/Arcade/MAME/pegasus.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "vg5k.zip",
+      "sha1": "5ad489a58fc457d2bfb7a348f4a312c3b49daad1",
+      "size": 26356,
+      "repo_path": "bios/Arcade/MAME/vg5k.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "mame2003-plus/cheat.dat",
       "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
       "size": 7971360,
@@ -5477,6 +6704,402 @@
       ]
     },
     {
+      "dest": "ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekaraa.zip",
+      "sha1": "98080e5a3d352e04ed8b50e6a04af456518aa66e",
+      "size": 629642,
+      "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekaraj.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekarag.zip",
+      "sha1": "39e589aa0158b48d33648413c89778f8e8cc0d58",
+      "size": 795612,
+      "repo_path": "bios/Arcade/Arcade/ekarag.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekaras.zip",
+      "sha1": "ab288761b8cd5a02fc7b3d12acbb1e3371214b69",
+      "size": 813756,
+      "repo_path": "bios/Arcade/Arcade/ekaras.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "isinger.zip",
+      "sha1": "28c6f8828b6820c072832fa7027beb7be9aad020",
+      "size": 556765,
+      "repo_path": "bios/Arcade/Arcade/isinger.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekaraphs.zip",
+      "sha1": "31199ff06972ba2a1a67b1b403119ee3d821efc7",
+      "size": 798457,
+      "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "epitch.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ekaramix.zip",
+      "sha1": "08cea726163f490471d88e4c640b8385ee065836",
+      "size": 663402,
+      "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ddrfammt.zip",
+      "sha1": "ec9a6c1bf8f33f5717d51588ffe87239313b2a06",
+      "size": 883352,
+      "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "popirak.zip",
+      "sha1": "9801ee035decbb5e45aa0a20ca4d26323e0ac126",
+      "size": 639838,
+      "repo_path": "bios/Arcade/Arcade/popirak.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "popira2.zip",
+      "sha1": "5143c86ac93607223cafb5e529ea08221518e64a",
+      "size": 1124630,
+      "repo_path": "bios/Arcade/Arcade/popira2.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "taikodp.zip",
+      "sha1": "446013455ab02be7fc3e27bf6ff680293c8657b7",
+      "size": 1141771,
+      "repo_path": "bios/Arcade/Arcade/taikodp.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "jpopira.zip",
+      "sha1": "500a2402fcdf856d127128153e62e51c3c2f7bdc",
+      "size": 1116085,
+      "repo_path": "bios/Arcade/Arcade/jpopira.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "evio.zip",
+      "sha1": "96ac6cc92b40e57f04be7215703e532394bead55",
+      "size": 1292911,
+      "repo_path": "bios/Arcade/Arcade/evio.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "tak_daig.zip",
+      "sha1": "d3c641bdde6c6f681abd3bdd36463d1e7264b6e7",
+      "size": 951997,
+      "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "gcslottv.zip",
+      "sha1": "4ea3ec9c41ab767907167b5022bfcfd1a05795c8",
+      "size": 737452,
+      "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "hikara.zip",
+      "sha1": "dbfdea3057a5fcc0e0d243deace87fd6840a2322",
+      "size": 636237,
+      "repo_path": "bios/Arcade/Arcade/hikara.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "apple2.zip",
+      "sha1": "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b",
+      "size": 194121,
+      "repo_path": "bios/Apple/Apple II/apple2.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "aquarius.zip",
+      "sha1": "e549c95af34bae7652ce270ca065e81cbef1ecc7",
+      "size": 15286,
+      "repo_path": "bios/Mattel/Aquarius/aquarius.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "aquarius2.zip",
+      "sha1": "27aa76a6b4a1c9b659689c7d9c9a43874150507b",
+      "size": 15301,
+      "repo_path": "bios/Mattel/Aquarius/aquarius2.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "aquarius_ar.zip",
+      "sha1": "29e424093937bf1655566750d196d204c9cd3946",
+      "size": 21886,
+      "repo_path": "bios/Mattel/Aquarius/aquarius_ar.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "cgenie_fdc.zip",
+      "sha1": "ba435805d0d22d42d2ba3e2b442cdd6d601c180c",
+      "size": 6920,
+      "repo_path": "bios/Arcade/Arcade/cgenie_fdc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "atom_discpack.zip",
+      "sha1": "711e46c4659317b8e244e76d71e8512f006df68c",
+      "size": 3459,
+      "repo_path": "bios/Arcade/Arcade/atom_discpack.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "atom_gdos.zip",
+      "sha1": "7c5e2aac9cbf988b23ccdcd95c814de9ea976ba6",
+      "size": 3145,
+      "repo_path": "bios/Arcade/MAME/atom_gdos.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "atom_gdos2015.zip",
+      "sha1": "e1a4a181fcf1b428ddb99f0392e2efd73907c709",
+      "size": 6985,
+      "repo_path": "bios/Arcade/MAME/atom_gdos2015.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "atom_speech.zip",
+      "sha1": "82aeaace3231022fc158e96c9042745f6482aa93",
+      "size": 2019,
+      "repo_path": "bios/Arcade/Arcade/einstein_speech.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "atom_vdu80.zip",
+      "sha1": "e66d22bcc5fa558c447cf6d83977713a3d6b394b",
+      "size": 1074,
+      "repo_path": "bios/Arcade/MAME/atom_vdu80.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "umc6650.zip",
+      "sha1": "46c49d56e97c8ca8bbc4f30e88678653eb99301a",
+      "size": 160,
+      "repo_path": "bios/Arcade/MAME/umc6650.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_fdc.zip",
+      "sha1": "c8bc5b7f912ae7f6383a34266a3b0ce543cb0df0",
+      "size": 4969,
+      "repo_path": "bios/Arcade/Arcade/ti99_fdc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_bwg.zip",
+      "sha1": "b58c02f20d20336ef0756788c462fc540bc45637",
+      "size": 7452,
+      "repo_path": "bios/Arcade/Arcade/ti99_bwg.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_ccdcc.zip",
+      "sha1": "0f701bf3ceeb4b118434f4dde98823a696142e27",
+      "size": 9611,
+      "repo_path": "bios/Arcade/MAME/ti99_ccdcc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_ccfdc.zip",
+      "sha1": "78f0eea2e91f00155af3346aef36f10b5aee0a1e",
+      "size": 9712,
+      "repo_path": "bios/Arcade/MAME/ti99_ccfdc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_rs232.zip",
+      "sha1": "e420a78eae0c3fbf259ac649006136f0d11c1c5a",
+      "size": 1782,
+      "repo_path": "bios/Arcade/Arcade/ti99_rs232.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_evpc.zip",
+      "sha1": "fda48feb7758cc806b9ddf7aa3d1c505e391a0f8",
+      "size": 17207,
+      "repo_path": "bios/Arcade/Arcade/ti99_evpc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_hfdc.zip",
+      "sha1": "4873ec73ecebe8edacfe4fd470378242db3618a1",
+      "size": 11813,
+      "repo_path": "bios/Arcade/Arcade/ti99_hfdc.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_pcode.zip",
+      "sha1": "f46c34d07a0e460cacd401685976696d0007ed2e",
+      "size": 41460,
+      "repo_path": "bios/Arcade/Arcade/ti99_pcode.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_ddcc1.zip",
+      "sha1": "40a6859a46df94c1890738be498b976e157a35d4",
+      "size": 6231,
+      "repo_path": "bios/Arcade/MAME/ti99_ddcc1.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_myarcmem.zip",
+      "sha1": "c1bfde709e01b77956199af7eb8ca035852226a6",
+      "size": 6085,
+      "repo_path": "bios/Arcade/Arcade/ti99_myarcmem.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_tipi.zip",
+      "sha1": "4fbb8487b1e43a80ace507ac0dcf4c2501c7497c",
+      "size": 5838,
+      "repo_path": "bios/Arcade/MAME/ti99_tipi.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_whtscsi.zip",
+      "sha1": "479b0fdc7c5e361168dce4af557a06f6a9a41363",
+      "size": 790364,
+      "repo_path": "bios/Arcade/MAME/ti99_whtscsi.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_arcturus.zip",
+      "sha1": "84c9ee5295a695c56513e50f138220b92588a7bc",
+      "size": 11432,
+      "repo_path": "bios/Arcade/MAME/ti99_arcturus.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
+      "dest": "ti99_gkracker.zip",
+      "sha1": "dcc89f3ea37bfc43a1b9b4215cabacb63d3917a6",
+      "size": 5998,
+      "repo_path": "bios/Arcade/Arcade/ti99_gkracker.zip",
+      "cores": [
+        "MAME MESS"
+      ]
+    },
+    {
       "dest": "syscard2.pce",
       "sha1": "88da02e2503f7c32810f5d93a34849d470742b6d",
       "size": 262144,
@@ -5528,6 +7151,69 @@
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
       "cores": [
         "melonDS"
+      ]
+    },
+    {
+      "dest": "StudyBox.bin",
+      "sha1": "3a5683e8c417a07c3252e1db4a054effdf75cb6e",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/NES/StudyBox.bin",
+      "cores": [
+        "Mesen"
+      ]
+    },
+    {
+      "dest": "MesenPalette.pal",
+      "sha1": "c7635019127aa28d84d28ae48304bfca6d5baefb",
+      "size": 192,
+      "repo_path": "bios/Nintendo/NES/MesenPalette.pal",
+      "cores": [
+        "Mesen"
+      ]
+    },
+    {
+      "dest": "dmg_boot.bin",
+      "sha1": "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/dmg_boot.bin",
+      "cores": [
+        "mesen-s"
+      ]
+    },
+    {
+      "dest": "cgb_boot.bin",
+      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
+      "size": 2304,
+      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
+      "cores": [
+        "mesen-s"
+      ]
+    },
+    {
+      "dest": "Mupen64plus/font.ttf",
+      "sha1": "1d7f6fa0c34e3d50be52c16a0816bebac309fe41",
+      "size": 65932,
+      "repo_path": "bios/Nintendo/Nintendo 64DD/Mupen64plus/font.ttf",
+      "cores": [
+        "Mupen64Plus-Next"
+      ]
+    },
+    {
+      "dest": "NstDatabase.xml",
+      "sha1": "f92312bae56e29c5bf00a5103105fce78472bf5c",
+      "size": 1022369,
+      "repo_path": "bios/Nintendo/NES/NstDatabase.xml",
+      "cores": [
+        "Nestopia UE"
+      ]
+    },
+    {
+      "dest": "custom.pal",
+      "sha1": "c7635019127aa28d84d28ae48304bfca6d5baefb",
+      "size": 192,
+      "repo_path": "bios/Nintendo/NES/MesenPalette.pal",
+      "cores": [
+        "Nestopia UE"
       ]
     },
     {
@@ -5630,21 +7316,48 @@
       ]
     },
     {
-      "dest": "np2kai/key.txt",
-      "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-      "size": 0,
-      "repo_path": "bios/NEC/PC-98/key.txt",
-      "cores": [
-        "NP2kai"
-      ]
-    },
-    {
       "dest": "nxengine/Doukutsu.exe",
       "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
       "size": 1478656,
       "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
       "cores": [
         "NXEngine"
+      ]
+    },
+    {
+      "dest": "NMS8245SystemROM1.08.bin",
+      "sha1": "cc57c1dcd7249ea9f8e2547244592e7d97308ed0",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/openmsx/NMS8245SystemROM1.08.bin",
+      "cores": [
+        "openMSX"
+      ]
+    },
+    {
+      "dest": "ide250.dat",
+      "sha1": "93e41c7d479bc90c1d1f6d081af20fd9924b8ada",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/openmsx/ide250.dat",
+      "cores": [
+        "openMSX"
+      ]
+    },
+    {
+      "dest": "COLECO.ROM",
+      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
+      "size": 8192,
+      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": [
+        "openMSX"
+      ]
+    },
+    {
+      "dest": "svi-3x8_v111.rom",
+      "sha1": "10349ce675f6d6d47f0976e39cb7188eba858d89",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/openmsx/svi-3x8_v111.rom",
+      "cores": [
+        "openMSX"
       ]
     },
     {
@@ -5760,15 +7473,6 @@
       "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
-      "cores": [
-        "PicoDrive"
-      ]
-    },
-    {
-      "dest": "SegaCDBIOS9303.bin",
-      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
-      "size": 131072,
-      "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
         "PicoDrive"
       ]
@@ -5913,15 +7617,6 @@
       "sha1": "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/kick39106.A4000",
-      "cores": [
-        "PUAE (P-UAE)"
-      ]
-    },
-    {
-      "dest": "rom.key",
-      "sha1": "801bbab32e3d37386dd1636d4f1d6fa7e21d5874",
-      "size": 2069,
-      "repo_path": "bios/Commodore/Amiga/rom.key",
       "cores": [
         "PUAE (P-UAE)"
       ]
@@ -6080,12 +7775,192 @@
       ]
     },
     {
+      "dest": "same_cdi/bios/cdimono2.zip",
+      "sha1": "9492247203b71c12d88fad0a5437376941c7870a",
+      "size": 244291,
+      "repo_path": "bios/Philips/CD-i/cdimono2.zip",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdi910.zip",
+      "sha1": "b64381aa271ab5cd83b47a83fefab018f39ed11b",
+      "size": 487572,
+      "repo_path": "bios/Arcade/Arcade/cdi910.zip",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdi490a.zip",
+      "sha1": "2366883a3259df021d0f1fc104b945978b8ef8b4",
+      "size": 379558,
+      "repo_path": "bios/Philips/CD-i/cdi490a.zip",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
       "dest": "shadps4/sys_modules",
       "sha1": "18ec2a5fc30dc55a401385736ebd7d38f2215b2f",
       "size": 1543640,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceLibcInternal.sprx",
       "cores": [
         "shadps4"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-fast.jar",
+      "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
+      "size": 2367241,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-fast.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-test.jar",
+      "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
+      "size": 3396757,
+      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-slow.jar",
+      "sha1": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
+      "size": 3129653,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-0.3.0-slow-test.jar",
+      "sha1": "b411c128bfd8411f339a49bbcb1c9e97189c2161",
+      "size": 3772058,
+      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-fast.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme.jar",
+      "sha1": "6933bbe1fc29f58581a7f64f859f756db9ef78a7",
+      "size": 4700395,
+      "repo_path": "bios/Java/J2ME/squirreljme.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-test.jar",
+      "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
+      "size": 3396757,
+      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-slow.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "squirreljme-slow-test.jar",
+      "sha1": "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
+      "size": 15181774,
+      "repo_path": "bios/Java/J2ME/squirreljme.sqc",
+      "cores": [
+        "SquirrelJME"
+      ]
+    },
+    {
+      "dest": "kvs1.wav",
+      "sha1": "b094c2c1fca81a0e531e0541f302346150ec4604",
+      "size": 3436329,
+      "repo_path": "bios/Atari/2600/KVS1.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs2.wav",
+      "sha1": "8b83b2eea01b3e08ceb885aeb153d4084bddb63c",
+      "size": 2086275,
+      "repo_path": "bios/Atari/2600/KVS2.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs3.wav",
+      "sha1": "86896a1e272d8715489de9b407f0b8a42f82d4a0",
+      "size": 3720920,
+      "repo_path": "bios/Atari/2600/KVS3.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb1.wav",
+      "sha1": "6a582aebcefd6e2a97bdd8968202aab9851a889c",
+      "size": 4219542,
+      "repo_path": "bios/Atari/2600/KVB1.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb2.wav",
+      "sha1": "60a425c6bde3226ab731995562716321be20fc49",
+      "size": 9593878,
+      "repo_path": "bios/Atari/2600/KVB2.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb3.wav",
+      "sha1": "5e34125c4d6c209b21d1c892f3df0ec1644fd0d8",
+      "size": 7676992,
+      "repo_path": "bios/Atari/2600/KVB3.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvshared.wav",
+      "sha1": "9adf10cdf1de833b194c7d8797ad1f041ad98dd3",
+      "size": 3059116,
+      "repo_path": "bios/Atari/2600/KVSHARED.WAV",
+      "cores": [
+        "Stella 2014"
       ]
     },
     {
@@ -6152,15 +8027,6 @@
       ]
     },
     {
-      "dest": "MYTOWNS.ROM",
-      "sha1": "e245f8086df57ce6e48853f0e13525f738e5c4d8",
-      "size": 32,
-      "repo_path": "bios/Fujitsu/FM Towns/MYTOWNS.ROM",
-      "cores": [
-        "tsugaru"
-      ]
-    },
-    {
       "dest": "FMT_ALL.ROM",
       "sha1": "262aae14f334bc21499f7e2bfe8b7ec1079b1e04",
       "size": 4194496,
@@ -6203,6 +8069,924 @@
       "repo_path": "bios/Fujitsu/FM Towns/MAR_EX3.ROM",
       "cores": [
         "tsugaru"
+      ]
+    },
+    {
+      "dest": "vice/C64/basic-901226-01.bin",
+      "sha1": "79015323128650c742a3694c9429aa91f355905e",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/basic-901226-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-901227-03.bin",
+      "sha1": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-901227-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-901227-01.bin",
+      "sha1": "87cc04d61fc748b82df09856847bb5c2754a2033",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-901227-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-901227-02.bin",
+      "sha1": "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-901227-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-390852-01.bin",
+      "sha1": "21940ef5f1bfe67d7537164f7ca130a1095b067a",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-390852-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-251104-04.bin",
+      "sha1": "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-251104-04.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-901246-01.bin",
+      "sha1": "6c4fa9465f6091b174df27dfe679499df447503c",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-901246-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/kernal-906145-02.bin",
+      "sha1": "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/chargen-901225-01.bin",
+      "sha1": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64/chargen-906143-02.bin",
+      "sha1": "0fad19dbcdb12461c99657b2979dbb5c2e47b527",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-318020-05.bin",
+      "sha1": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-318020-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-315078-03.bin",
+      "sha1": "3629b3fa28b6a30bcc027b647f26654929ed1b0f",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-315078-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-325172-01.bin",
+      "sha1": "98c34e0dec9f52d7862b56bb287d2573eb3f6364",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-325172-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-318034-01.bin",
+      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernalfi",
+      "sha1": "d08e7991a6df14a843e92daafaf6756337959ba4",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernalfi",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernalfr",
+      "sha1": "a0680d04db3232fa9f58598e5c9f09c4fe94f601",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernalfr",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernalit",
+      "sha1": "592a626eb2b5372596ac374d3505c3ce78dd040f",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernalit",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernalno",
+      "sha1": "00fe2fd610a812121befab1e7238fa882c0f8257",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernalno",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/basiclo-318018-04.bin",
+      "sha1": "d53a7884404f7d18ebd60dd3080c8f8d71067441",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/basiclo-318018-04.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/basichi-318019-04.bin",
+      "sha1": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/basichi-318019-04.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/basic-901226-01.bin",
+      "sha1": "79015323128650c742a3694c9429aa91f355905e",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/basic-901226-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-901227-03.bin",
+      "sha1": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-901227-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal64-325179-01.bin",
+      "sha1": "b4862cac7b9319d8e912887c97fc270d4c239349",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal64-325179-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal64-325182-01.bin",
+      "sha1": "267654823c4fdf2167050f41faa118218d2569ce",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal64-325182-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-390059-01.bin",
+      "sha1": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-390059-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-315079-01.bin",
+      "sha1": "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-315079-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-325167-02.bin",
+      "sha1": "9119b27a1bf885fa4c76fff5d858c74c194dd2b8",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-325167-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-325173-01D.bin",
+      "sha1": "70eccd8b944146f6b60f1519b830a4ee8928d4fa",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-325173-01D.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-325078-02.bin",
+      "sha1": "5a87faa457979e7b6f434251a9e32f4483b337b3",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-325078-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C128/chargen-325181-01.bin",
+      "sha1": "aca3f7321ee7e6152f1f0afad646ae41964de4fb",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/chargen-325181-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64DTV/dtvrom.bin",
+      "sha1": "72b4c8da075646cc9940e4377004c81192c7b0b1",
+      "size": 2097152,
+      "repo_path": "bios/Commodore/C128/vice/C64DTV/dtvrom.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64DTV/basic-901226-01.bin",
+      "sha1": "79015323128650c742a3694c9429aa91f355905e",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/basic-901226-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64DTV/chargen-901225-01.bin",
+      "sha1": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/C64DTV/kernal-901227-03.bin",
+      "sha1": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-901227-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/basic-901486-01.bin",
+      "sha1": "587d1e90950675ab6b12d91248a3f0d640d02e8d",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/basic-901486-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/kernal.901486-07.bin",
+      "sha1": "ce0137ed69f003a299f43538fa9eee27898e621e",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-07.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/kernal.901486-06.bin",
+      "sha1": "06de7ec017a5e78bd6746d89c2ecebb646efeb19",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-06.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/kernal.901486-02.bin",
+      "sha1": "c9ead45e6674d1042ca6199160e8583c23aeac22",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/chargen-901460-03.bin",
+      "sha1": "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/VIC20/chargen-901460-02.bin",
+      "sha1": "dae61ac03065aa2904af5c123ce821855898c555",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/basic-318006-01.bin",
+      "sha1": "161c96b4ad20f3a4f2321808e37a5ded26a135dd",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/basic-318006-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/kernal-318004-05.bin",
+      "sha1": "7c7e07f016391174a557e790c4ef1cbe33512cdb",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/kernal-318005-05.bin",
+      "sha1": "a3d9e5be091b98de39a046ab167fb7632d053682",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318005-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/kernal-318004-01.bin",
+      "sha1": "3c77caf72914c1c0a0875b3a7f6935cd30c54201",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/kernal-364.bin",
+      "sha1": "b9a5b5dacd57ca117ef0b3af29e91998bf4d7e5f",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-364.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/3plus1-317053-01.bin",
+      "sha1": "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/3plus1-317053-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/3plus1-317054-01.bin",
+      "sha1": "0ad7ac2db7da692d972e586ca0dfd747d82c7693",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/3plus1-317054-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PLUS4/c2lo-364.bin",
+      "sha1": "59af401cbb2194f689898271c6e8aafa28a7af11",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/PLUS4/c2lo-364.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/basic-1.901439-09-05-02-06.bin",
+      "sha1": "3be9cd41b646fefa00d80f1c3433a06146e97c59",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/PET/basic-1.901439-09-05-02-06.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/basic-2.901465-01-02.bin",
+      "sha1": "9322a9f0354b9049847d98d3a045fbec860a6264",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/PET/basic-2.901465-01-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/basic-4.901465-23-20-21.bin",
+      "sha1": "d70bec479e1e3a0d0908a4897066e9959bbc11c8",
+      "size": 12288,
+      "repo_path": "bios/Commodore/C128/vice/PET/basic-4.901465-23-20-21.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/kernal-1.901439-04-07.bin",
+      "sha1": "32dc08828e88c74d6433156e64d402b564556308",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/kernal-1.901439-04-07.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/kernal-2.901465-03.bin",
+      "sha1": "38742bdf449f629bcba6276ef24d3daeb7da6e84",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/kernal-2.901465-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/kernal-4.901465-22.bin",
+      "sha1": "96a0fa56e0c937da92971d9c99d504e44e898806",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/kernal-4.901465-22.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-1-n.901439-03.bin",
+      "sha1": "f02f5fb492ba93dbbd390f24c10f7a832dec432a",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-1-n.901439-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-2-n.901447-24.bin",
+      "sha1": "5e5502ce32f5a7e387d65efe058916282041e54b",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-2-n.901447-24.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-2-b.901474-01.bin",
+      "sha1": "174ace3a8c0348cd21d39cc864e2adc58b0101a9",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-2-b.901474-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-4-40-n-50Hz.901498-01.bin",
+      "sha1": "05af284c914d53a52987b5f602466de75765f650",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-4-40-n-50Hz.901498-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-4-40-b-50Hz.ts.bin",
+      "sha1": "9f91fbabfdd532d003d2508f399574ba8ec6ee5f",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-4-40-b-50Hz.ts.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/edit-4-80-b-50Hz.901474-04_.bin",
+      "sha1": "81975eab31a8f4f51ae2a20d099a567c7b3f2dd1",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/edit-4-80-b-50Hz.901474-04_.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/characters-1.901447-08.bin",
+      "sha1": "3e067cc621e4beafca2b90cb8f6dba975df2855b",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/characters-1.901447-08.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/characters-2.901447-10.bin",
+      "sha1": "0157a2d55b7ac4eaeb38475889ebeea52e2593db",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/characters-2.901447-10.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/characters.901640-01.bin",
+      "sha1": "bf346f11595a3e65e55d6aeeaa2c0cec807b66c7",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/characters.901640-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-a000.901898-01.bin",
+      "sha1": "0414b3ab847c8977eb05c2fcc72efcf2f9d92871",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-a000.901898-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-b000.901898-02.bin",
+      "sha1": "df154939b934d0aeeb376813ec1ba0d43c2a3378",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-b000.901898-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-c000.901898-03.bin",
+      "sha1": "6c5b0cce97068f8841112ba6d5cd8e568b562fa3",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-c000.901898-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-d000.901898-04.bin",
+      "sha1": "b42a2050a319a1ffca7868a8d8d635fadd37ec37",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-d000.901898-04.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-e000.901897-01.bin",
+      "sha1": "e8ce8347451a001214a5e71a13081b38b4be23bc",
+      "size": 2048,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-e000.901897-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/PET/waterloo-f000.901898-05.bin",
+      "sha1": "9b4a5134d20345171e7303445f87c4e0b9addc96",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/PET/waterloo-f000.901898-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/basic-901242+3-04a.bin",
+      "sha1": "9409f92e167984096fe4d5913714bff6214c3b2d",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/basic-901242+3-04a.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/basic-901240+1-03.bin",
+      "sha1": "53314b4d565cc405a67a0936b935e6e08955580d",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/basic-901240+1-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/basic-901235+6-02.bin",
+      "sha1": "e69531d45f5993f8e53c6bd9ab2a7bc10fe2d02f",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/basic-901235+6-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/kernal-901244-04a.bin",
+      "sha1": "abb26418b9e1614a8f52bdeee0822d4a96071439",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/kernal-901244-04a.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/kernal-901234-02.bin",
+      "sha1": "097197d4d08e0b82e0466a5f1fbd49a24f3d2523",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/kernal-901234-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/chargen-901225-01.bin",
+      "sha1": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/chargen-901237-01.bin",
+      "sha1": "e63bf18da48e5a53c99ef127c1ae721333d1d102",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/chargen-901237-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/CBM-II/chargen-901232-01.bin",
+      "sha1": "e7f3cbc8e282f79a00c3e95d75c8d725ee3c6287",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/CBM-II/chargen-901232-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/SCPU64/scpu64",
+      "sha1": "f5b6da17ee8206ff0d2258e1d6e8b798147c2650",
+      "size": 65536,
+      "repo_path": "bios/Commodore/C128/vice/SCPU64/scpu64",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/SCPU64/chargen-901225-01.bin",
+      "sha1": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/SCPU64/chargen-906143-02.bin",
+      "sha1": "0fad19dbcdb12461c99657b2979dbb5c2e47b527",
+      "size": 4096,
+      "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/SCPU64/scpu-dos-1.4.bin",
+      "sha1": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
+      "size": 131072,
+      "repo_path": "bios/Commodore/C128/SCPU64/scpu-dos-1.4.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/SCPU64/scpu-dos-2.04.bin",
+      "sha1": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "size": 131072,
+      "repo_path": "bios/Commodore/C128/SCPU64/scpu-dos-2.04.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1540-325302+3-01.bin",
+      "sha1": "0bec500cd97bf7c38c894bc5265aec19307e7c06",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1540-325302+3-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1541-325302-01+901229-05.bin",
+      "sha1": "ab16f56989b27d89babe5f89c5a8cb3da71a82f0",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1541-325302-01+901229-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1541ii-251968-03.bin",
+      "sha1": "d3b78c3dbac55f5199f33f3fe0036439811f7fb3",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1541ii-251968-03.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1551-318008-01.bin",
+      "sha1": "fae3c788ad9a6cc2dbdfbcf6c0264b2ca921d55e",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1551-318008-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1570-315090-01.bin",
+      "sha1": "5fc06dc82ff6840f183bd43a4d9b8a16956b2f56",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1570-315090-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1571-310654-05.bin",
+      "sha1": "f1be619c106641a685f6609e4d43d6fc9eac1e70",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1571-310654-05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1571cr-318047-01.bin",
+      "sha1": "14ee7a0fb7e1c59c51fbf781f944387037daa3ee",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1571cr-318047-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1581-318045-02.bin",
+      "sha1": "01228eae6f066bd9b7b2b6a7fa3f667e41dad393",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1581-318045-02.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos1001-901887+8-01.bin",
+      "sha1": "d50b093828888146596f17ae0df9ef3dfde71b05",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1001-901887+8-01.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos2031-901484-03+05.bin",
+      "sha1": "c53e180a96649ceb3f421739e8dc66faba7cba44",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos2031-901484-03+05.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos2040-901468-06+07.bin",
+      "sha1": "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos2040-901468-06+07.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos3040-901468-11-13.bin",
+      "sha1": "02bd4b0c8508b3874b95799a9a63caf369c837de",
+      "size": 12288,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos3040-901468-11-13.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos4040-901468-14-16.bin",
+      "sha1": "245abbe76581558d270cdbb6fe55f56748403d8e",
+      "size": 12288,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos4040-901468-14-16.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/DRIVES/dos9000-300516+7-revC.bin",
+      "sha1": "c48df2cbb0eea656c3243df7ea8bfefcd171b8e8",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/DRIVES/dos9000-300516+7-revC.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_C64.bin",
+      "sha1": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C128/JiffyDOS_C64.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_SX-64.bin",
+      "sha1": "942c2150123dc30f40b3df6086132ef0a3c43948",
+      "size": 8192,
+      "repo_path": "bios/Commodore/C64/JiffyDOS_SX-64.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_C128.bin",
+      "sha1": "7d1898f32beae4b2ae610d469ce578a588efaa7c",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/JiffyDOS_C128.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_1541-II.bin",
+      "sha1": "b1a5b826304d3df2a27d7163c6a81a532e040d32",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/JiffyDOS_1541-II.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_1571_repl310654.bin",
+      "sha1": "d4b79b60cf1eaa399d0932200eb7811e00455249",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/JiffyDOS_1571_repl310654.bin",
+      "cores": [
+        "VICE"
+      ]
+    },
+    {
+      "dest": "vice/JiffyDOS_1581.bin",
+      "sha1": "65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe",
+      "size": 32768,
+      "repo_path": "bios/Commodore/C128/JiffyDOS_1581.bin",
+      "cores": [
+        "VICE"
       ]
     },
     {
@@ -6278,6 +9062,24 @@
       ]
     },
     {
+      "dest": "scpu-dos-2.04.bin",
+      "sha1": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "size": 131072,
+      "repo_path": "bios/Commodore/C128/SCPU64/scpu-dos-2.04.bin",
+      "cores": [
+        "VICE xscpu64"
+      ]
+    },
+    {
+      "dest": "scpu-dos-1.4.bin",
+      "sha1": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
+      "size": 131072,
+      "repo_path": "bios/Commodore/C128/SCPU64/scpu-dos-1.4.bin",
+      "cores": [
+        "VICE xscpu64"
+      ]
+    },
+    {
       "dest": "kernal.901486-02.bin",
       "sha1": "c9ead45e6674d1042ca6199160e8583c23aeac22",
       "size": 8192,
@@ -6302,15 +9104,6 @@
       "repo_path": "bios/Vircon/Vircon32Bios.v32",
       "cores": [
         "Vircon32"
-      ]
-    },
-    {
-      "dest": "xmil/IPLROM.X1T",
-      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
-      "size": 32768,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
-      "cores": [
-        "X Millennium"
       ]
     },
     {
@@ -6356,6 +9149,276 @@
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
       "cores": [
         "Xemu"
+      ]
+    },
+    {
+      "dest": "d32.rom",
+      "sha1": "f2dab125673e653995a83bf6b793e3390ec7f65a",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/d32.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "d64_1.rom",
+      "sha1": "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/alpha-basic.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "d64_2.rom",
+      "sha1": "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/d200rom2.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "d200e_1.rom",
+      "sha1": "628543ee8b47a56df2b2175cfb763c0051517b90",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/d200e_1.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "d200e_2.rom",
+      "sha1": "c25632f3c2cfd1af3ee26b2f233a1ce1eccc365d",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/d200e_2.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "d200e_26.rom",
+      "sha1": "da5b756ba2a9c9ecebaa7daa8ba8bfd984d56a6f",
+      "size": 4096,
+      "repo_path": "bios/Dragon/Dragon/d200e_26.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "alpha-boot-v1.0.rom",
+      "sha1": "4a5851aa66eb426e9bb0bba196f1e02d48156068",
+      "size": 8192,
+      "repo_path": "bios/Dragon/Dragon/alpha-boot-v1.0.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "alpha-basic.rom",
+      "sha1": "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/alpha-basic.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "bas11.rom",
+      "sha1": "cecb7c24ff1e0ab5836e4a7a8eb1b8e01f1fded3",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/bas11.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "extbas10.rom",
+      "sha1": "7275f1e3f165ff6a4657e4e5e24cb8b817239f54",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/extbas10.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "deluxe.rom",
+      "sha1": "d89196292b9ebd787647cf91bbb83c63da2b4390",
+      "size": 32768,
+      "repo_path": "bios/Tandy/CoCo/deluxe.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "adv071_u24.rom",
+      "sha1": "2f3d67efd80c36533d0220324c254fbeea364aaa",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/adv071_u24.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "adv072_u24.rom",
+      "sha1": "feea48b6b7070f0ac0acb132ad85087c5ad79e3b",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/adv072_u24.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "adv073-2_u24.rom",
+      "sha1": "c3aba0eb359f7f40d40d7947f72c9ecae6e0525d",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/adv073-2_u24.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "mx1600bas.rom",
+      "sha1": "70a464edf3a654ed4ffe687e6dee4f0d2acc758b",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/mx1600bas.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "mx1600extbas.rom",
+      "sha1": "9079a477c3f22e46cebb1e68b61df5bd607c71a4",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/mx1600extbas.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cp400bas.rom",
+      "sha1": "2588b89a25be5c21cb2cf0abb51eca620e4a1bb6",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/cp400bas.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cp400ext.rom",
+      "sha1": "a348a165009a6de1ae6fc18ed77137b38b6ed46d",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/cp400ext.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "hdbdw3bck.rom",
+      "sha1": "8fd64f1c246489e0bf2b3743ae76332ff324716a",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/hdbdw3bck.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "ddos12a.rom",
+      "sha1": "7e324688aac097dd2b016506c40d570a085361bf",
+      "size": 8192,
+      "repo_path": "bios/Dragon/Dragon/ddos12a.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "dplus49b.rom",
+      "sha1": "73ae74978a78ec2b97ebb1b0c808238779529bfa",
+      "size": 8192,
+      "repo_path": "bios/Dragon/Dragon/dplus49b.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "sdose6.rom",
+      "sha1": "ef157016386ed463374de6bac84d1f8ce654ed80",
+      "size": 8192,
+      "repo_path": "bios/Dragon/Dragon/sdose6.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cdos20.rom",
+      "sha1": "9513091f37adf330f66a0c08f4e200344ad2e082",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/cdos20.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cp450dsk.rom",
+      "sha1": "827697fa5b755f5dc1efb054cdbbeb04e405405b",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/cp400dsk.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "orch90.rom",
+      "sha1": "6a20fee9c70b36a6435ac8378f31d5b626017df0",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/orch90.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "mcx128.rom",
+      "sha1": "36c30d0f198a1bffee88ef29d92f2401447a91f4",
+      "size": 16384,
+      "repo_path": "bios/Tandy/MC-10/mcx128.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "mcx128a.rom",
+      "sha1": "c8fd92705fc42deb6a0ffac6274e27fd61ecd4cc",
+      "size": 16384,
+      "repo_path": "bios/Tandy/MC-10/mcx128a.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "yados.rom",
+      "sha1": "00009ae71d5ad71f12c456feb9ae1e2aa8aec751",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/yados.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "sdbdos.rom",
+      "sha1": "db4013d556da870362f750e3b31f172622803c64",
+      "size": 65536,
+      "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cdb/cdb_rom.bin",
+      "sha1": "b3c20fbe57cd2eb595e9edac86817e5948dccae4",
+      "size": 65536,
+      "repo_path": "bios/Sega/Saturn/cdb/cdb106.bin",
+      "cores": [
+        "ymir"
       ]
     },
     {
@@ -6426,15 +9489,6 @@
       "sha1": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "size": 633030,
       "repo_path": "bios/ZC/ZC210/zc210/sfx/SwangSong.dat",
-      "cores": [
-        "Zelda Classic v2.10"
-      ]
-    },
-    {
-      "dest": "zc210/sfx/Custom.dat",
-      "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-      "size": 0,
-      "repo_path": "bios/NEC/PC-98/key.txt",
       "cores": [
         "Zelda Classic v2.10"
       ]
@@ -6890,10 +9944,91 @@
       ]
     },
     {
+      "dest": "Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AmstradCPC/amsdos.rom",
+      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
+      "size": 16384,
+      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleII/apple2-character.rom",
+      "sha1": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
+      "size": 2048,
+      "repo_path": "bios/Apple/Apple II/apple2-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleII/apple2eu-character.rom",
+      "sha1": "7060de104046736529c1e8a687a0dd7b84f8c51b",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleII/apple2e-character.rom",
+      "sha1": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2e-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleIIgs/apple2gs.chr",
+      "sha1": "34e2443e2ef960a36c047a09ed5a93f471797f89",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2gs.chr",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleIIgs/341s0632-2",
+      "sha1": "141d18c36a617ab9dce668445440d34354be0672",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/341s0632-2",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "ColecoVision/coleco.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Enterprise/exos20.bin",
+      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos20.bin",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "MSX/msx-japanese.rom",
+      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -6905,6 +10040,204 @@
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
       "cores": [
         "Dolphin"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos21.rom",
+      "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos21.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos20.rom",
+      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos20.bin",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exos24uk.rom",
+      "sha1": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
+      "size": 65536,
+      "repo_path": "bios/Enterprise/64-128/exos24uk.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/basic21.rom",
+      "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/basic21.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/basic20.rom",
+      "sha1": "61d0987b906146e21b94f265d5b51b4938c986a9",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/basic20.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exdos13.rom",
+      "sha1": "cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exdos13.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exdos14isdos10uk.rom",
+      "sha1": "b82e21b6e3214432b6dc13f650e97de88fc90a72",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exdos14isdos10uk.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/epfileio.rom",
+      "sha1": "2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/epfileio.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/epdos16f.rom",
+      "sha1": "9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/epdos16f.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/hun.rom",
+      "sha1": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/hun.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/brd.rom",
+      "sha1": "f34f0c330b44dbf2548329bea954d5991dec30ca",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/brd.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zt19uk.rom",
+      "sha1": "b7af62f0bc95fdca4b31d236f8327dafc80f83b7",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zt19uk.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_sys.rom",
+      "sha1": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc22_sys.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_ext.rom",
+      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvcfileio.rom",
+      "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvcfileio.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/tvc_dos12d.rom",
+      "sha1": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc_dos12d.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc464.rom",
+      "sha1": "56d39c463da60968d93e58b4ba0e675829412a20",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc464.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc664.rom",
+      "sha1": "073a7665527b5bd8a148747a3947dbd3328682c8",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc664.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc6128.rom",
+      "sha1": "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc6128.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc_amsdos.rom",
+      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
+      "size": 16384,
+      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx128.rom",
+      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zx128.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "cores": [
+        "ep128emu_core"
       ]
     },
     {
@@ -6980,6 +10313,24 @@
       ]
     },
     {
+      "dest": "same_cdi/bios/cdimono1.zip",
+      "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
+      "size": 660996,
+      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdibios.zip",
+      "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
+      "size": 472798,
+      "repo_path": "bios/Arcade/Arcade/cdibios.zip",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
       "dest": "scummvm/extra/CM32L_CONTROL.ROM",
       "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
@@ -6995,6 +10346,15 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
+      ]
+    },
+    {
+      "dest": "xmil/IPLROM.X1T",
+      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
+      "size": 32768,
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
+      "cores": [
+        "X Millennium"
       ]
     }
   ]

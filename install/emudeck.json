@@ -3,7 +3,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-29T14:02:36Z",
+  "generated": "2026-03-30T07:38:01Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -50,8 +50,8 @@
       }
     }
   ],
-  "total_files": 270,
-  "total_size": 913637720,
+  "total_files": 290,
+  "total_size": 717377323,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -474,154 +474,10 @@
       ]
     },
     {
-      "dest": "scph1000.bin",
-      "sha1": "343883a7b555646da8cee54aadd2795b6e7dd070",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1000.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1001.bin",
-      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
       "dest": "scph1002a.bin",
       "sha1": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1002b.bin",
-      "sha1": "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1002c.bin",
-      "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "dtlh1100.bin",
-      "sha1": "73107d468fc7cb1d2c5b18b269715dd889ecef06",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/dtlh1100.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph3000.bin",
-      "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph3000.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1001_v20.bin",
-      "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph3500.bin",
-      "sha1": "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph3500.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1001_v21.bin",
-      "sha1": "ca7af30b50d9756cbd764640126c454cff658479",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph5000.bin",
-      "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph5000.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph7000.bin",
-      "sha1": "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph7000.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph7000w.bin",
-      "sha1": "1b0dbdb23da9dc0776aac58d0755dc80fea20975",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph7001.bin",
-      "sha1": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph7001.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph7002.bin",
-      "sha1": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph7002.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph100.bin",
-      "sha1": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph100.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph101_v44.bin",
-      "sha1": "7771d6e90980408f753891648685def6dd42ef6d",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph101_v44.bin",
       "cores": [
         "DuckStation"
       ]
@@ -649,15 +505,6 @@
       "sha1": "dbc7339e5d85827c095764fc077b41f78fd2ecae",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph102B.bin",
-      "cores": [
-        "DuckStation"
-      ]
-    },
-    {
-      "dest": "scph1000r.bin",
-      "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
       "cores": [
         "DuckStation"
       ]
@@ -2112,6 +1959,42 @@
       ]
     },
     {
+      "dest": "astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "apple2gs.zip",
+      "sha1": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
+      "size": 174124,
+      "repo_path": "bios/Apple/Apple II/apple2gs.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "casloopy.zip",
+      "sha1": "144ea9d0f20113632dde6d21c62a01c02cf7666d",
+      "size": 478191,
+      "repo_path": "bios/Casio/Loopy/casloopy.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "pv2000.zip",
+      "sha1": "c18f460301177b64bbfcbedc3010e734d0803d4c",
+      "size": 13622,
+      "repo_path": "bios/Casio/PV-2000/pv2000.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "adam.zip",
       "sha1": "dc4b77cd3ac45cf448e427eff5c0a7b138fd9d81",
       "size": 52891,
@@ -2220,6 +2103,303 @@
       ]
     },
     {
+      "dest": "beena.zip",
+      "sha1": "f63eca9a1b1e92ee1582ff5e4c0db55193f97e33",
+      "size": 85176,
+      "repo_path": "bios/Sega/Beena/beena.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "rx78.zip",
+      "sha1": "b3a26e21574395a279a37922238802b349c303b7",
+      "size": 6397,
+      "repo_path": "bios/Bandai/RX-78/rx78.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "segaai.zip",
+      "sha1": "39a0fec854e438f6757882604a8dc56e62e401d9",
+      "size": 343220,
+      "repo_path": "bios/Sega/AI/segaai.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "segaai_soundbox.zip",
+      "sha1": "d90e0b3545e60c59c20a7fb32d0785f6c3abbf60",
+      "size": 47380,
+      "repo_path": "bios/Arcade/MAME/segaai_soundbox.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "lynx48k.zip",
+      "sha1": "64947e9b7d17870839aba5d93217183d480ff897",
+      "size": 25078,
+      "repo_path": "bios/Camputers/Lynx/lynx48k.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "lynx96k.zip",
+      "sha1": "df95ea702606e88b4c906a0233c8fec54c02ff01",
+      "size": 32888,
+      "repo_path": "bios/Camputers/Lynx/lynx96k.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "lynx128k.zip",
+      "sha1": "5300a352007976102d61d53f1e8c48063d2f3026",
+      "size": 24796,
+      "repo_path": "bios/Camputers/Lynx/lynx128k.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "crvision.zip",
+      "sha1": "87526fb12fabbcc01292dd01dc698fdc762ab7dc",
+      "size": 441619,
+      "repo_path": "bios/VTech/CreatiVision/crvision.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "laser310.zip",
+      "sha1": "9fa5f366c4ec43d7c23f03f054733894bf42912f",
+      "size": 42630,
+      "repo_path": "bios/VTech/Laser 310/laser310.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "socrates.zip",
+      "sha1": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
+      "size": 218299,
+      "repo_path": "bios/VTech/Socrates/socrates.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "vsmile.zip",
+      "sha1": "65e526ae3e4795a9186c53c7428d8b946170befe",
+      "size": 3078731,
+      "repo_path": "bios/VTech/V.Smile/vsmile.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gamate.zip",
+      "sha1": "e99667ea5cfe6a5eceb53faaa39cdda0cbf69c69",
+      "size": 5072,
+      "repo_path": "bios/Bit Corporation/Gamate/gamate.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gamepock.zip",
+      "sha1": "83e94c56f2fc4ab60de94021a1283cca09d65ee5",
+      "size": 3455,
+      "repo_path": "bios/Epoch/Game Pocket/gamepock.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gmaster.zip",
+      "sha1": "a89263689f19e046dab6dadea24c5d07270548a6",
+      "size": 1686,
+      "repo_path": "bios/Hartung/Game Master/gmaster.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gamecom.zip",
+      "sha1": "e0f5e2eced447abf9948342b2facc40179f0f527",
+      "size": 145138,
+      "repo_path": "bios/Tiger/Game.com/gamecom.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gp32.zip",
+      "sha1": "35def9830e797fb0788740b5da0a7202933554df",
+      "size": 1378301,
+      "repo_path": "bios/GamePark/GP32/gp32.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "fm7.zip",
+      "sha1": "1c29ba16151255cd916f49ea25570956f1353b71",
+      "size": 104276,
+      "repo_path": "bios/Fujitsu/FM Towns/fm7.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "fm77av.zip",
+      "sha1": "b558bb5472cfa727dccab92229c66afa0d64404f",
+      "size": 46921,
+      "repo_path": "bios/Fujitsu/FM Towns/fm77av.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "pegasus.zip",
+      "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
+      "size": 27305,
+      "repo_path": "bios/Arcade/MAME/pegasus.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "pcw8256.zip",
+      "sha1": "f8a11b4e03bb8c3caee604ca591676eab6535d1b",
+      "size": 1710,
+      "repo_path": "bios/Amstrad/PCW/pcw8256.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "pcw9512.zip",
+      "sha1": "844988dc5a36917b002d0140d3a7692d1407f783",
+      "size": 2625,
+      "repo_path": "bios/Amstrad/PCW/pcw9512.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "vis.zip",
+      "sha1": "beff39b4edb449c66b704e1c64ee6ed58e30a868",
+      "size": 605047,
+      "repo_path": "bios/Tandy/VIS/vis.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "trs80.zip",
+      "sha1": "a9b8931c42303e8dfb475112fc18ff200b7252ce",
+      "size": 14558,
+      "repo_path": "bios/Tandy/TRS-80/trs80.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "trs80m3.zip",
+      "sha1": "b804a031c8db6def59e077a4b6938dcac25093d7",
+      "size": 32854,
+      "repo_path": "bios/Tandy/TRS-80/trs80m3.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "trs80m4.zip",
+      "sha1": "bc58ac28be4854fb198b895c7fd999f599b5a961",
+      "size": 25371,
+      "repo_path": "bios/Tandy/TRS-80/trs80m4.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "trs80m4p.zip",
+      "sha1": "497eea6e0ed80501ca3beee714d71a5815495b07",
+      "size": 4880,
+      "repo_path": "bios/Tandy/TRS-80/trs80m4p.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ti99_4a.zip",
+      "sha1": "e05575b630bea7ff98b9ca1f083d745abb3110b6",
+      "size": 21377,
+      "repo_path": "bios/Texas Instruments/TI-99/ti99_4a.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ti99_speech.zip",
+      "sha1": "b58fe2dbbc254d363c2ec4a459e6ec1d91b2ac86",
+      "size": 31206,
+      "repo_path": "bios/Arcade/Arcade/ti99_speech.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "tutor.zip",
+      "sha1": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "size": 34653,
+      "repo_path": "bios/Tomy/Tutor/tutor.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "vg5k.zip",
+      "sha1": "5ad489a58fc457d2bfb7a348f4a312c3b49daad1",
+      "size": 26356,
+      "repo_path": "bios/Arcade/MAME/vg5k.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "qsound.zip",
+      "sha1": "f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f",
+      "size": 2654,
+      "repo_path": "bios/Arcade/Arcade/qsound.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ym2413.zip",
+      "sha1": "900e8c6cd152704a79905b6838fe3229c9499f8c",
+      "size": 286,
+      "repo_path": "bios/Arcade/MAME/ym2413.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ym2608.zip",
+      "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
+      "size": 7609,
+      "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "dsi_bios9.bin",
       "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
       "size": 65536,
@@ -2245,17 +2425,6 @@
       "cores": [
         "melonDS"
       ]
-    },
-    {
-      "dest": "dsi_nand.bin",
-      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
-      "size": 251658304,
-      "repo_path": ".cache/large/dsi_nand.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "dsi_nand.bin"
     },
     {
       "dest": "dsi_sd_card.bin",
@@ -2364,6 +2533,17 @@
       "cores": [
         "shadps4"
       ]
+    },
+    {
+      "dest": "psvita/PSP2UPDAT.PUP",
+      "sha1": "3ae832c9800fcaa007eccfc48f24242967c111f8",
+      "size": 56768512,
+      "repo_path": "bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP",
+      "cores": [
+        "Vita3K"
+      ],
+      "storage": "release",
+      "release_asset": "PSP2UPDAT.PUP"
     },
     {
       "dest": "Complex_4627.bin",

@@ -428,7 +428,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (24):
+  - Other (25):
     - ares: emulators/ares.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - BigPEmu: emulators/bigpemu.md
@@ -446,6 +446,7 @@ nav:
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md
     - Supermodel: emulators/supermodel.md
+    - ti99sim: emulators/ti99sim.md
     - tsugaru: emulators/tsugaru.md
     - VBA-M: emulators/vba_m.md
     - VICE: emulators/vice.md
