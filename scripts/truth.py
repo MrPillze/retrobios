@@ -329,9 +329,46 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
                 "scraped_required": s_req,
             })
 
-    # Truth files not matched -> missing
-    for fe in truth_sys.get("files", []):
-        if fe["name"].lower() not in matched_truth_names:
+    # Collect unmatched files from both sides
+    unmatched_truth = [
+        fe for fe in truth_sys.get("files", [])
+        if fe["name"].lower() not in matched_truth_names
+    ]
+    unmatched_scraped = {
+        s_key: s_entry for s_key, s_entry in scraped_index.items()
+        if s_key not in truth_index
+    }
+
+    # Hash-based fallback: detect platform renames (e.g. Batocera ROM → ROM1)
+    # If an unmatched scraped file shares a hash with an unmatched truth file,
+    # it's the same file under a different name — a platform rename, not a gap.
+    rename_matched_truth: set[str] = set()
+    rename_matched_scraped: set[str] = set()
+
+    if unmatched_truth and unmatched_scraped:
+        # Build hash → truth file index for unmatched truth files
+        truth_hash_index: dict[str, dict] = {}
+        for fe in unmatched_truth:
+            for h in ("sha1", "md5", "crc32"):
+                val = fe.get(h)
+                if val and isinstance(val, str):
+                    truth_hash_index[val.lower()] = fe
+
+        for s_key, s_entry in unmatched_scraped.items():
+            for h in ("sha1", "md5", "crc32"):
+                s_val = s_entry.get(h)
+                if not s_val or not isinstance(s_val, str):
+                    continue
+                t_entry = truth_hash_index.get(s_val.lower())
+                if t_entry is not None:
+                    # Rename detected — count as matched
+                    rename_matched_truth.add(t_entry["name"].lower())
+                    rename_matched_scraped.add(s_key)
+                    break
+
+    # Truth files not matched (by name, alias, or hash) -> missing
+    for fe in unmatched_truth:
+        if fe["name"].lower() not in rename_matched_truth:
             missing.append({
                 "name": fe["name"],
                 "cores": list(fe.get("_cores", [])),
@@ -341,13 +378,14 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     # Scraped files not in truth -> extra
     coverage = truth_sys.get("_coverage", {})
     has_unprofiled = bool(coverage.get("cores_unprofiled"))
-    for s_key, s_entry in scraped_index.items():
-        if s_key not in truth_index:
-            entry = {"name": s_entry["name"]}
-            if has_unprofiled:
-                extra_unprofiled.append(entry)
-            else:
-                extra_phantom.append(entry)
+    for s_key, s_entry in unmatched_scraped.items():
+        if s_key in rename_matched_scraped:
+            continue
+        entry = {"name": s_entry["name"]}
+        if has_unprofiled:
+            extra_unprofiled.append(entry)
+        else:
+            extra_phantom.append(entry)
 
     result: dict = {}
     if missing:
