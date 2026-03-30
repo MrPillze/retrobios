@@ -31,10 +31,11 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     build_target_cores_cache, build_zip_contents_index, check_inside_zip,
-    compute_hashes, filter_systems_by_target, group_identical_platforms,
-    list_emulator_profiles, list_system_ids, load_data_dir_registry,
-    load_emulator_profiles, load_platform_config, md5sum, md5_composite,
-    require_yaml, resolve_local_file, resolve_platform_cores,
+    compute_hashes, expand_platform_declared_names, filter_systems_by_target,
+    group_identical_platforms, list_emulator_profiles, list_system_ids,
+    load_data_dir_registry, load_emulator_profiles, load_platform_config,
+    md5sum, md5_composite, require_yaml, resolve_local_file,
+    resolve_platform_cores,
 )
 
 yaml = require_yaml()
@@ -261,13 +262,9 @@ def find_undeclared_files(
     data_names: set[str] | None = None,
 ) -> list[dict]:
     """Find files needed by cores but not declared in platform config."""
-    # Collect all filenames declared by this platform
-    declared_names: set[str] = set()
-    for sys_id, system in config.get("systems", {}).items():
-        for fe in system.get("files", []):
-            name = fe.get("name", "")
-            if name:
-                declared_names.add(name)
+    # Collect all filenames declared by this platform, enriched with
+    # canonical names from DB via MD5 (handles platform renaming)
+    declared_names = expand_platform_declared_names(config, db)
 
     # Collect data_directory refs
     declared_dd: set[str] = set()

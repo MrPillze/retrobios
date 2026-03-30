@@ -915,6 +915,39 @@ def filter_systems_by_target(
     return filtered
 
 
+def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
+    """Build set of file names declared by a platform config.
+
+    Enriches the set with canonical names and aliases from the database
+    by resolving each platform file's MD5 through by_md5.  This handles
+    cases where a platform declares a file under a different name than
+    the emulator profile (e.g. Batocera ROM1 vs gsplus ROM).
+    """
+    declared: set[str] = set()
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    files_db = db.get("files", {})
+    for system in config.get("systems", {}).values():
+        for fe in system.get("files", []):
+            name = fe.get("name", "")
+            if name:
+                declared.add(name)
+            md5 = fe.get("md5", "")
+            if not md5:
+                continue
+            # Skip multi-hash and zippedFile entries (inner ROM MD5, not file MD5)
+            if "," in md5 or fe.get("zippedFile"):
+                continue
+            sha1 = by_md5.get(md5.lower())
+            if not sha1:
+                continue
+            entry = files_db.get(sha1, {})
+            db_name = entry.get("name", "")
+            if db_name:
+                declared.add(db_name)
+            for alias in entry.get("aliases", []):
+                declared.add(alias)
+    return declared
+
 
 # Validation and mode filtering -extracted to validation.py for SoC.
 # Re-exported below for backward compatibility.

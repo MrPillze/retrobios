@@ -31,6 +31,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import yaml
 from common import (
     build_zip_contents_index, check_inside_zip, compute_hashes,
+    expand_platform_declared_names,
     group_identical_platforms, load_emulator_profiles, load_platform_config,
     md5_composite, md5sum, parse_md5_list, resolve_local_file,
     resolve_platform_cores, safe_extract_zip,
@@ -269,6 +270,12 @@ class TestE2E(unittest.TestCase):
                         {"ref": "test-data-dir", "destination": "TestData"},
                     ],
                 },
+                "sys-renamed": {
+                    "files": [
+                        {"name": "renamed_file.bin", "destination": "renamed_file.bin",
+                         "md5": f["correct_hash.bin"]["md5"], "required": True},
+                    ],
+                },
             },
         }
         with open(os.path.join(self.platforms_dir, "test_md5.yml"), "w") as fh:
@@ -489,6 +496,19 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "test_subdir_core.yml"), "w") as fh:
             yaml.dump(emu_subdir, fh)
+
+        # Emulator whose file is declared by platform under a different name
+        # (e.g. gsplus ROM vs Batocera ROM1) — hash-based matching should resolve
+        emu_renamed = {
+            "emulator": "TestRenamed",
+            "type": "standalone",
+            "systems": ["sys-renamed"],
+            "files": [
+                {"name": "correct_hash.bin", "required": True},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_renamed.yml"), "w") as fh:
+            yaml.dump(emu_renamed, fh)
 
     # ---------------------------------------------------------------
     # THE TEST -one method per feature area, all using same fixtures
@@ -3250,6 +3270,25 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(div["hash_mismatch"][0]["name"], "shared.bin")
         self.assertEqual(div["extra_unprofiled"][0]["name"], "phantom.bin")
         self.assertNotIn("extra_phantom", div)
+
+    def test_173_cross_ref_hash_matching(self):
+        """Platform file under different name matched by MD5 is not undeclared."""
+        config = load_platform_config("test_md5", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        names = {u["name"] for u in undeclared}
+        # correct_hash.bin is declared by platform as renamed_file.bin with same MD5
+        # hash-based matching should suppress it from undeclared
+        self.assertNotIn("correct_hash.bin", names)
+
+    def test_174_expand_platform_declared_names(self):
+        """expand_platform_declared_names enriches with DB canonical names."""
+        config = load_platform_config("test_md5", self.platforms_dir)
+        result = expand_platform_declared_names(config, self.db)
+        # renamed_file.bin is declared directly
+        self.assertIn("renamed_file.bin", result)
+        # correct_hash.bin is the DB canonical name for the same MD5
+        self.assertIn("correct_hash.bin", result)
 
 
 if __name__ == "__main__":

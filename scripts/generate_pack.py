@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     MANUFACTURER_PREFIXES,
     build_target_cores_cache, build_zip_contents_index, check_inside_zip,
-    compute_hashes, fetch_large_file, group_identical_platforms,
+    compute_hashes, expand_platform_declared_names, fetch_large_file, group_identical_platforms,
     list_emulator_profiles, list_platform_system_ids, list_registered_platforms,
     filter_systems_by_target, list_system_ids, load_database,
     load_data_dir_registry, load_emulator_profiles, load_platform_config,
@@ -371,12 +371,8 @@ def _collect_emulator_extras(
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
 
     # Build set of filenames already covered (platform baseline + first pass extras)
-    covered_names: set[str] = set()
-    for sys_id, system in config.get("systems", {}).items():
-        for fe in system.get("files", []):
-            n = fe.get("name", "")
-            if n:
-                covered_names.add(n)
+    # Enriched with canonical names from DB via MD5 (handles platform renaming)
+    covered_names = expand_platform_declared_names(config, db)
     for e in extras:
         covered_names.add(e["name"])
 
