@@ -47,7 +47,18 @@ class Exporter(BaseExporter):
             scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
             display_name = self._display_name(sys_id, scraped_sys)
 
+            # Build md5 lookup from scraped data for this system
+            scraped_md5: dict[str, str] = {}
+            if scraped_data:
+                s_sys = scraped_data.get("systems", {}).get(sys_id, {})
+                for sf in s_sys.get("files", []):
+                    sname = sf.get("name", "").lower()
+                    smd5 = sf.get("md5", "")
+                    if sname and smd5:
+                        scraped_md5[sname] = smd5
+
             # Build biosFiles entries as compact single-line dicts
+            # Original format ALWAYS has md5 — use scraped md5 as fallback
             bios_parts: list[str] = []
             for fe in files:
                 name = fe.get("name", "")
@@ -57,6 +68,8 @@ class Exporter(BaseExporter):
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""
+                if not md5:
+                    md5 = scraped_md5.get(name.lower(), "")
 
                 entry_parts = []
                 if md5:

@@ -56,14 +56,26 @@ class Exporter(BaseExporter):
 
             lines.append(f'  <system fullname="{display_name}" platform="{native_id}">')
 
+            # Build path lookup from scraped data for this system
+            scraped_paths: dict[str, str] = {}
+            if scraped_data:
+                s_sys = scraped_data.get("systems", {}).get(sys_id, {})
+                for sf in s_sys.get("files", []):
+                    sname = sf.get("name", "").lower()
+                    spath = sf.get("destination", sf.get("name", ""))
+                    if sname and spath:
+                        scraped_paths[sname] = spath
+
             for fe in files:
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
 
-                dest = self._dest(fe)
-                # Recalbox paths include system prefix
-                path = f"{native_id}/{dest}" if "/" not in dest else dest
+                # Use scraped path when available (preserves original format)
+                path = scraped_paths.get(name.lower())
+                if not path:
+                    dest = self._dest(fe)
+                    path = f"{native_id}/{dest}" if "/" not in dest else dest
 
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
@@ -103,9 +115,8 @@ class Exporter(BaseExporter):
         for bios_el in root.iter("bios"):
             path = bios_el.get("path", "")
             if path:
-                exported_paths.add(path)
-                # Also index basename
-                exported_paths.add(path.split("/")[-1])
+                exported_paths.add(path.lower())
+                exported_paths.add(path.split("/")[-1].lower())
 
         issues: list[str] = []
         for sys_data in truth_data.get("systems", {}).values():
@@ -114,6 +125,6 @@ class Exporter(BaseExporter):
                 if name.startswith("_") or self._is_pattern(name):
                     continue
                 dest = self._dest(fe)
-                if name not in exported_paths and dest not in exported_paths:
+                if name.lower() not in exported_paths and dest.lower() not in exported_paths:
                     issues.append(f"missing: {name}")
         return issues
