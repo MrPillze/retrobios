@@ -401,6 +401,8 @@ def _collect_all_aliases(files: dict) -> dict:
         try:
             import yaml
             for emu_file in emulators_dir.glob("*.yml"):
+                if emu_file.name.endswith(".old.yml"):
+                    continue
                 try:
                     with open(emu_file) as f:
                         emu_config = yaml.safe_load(f) or {}

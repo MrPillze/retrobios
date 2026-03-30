@@ -1358,6 +1358,8 @@ The CI automatically:
 
 
 # Wiki pages
+# index, architecture, tools, profiling are maintained as wiki/ sources
+# and copied verbatim by main(). Only data-model is generated dynamically.
 
 def generate_wiki_index() -> str:
     """Generate wiki landing page."""
@@ -1994,10 +1996,19 @@ def generate_mkdocs_nav(
 
     wiki_nav = [
         {"Overview": "wiki/index.md"},
+        {"Getting started": "wiki/getting-started.md"},
+        {"FAQ": "wiki/faq.md"},
+        {"Troubleshooting": "wiki/troubleshooting.md"},
         {"Architecture": "wiki/architecture.md"},
         {"Tools": "wiki/tools.md"},
-        {"Profiling guide": "wiki/profiling.md"},
+        {"Advanced usage": "wiki/advanced-usage.md"},
+        {"Verification modes": "wiki/verification-modes.md"},
         {"Data model": "wiki/data-model.md"},
+        {"Profiling guide": "wiki/profiling.md"},
+        {"Adding a platform": "wiki/adding-a-platform.md"},
+        {"Adding a scraper": "wiki/adding-a-scraper.md"},
+        {"Testing guide": "wiki/testing-guide.md"},
+        {"Release process": "wiki/release-process.md"},
     ]
 
     return [
@@ -2165,7 +2176,11 @@ markdown_extensions:
 - toc:
     permalink: true
 - pymdownx.details
-- pymdownx.superfences
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format
 - pymdownx.tabbed:
     alternate_style: true
 plugins:
@@ -2180,7 +2195,7 @@ plugins:
         + 1  # cross-reference
         + 1 + len(profiles)  # emulator index + detail
         + 1  # gap analysis
-        + 5  # wiki (index, architecture, tools, profiling, data model)
+        + 14  # wiki pages (copied from wiki/ + generated data-model)
         + 1  # contributing
     )
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")
