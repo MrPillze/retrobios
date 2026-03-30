@@ -683,6 +683,8 @@ def load_emulator_profiles(
     if not emu_path.exists():
         return profiles
     for f in sorted(emu_path.glob("*.yml")):
+        if f.name.endswith(".old.yml"):
+            continue
         with open(f) as fh:
             profile = yaml.safe_load(fh) or {}
         if "emulator" not in profile:

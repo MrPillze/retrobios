@@ -91,6 +91,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
     emulator_count = sum(
         1 for f in Path("emulators").glob("*.yml")
+        if not f.name.endswith(".old.yml")
     ) if Path("emulators").exists() else 0
 
     # Count systems from emulator profiles
@@ -100,6 +101,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         try:
             import yaml
             for f in emu_dir.glob("*.yml"):
+                if f.name.endswith(".old.yml"):
+                    continue
                 with open(f) as fh:
                     p = yaml.safe_load(fh) or {}
                 system_ids.update(p.get("systems", []))

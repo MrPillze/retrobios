@@ -132,7 +132,7 @@ nav:
   - ZC: systems/zc.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (62):
+  - Official ports (63):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -180,6 +180,7 @@ nav:
     - PicoDrive: emulators/picodrive.md
     - play: emulators/play.md
     - PPSSPP: emulators/ppsspp.md
+    - RPCS3: emulators/rpcs3.md
     - Rustation: emulators/rustation.md
     - RVVM: emulators/rvvm.md
     - SameBoy: emulators/sameboy.md
@@ -429,7 +430,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (24):
+  - Other (23):
     - ares: emulators/ares.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - BigPEmu: emulators/bigpemu.md
@@ -442,7 +443,6 @@ nav:
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
     - Redream: emulators/redream.md
-    - RPCS3: emulators/rpcs3.md
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md
     - Supermodel: emulators/supermodel.md
@@ -458,8 +458,17 @@ nav:
 - Gap Analysis: gaps.md
 - Wiki:
   - Overview: wiki/index.md
+  - Getting started: wiki/getting-started.md
+  - FAQ: wiki/faq.md
+  - Troubleshooting: wiki/troubleshooting.md
   - Architecture: wiki/architecture.md
   - Tools: wiki/tools.md
-  - Profiling guide: wiki/profiling.md
+  - Advanced usage: wiki/advanced-usage.md
+  - Verification modes: wiki/verification-modes.md
   - Data model: wiki/data-model.md
+  - Profiling guide: wiki/profiling.md
+  - Adding a platform: wiki/adding-a-platform.md
+  - Adding a scraper: wiki/adding-a-scraper.md
+  - Testing guide: wiki/testing-guide.md
+  - Release process: wiki/release-process.md
 - Contributing: contributing.md
