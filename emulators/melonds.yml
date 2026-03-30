@@ -77,11 +77,14 @@ files:
     source_ref: "src/SPI.cpp:197-211, src/frontend/Util_ROM.cpp:201-217"
 
   - name: dsi_nand.bin
+    aliases: [DSi_Nand_USA.bin, DSi_Nand_EUR.bin, DSi_Nand_JPN.bin, DSi_Nand_AUS.bin, DSi_Nand_CHN.bin, DSi_Nand_KOR.bin]
     system: nintendo-dsi
     description: "DSi NAND dump"
     required: true
-    source_ref: "src/frontend/Util_ROM.cpp:224-235, src/DSi_NAND.cpp"
-    note: "Uses AES keys from ARM7i BIOS offset 0x8308"
+    size: 251658304
+    storage: large_file
+    source_ref: "src/frontend/Util_ROM.cpp:224-235, src/DSi_NAND.cpp:58-97"
+    note: "Any regional dump works. Nocash footer required (DSi eMMC CID/CPU at EOF-0x40 or 0xFF800). AES keys derived from ARM7i BIOS offset 0x8308."
 
   - name: dsi_sd_card.bin
     system: nintendo-dsi
