@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, list_registered_platforms
+from common import compute_hashes, list_registered_platforms, write_if_changed
 
 CACHE_DIR = ".cache"
 CACHE_FILE = os.path.join(CACHE_DIR, "db_cache.json")
@@ -315,14 +315,15 @@ def main():
         "indexes": indexes,
     }
 
-    with open(args.output, "w") as f:
-        json.dump(database, f, indent=2)
+    new_content = json.dumps(database, indent=2)
+    written = write_if_changed(args.output, new_content)
 
     save_cache(CACHE_FILE, new_cache)
 
     alias_count = sum(len(v) for v in aliases.values())
     name_count = len(indexes["by_name"])
-    print(f"Generated {args.output}: {len(files)} files, {total_size:,} bytes total")
+    status = "Generated" if written else "Unchanged"
+    print(f"{status} {args.output}: {len(files)} files, {total_size:,} bytes total")
     print(f"  Name index: {name_count} names ({alias_count} aliases)")
     return 0
 

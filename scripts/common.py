@@ -968,6 +968,39 @@ def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
     return declared
 
 
+import re
+
+_TIMESTAMP_PATTERNS = [
+    re.compile(r'"generated_at":\s*"[^"]*"'),       # database.json
+    re.compile(r'\*Auto-generated on [^*]*\*'),      # README.md
+    re.compile(r'\*Generated on [^*]*\*'),           # docs site pages
+]
+
+
+def write_if_changed(path: str, content: str) -> bool:
+    """Write content to path only if the non-timestamp content differs.
+
+    Compares new and existing content after stripping timestamp lines.
+    Returns True if the file was written, False if skipped (unchanged).
+    """
+    if os.path.exists(path):
+        with open(path) as f:
+            existing = f.read()
+        if _strip_timestamps(existing) == _strip_timestamps(content):
+            return False
+    with open(path, "w") as f:
+        f.write(content)
+    return True
+
+
+def _strip_timestamps(text: str) -> str:
+    """Remove known timestamp patterns for content comparison."""
+    result = text
+    for pattern in _TIMESTAMP_PATTERNS:
+        result = pattern.sub("", result)
+    return result
+
+
 # Validation and mode filtering -extracted to validation.py for SoC.
 # Re-exported below for backward compatibility.
 

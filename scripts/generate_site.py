@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config, require_yaml
+from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config, require_yaml, write_if_changed
 
 yaml = require_yaml()
 from generate_readme import compute_coverage
@@ -2064,7 +2064,7 @@ def main():
 
     # Generate home
     print("Generating home page...")
-    (docs / "index.md").write_text(generate_home(db, coverages, profiles, registry))
+    write_if_changed(str(docs / "index.md"), generate_home(db, coverages, profiles, registry))
 
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
@@ -2074,37 +2074,35 @@ def main():
 
     # Generate platform pages
     print("Generating platform pages...")
-    (docs / "platforms" / "index.md").write_text(generate_platform_index(coverages))
+    write_if_changed(str(docs / "platforms" / "index.md"), generate_platform_index(coverages))
     for name, cov in coverages.items():
-        (docs / "platforms" / f"{name}.md").write_text(generate_platform_page(name, cov, registry, emulator_files))
+        write_if_changed(str(docs / "platforms" / f"{name}.md"), generate_platform_page(name, cov, registry, emulator_files))
 
     # Generate system pages
     print("Generating system pages...")
 
-    (docs / "systems" / "index.md").write_text(generate_systems_index(manufacturers))
+    write_if_changed(str(docs / "systems" / "index.md"), generate_systems_index(manufacturers))
     for mfr, consoles in manufacturers.items():
         slug = mfr.lower().replace(" ", "-")
         page = generate_system_page(mfr, consoles, platform_files, emulator_files)
-        (docs / "systems" / f"{slug}.md").write_text(page)
+        write_if_changed(str(docs / "systems" / f"{slug}.md"), page)
 
     # Generate emulator pages
     print("Generating emulator pages...")
-    (docs / "emulators" / "index.md").write_text(generate_emulators_index(profiles))
+    write_if_changed(str(docs / "emulators" / "index.md"), generate_emulators_index(profiles))
     for name, profile in profiles.items():
         page = generate_emulator_page(name, profile, db, platform_files)
-        (docs / "emulators" / f"{name}.md").write_text(page)
+        write_if_changed(str(docs / "emulators" / f"{name}.md"), page)
 
     # Generate cross-reference page
     print("Generating cross-reference page...")
-    (docs / "cross-reference.md").write_text(
-        generate_cross_reference(coverages, profiles)
-    )
+    write_if_changed(str(docs / "cross-reference.md"),
+        generate_cross_reference(coverages, profiles))
 
     # Generate gap analysis page
     print("Generating gap analysis page...")
-    (docs / "gaps.md").write_text(
-        generate_gap_analysis(profiles, coverages, db)
-    )
+    write_if_changed(str(docs / "gaps.md"),
+        generate_gap_analysis(profiles, coverages, db))
 
     # Wiki pages: copy manually maintained sources + generate dynamic ones
     print("Generating wiki pages...")
@@ -2115,11 +2113,11 @@ def main():
         for src_file in wiki_src.glob("*.md"):
             shutil.copy2(src_file, wiki_dest / src_file.name)
     # data-model.md is generated (contains live DB stats)
-    (wiki_dest / "data-model.md").write_text(generate_wiki_data_model(db, profiles))
+    write_if_changed(str(wiki_dest / "data-model.md"), generate_wiki_data_model(db, profiles))
 
     # Generate contributing
     print("Generating contributing page...")
-    (docs / "contributing.md").write_text(generate_contributing())
+    write_if_changed(str(docs / "contributing.md"), generate_contributing())
 
     # Update mkdocs.yml nav section only (avoid yaml.dump round-trip mangling quotes)
     print("Updating mkdocs.yml nav...")
@@ -2173,9 +2171,7 @@ markdown_extensions:
 plugins:
 - search
 """
-    with open("mkdocs.yml", "w") as f:
-        f.write(mkdocs_static)
-        f.write(nav_yaml)
+    write_if_changed("mkdocs.yml", mkdocs_static + nav_yaml)
 
     total_pages = (
         1  # home

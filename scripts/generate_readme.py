@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_database, load_platform_config
+from common import list_registered_platforms, load_database, load_platform_config, write_if_changed
 from verify import verify_platform
 
 def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
@@ -316,14 +316,12 @@ def main():
     db = load_database(args.db)
 
     readme = generate_readme(db, args.platforms_dir)
-    with open("README.md", "w") as f:
-        f.write(readme)
-    print(f"Generated ./README.md")
+    status = "Generated" if write_if_changed("README.md", readme) else "Unchanged"
+    print(f"{status} ./README.md")
 
     contributing = generate_contributing()
-    with open("CONTRIBUTING.md", "w") as f:
-        f.write(contributing)
-    print(f"Generated ./CONTRIBUTING.md")
+    status = "Generated" if write_if_changed("CONTRIBUTING.md", contributing) else "Unchanged"
+    print(f"{status} ./CONTRIBUTING.md")
 
 
 if __name__ == "__main__":
