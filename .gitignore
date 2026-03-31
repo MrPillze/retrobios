@@ -36,6 +36,7 @@ bios/Nintendo/DS/DSi_Nand_USA.bin
 bios/Nintendo/DS/DSi_Nand_AUS.bin
 bios/Nintendo/DS/DSi_Nand_CHN.bin
 bios/Nintendo/DS/DSi_Nand_KOR.bin
+bios/Nintendo/DS/dsi_nand.bin
 
 # QEMU EDK2 firmware (64MB each)
 bios/QEMU/edk2-aarch64-code.fd
