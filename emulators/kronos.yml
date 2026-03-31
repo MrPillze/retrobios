@@ -38,11 +38,14 @@ notes: |
   Standalone supports MPEG card ROM loading (Video CD card); disabled in
   libretro port (mpegpath = NULL in libretro.c:1578).
 
+archive_prefix: kronos
+
 files:
   # -----------------------------------------------------------
   # Saturn BIOS - primary (any region)
   # -----------------------------------------------------------
   - name: "saturn_bios.bin"
+    path: "kronos/saturn_bios.bin"
     system: sega-saturn
     required: true
     size: 524288

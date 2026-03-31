@@ -38,6 +38,8 @@ notes: |
 
   need_fullpath=false, extensions=zip|7z|cue|ccd, savestate=deterministic.
 
+archive_prefix: fbneo
+
 files:
   # -------------------------------------------------------
   # Neo Geo MVS/AES (neogeo.zip) — 68K BIOS ROMs

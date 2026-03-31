@@ -33,6 +33,8 @@ systems:
   - taito-cchip
   - ym2608
 
+archive_prefix: fbneo
+
 data_directories:
   - ref: fbneo-cheats
     destination: fbneo/cheats

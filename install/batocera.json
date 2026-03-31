@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-30T09:46:19Z",
+  "generated": "2026-03-30T22:08:40Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1228,
-  "total_size": 1928497242,
+  "total_files": 1347,
+  "total_size": 3851309448,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -6614,6 +6614,177 @@
       ]
     },
     {
+      "dest": "ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraa.zip",
+      "sha1": "98080e5a3d352e04ed8b50e6a04af456518aa66e",
+      "size": 629642,
+      "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraj.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekarag.zip",
+      "sha1": "39e589aa0158b48d33648413c89778f8e8cc0d58",
+      "size": 795612,
+      "repo_path": "bios/Arcade/Arcade/ekarag.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaras.zip",
+      "sha1": "ab288761b8cd5a02fc7b3d12acbb1e3371214b69",
+      "size": 813756,
+      "repo_path": "bios/Arcade/Arcade/ekaras.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "isinger.zip",
+      "sha1": "28c6f8828b6820c072832fa7027beb7be9aad020",
+      "size": 556765,
+      "repo_path": "bios/Arcade/Arcade/isinger.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraphs.zip",
+      "sha1": "31199ff06972ba2a1a67b1b403119ee3d821efc7",
+      "size": 798457,
+      "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "epitch.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaramix.zip",
+      "sha1": "08cea726163f490471d88e4c640b8385ee065836",
+      "size": 663402,
+      "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ddrfammt.zip",
+      "sha1": "ec9a6c1bf8f33f5717d51588ffe87239313b2a06",
+      "size": 883352,
+      "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popirak.zip",
+      "sha1": "9801ee035decbb5e45aa0a20ca4d26323e0ac126",
+      "size": 639838,
+      "repo_path": "bios/Arcade/Arcade/popirak.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popira2.zip",
+      "sha1": "5143c86ac93607223cafb5e529ea08221518e64a",
+      "size": 1124630,
+      "repo_path": "bios/Arcade/Arcade/popira2.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "taikodp.zip",
+      "sha1": "446013455ab02be7fc3e27bf6ff680293c8657b7",
+      "size": 1141771,
+      "repo_path": "bios/Arcade/Arcade/taikodp.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "jpopira.zip",
+      "sha1": "500a2402fcdf856d127128153e62e51c3c2f7bdc",
+      "size": 1116085,
+      "repo_path": "bios/Arcade/Arcade/jpopira.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "evio.zip",
+      "sha1": "96ac6cc92b40e57f04be7215703e532394bead55",
+      "size": 1292911,
+      "repo_path": "bios/Arcade/Arcade/evio.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "tak_daig.zip",
+      "sha1": "d3c641bdde6c6f681abd3bdd36463d1e7264b6e7",
+      "size": 951997,
+      "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gcslottv.zip",
+      "sha1": "4ea3ec9c41ab767907167b5022bfcfd1a05795c8",
+      "size": 737452,
+      "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "hikara.zip",
+      "sha1": "dbfdea3057a5fcc0e0d243deace87fd6840a2322",
+      "size": 636237,
+      "repo_path": "bios/Arcade/Arcade/hikara.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "mame2003-plus/cheat.dat",
       "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
       "size": 7971360,
@@ -6701,177 +6872,6 @@
       "repo_path": "bios/Arcade/Arcade/cvs.zip",
       "cores": [
         "MAME 2003-Plus"
-      ]
-    },
-    {
-      "dest": "ekara.zip",
-      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
-      "size": 630644,
-      "repo_path": "bios/Arcade/Arcade/ekara.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekaraa.zip",
-      "sha1": "98080e5a3d352e04ed8b50e6a04af456518aa66e",
-      "size": 629642,
-      "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekaraj.zip",
-      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
-      "size": 629853,
-      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekarag.zip",
-      "sha1": "39e589aa0158b48d33648413c89778f8e8cc0d58",
-      "size": 795612,
-      "repo_path": "bios/Arcade/Arcade/ekarag.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekaras.zip",
-      "sha1": "ab288761b8cd5a02fc7b3d12acbb1e3371214b69",
-      "size": 813756,
-      "repo_path": "bios/Arcade/Arcade/ekaras.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "isinger.zip",
-      "sha1": "28c6f8828b6820c072832fa7027beb7be9aad020",
-      "size": 556765,
-      "repo_path": "bios/Arcade/Arcade/isinger.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekaraphs.zip",
-      "sha1": "31199ff06972ba2a1a67b1b403119ee3d821efc7",
-      "size": 798457,
-      "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "epitch.zip",
-      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
-      "size": 629853,
-      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ekaramix.zip",
-      "sha1": "08cea726163f490471d88e4c640b8385ee065836",
-      "size": 663402,
-      "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "ddrfammt.zip",
-      "sha1": "ec9a6c1bf8f33f5717d51588ffe87239313b2a06",
-      "size": 883352,
-      "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "popira.zip",
-      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
-      "size": 654918,
-      "repo_path": "bios/Arcade/Arcade/popira.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "popirak.zip",
-      "sha1": "9801ee035decbb5e45aa0a20ca4d26323e0ac126",
-      "size": 639838,
-      "repo_path": "bios/Arcade/Arcade/popirak.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "popira2.zip",
-      "sha1": "5143c86ac93607223cafb5e529ea08221518e64a",
-      "size": 1124630,
-      "repo_path": "bios/Arcade/Arcade/popira2.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "taikodp.zip",
-      "sha1": "446013455ab02be7fc3e27bf6ff680293c8657b7",
-      "size": 1141771,
-      "repo_path": "bios/Arcade/Arcade/taikodp.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "jpopira.zip",
-      "sha1": "500a2402fcdf856d127128153e62e51c3c2f7bdc",
-      "size": 1116085,
-      "repo_path": "bios/Arcade/Arcade/jpopira.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "evio.zip",
-      "sha1": "96ac6cc92b40e57f04be7215703e532394bead55",
-      "size": 1292911,
-      "repo_path": "bios/Arcade/Arcade/evio.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "tak_daig.zip",
-      "sha1": "d3c641bdde6c6f681abd3bdd36463d1e7264b6e7",
-      "size": 951997,
-      "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "gcslottv.zip",
-      "sha1": "4ea3ec9c41ab767907167b5022bfcfd1a05795c8",
-      "size": 737452,
-      "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
-      "cores": [
-        "MAME MESS"
-      ]
-    },
-    {
-      "dest": "hikara.zip",
-      "sha1": "dbfdea3057a5fcc0e0d243deace87fd6840a2322",
-      "size": 636237,
-      "repo_path": "bios/Arcade/Arcade/hikara.zip",
-      "cores": [
-        "MAME MESS"
       ]
     },
     {
@@ -7448,15 +7448,6 @@
       "repo_path": "bios/3DO Company/3DO/panafz10ja-anvil-kanji.bin",
       "cores": [
         "Opera (4DO)"
-      ]
-    },
-    {
-      "dest": "eeprom.dat",
-      "sha1": "ffc6261e487efa8c7442069f71acfc4aa826993d",
-      "size": 64,
-      "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
-      "cores": [
-        "PCSX2"
       ]
     },
     {
@@ -10355,6 +10346,1098 @@
       "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
       "cores": [
         "X Millennium"
+      ]
+    },
+    {
+      "dest": "DSi_Nand_AUS.bin",
+      "sha1": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_AUS.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_AUS.bin"
+    },
+    {
+      "dest": "DSi_Nand_CHN.bin",
+      "sha1": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_CHN.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_CHN.bin"
+    },
+    {
+      "dest": "DSi_Nand_EUR.bin",
+      "sha1": "bc4091b6cab4feba3812ac0f23e23d0353481ecf",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_EUR.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_EUR.bin"
+    },
+    {
+      "dest": "DSi_Nand_JPN.bin",
+      "sha1": "c82d60626ac05b49ccec0cfb30001d4a3f31c5b9",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_JPN.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_JPN.bin"
+    },
+    {
+      "dest": "DSi_Nand_KOR.bin",
+      "sha1": "4b061953d8f870bcda006ce86ce136f112cc1793",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_KOR.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_KOR.bin"
+    },
+    {
+      "dest": "DSi_Nand_USA.bin",
+      "sha1": "ef08ae02c5fbe1a22a208c36e25607f5a9d5ae98",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_USA.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_USA.bin"
+    },
+    {
+      "dest": "ps2-dvd-300e.bin",
+      "sha1": "bbfdc1a2df333885f62cca4e8920228e40e94e29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-300u.bin",
+      "sha1": "6219ad4ead2ece9c4d32df5b040c4c391b763e5a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-302c.bin",
+      "sha1": "aa21592362b5797109ea38ec2df31e949ad3effd",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302c.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-302e.bin",
+      "sha1": "30eb804bcc8824a679740ff8fce3d8268838425b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-302u.bin",
+      "sha1": "17380f704f16cc8ec44cf0ba1b349dda3a514b77",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-310.bin",
+      "sha1": "cd8b548d6db7f7bdd4a0d90e21081520e7e05a40",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-310.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-311.bin",
+      "sha1": "747e36b086aceceb300c72c0d1bbab38e2920e63",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-10000.bin",
+      "sha1": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-30004R.bin",
+      "sha1": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-30004R.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-39001.bin",
+      "sha1": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-39001.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-70004.BIN",
+      "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0100jd-20000117.bin",
+      "sha1": "5b33170323ed6344e2363fed8115dc3918bb96a4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0100jd-20000117.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0101j-20000217.bin",
+      "sha1": "916e02431bcd73140504da3355c9598143b77e11",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0101jd-20000217.bin",
+      "sha1": "16f4a284d0e760ee13a2aff2f7dda928255e3080",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0101xd-20000224.bin",
+      "sha1": "4440b246bfde7bb31002c584a76c6ef384908e84",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0110a-20000727.bin",
+      "sha1": "20f6ce6693cf97e9494f8f0227f2b7988ffaf961",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0110ad-20000727.bin",
+      "sha1": "339c646cf0699268552df5b05f18f0a03a9f55ff",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120a-20000902.bin",
+      "sha1": "dbc2318a1029347b5af3a0c74b0bdf88d19efee6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120e-20000902.bin",
+      "sha1": "274c05fec654913a3f698d4b0d592085866a2cbd",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120ed-20000902-20030110.bin",
+      "sha1": "1b73dec999fcc2b92fa958110ff6bfe4d0af276e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120ed-20000902.bin",
+      "sha1": "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120j-20001027-185015.bin",
+      "sha1": "e481079eca752225555f0c26d14c9d0f94d9a8e9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0120j-20001027-191435.bin",
+      "sha1": "a9f5d8ed56cfff18add1b599010493461fa02448",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150a-20001228.bin",
+      "sha1": "5af5b5077d84a9c037ebe12bfab8a38b31d8a543",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150ad-20001228-20030520.bin",
+      "sha1": "7284b9d16df9935afc384318e024c87ef0574fe5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150e-20001228.bin",
+      "sha1": "e22ef231faf3661edd92f2ee449a71297c82a092",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150ed-20001228-20030520.bin",
+      "sha1": "d004326c9d8060812b4433c3f07646b04854d6c4",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150j-20010118.bin",
+      "sha1": "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0150jd-20010118.bin",
+      "sha1": "334e029fc7fd50222a399c50384ff42732652259",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160a-20010427.bin",
+      "sha1": "7331a40b4b4feb1b3f0f77b013b6d38483577baa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160a-20010704.bin",
+      "sha1": "ce92e8e8c88665f2f645a9522e337823d47a914a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160a-20011004.bin",
+      "sha1": "d257bce6ecaf3bafb704c75a1b4741b910bd2d49",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160e-20010704.bin",
+      "sha1": "3cbd048e437c785b5a05a0feced00117a8a42545",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160e-20011004.bin",
+      "sha1": "ee34c3a87c53c75ca2a37d77b0042ca24d07831f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160e-20020319.bin",
+      "sha1": "bff2902bd0ce9729a060581132541e9fd1a9fab6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160e-20020426.bin",
+      "sha1": "d106b757ae2544dfe63f7e1924e59d5ad44c0c29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160h-20010730.bin",
+      "sha1": "ba15dcf7aac13864c08222037e9321d7468c87d1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160h-20020426.bin",
+      "sha1": "e3a74125c426bcacabca00b513fab928665c8846",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160h-20030602.bin",
+      "sha1": "f03bc2b7e7722d1788c9e7a341e43ac3ffe33a47",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20030602.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160j-20010427.bin",
+      "sha1": "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160j-20011004.bin",
+      "sha1": "e63a786590b62867faef4c47af6ca71c19368216",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20011004.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0160j-20020426.bin",
+      "sha1": "003628c137dae577ff3b04b93ca1787b0c944702",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170a-20030325.bin",
+      "sha1": "d269d1ed513227f3ef7133c76cf1b3a64f97b15d",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170ad-20030325.bin",
+      "sha1": "c5bc6e893b4c43d528142e56c96073024de64157",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170e-20030227.bin",
+      "sha1": "ad15bd7eabd5bd81ba011516a5be44947d6641aa",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170ed-20030227.bin",
+      "sha1": "e220bb282378c1f48ea1b585b3675e51a6dca572",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170j-20030206.bin",
+      "sha1": "d812ac65c357d392396ca9edee812dc41bed8bde",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0170jd-20030206.bin",
+      "sha1": "03c6531a1feba6da75a32c2a69c7bb89be61dcda",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0180cd-20030224.bin",
+      "sha1": "2de87767008fc4a303af64a46251156e965d9065",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0180j-20031028.bin",
+      "sha1": "aa4a35c14ee342cf7a03b1dde294ca10e64889e1",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190a-20030623.bin",
+      "sha1": "c74d92a2952a2912b6698cbcf7742adac8f784d3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190a-20040329.bin",
+      "sha1": "b68c05f5cd86bf03cb38a643a723b7a97b759531",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190ad-20030623.bin",
+      "sha1": "fe19d2c52729e2ce4fea30e0e6a501587285d93f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190c-20030623.bin",
+      "sha1": "92d9eb4b11cef97bb69a275b2851b72f7b0023d6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190cd-20030623.bin",
+      "sha1": "1e63d563a3f62acf5b9be611391e2c196c5a4243",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190cd-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190e-20030623.bin",
+      "sha1": "18b9ba833c469c4683676cc20da5124080d980bb",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190e-20030822.bin",
+      "sha1": "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190h-20030623.bin",
+      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190j-20030623.bin",
+      "sha1": "6a6ecfe6c10e42eff1ca056349def799b5629067",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190j-20030822.bin",
+      "sha1": "0ea98a25a32145dda514de2f0d4bfbbd806bd00c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190k-20030623.bin",
+      "sha1": "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0190r-20030623.bin",
+      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0200a-20040614.bin",
+      "sha1": "7a62e5f48603582707e9898eb055ea3eaee50d4c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200a-20040614.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0200ad-20040614.bin",
+      "sha1": "6b42b59c772027c48ef0df89ad165e6c17f2886e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200ad-20040614.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0200ed-20040614.bin",
+      "sha1": "902f4680b258abd40c0922f6b0d581cbd8f8a73e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0200h-20040614.bin",
+      "sha1": "7f8e812cab7c7393c85eac6c42661e1fd0a642df",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0200j-20040614.bin",
+      "sha1": "224ab5704ab719edeb05ca1d835812252c97c1b3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0210j-20040917.bin",
+      "sha1": "bbb1af3085e77599691ec430d147810157da934f",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220a-20050620.bin",
+      "sha1": "48d0445dffd1e879c7ae752c5166ec3101921555",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220a-20060210.bin",
+      "sha1": "92e488d5b2705e4cca83d4d1efbc421012faf83e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220a-20060905.bin",
+      "sha1": "8361d615cc895962e0f0838489337574dbdc9173",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220ad-20050620.bin",
+      "sha1": "7c7efdfcec7705f4e84bb47f45322104e39eed09",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220ad-20060905.bin",
+      "sha1": "4191b5842f31a9985b5428bc9d2b733ce3abb583",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220e-20050620.bin",
+      "sha1": "929a85e974faf4b40d0a7785023b758402c43bd9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220e-20060210.bin",
+      "sha1": "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220e-20060905.bin",
+      "sha1": "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220h-20050620.bin",
+      "sha1": "0a071d1b46607a7694770407606d8599f62a372b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220h-20060210.bin",
+      "sha1": "fce2a24e5e0400cc6d98c08f426405d19173813e",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220h-20060905.bin",
+      "sha1": "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220j-20050620.bin",
+      "sha1": "7ffa75d142cb8eeea6c777dbcf263143655275d5",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220j-20060210.bin",
+      "sha1": "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220j-20060905.bin",
+      "sha1": "3baf847c1c217aa71ac6d298389c88edb3db32e2",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220jd-20050620.bin",
+      "sha1": "458adf85d216856892d6480213575670894049c6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0220jd-20060905.bin",
+      "sha1": "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0230a-20080220.bin",
+      "sha1": "f9229fe159d0353b9f0632f3fdc66819c9030458",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0230e-20080220.bin",
+      "sha1": "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0230h-20080220.bin",
+      "sha1": "a277b456849697abec11285c6b35bc734598c220",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0230j-20080220.bin",
+      "sha1": "fbd54bfc020af34008b317dcb80b812dd29b3759",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0250e-20100415.bin",
+      "sha1": "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-0250j-20100415.bin",
+      "sha1": "4b5ef16b67e3b523d28ed2406106cb80470a06d0",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "GameIndex.yaml",
+      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
+      "size": 2669341,
+      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ROM2.BIN",
+      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
+      "size": 8192,
+      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-110u.bin",
+      "sha1": "0bc9143cb6839471d62b8fdd0b2fc05e941527d3",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-110u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-120e.bin",
+      "sha1": "ceab36633cd5d6050a3080ed8312a6f79d68a6f3",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-120u.bin",
+      "sha1": "f1e306ebefb03af3e1fc2a3695089e4e459968ed",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-130e.bin",
+      "sha1": "062f287fb56b18ffbac85ec5f21841b03243ba5a",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-130u.bin",
+      "sha1": "7f2e4a49835cd6f9e30a1c2999975a9b1ce870bc",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-200j.bin",
+      "sha1": "0ba4ea6909ad1bb67d6654ecb27cd65a4f14e3e5",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-200j.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-210e.bin",
+      "sha1": "7625f77742dee6745e3be8f89cbd59a1143db104",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-210j.bin",
+      "sha1": "250d3e279ec30f78c46b7a92dca60bc4adc7df1d",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210j.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-210u.bin",
+      "sha1": "8fd801131621b0dcd556e3d6df59f5eb021fbf6a",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-212g.bin",
+      "sha1": "a10bc145413cf43204d6b8ee0fff34370c092673",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212g.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-212u.bin",
+      "sha1": "d1a60da85dfcb5354f53b716fbcb5747ab4a1e56",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212u.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-213e.bin",
+      "sha1": "010ab71354a1ae5065640a2cb85e829ff8141a66",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-213e.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2-dvd-215g.bin",
+      "sha1": "12d8531ca73ae33a9cd363797835a45f50fdf8f9",
+      "size": 2097152,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-215g.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "EROM.BIN",
+      "sha1": "adb4dbb7feb8247811506a38896ddcb789c4b477",
+      "size": 247968,
+      "repo_path": "bios/Sony/PlayStation 2/EROM.BIN",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-10000.MEC",
+      "sha1": "3f8affbe07024ccd2f5b8374072d0928c583a862",
+      "size": 4,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-70004.EROM",
+      "sha1": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
+      "size": 3145728,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.EROM",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH-70004.ROM1",
+      "sha1": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "SCPH30004R.nvm",
+      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "cheats_ni.zip",
+      "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
+      "size": 42525,
+      "repo_path": "bios/Sony/PlayStation 2/cheats_ni.zip",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "cheats_ws.zip",
+      "sha1": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
+      "size": 1273296,
+      "repo_path": "bios/Sony/PlayStation 2/cheats_ws.zip",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "eeprom.dat",
+      "sha1": "ffc6261e487efa8c7442069f71acfc4aa826993d",
+      "size": 64,
+      "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "rom1.bin",
+      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "size": 199680,
+      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
+      "cores": [
+        "PCSX2"
       ]
     }
   ]

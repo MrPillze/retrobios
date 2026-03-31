@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,241** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+**7,293** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -46,8 +46,8 @@ Each file is checked against the emulator's source code to match what the code a
 - **10 platforms** supported with platform-specific verification
 - **329 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,241 files** verified with MD5, SHA1, CRC32 checksums
-- **8144 MB** total collection size
+- **7,293 files** verified with MD5, SHA1, CRC32 checksums
+- **8710 MB** total collection size
 
 ## Supported systems
 
@@ -59,15 +59,15 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
-| Batocera | 356/362 (98.3%) | 349 | 7 | 6 |
+| Batocera | 361/362 (99.7%) | 354 | 7 | 1 |
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
-| Lakka | 442/448 (98.7%) | 442 | 0 | 6 |
+| Lakka | 443/448 (98.9%) | 443 | 0 | 5 |
 | Recalbox | 277/346 (80.1%) | 274 | 3 | 69 |
-| RetroArch | 442/448 (98.7%) | 442 | 0 | 6 |
+| RetroArch | 443/448 (98.9%) | 443 | 0 | 5 |
 | RetroBat | 339/339 (100.0%) | 335 | 4 | 0 |
 | RetroDECK | 1960/2006 (97.7%) | 1934 | 26 | 46 |
-| RetroPie | 442/448 (98.7%) | 442 | 0 | 6 |
+| RetroPie | 443/448 (98.9%) | 443 | 0 | 5 |
 | RomM | 372/374 (99.5%) | 372 | 0 | 2 |
 
 ## Build your own pack
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-30T20:16:27Z*
+*Auto-generated on 2026-03-30T23:36:52Z*

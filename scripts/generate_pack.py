@@ -337,6 +337,8 @@ def _collect_emulator_extras(
     from common import resolve_platform_cores
     from verify import find_undeclared_files
 
+    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
     extras = []
     seen_dests: set[str] = set(seen)
@@ -364,7 +366,6 @@ def _collect_emulator_extras(
     # different path by another core (e.g. neocd/ vs root, same_cdi/bios/ vs root).
     # Only adds a copy when the file is ALREADY covered at a different path -
     # never introduces a file that wasn't selected by the first pass.
-    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = {str(c) for c in config.get("standalone_cores", [])}
     by_name = db.get("indexes", {}).get("by_name", {})
@@ -419,6 +420,41 @@ def _collect_emulator_extras(
                 "destination": dest,
                 "required": f.get("required", False),
                 "hle_fallback": f.get("hle_fallback", False),
+                "source_emulator": profile.get("emulator", emu_name),
+            })
+
+    # Archive prefix pass: cores that store BIOS archives in a subdirectory
+    # (e.g. system/fbneo/neogeo.zip).  When the archive is already covered at
+    # the root, add a copy at the prefixed path so the core's .info firmware
+    # check finds it.
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        if emu_name not in relevant:
+            continue
+        prefix = profile.get("archive_prefix", "")
+        if not prefix:
+            continue
+        profile_archives: set[str] = set()
+        for f in profile.get("files", []):
+            archive = f.get("archive", "")
+            if archive:
+                profile_archives.add(archive)
+        for archive_name in sorted(profile_archives):
+            if archive_name not in covered_names:
+                continue
+            dest = f"{prefix}/{archive_name}"
+            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            if full_dest in seen_dests:
+                continue
+            if not by_name.get(archive_name):
+                continue
+            seen_dests.add(full_dest)
+            extras.append({
+                "name": archive_name,
+                "destination": dest,
+                "required": True,
+                "hle_fallback": False,
                 "source_emulator": profile.get("emulator", emu_name),
             })
 
@@ -1066,9 +1102,10 @@ def generate_pack(
             if _has_path_conflict(full_dest, seen_destinations, seen_parents):
                 continue
 
+            dest_hint = fe.get("destination", "")
             local_path, status = resolve_file(
                 fe, db, bios_dir, zip_contents,
-                data_dir_registry=data_registry,
+                dest_hint=dest_hint, data_dir_registry=data_registry,
             )
             if status in ("not_found", "external", "user_provided"):
                 continue
@@ -1181,6 +1218,9 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
     try:
         rebuild_zip_deterministic(source_zip, tmp_path)
         target_zf.write(tmp_path, dest_path)
+    except zipfile.BadZipFile:
+        # Corrupt source ZIP: copy as-is (will be flagged by verify)
+        target_zf.write(source_zip, dest_path)
     finally:
         os.unlink(tmp_path)
 
@@ -1318,8 +1358,11 @@ def generate_emulator_pack(
                     archives.add(archive)
 
             # Pack archives as units
+            archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
                 archive_dest = _sanitize_path(archive_name)
+                if archive_prefix:
+                    archive_dest = f"{archive_prefix}/{archive_dest}"
                 if pack_structure:
                     mode_key = "standalone" if standalone else "libretro"
                     prefix = pack_structure.get(mode_key, "")
@@ -2262,7 +2305,9 @@ def generate_manifest(
         if _has_path_conflict(full_dest, seen_destinations, seen_parents):
             continue
 
-        local_path, status = resolve_file(fe, db, bios_dir, zip_contents)
+        dest_hint = fe.get("destination", "")
+        local_path, status = resolve_file(fe, db, bios_dir, zip_contents,
+                                          dest_hint=dest_hint)
         if status in ("not_found", "external", "user_provided"):
             continue
 

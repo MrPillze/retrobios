@@ -3,7 +3,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-03-30T09:46:23Z",
+  "generated": "2026-03-30T22:08:44Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -18,8 +18,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 437,
-  "total_size": 1790314370,
+  "total_files": 456,
+  "total_size": 1805641545,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -2619,6 +2619,177 @@
       "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "size": 7609,
       "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraa.zip",
+      "sha1": "98080e5a3d352e04ed8b50e6a04af456518aa66e",
+      "size": 629642,
+      "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraj.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekarag.zip",
+      "sha1": "39e589aa0158b48d33648413c89778f8e8cc0d58",
+      "size": 795612,
+      "repo_path": "bios/Arcade/Arcade/ekarag.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaras.zip",
+      "sha1": "ab288761b8cd5a02fc7b3d12acbb1e3371214b69",
+      "size": 813756,
+      "repo_path": "bios/Arcade/Arcade/ekaras.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "isinger.zip",
+      "sha1": "28c6f8828b6820c072832fa7027beb7be9aad020",
+      "size": 556765,
+      "repo_path": "bios/Arcade/Arcade/isinger.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaraphs.zip",
+      "sha1": "31199ff06972ba2a1a67b1b403119ee3d821efc7",
+      "size": 798457,
+      "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "epitch.zip",
+      "sha1": "d4fa61d730b6aaf354bbec5e997c0db30efc85d0",
+      "size": 629853,
+      "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ekaramix.zip",
+      "sha1": "08cea726163f490471d88e4c640b8385ee065836",
+      "size": 663402,
+      "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ddrfammt.zip",
+      "sha1": "ec9a6c1bf8f33f5717d51588ffe87239313b2a06",
+      "size": 883352,
+      "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popirak.zip",
+      "sha1": "9801ee035decbb5e45aa0a20ca4d26323e0ac126",
+      "size": 639838,
+      "repo_path": "bios/Arcade/Arcade/popirak.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "popira2.zip",
+      "sha1": "5143c86ac93607223cafb5e529ea08221518e64a",
+      "size": 1124630,
+      "repo_path": "bios/Arcade/Arcade/popira2.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "taikodp.zip",
+      "sha1": "446013455ab02be7fc3e27bf6ff680293c8657b7",
+      "size": 1141771,
+      "repo_path": "bios/Arcade/Arcade/taikodp.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "jpopira.zip",
+      "sha1": "500a2402fcdf856d127128153e62e51c3c2f7bdc",
+      "size": 1116085,
+      "repo_path": "bios/Arcade/Arcade/jpopira.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "evio.zip",
+      "sha1": "96ac6cc92b40e57f04be7215703e532394bead55",
+      "size": 1292911,
+      "repo_path": "bios/Arcade/Arcade/evio.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "tak_daig.zip",
+      "sha1": "d3c641bdde6c6f681abd3bdd36463d1e7264b6e7",
+      "size": 951997,
+      "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "gcslottv.zip",
+      "sha1": "4ea3ec9c41ab767907167b5022bfcfd1a05795c8",
+      "size": 737452,
+      "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "hikara.zip",
+      "sha1": "dbfdea3057a5fcc0e0d243deace87fd6840a2322",
+      "size": 636237,
+      "repo_path": "bios/Arcade/Arcade/hikara.zip",
       "cores": [
         "MAME"
       ]
