@@ -3,7 +3,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-03-30T22:08:44Z",
+  "generated": "2026-03-31T11:40:35Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -18,8 +18,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 456,
-  "total_size": 1805641545,
+  "total_files": 527,
+  "total_size": 2068127713,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -744,7 +744,7 @@
       "dest": "SMS_jp_2.1.sms",
       "sha1": "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_jp_2.1.sms",
+      "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
       "cores": null
     },
     {
@@ -1385,7 +1385,7 @@
       "dest": "bios_J.sms",
       "sha1": "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_jp_2.1.sms",
+      "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
       "cores": [
         "Genesis Plus GX"
       ]
@@ -2192,6 +2192,24 @@
       ]
     },
     {
+      "dest": "astrocdl.zip",
+      "sha1": "49248415d2f678ccdbd605b4b50197f81a0fff4d",
+      "size": 6805,
+      "repo_path": "bios/Arcade/MAME/astrocdl.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "astrocdw.zip",
+      "sha1": "cab478fe47eddc3969587e3d3f1f6f1fce51b1f2",
+      "size": 6807,
+      "repo_path": "bios/Arcade/MAME/astrocdw.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "apple2gs.zip",
       "sha1": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "size": 174124,
@@ -2399,6 +2417,33 @@
       ]
     },
     {
+      "dest": "fnvision.zip",
+      "sha1": "324f9faf482d9fd208111bd6ce60edcc6cb62e44",
+      "size": 1798,
+      "repo_path": "bios/Arcade/MAME/fnvision.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "lasr2001.zip",
+      "sha1": "a1cb447855e4f9afc6e786fc36c9c11003210af7",
+      "size": 12613,
+      "repo_path": "bios/Arcade/MAME/lasr2001.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "manager.zip",
+      "sha1": "5525769b842e301e4833553dd14e9ff29d4ab264",
+      "size": 16564,
+      "repo_path": "bios/Arcade/MAME/manager.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "laser310.zip",
       "sha1": "9fa5f366c4ec43d7c23f03f054733894bf42912f",
       "size": 42630,
@@ -2489,6 +2534,15 @@
       ]
     },
     {
+      "dest": "fmnew7.zip",
+      "sha1": "8ca22512518251dcede5dd5e34dfc911272d5283",
+      "size": 26815,
+      "repo_path": "bios/Arcade/MAME/fmnew7.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "pegasus.zip",
       "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
       "size": 27305,
@@ -2534,6 +2588,60 @@
       ]
     },
     {
+      "dest": "trs80l2.zip",
+      "sha1": "9418ce6ac477bb91191d602b3ea661a34b7dac15",
+      "size": 26298,
+      "repo_path": "bios/Arcade/MAME/trs80l2.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "eg3003.zip",
+      "sha1": "b87f161a5e1e7090b15571ea1abc0bfda4acb7e2",
+      "size": 13284,
+      "repo_path": "bios/Arcade/MAME/eg3003.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "sys80.zip",
+      "sha1": "acd9eaa3f155db4826b7e3416f600a30d54d10b1",
+      "size": 3280,
+      "repo_path": "bios/Arcade/MAME/sys80.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ht1080z.zip",
+      "sha1": "c5b2972ccb2fa533080f031d2efe5d406e582bb3",
+      "size": 2168,
+      "repo_path": "bios/Arcade/MAME/ht1080z.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ht1080z2.zip",
+      "sha1": "679bd7e5d46cbb6ad90d2b7d8646025aaa140d72",
+      "size": 4318,
+      "repo_path": "bios/Arcade/MAME/ht1080z2.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "ht108064.zip",
+      "sha1": "22ab75af32534678b1f17d429d5303528a7391de",
+      "size": 9670,
+      "repo_path": "bios/Arcade/MAME/ht108064.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "trs80m3.zip",
       "sha1": "b804a031c8db6def59e077a4b6938dcac25093d7",
       "size": 32854,
@@ -2556,6 +2664,15 @@
       "sha1": "497eea6e0ed80501ca3beee714d71a5815495b07",
       "size": 4880,
       "repo_path": "bios/Tandy/TRS-80/trs80m4p.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "cp500.zip",
+      "sha1": "8ed5ef5dbad5ef5b338381d8fed35d2282eab5ee",
+      "size": 14661,
+      "repo_path": "bios/Arcade/MAME/cp500.zip",
       "cores": [
         "MAME"
       ]
@@ -2790,6 +2907,15 @@
       "sha1": "dbfdea3057a5fcc0e0d243deace87fd6840a2322",
       "size": 636237,
       "repo_path": "bios/Arcade/Arcade/hikara.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "galgames.zip",
+      "sha1": "82053430ba53e1e49f9d4646336999a938bb2b2c",
+      "size": 28838,
+      "repo_path": "bios/Arcade/MAME/galgames.zip",
       "cores": [
         "MAME"
       ]
@@ -3900,6 +4026,521 @@
       "cores": [
         "Citra"
       ]
+    },
+    {
+      "dest": "fbneo/bubsys.zip",
+      "sha1": "1c0ffcd308b0c8c6dbb74ad8b811a0767200d366",
+      "size": 7950,
+      "repo_path": "bios/Arcade/Arcade/bubsys.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/cchip.zip",
+      "sha1": "364f2302a145a0fd6de767d7f8484badde1d1a6e",
+      "size": 2700,
+      "repo_path": "bios/Arcade/Arcade/cchip.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/coleco.zip",
+      "sha1": "db2190922f359f19b47f8270fa87a7c1b38f5b2b",
+      "size": 28014,
+      "repo_path": "bios/Arcade/Arcade/coleco.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/decocass.zip",
+      "sha1": "1b33cf0e730a6cde96479b0face108b6931d433e",
+      "size": 22379,
+      "repo_path": "bios/Arcade/Arcade/decocass.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/dsp1.zip",
+      "sha1": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
+      "size": 10354,
+      "repo_path": "bios/Arcade/Arcade/dsp1.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/dsp1b.zip",
+      "sha1": "71b5e30189de3df990f2500ba932bbc815a71010",
+      "size": 4119,
+      "repo_path": "bios/Arcade/Arcade/dsp1b.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/dsp2.zip",
+      "sha1": "2dfb572191187acdaeacb6f128bf8b0acc065bdb",
+      "size": 2968,
+      "repo_path": "bios/Arcade/Arcade/dsp2.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/dsp3.zip",
+      "sha1": "bc2129b05a701fdbc432d8092f54ecad4c0088c7",
+      "size": 3531,
+      "repo_path": "bios/Arcade/Arcade/dsp3.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/dsp4.zip",
+      "sha1": "4394045a514872c6ca2aa86106bf8b5ac0104b09",
+      "size": 3396,
+      "repo_path": "bios/Arcade/Arcade/dsp4.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/fdsbios.zip",
+      "sha1": "199e05ebd1966d23877c8aed60f3502115b70a2e",
+      "size": 8312,
+      "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/isgsm.zip",
+      "sha1": "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
+      "size": 10207,
+      "repo_path": "bios/Arcade/Arcade/isgsm.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojo.zip",
+      "sha1": "802adfa42a0c1cde3c33385cb3eebcead70bede4",
+      "size": 129780,
+      "repo_path": "bios/Arcade/Arcade/jojo.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojoa.zip",
+      "sha1": "27b36c49eb2ba3c8fb2953ce717d915b696a0fce",
+      "size": 129219,
+      "repo_path": "bios/Arcade/Arcade/jojoa.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojoba.zip",
+      "sha1": "9df6ec80bbadb04f4e62f7e9cf3a7f6f6188d66b",
+      "size": 132257,
+      "repo_path": "bios/Arcade/Arcade/jojoba.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojobajr1.zip",
+      "sha1": "65eac36641f01942f0d2c34e2b27c26f930abb32",
+      "size": 132458,
+      "repo_path": "bios/Arcade/Arcade/jojobajr1.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojoban.zip",
+      "sha1": "aa73b11ba0787ec8bf59d7d1aa327be791506edf",
+      "size": 132468,
+      "repo_path": "bios/Arcade/Arcade/jojoban.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojobar1.zip",
+      "sha1": "c55678aa4beae29d25ec024d15b59cf39d066163",
+      "size": 132247,
+      "repo_path": "bios/Arcade/Arcade/jojobar1.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojoj.zip",
+      "sha1": "adfd8a50daceb9140c83880886dd15b0e705e6b2",
+      "size": 129782,
+      "repo_path": "bios/Arcade/Arcade/jojoj.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojon.zip",
+      "sha1": "e9623af0ae27632b55c037dde2dc5c0a07b1f466",
+      "size": 129790,
+      "repo_path": "bios/Arcade/Arcade/jojon.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/jojou.zip",
+      "sha1": "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5",
+      "size": 129779,
+      "repo_path": "bios/Arcade/Arcade/jojou.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/midssio.zip",
+      "sha1": "54275c9833e497f71f76ab239030cc386c863991",
+      "size": 163,
+      "repo_path": "bios/Arcade/Arcade/midssio.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/msx.zip",
+      "sha1": "c0673df5af0ea7728aedf637f18d118e6f7cb778",
+      "size": 193854,
+      "repo_path": "bios/Arcade/Arcade/msx.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/namcoc69.zip",
+      "sha1": "1cc7452608d44af8171270530a995644fb213d1d",
+      "size": 7771,
+      "repo_path": "bios/Arcade/Arcade/namcoc69.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/namcoc70.zip",
+      "sha1": "ab8375fcb12791d35b11df801041f965a40b21d9",
+      "size": 7822,
+      "repo_path": "bios/Arcade/Arcade/namcoc70.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/namcoc75.zip",
+      "sha1": "0649e27b7d605add7fc4215ee628b71e3c835328",
+      "size": 8709,
+      "repo_path": "bios/Arcade/Arcade/namcoc75.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/neocdz.zip",
+      "sha1": "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
+      "size": 1181333,
+      "repo_path": "bios/Arcade/Arcade/neocdz.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/neogeo.zip",
+      "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
+      "size": 1859335,
+      "repo_path": "bios/Arcade/Arcade/neogeo.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/ngp.zip",
+      "sha1": "f677361cd05cf2d146730890298985290b3dbc69",
+      "size": 74758,
+      "repo_path": "bios/Arcade/Arcade/ngp.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/nmk004.zip",
+      "sha1": "489256f5e2001070d2ad94c90d255282c71ed274",
+      "size": 3556,
+      "repo_path": "bios/Arcade/Arcade/nmk004.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/pgm.zip",
+      "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
+      "size": 2094636,
+      "repo_path": "bios/Arcade/MAME/pgm.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/redearth.zip",
+      "sha1": "7821398e77ca91837548826773157c427a2ba018",
+      "size": 132590,
+      "repo_path": "bios/Arcade/Arcade/redearth.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/redearthn.zip",
+      "sha1": "a1c5727c93860381c4e65e1f04e204248678c702",
+      "size": 132458,
+      "repo_path": "bios/Arcade/Arcade/redearthn.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii.zip",
+      "sha1": "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856",
+      "size": 132544,
+      "repo_path": "bios/Arcade/Arcade/sfiii.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2.zip",
+      "sha1": "1c8b9163f121afba6f43d5a55dda504bb66a32c5",
+      "size": 131904,
+      "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2h.zip",
+      "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
+      "size": 131609,
+      "repo_path": "bios/Arcade/Arcade/sfiii2h.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2j.zip",
+      "sha1": "b6410ccf4a291e028fb05848f8308200f9eb2ea7",
+      "size": 131908,
+      "repo_path": "bios/Arcade/Arcade/sfiii2j.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2n.zip",
+      "sha1": "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd",
+      "size": 131916,
+      "repo_path": "bios/Arcade/Arcade/sfiii2n.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii3.zip",
+      "sha1": "908a53ee5dc154dc8e429ec9637b37b22f223f6d",
+      "size": 132421,
+      "repo_path": "bios/Arcade/Arcade/sfiii3.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii3j.zip",
+      "sha1": "bb31d8f5f5adbe2aa861029b57670329e6d70ac7",
+      "size": 132423,
+      "repo_path": "bios/Arcade/Arcade/sfiii3j.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii3n.zip",
+      "sha1": "f2f71013cf0895d0707c09ecb3bf82371ab92f5c",
+      "size": 132433,
+      "repo_path": "bios/Arcade/Arcade/sfiii3n.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii3na.zip",
+      "sha1": "9c14bf1a30bdc3a8bf894fe6de55f0f43b676251",
+      "size": 524490,
+      "repo_path": "bios/Arcade/Arcade/sfiii3na.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii3u.zip",
+      "sha1": "3cbd7d975a8469177f511aa5e9f86d7015c891a0",
+      "size": 132419,
+      "repo_path": "bios/Arcade/Arcade/sfiii3u.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiiia.zip",
+      "sha1": "878021d181718b2d87f20dab0c5774e111f8b7d0",
+      "size": 132564,
+      "repo_path": "bios/Arcade/Arcade/sfiiia.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiiih.zip",
+      "sha1": "d7538b16782abed604bbd6de8fc90da580757497",
+      "size": 132552,
+      "repo_path": "bios/Arcade/Arcade/sfiiih.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiiij.zip",
+      "sha1": "9dab5428a2694d424a93a315cb974a14e9ae64a3",
+      "size": 132546,
+      "repo_path": "bios/Arcade/Arcade/sfiiij.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiiin.zip",
+      "sha1": "764e8889e2ff9e2bf0c56585f32315aa5c19076d",
+      "size": 132555,
+      "repo_path": "bios/Arcade/Arcade/sfiiin.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiiiu.zip",
+      "sha1": "e8fcd1507a6811f0c2643d0497c0ac3f405f2438",
+      "size": 132562,
+      "repo_path": "bios/Arcade/Arcade/sfiiiu.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/skns.zip",
+      "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
+      "size": 924762,
+      "repo_path": "bios/Arcade/Arcade/skns.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/spec128.zip",
+      "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
+      "size": 32986,
+      "repo_path": "bios/Arcade/Arcade/spec128.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/spec1282a.zip",
+      "sha1": "a20dfda5804a9624e35baaf2fad2ac2011e70d9d",
+      "size": 41646,
+      "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/spectrum.zip",
+      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
+      "size": 16506,
+      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/st010.zip",
+      "sha1": "a6c6acd09c690b8efa85c96993fee85bede0b7fc",
+      "size": 69800,
+      "repo_path": "bios/Arcade/Arcade/st010.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/st011.zip",
+      "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
+      "size": 69800,
+      "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/warzard.zip",
+      "sha1": "41c639c6a96403c4a42a2799bd7928f091226e2b",
+      "size": 132590,
+      "repo_path": "bios/Arcade/Arcade/warzard.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/ym2608.zip",
+      "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
+      "size": 7609,
+      "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "dsi_nand.bin",
+      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/dsi_nand.bin",
+      "cores": [
+        "melonDS"
+      ],
+      "storage": "release",
+      "release_asset": "dsi_nand.bin"
     }
   ]
 }

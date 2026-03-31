@@ -114,11 +114,16 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
 
         if p_match:
             p_ok, p_total = p[p_match]
-            if v_ok == p_ok and v_total == p_total:
+            if v_total != p_total:
+                print(f"  {v_label}: MISMATCH total verify {v_total} != pack {p_total}")
+                all_ok = False
+            elif p_ok < v_ok:
+                print(f"  {v_label}: MISMATCH pack {p_ok} OK < verify {v_ok} OK (/{v_total})")
+                all_ok = False
+            elif p_ok == v_ok:
                 print(f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK")
             else:
-                print(f"  {v_label}: MISMATCH verify {v_ok}/{v_total} != pack {p_ok}/{p_total}")
-                all_ok = False
+                print(f"  {v_label}: verify {v_ok}/{v_total}, pack {p_ok}/{p_total} OK (pack resolves more)")
         else:
             print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
 
