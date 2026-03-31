@@ -436,8 +436,12 @@ def resolve_local_file(
             sha1_match = by_md5.get(md5_candidate)
             if sha1_match and sha1_match in files_db:
                 path = files_db[sha1_match]["path"]
-                if os.path.exists(path) and _md5_name_ok(path):
-                    return path, "md5_exact"
+                # Full MD5 (32 chars) is a strong identifier: trust it
+                # without name guard. Truncated MD5 still needs name check
+                # to avoid cross-contamination.
+                if os.path.exists(path):
+                    if len(md5_candidate) >= 32 or _md5_name_ok(path):
+                        return path, "md5_exact"
             if len(md5_candidate) < 32:
                 for db_md5, db_sha1 in by_md5.items():
                     if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
