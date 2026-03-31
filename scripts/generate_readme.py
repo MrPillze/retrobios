@@ -21,9 +21,12 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import list_registered_platforms, load_database, load_platform_config, write_if_changed
 from verify import verify_platform
 
-def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
+def compute_coverage(platform_name: str, platforms_dir: str, db: dict,
+                     data_registry: dict | None = None,
+                     supplemental_names: set[str] | None = None) -> dict:
     config = load_platform_config(platform_name, platforms_dir)
-    result = verify_platform(config, db)
+    result = verify_platform(config, db, data_dir_registry=data_registry,
+                             supplemental_names=supplemental_names)
     sc = result.get("status_counts", {})
     ok = sc.get("ok", 0)
     untested = sc.get("untested", 0)
@@ -82,10 +85,16 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
     platform_names = list_registered_platforms(platforms_dir, include_archived=True)
 
+    from common import load_data_dir_registry
+    from cross_reference import _build_supplemental_index
+    data_registry = load_data_dir_registry(platforms_dir)
+    suppl_names = _build_supplemental_index()
+
     coverages = {}
     for name in platform_names:
         try:
-            coverages[name] = compute_coverage(name, platforms_dir, db)
+            coverages[name] = compute_coverage(name, platforms_dir, db,
+                                               data_registry, suppl_names)
         except FileNotFoundError:
             pass
 

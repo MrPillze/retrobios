@@ -2054,11 +2054,17 @@ def main():
 
     platform_names = list_registered_platforms(args.platforms_dir, include_archived=True)
 
+    from common import load_data_dir_registry
+    from cross_reference import _build_supplemental_index
+    data_registry = load_data_dir_registry(args.platforms_dir)
+    suppl_names = _build_supplemental_index()
+
     print("Computing platform coverage...")
     coverages = {}
     for name in sorted(platform_names):
         try:
-            cov = compute_coverage(name, args.platforms_dir, db)
+            cov = compute_coverage(name, args.platforms_dir, db,
+                                   data_registry, suppl_names)
             coverages[name] = cov
             print(f"  {cov['platform']}: {cov['present']}/{cov['total']} ({_pct(cov['present'], cov['total'])})")
         except FileNotFoundError as e:
