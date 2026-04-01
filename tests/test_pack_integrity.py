@@ -25,11 +25,11 @@ def _platform_has_pack(platform_name: str) -> bool:
         return False
     sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from common import load_platform_config
+
     config = load_platform_config(platform_name, PLATFORMS_DIR)
     display = config.get("platform", platform_name).replace(" ", "_")
     return any(
-        f.endswith("_BIOS_Pack.zip") and display in f
-        for f in os.listdir(DIST_DIR)
+        f.endswith("_BIOS_Pack.zip") and display in f for f in os.listdir(DIST_DIR)
     )
 
 
@@ -40,10 +40,18 @@ class PackIntegrityTest(unittest.TestCase):
         if not _platform_has_pack(platform_name):
             self.skipTest(f"no pack found for {platform_name}")
         result = subprocess.run(
-            [sys.executable, "scripts/generate_pack.py",
-             "--platform", platform_name,
-             "--verify-packs", "--output-dir", "dist/"],
-            capture_output=True, text=True, cwd=REPO_ROOT,
+            [
+                sys.executable,
+                "scripts/generate_pack.py",
+                "--platform",
+                platform_name,
+                "--verify-packs",
+                "--output-dir",
+                "dist/",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
         )
         if result.returncode != 0:
             self.fail(

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 import sys
-import urllib.request
 import urllib.error
+import urllib.request
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -14,6 +14,7 @@ from pathlib import Path
 @dataclass
 class BiosRequirement:
     """A single BIOS file requirement from a platform source."""
+
     name: str
     system: str
     sha1: str | None = None
@@ -29,9 +30,12 @@ class BiosRequirement:
 @dataclass
 class ChangeSet:
     """Differences between scraped requirements and current config."""
+
     added: list[BiosRequirement] = field(default_factory=list)
     removed: list[BiosRequirement] = field(default_factory=list)
-    modified: list[tuple[BiosRequirement, BiosRequirement]] = field(default_factory=list)
+    modified: list[tuple[BiosRequirement, BiosRequirement]] = field(
+        default_factory=list
+    )
 
     @property
     def has_changes(self) -> bool:
@@ -80,7 +84,9 @@ class BaseScraper(ABC):
         if not self.url:
             raise ValueError("No source URL configured")
         try:
-            req = urllib.request.Request(self.url, headers={"User-Agent": "retrobios-scraper/1.0"})
+            req = urllib.request.Request(
+                self.url, headers={"User-Agent": "retrobios-scraper/1.0"}
+            )
             with urllib.request.urlopen(req, timeout=30) as resp:
                 self._raw_data = _read_limited(resp).decode("utf-8")
                 return self._raw_data
@@ -113,35 +119,49 @@ class BaseScraper(ABC):
                 changes.added.append(req)
             else:
                 existing_file = existing[key]
-                if req.sha1 and existing_file.get("sha1") and req.sha1 != existing_file["sha1"]:
-                    changes.modified.append((
-                        BiosRequirement(
-                            name=existing_file["name"],
-                            system=key[0],
-                            sha1=existing_file.get("sha1"),
-                            md5=existing_file.get("md5"),
-                        ),
-                        req,
-                    ))
-                elif req.md5 and existing_file.get("md5") and req.md5 != existing_file["md5"]:
-                    changes.modified.append((
-                        BiosRequirement(
-                            name=existing_file["name"],
-                            system=key[0],
-                            md5=existing_file.get("md5"),
-                        ),
-                        req,
-                    ))
+                if (
+                    req.sha1
+                    and existing_file.get("sha1")
+                    and req.sha1 != existing_file["sha1"]
+                ):
+                    changes.modified.append(
+                        (
+                            BiosRequirement(
+                                name=existing_file["name"],
+                                system=key[0],
+                                sha1=existing_file.get("sha1"),
+                                md5=existing_file.get("md5"),
+                            ),
+                            req,
+                        )
+                    )
+                elif (
+                    req.md5
+                    and existing_file.get("md5")
+                    and req.md5 != existing_file["md5"]
+                ):
+                    changes.modified.append(
+                        (
+                            BiosRequirement(
+                                name=existing_file["name"],
+                                system=key[0],
+                                md5=existing_file.get("md5"),
+                            ),
+                            req,
+                        )
+                    )
 
         for key in existing:
             if key not in scraped_map:
                 f = existing[key]
-                changes.removed.append(BiosRequirement(
-                    name=f["name"],
-                    system=key[0],
-                    sha1=f.get("sha1"),
-                    md5=f.get("md5"),
-                ))
+                changes.removed.append(
+                    BiosRequirement(
+                        name=f["name"],
+                        system=key[0],
+                        sha1=f.get("sha1"),
+                        md5=f.get("md5"),
+                    )
+                )
 
         return changes
 
@@ -163,10 +183,13 @@ def fetch_github_latest_version(repo: str) -> str | None:
     """Fetch the latest release version tag from a GitHub repo."""
     url = f"https://api.github.com/repos/{repo}/releases/latest"
     try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "retrobios-scraper/1.0",
-            "Accept": "application/vnd.github.v3+json",
-        })
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "retrobios-scraper/1.0",
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read())
             return data.get("tag_name", "")
@@ -174,7 +197,9 @@ def fetch_github_latest_version(repo: str) -> str | None:
         return None
 
 
-def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirements") -> None:
+def scraper_cli(
+    scraper_class: type, description: str = "Scrape BIOS requirements"
+) -> None:
     """Shared CLI entry point for all scrapers. Eliminates main() boilerplate."""
     import argparse
 
@@ -203,13 +228,23 @@ def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirement
         return
 
     if args.json:
-        data = [{"name": r.name, "system": r.system, "sha1": r.sha1, "md5": r.md5,
-                 "size": r.size, "required": r.required} for r in reqs]
+        data = [
+            {
+                "name": r.name,
+                "system": r.system,
+                "sha1": r.sha1,
+                "md5": r.md5,
+                "size": r.size,
+                "required": r.required,
+            }
+            for r in reqs
+        ]
         print(json.dumps(data, indent=2))
         return
 
     if args.output:
         import yaml
+
         # Use scraper's generate_platform_yaml() if available (includes
         # platform metadata, cores list, standalone_cores, etc.)
         if hasattr(scraper, "generate_platform_yaml"):
@@ -224,7 +259,11 @@ def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirement
                     if req.native_id:
                         sys_entry["native_id"] = req.native_id
                     config["systems"][sys_id] = sys_entry
-                entry = {"name": req.name, "destination": req.destination or req.name, "required": req.required}
+                entry = {
+                    "name": req.name,
+                    "destination": req.destination or req.name,
+                    "required": req.required,
+                }
                 if req.sha1:
                     entry["sha1"] = req.sha1
                 if req.md5:
@@ -265,10 +304,13 @@ def fetch_github_latest_tag(repo: str, prefix: str = "") -> str | None:
     """Fetch the most recent matching tag from a GitHub repo."""
     url = f"https://api.github.com/repos/{repo}/tags?per_page=50"
     try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "retrobios-scraper/1.0",
-            "Accept": "application/vnd.github.v3+json",
-        })
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "retrobios-scraper/1.0",
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
         with urllib.request.urlopen(req, timeout=15) as resp:
             tags = json.loads(resp.read())
             for tag in tags:

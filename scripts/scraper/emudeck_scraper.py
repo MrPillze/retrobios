@@ -14,9 +14,8 @@ from __future__ import annotations
 import csv
 import io
 import re
-import sys
-import urllib.request
 import urllib.error
+import urllib.request
 
 try:
     from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
@@ -31,8 +30,7 @@ CHECKBIOS_URL = (
 )
 
 CSV_BASE_URL = (
-    "https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/"
-    "main/docs/tables"
+    "https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables"
 )
 
 CSV_SHEETS = [
@@ -117,10 +115,22 @@ KNOWN_BIOS_FILES = {
         {"name": "scph5502.bin", "destination": "scph5502.bin", "region": "EU"},
     ],
     "sony-playstation-2": [
-        {"name": "SCPH-70004_BIOS_V12_EUR_200.BIN", "destination": "SCPH-70004_BIOS_V12_EUR_200.BIN"},
-        {"name": "SCPH-70004_BIOS_V12_EUR_200.EROM", "destination": "SCPH-70004_BIOS_V12_EUR_200.EROM"},
-        {"name": "SCPH-70004_BIOS_V12_EUR_200.ROM1", "destination": "SCPH-70004_BIOS_V12_EUR_200.ROM1"},
-        {"name": "SCPH-70004_BIOS_V12_EUR_200.ROM2", "destination": "SCPH-70004_BIOS_V12_EUR_200.ROM2"},
+        {
+            "name": "SCPH-70004_BIOS_V12_EUR_200.BIN",
+            "destination": "SCPH-70004_BIOS_V12_EUR_200.BIN",
+        },
+        {
+            "name": "SCPH-70004_BIOS_V12_EUR_200.EROM",
+            "destination": "SCPH-70004_BIOS_V12_EUR_200.EROM",
+        },
+        {
+            "name": "SCPH-70004_BIOS_V12_EUR_200.ROM1",
+            "destination": "SCPH-70004_BIOS_V12_EUR_200.ROM1",
+        },
+        {
+            "name": "SCPH-70004_BIOS_V12_EUR_200.ROM2",
+            "destination": "SCPH-70004_BIOS_V12_EUR_200.ROM2",
+        },
     ],
     "sega-mega-cd": [
         {"name": "bios_CD_E.bin", "destination": "bios_CD_E.bin", "region": "EU"},
@@ -157,17 +167,17 @@ KNOWN_BIOS_FILES = {
 }
 
 _RE_ARRAY = re.compile(
-    r'(?:local\s+)?(\w+)=\(\s*((?:[0-9a-fA-F]+\s*)+)\)',
+    r"(?:local\s+)?(\w+)=\(\s*((?:[0-9a-fA-F]+\s*)+)\)",
     re.MULTILINE,
 )
 
 _RE_FUNC = re.compile(
-    r'function\s+(check\w+Bios)\s*\(\)',
+    r"function\s+(check\w+Bios)\s*\(\)",
     re.MULTILINE,
 )
 
 _RE_LOCAL_HASHES = re.compile(
-    r'local\s+hashes=\(\s*((?:[0-9a-fA-F]+\s*)+)\)',
+    r"local\s+hashes=\(\s*((?:[0-9a-fA-F]+\s*)+)\)",
     re.MULTILINE,
 )
 
@@ -184,7 +194,9 @@ def _fetch_url(url: str) -> str:
 class Scraper(BaseScraper):
     """Scraper for EmuDeck checkBIOS.sh and CSV cheat sheets."""
 
-    def __init__(self, checkbios_url: str = CHECKBIOS_URL, csv_base_url: str = CSV_BASE_URL):
+    def __init__(
+        self, checkbios_url: str = CHECKBIOS_URL, csv_base_url: str = CSV_BASE_URL
+    ):
         super().__init__(url=checkbios_url)
         self.checkbios_url = checkbios_url
         self.csv_base_url = csv_base_url
@@ -241,12 +253,12 @@ class Scraper(BaseScraper):
     @staticmethod
     def _clean_markdown(text: str) -> str:
         """Strip markdown/HTML artifacts from CSV fields."""
-        text = re.sub(r'\*\*', '', text)  # bold
-        text = re.sub(r':material-[^:]+:\{[^}]*\}', '', text)  # mkdocs material icons
-        text = re.sub(r':material-[^:]+:', '', text)
-        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # [text](url) -> text
-        text = re.sub(r'<br\s*/?>', ' ', text)  # <br/>
-        text = re.sub(r'<[^>]+>', '', text)  # remaining HTML
+        text = re.sub(r"\*\*", "", text)  # bold
+        text = re.sub(r":material-[^:]+:\{[^}]*\}", "", text)  # mkdocs material icons
+        text = re.sub(r":material-[^:]+:", "", text)
+        text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)  # [text](url) -> text
+        text = re.sub(r"<br\s*/?>", " ", text)  # <br/>
+        text = re.sub(r"<[^>]+>", "", text)  # remaining HTML
         return text.strip()
 
     def _parse_csv_bios(self, csv_text: str) -> list[dict]:
@@ -274,28 +286,32 @@ class Scraper(BaseScraper):
                     system_col = self._clean_markdown((row[key] or ""))
                     break
             slug = None
-            for part in re.split(r'[`\s/]+', folder_col):
-                part = part.strip().strip('`').lower()
+            for part in re.split(r"[`\s/]+", folder_col):
+                part = part.strip().strip("`").lower()
                 if part and part in SYSTEM_SLUG_MAP:
                     slug = SYSTEM_SLUG_MAP[part]
                     break
             if not slug:
-                clean = re.sub(r'[^a-z0-9\-]', '', folder_col.strip().strip('`').lower())
+                clean = re.sub(
+                    r"[^a-z0-9\-]", "", folder_col.strip().strip("`").lower()
+                )
                 slug = clean if clean else "unknown"
-            entries.append({
-                "system": slug,
-                "system_name": system_col,
-                "bios_raw": bios_col,
-            })
+            entries.append(
+                {
+                    "system": slug,
+                    "system_name": system_col,
+                    "bios_raw": bios_col,
+                }
+            )
         return entries
 
     def _extract_filenames_from_bios_field(self, bios_raw: str) -> list[dict]:
         """Extract individual BIOS filenames from a CSV BIOS field."""
         results = []
-        bios_raw = re.sub(r'<br\s*/?>', ' ', bios_raw)
-        bios_raw = bios_raw.replace('`', '')
+        bios_raw = re.sub(r"<br\s*/?>", " ", bios_raw)
+        bios_raw = bios_raw.replace("`", "")
         patterns = re.findall(
-            r'[\w\-./]+\.(?:bin|rom|zip|BIN|ROM|ZIP|EROM|ROM1|ROM2|n64|txt|keys)',
+            r"[\w\-./]+\.(?:bin|rom|zip|BIN|ROM|ZIP|EROM|ROM1|ROM2|n64|txt|keys)",
             bios_raw,
         )
         for p in patterns:
@@ -324,21 +340,25 @@ class Scraper(BaseScraper):
                 if key in seen:
                     continue
                 seen.add(key)
-                requirements.append(BiosRequirement(
-                    name=f["name"],
-                    system=system,
-                    destination=f.get("destination", f["name"]),
-                    required=True,
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=f["name"],
+                        system=system,
+                        destination=f.get("destination", f["name"]),
+                        required=True,
+                    )
+                )
 
             for md5 in system_hashes:
-                requirements.append(BiosRequirement(
-                    name=f"{system}:{md5}",
-                    system=system,
-                    md5=md5,
-                    destination="",
-                    required=True,
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=f"{system}:{md5}",
+                        system=system,
+                        md5=md5,
+                        destination="",
+                        required=True,
+                    )
+                )
 
         for sheet in CSV_SHEETS:
             csv_text = self._fetch_csv(sheet)
@@ -353,19 +373,21 @@ class Scraper(BaseScraper):
                     seen.add(key)
                     if system in KNOWN_BIOS_FILES:
                         continue
-                    requirements.append(BiosRequirement(
-                        name=f["name"],
-                        system=system,
-                        destination=f.get("destination", f["name"]),
-                        required=True,
-                    ))
+                    requirements.append(
+                        BiosRequirement(
+                            name=f["name"],
+                            system=system,
+                            destination=f.get("destination", f["name"]),
+                            required=True,
+                        )
+                    )
 
         return requirements
 
     def validate_format(self, raw_data: str) -> bool:
         has_ps = "PSBios=" in raw_data or "PSBios =" in raw_data
         has_func = "checkPS1BIOS" in raw_data or "checkPS2BIOS" in raw_data
-        has_md5 = re.search(r'[0-9a-f]{32}', raw_data) is not None
+        has_md5 = re.search(r"[0-9a-f]{32}", raw_data) is not None
         return has_ps and has_func and has_md5
 
     def generate_platform_yaml(self) -> dict:
@@ -419,14 +441,17 @@ class Scraper(BaseScraper):
             "contents/functions/EmuScripts"
         )
         name_overrides = {
-            "pcsx2qt": "pcsx2", "rpcs3legacy": "rpcs3",
-            "cemuproton": "cemu", "rmg": "mupen64plus_next",
+            "pcsx2qt": "pcsx2",
+            "rpcs3legacy": "rpcs3",
+            "cemuproton": "cemu",
+            "rmg": "mupen64plus_next",
         }
         skip = {"retroarch_maincfg", "retroarch"}
 
         try:
             req = urllib.request.Request(
-                api_url, headers={"User-Agent": "retrobios-scraper/1.0"},
+                api_url,
+                headers={"User-Agent": "retrobios-scraper/1.0"},
             )
             data = json.loads(urllib.request.urlopen(req, timeout=30).read())
         except (urllib.error.URLError, OSError):
@@ -454,6 +479,7 @@ class Scraper(BaseScraper):
 
 def main():
     from scripts.scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape emudeck BIOS requirements")
 
 

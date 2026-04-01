@@ -58,16 +58,18 @@ class Exporter(BaseExporter):
         ]
         if version:
             lines.append(f"\tversion {version}")
-        lines.extend([
-            '\tauthor "libretro"',
-            '\thomepage "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"',
-            '\turl "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"',
-            ")",
-            "",
-            "game (",
-            '\tname "System"',
-            '\tcomment "System"',
-        ])
+        lines.extend(
+            [
+                '\tauthor "libretro"',
+                '\thomepage "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"',
+                '\turl "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"',
+                ")",
+                "",
+                "game (",
+                '\tname "System"',
+                '\tcomment "System"',
+            ]
+        )
 
         systems = truth_data.get("systems", {})
         for sys_id in sorted(systems):

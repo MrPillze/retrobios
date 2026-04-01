@@ -36,8 +36,20 @@ DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
 
 BLOCKED_EXTENSIONS = {
-    ".exe", ".bat", ".cmd", ".sh", ".ps1", ".vbs", ".js",
-    ".msi", ".dll", ".so", ".dylib", ".py", ".rb", ".pl",
+    ".exe",
+    ".bat",
+    ".cmd",
+    ".sh",
+    ".ps1",
+    ".vbs",
+    ".js",
+    ".msi",
+    ".dll",
+    ".so",
+    ".dylib",
+    ".py",
+    ".rb",
+    ".pl",
 }
 
 MAX_FILE_SIZE = 100 * 1024 * 1024
@@ -140,7 +152,10 @@ def validate_file(
         result.add_check(False, f"Blocked file extension: {ext}")
 
     if result.size > MAX_FILE_SIZE:
-        result.add_check(False, f"File too large for embedded storage ({result.size:,} > {MAX_FILE_SIZE:,} bytes). Use storage: external in platform config.")
+        result.add_check(
+            False,
+            f"File too large for embedded storage ({result.size:,} > {MAX_FILE_SIZE:,} bytes). Use storage: external in platform config.",
+        )
     elif result.size == 0:
         result.add_check(False, "File is empty (0 bytes)")
     else:
@@ -149,7 +164,9 @@ def validate_file(
     if db:
         if result.sha1 in db.get("files", {}):
             existing = db["files"][result.sha1]
-            result.add_warning(f"Duplicate: identical file already exists at `{existing['path']}`")
+            result.add_warning(
+                f"Duplicate: identical file already exists at `{existing['path']}`"
+            )
         else:
             result.add_check(True, "Not a duplicate in database")
 
@@ -162,9 +179,13 @@ def validate_file(
     elif md5_known:
         result.add_check(True, "MD5 matches known platform requirement")
     elif name_known:
-        result.add_warning("Filename matches a known requirement but hash differs - may be a variant")
+        result.add_warning(
+            "Filename matches a known requirement but hash differs - may be a variant"
+        )
     else:
-        result.add_warning("File not referenced in any platform config - needs manual review")
+        result.add_warning(
+            "File not referenced in any platform config - needs manual review"
+        )
 
     normalized = os.path.normpath(filepath)
     if os.path.islink(filepath):
@@ -194,9 +215,15 @@ def get_changed_files() -> list[str]:
             try:
                 result = subprocess.run(
                     ["git", "diff", "--name-only", f"origin/{base}...HEAD"],
-                    capture_output=True, text=True, check=True,
+                    capture_output=True,
+                    text=True,
+                    check=True,
                 )
-                files = [f for f in result.stdout.strip().split("\n") if f.startswith("bios/")]
+                files = [
+                    f
+                    for f in result.stdout.strip().split("\n")
+                    if f.startswith("bios/")
+                ]
                 if files:
                     return files
             except subprocess.CalledProcessError:
@@ -206,7 +233,8 @@ def get_changed_files() -> list[str]:
 
     result = subprocess.run(
         ["git", "diff", "--cached", "--name-only"],
-        capture_output=True, text=True,
+        capture_output=True,
+        text=True,
     )
     return [f for f in result.stdout.strip().split("\n") if f.startswith("bios/") and f]
 
@@ -214,10 +242,14 @@ def get_changed_files() -> list[str]:
 def main():
     parser = argparse.ArgumentParser(description="Validate BIOS file contributions")
     parser.add_argument("files", nargs="*", help="Files to validate")
-    parser.add_argument("--changed", action="store_true", help="Auto-detect changed BIOS files")
+    parser.add_argument(
+        "--changed", action="store_true", help="Auto-detect changed BIOS files"
+    )
     parser.add_argument("--db", default=DEFAULT_DB, help="Path to database.json")
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
-    parser.add_argument("--markdown", action="store_true", help="Output as markdown (for PR comments)")
+    parser.add_argument(
+        "--markdown", action="store_true", help="Output as markdown (for PR comments)"
+    )
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     args = parser.parse_args()
 
@@ -250,14 +282,16 @@ def main():
     if args.json:
         output = []
         for r in results:
-            output.append({
-                "file": r.filepath,
-                "passed": r.passed,
-                "sha1": r.sha1,
-                "md5": r.md5,
-                "size": r.size,
-                "checks": [{"status": s, "message": m} for s, m in r.checks],
-            })
+            output.append(
+                {
+                    "file": r.filepath,
+                    "passed": r.passed,
+                    "sha1": r.sha1,
+                    "md5": r.md5,
+                    "size": r.size,
+                    "checks": [{"status": s, "message": m} for s, m in r.checks],
+                }
+            )
         print(json.dumps(output, indent=2))
     elif args.markdown:
         lines = ["## BIOS Validation Report", ""]
@@ -278,7 +312,15 @@ def main():
             print(f"  MD5:  {r.md5}")
             print(f"  Size: {r.size:,}")
             for s, m in r.checks:
-                marker = "✓" if s == "PASS" else "✗" if s == "FAIL" else "!" if s == "WARN" else "i"
+                marker = (
+                    "✓"
+                    if s == "PASS"
+                    else "✗"
+                    if s == "FAIL"
+                    else "!"
+                    if s == "WARN"
+                    else "i"
+                )
                 print(f"  [{marker}] {m}")
 
     if not all_passed:

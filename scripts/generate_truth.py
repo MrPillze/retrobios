@@ -39,20 +39,28 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     group.add_argument("--all", action="store_true", help="all registered platforms")
     group.add_argument("--platform", help="single platform name")
     parser.add_argument(
-        "--output-dir", default=DEFAULT_OUTPUT_DIR, help="output directory",
+        "--output-dir",
+        default=DEFAULT_OUTPUT_DIR,
+        help="output directory",
     )
     parser.add_argument(
-        "--target", "-t", default=None, help="hardware target filter",
+        "--target",
+        "-t",
+        default=None,
+        help="hardware target filter",
     )
     parser.add_argument(
-        "--include-archived", action="store_true",
+        "--include-archived",
+        action="store_true",
         help="include archived platforms with --all",
     )
     parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
+        "--platforms-dir",
+        default=DEFAULT_PLATFORMS_DIR,
     )
     parser.add_argument(
-        "--emulators-dir", default=DEFAULT_EMULATORS_DIR,
+        "--emulators-dir",
+        default=DEFAULT_EMULATORS_DIR,
     )
     parser.add_argument("--db", default=DEFAULT_DB_FILE, help="database.json path")
     return parser.parse_args(argv)
@@ -77,7 +85,8 @@ def main(argv: list[str] | None = None) -> None:
     # Determine platforms
     if args.all:
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived,
+            args.platforms_dir,
+            include_archived=args.include_archived,
         )
     else:
         platforms = [args.platform]
@@ -90,7 +99,9 @@ def main(argv: list[str] | None = None) -> None:
         if args.target:
             try:
                 target_cores = load_target_config(
-                    name, args.target, args.platforms_dir,
+                    name,
+                    args.target,
+                    args.platforms_dir,
                 )
             except FileNotFoundError:
                 print(f"  {name}: no target config, skipped")
@@ -105,15 +116,22 @@ def main(argv: list[str] | None = None) -> None:
         registry_entry = registry.get(name, {})
 
         result = generate_platform_truth(
-            name, config, registry_entry, profiles,
-            db=db, target_cores=target_cores,
+            name,
+            config,
+            registry_entry,
+            profiles,
+            db=db,
+            target_cores=target_cores,
         )
 
         out_path = os.path.join(args.output_dir, f"{name}.yml")
         with open(out_path, "w") as f:
             yaml.dump(
-                result, f,
-                default_flow_style=False, sort_keys=False, allow_unicode=True,
+                result,
+                f,
+                default_flow_style=False,
+                sort_keys=False,
+                allow_unicode=True,
             )
 
         n_systems = len(result.get("systems", {}))

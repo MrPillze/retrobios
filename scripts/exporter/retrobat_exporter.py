@@ -15,8 +15,6 @@ from pathlib import Path
 from .base_exporter import BaseExporter
 
 
-
-
 class Exporter(BaseExporter):
     """Export truth data to RetroBat batocera-systems.json format."""
 
@@ -47,7 +45,9 @@ class Exporter(BaseExporter):
                 continue
 
             native_id = native_map.get(sys_id, sys_id)
-            scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            scraped_sys = (
+                scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            )
             display_name = self._display_name(sys_id, scraped_sys)
             bios_files: list[OrderedDict] = []
 
@@ -70,7 +70,9 @@ class Exporter(BaseExporter):
 
             if bios_files:
                 if native_id in output:
-                    existing_files = {e.get("file") for e in output[native_id]["biosFiles"]}
+                    existing_files = {
+                        e.get("file") for e in output[native_id]["biosFiles"]
+                    }
                     for entry in bios_files:
                         if entry.get("file") not in existing_files:
                             output[native_id]["biosFiles"].append(entry)

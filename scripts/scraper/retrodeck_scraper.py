@@ -29,8 +29,8 @@ import json
 import os
 import re
 import sys
-import urllib.request
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 try:
@@ -43,16 +43,16 @@ PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
 COMPONENTS_BRANCH = "main"
 COMPONENTS_API_URL = (
-    f"https://api.github.com/repos/{COMPONENTS_REPO}"
-    f"/git/trees/{COMPONENTS_BRANCH}"
+    f"https://api.github.com/repos/{COMPONENTS_REPO}/git/trees/{COMPONENTS_BRANCH}"
 )
-RAW_BASE = (
-    f"https://raw.githubusercontent.com/{COMPONENTS_REPO}"
-    f"/{COMPONENTS_BRANCH}"
-)
+RAW_BASE = f"https://raw.githubusercontent.com/{COMPONENTS_REPO}/{COMPONENTS_BRANCH}"
 SKIP_DIRS = {"archive_later", "archive_old", "automation-tools", ".github"}
 NON_EMULATOR_COMPONENTS = {
-    "framework", "es-de", "steam-rom-manager", "flips", "portmaster",
+    "framework",
+    "es-de",
+    "steam-rom-manager",
+    "flips",
+    "portmaster",
 }
 
 # RetroDECK system ID -> retrobios slug.
@@ -358,13 +358,20 @@ class Scraper(BaseScraper):
 
                     required_raw = entry.get("required", "")
                     required = bool(required_raw) and str(required_raw).lower() not in (
-                        "false", "no", "optional", "",
+                        "false",
+                        "no",
+                        "optional",
+                        "",
                     )
 
                     key = (system, filename.lower())
                     if key in seen:
                         existing = next(
-                            (r for r in requirements if (r.system, r.name.lower()) == key),
+                            (
+                                r
+                                for r in requirements
+                                if (r.system, r.name.lower()) == key
+                            ),
                             None,
                         )
                         if existing and md5 and existing.md5 and md5 != existing.md5:
@@ -376,13 +383,15 @@ class Scraper(BaseScraper):
                         continue
                     seen.add(key)
 
-                    requirements.append(BiosRequirement(
-                        name=filename,
-                        system=system,
-                        destination=destination,
-                        md5=md5,
-                        required=required,
-                    ))
+                    requirements.append(
+                        BiosRequirement(
+                            name=filename,
+                            system=system,
+                            destination=destination,
+                            md5=md5,
+                            required=required,
+                        )
+                    )
 
         return requirements
 
@@ -390,11 +399,14 @@ class Scraper(BaseScraper):
         reqs = self.fetch_requirements()
         manifests = self._get_manifests()
 
-        cores = sorted({
-            comp_name for comp_name, _ in manifests
-            if comp_name not in SKIP_DIRS
-            and comp_name not in NON_EMULATOR_COMPONENTS
-        })
+        cores = sorted(
+            {
+                comp_name
+                for comp_name, _ in manifests
+                if comp_name not in SKIP_DIRS
+                and comp_name not in NON_EMULATOR_COMPONENTS
+            }
+        )
 
         systems: dict[str, dict] = {}
         for req in reqs:
@@ -423,6 +435,7 @@ class Scraper(BaseScraper):
 
 def main() -> None:
     from scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape RetroDECK BIOS requirements")
 
 

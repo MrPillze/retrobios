@@ -4,6 +4,7 @@ Source: https://github.com/RetroPie/RetroPie-Setup/tree/master/scriptmodules/lib
 Parses rp_module_id and rp_module_flags from each scriptmodule to determine
 which platforms each core supports.
 """
+
 from __future__ import annotations
 
 import argparse

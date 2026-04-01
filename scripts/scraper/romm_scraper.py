@@ -138,16 +138,18 @@ class Scraper(BaseScraper):
             crc32 = (entry.get("crc") or "").strip() or None
             size = int(entry["size"]) if entry.get("size") else None
 
-            requirements.append(BiosRequirement(
-                name=filename,
-                system=system,
-                sha1=sha1,
-                md5=md5,
-                crc32=crc32,
-                size=size,
-                destination=f"{igdb_slug}/{filename}",
-                required=True,
-            ))
+            requirements.append(
+                BiosRequirement(
+                    name=filename,
+                    system=system,
+                    sha1=sha1,
+                    md5=md5,
+                    crc32=crc32,
+                    size=size,
+                    destination=f"{igdb_slug}/{filename}",
+                    required=True,
+                )
+            )
 
         return requirements
 
@@ -164,7 +166,7 @@ class Scraper(BaseScraper):
         for key in list(data.keys())[:5]:
             if ":" not in key:
                 return False
-            _, entry = key.split(":", 1), data[key]
+            _, _entry = key.split(":", 1), data[key]
             if not isinstance(data[key], dict):
                 return False
             if "md5" not in data[key] and "sha1" not in data[key]:
@@ -217,6 +219,7 @@ class Scraper(BaseScraper):
 
 def main():
     from scripts.scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape RomM BIOS requirements")
 
 

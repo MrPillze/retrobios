@@ -38,7 +38,8 @@ class BaseExporter(ABC):
 
     @staticmethod
     def _display_name(
-        sys_id: str, scraped_sys: dict | None = None,
+        sys_id: str,
+        scraped_sys: dict | None = None,
     ) -> str:
         """Get display name for a system from scraped data or slug."""
         if scraped_sys:
@@ -47,9 +48,28 @@ class BaseExporter(ABC):
                 return name
         # Fallback: convert slug to display name with acronym handling
         _UPPER = {
-            "3do", "cdi", "cpc", "cps1", "cps2", "cps3", "dos", "gba",
-            "gbc", "hle", "msx", "nes", "nds", "ngp", "psp", "psx",
-            "sms", "snes", "stv", "tvc", "vb", "zx",
+            "3do",
+            "cdi",
+            "cpc",
+            "cps1",
+            "cps2",
+            "cps3",
+            "dos",
+            "gba",
+            "gbc",
+            "hle",
+            "msx",
+            "nes",
+            "nds",
+            "ngp",
+            "psp",
+            "psx",
+            "sms",
+            "snes",
+            "stv",
+            "tvc",
+            "vb",
+            "zx",
         }
         parts = sys_id.replace("-", " ").split()
         result = []

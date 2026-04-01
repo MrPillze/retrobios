@@ -8,9 +8,8 @@ Hash: SHA1 primary
 
 from __future__ import annotations
 
-import sys
-import urllib.request
 import urllib.error
+import urllib.request
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
@@ -18,18 +17,17 @@ from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
 PLATFORM_NAME = "libretro"
 
 SOURCE_URL = (
-    "https://raw.githubusercontent.com/libretro/libretro-database/"
-    "master/dat/System.dat"
+    "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"
 )
 
 # Libretro cores that expect BIOS files in a subdirectory of system/.
 # System.dat lists filenames flat; the scraper prepends the prefix.
 # ref: each core's libretro.c or equivalent -see platforms/README.md
 CORE_SUBDIR_MAP = {
-    "nec-pc-98": "np2kai",         # libretro-np2kai/sdl/libretro.c
-    "sharp-x68000": "keropi",      # px68k/libretro/libretro.c
-    "sega-dreamcast": "dc",        # flycast/shell/libretro/libretro.cpp
-    "sega-dreamcast-arcade": "dc", # flycast -same subfolder
+    "nec-pc-98": "np2kai",  # libretro-np2kai/sdl/libretro.c
+    "sharp-x68000": "keropi",  # px68k/libretro/libretro.c
+    "sega-dreamcast": "dc",  # flycast/shell/libretro/libretro.cpp
+    "sega-dreamcast-arcade": "dc",  # flycast -same subfolder
 }
 
 SYSTEM_SLUG_MAP = {
@@ -100,7 +98,6 @@ class Scraper(BaseScraper):
     def __init__(self, url: str = SOURCE_URL):
         super().__init__(url=url)
 
-
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Parse System.dat and return BIOS requirements."""
         raw = self._fetch_raw()
@@ -113,7 +110,9 @@ class Scraper(BaseScraper):
 
         for rom in roms:
             native_system = rom.system
-            system_slug = SYSTEM_SLUG_MAP.get(native_system, native_system.lower().replace(" ", "-"))
+            system_slug = SYSTEM_SLUG_MAP.get(
+                native_system, native_system.lower().replace(" ", "-")
+            )
 
             destination = rom.name
             name = rom.name.split("/")[-1] if "/" in rom.name else rom.name
@@ -122,17 +121,19 @@ class Scraper(BaseScraper):
             if subdir and not destination.startswith(subdir + "/"):
                 destination = f"{subdir}/{destination}"
 
-            requirements.append(BiosRequirement(
-                name=name,
-                system=system_slug,
-                sha1=rom.sha1 or None,
-                md5=rom.md5 or None,
-                crc32=rom.crc32 or None,
-                size=rom.size or None,
-                destination=destination,
-                required=True,
-                native_id=native_system,
-            ))
+            requirements.append(
+                BiosRequirement(
+                    name=name,
+                    system=system_slug,
+                    sha1=rom.sha1 or None,
+                    md5=rom.md5 or None,
+                    crc32=rom.crc32 or None,
+                    size=rom.size or None,
+                    destination=destination,
+                    required=True,
+                    native_id=native_system,
+                )
+            )
 
         return requirements
 
@@ -158,17 +159,22 @@ class Scraper(BaseScraper):
         """Fetch per-core metadata from libretro-core-info .info files."""
         metadata = {}
         try:
-            url = f"https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
-            req = urllib.request.Request(url, headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            })
+            url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": "retrobios-scraper/1.0",
+                    "Accept": "application/vnd.github.v3+json",
+                },
+            )
             with urllib.request.urlopen(req, timeout=30) as resp:
                 import json
+
                 tree = json.loads(resp.read())
 
             info_files = [
-                item["path"] for item in tree.get("tree", [])
+                item["path"]
+                for item in tree.get("tree", [])
                 if item["path"].endswith("_libretro.info")
             ]
 
@@ -176,7 +182,9 @@ class Scraper(BaseScraper):
                 core_name = filename.replace("_libretro.info", "")
                 try:
                     info_url = f"https://raw.githubusercontent.com/libretro/libretro-core-info/master/{filename}"
-                    req = urllib.request.Request(info_url, headers={"User-Agent": "retrobios-scraper/1.0"})
+                    req = urllib.request.Request(
+                        info_url, headers={"User-Agent": "retrobios-scraper/1.0"}
+                    )
                     with urllib.request.urlopen(req, timeout=10) as resp:
                         content = resp.read().decode("utf-8")
 
@@ -194,10 +202,11 @@ class Scraper(BaseScraper):
                     system_name = info.get("systemname", "")
                     manufacturer = info.get("manufacturer", "")
                     display_name = info.get("display_name", "")
-                    categories = info.get("categories", "")
+                    info.get("categories", "")
 
                     # Map core to our system slug via firmware paths
                     from .coreinfo_scraper import CORE_SYSTEM_MAP
+
                     system_slug = CORE_SYSTEM_MAP.get(core_name)
                     if not system_slug:
                         continue
@@ -267,7 +276,11 @@ class Scraper(BaseScraper):
             # ref: Vircon32/libretro.c -virtual console, single BIOS
             "vircon32": {
                 "files": [
-                    {"name": "Vircon32Bios.v32", "destination": "Vircon32Bios.v32", "required": True},
+                    {
+                        "name": "Vircon32Bios.v32",
+                        "destination": "Vircon32Bios.v32",
+                        "required": True,
+                    },
                 ],
                 "core": "vircon32",
                 "manufacturer": "Vircon",
@@ -276,7 +289,11 @@ class Scraper(BaseScraper):
             # ref: xrick/src/sysvid.c, xrick/src/data.c -game data archive
             "xrick": {
                 "files": [
-                    {"name": "data.zip", "destination": "xrick/data.zip", "required": True},
+                    {
+                        "name": "data.zip",
+                        "destination": "xrick/data.zip",
+                        "required": True,
+                    },
                 ],
                 "core": "xrick",
                 "manufacturer": "Other",
@@ -318,27 +335,51 @@ class Scraper(BaseScraper):
 
         # segasp.zip for Sega System SP (Flycast)
         if "sega-dreamcast-arcade" in systems:
-            existing = {f["name"] for f in systems["sega-dreamcast-arcade"].get("files", [])}
+            existing = {
+                f["name"] for f in systems["sega-dreamcast-arcade"].get("files", [])
+            }
             if "segasp.zip" not in existing:
-                systems["sega-dreamcast-arcade"]["files"].append({
-                    "name": "segasp.zip",
-                    "destination": "dc/segasp.zip",
-                    "required": True,
-                })
+                systems["sega-dreamcast-arcade"]["files"].append(
+                    {
+                        "name": "segasp.zip",
+                        "destination": "dc/segasp.zip",
+                        "required": True,
+                    }
+                )
 
         # Extra files missing from System.dat for specific systems.
         # Each traced to the core's source code.
         EXTRA_SYSTEM_FILES = {
             # melonDS DS DSi mode -ref: JesseTG/melonds-ds/src/libretro.cpp
             "nintendo-ds": [
-                {"name": "dsi_bios7.bin", "destination": "dsi_bios7.bin", "required": True},
-                {"name": "dsi_bios9.bin", "destination": "dsi_bios9.bin", "required": True},
-                {"name": "dsi_firmware.bin", "destination": "dsi_firmware.bin", "required": True},
-                {"name": "dsi_nand.bin", "destination": "dsi_nand.bin", "required": True},
+                {
+                    "name": "dsi_bios7.bin",
+                    "destination": "dsi_bios7.bin",
+                    "required": True,
+                },
+                {
+                    "name": "dsi_bios9.bin",
+                    "destination": "dsi_bios9.bin",
+                    "required": True,
+                },
+                {
+                    "name": "dsi_firmware.bin",
+                    "destination": "dsi_firmware.bin",
+                    "required": True,
+                },
+                {
+                    "name": "dsi_nand.bin",
+                    "destination": "dsi_nand.bin",
+                    "required": True,
+                },
             ],
             # bsnes SGB naming -ref: bsnes/target-libretro/libretro.cpp
             "nintendo-sgb": [
-                {"name": "sgb.boot.rom", "destination": "sgb.boot.rom", "required": False},
+                {
+                    "name": "sgb.boot.rom",
+                    "destination": "sgb.boot.rom",
+                    "required": False,
+                },
             ],
             # JollyCV -ref: jollycv/libretro.c
             "coleco-colecovision": [
@@ -348,12 +389,20 @@ class Scraper(BaseScraper):
             ],
             # Kronos ST-V -ref: libretro-kronos/libretro/libretro.c
             "sega-saturn": [
-                {"name": "stvbios.zip", "destination": "kronos/stvbios.zip", "required": True},
+                {
+                    "name": "stvbios.zip",
+                    "destination": "kronos/stvbios.zip",
+                    "required": True,
+                },
             ],
             # PCSX ReARMed / Beetle PSX alt BIOS -ref: pcsx_rearmed/libpcsxcore/misc.c
             # docs say PSXONPSP660.bin (uppercase) but core accepts any case
             "sony-playstation": [
-                {"name": "psxonpsp660.bin", "destination": "psxonpsp660.bin", "required": False},
+                {
+                    "name": "psxonpsp660.bin",
+                    "destination": "psxonpsp660.bin",
+                    "required": False,
+                },
             ],
             # Dolphin GC -ref: DolphinLibretro/Boot.cpp:72-73,
             # BootManager.cpp:200-217, CommonPaths.h:139 GC_IPL="IPL.bin"
@@ -361,15 +410,43 @@ class Scraper(BaseScraper):
             # System.dat gc-ntsc-*.bin names are NOT what Dolphin loads.
             # We add the correct Dolphin paths for BIOS + essential firmware.
             "nintendo-gamecube": [
-                {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/USA/IPL.bin", "required": False},
-                {"name": "gc-pal-12.bin", "destination": "dolphin-emu/Sys/GC/EUR/IPL.bin", "required": False},
-                {"name": "gc-ntsc-12.bin", "destination": "dolphin-emu/Sys/GC/JAP/IPL.bin", "required": False},
+                {
+                    "name": "gc-ntsc-12.bin",
+                    "destination": "dolphin-emu/Sys/GC/USA/IPL.bin",
+                    "required": False,
+                },
+                {
+                    "name": "gc-pal-12.bin",
+                    "destination": "dolphin-emu/Sys/GC/EUR/IPL.bin",
+                    "required": False,
+                },
+                {
+                    "name": "gc-ntsc-12.bin",
+                    "destination": "dolphin-emu/Sys/GC/JAP/IPL.bin",
+                    "required": False,
+                },
                 # DSP firmware -ref: Source/Core/Core/HW/DSPLLE/DSPHost.cpp
-                {"name": "dsp_coef.bin", "destination": "dolphin-emu/Sys/GC/dsp_coef.bin", "required": True},
-                {"name": "dsp_rom.bin", "destination": "dolphin-emu/Sys/GC/dsp_rom.bin", "required": True},
+                {
+                    "name": "dsp_coef.bin",
+                    "destination": "dolphin-emu/Sys/GC/dsp_coef.bin",
+                    "required": True,
+                },
+                {
+                    "name": "dsp_rom.bin",
+                    "destination": "dolphin-emu/Sys/GC/dsp_rom.bin",
+                    "required": True,
+                },
                 # Fonts -ref: Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp
-                {"name": "font_western.bin", "destination": "dolphin-emu/Sys/GC/font_western.bin", "required": False},
-                {"name": "font_japanese.bin", "destination": "dolphin-emu/Sys/GC/font_japanese.bin", "required": False},
+                {
+                    "name": "font_western.bin",
+                    "destination": "dolphin-emu/Sys/GC/font_western.bin",
+                    "required": False,
+                },
+                {
+                    "name": "font_japanese.bin",
+                    "destination": "dolphin-emu/Sys/GC/font_japanese.bin",
+                    "required": False,
+                },
             ],
             # minivmac casing -ref: minivmac/src/MYOSGLUE.c
             # doc says MacII.rom, repo has MacII.ROM -both work on case-insensitive FS
@@ -455,6 +532,7 @@ class Scraper(BaseScraper):
 
 def main():
     from scripts.scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape libretro BIOS requirements")
 
 

@@ -78,11 +78,9 @@ BIOS_FILE_MAP = {
     "sanyotry.bin": ("3DO Company", "3DO"),
     "3do_arcade_saot.bin": ("3DO Company", "3DO"),
     "3dobios.zip": ("3DO Company", "3DO"),
-
     "cpc464.rom": ("Amstrad", "CPC"),
     "cpc664.rom": ("Amstrad", "CPC"),
     "cpc6128.rom": ("Amstrad", "CPC"),
-
     "neogeo.zip": ("SNK", "Neo Geo"),
     "pgm.zip": ("Arcade", "Arcade"),
     "skns.zip": ("Arcade", "Arcade"),
@@ -94,7 +92,6 @@ BIOS_FILE_MAP = {
     "nmk004.zip": ("Arcade", "Arcade"),
     "ym2608.zip": ("Arcade", "Arcade"),
     "qsound.zip": ("Arcade", "Arcade"),
-
     "ATARIBAS.ROM": ("Atari", "400-800"),
     "ATARIOSA.ROM": ("Atari", "400-800"),
     "ATARIOSB.ROM": ("Atari", "400-800"),
@@ -106,10 +103,8 @@ BIOS_FILE_MAP = {
     "7800 BIOS (E).rom": ("Atari", "7800"),
     "lynxboot.img": ("Atari", "Lynx"),
     "tos.img": ("Atari", "ST"),
-
     "colecovision.rom": ("Coleco", "ColecoVision"),
     "coleco.rom": ("Coleco", "ColecoVision"),
-
     "kick33180.A500": ("Commodore", "Amiga"),
     "kick34005.A500": ("Commodore", "Amiga"),
     "kick34005.CDTV": ("Commodore", "Amiga"),
@@ -122,33 +117,26 @@ BIOS_FILE_MAP = {
     "kick40063.A600": ("Commodore", "Amiga"),
     "kick40068.A1200": ("Commodore", "Amiga"),
     "kick40068.A4000": ("Commodore", "Amiga"),
-
     "sl31253.bin": ("Fairchild", "Channel F"),
     "sl31254.bin": ("Fairchild", "Channel F"),
     "sl90025.bin": ("Fairchild", "Channel F"),
-
     "prboom.wad": ("Id Software", "Doom"),
     "ecwolf.pk3": ("Id Software", "Wolfenstein 3D"),
-
     "MacII.ROM": ("Apple", "Macintosh II"),
     "MacIIx.ROM": ("Apple", "Macintosh II"),
     "vMac.ROM": ("Apple", "Macintosh II"),
-
     "o2rom.bin": ("Magnavox", "Odyssey2"),
     "g7400.bin": ("Philips", "Videopac+"),
     "jopac.bin": ("Philips", "Videopac+"),
-
     "exec.bin": ("Mattel", "Intellivision"),
     "grom.bin": ("Mattel", "Intellivision"),
     "ECS.bin": ("Mattel", "Intellivision"),
     "IVOICE.BIN": ("Mattel", "Intellivision"),
-
     "MSX.ROM": ("Microsoft", "MSX"),
     "MSX2.ROM": ("Microsoft", "MSX"),
     "MSX2EXT.ROM": ("Microsoft", "MSX"),
     "MSX2P.ROM": ("Microsoft", "MSX"),
     "MSX2PEXT.ROM": ("Microsoft", "MSX"),
-
     "syscard1.pce": ("NEC", "PC Engine"),
     "syscard2.pce": ("NEC", "PC Engine"),
     "syscard2u.pce": ("NEC", "PC Engine"),
@@ -156,7 +144,6 @@ BIOS_FILE_MAP = {
     "syscard3u.pce": ("NEC", "PC Engine"),
     "gexpress.pce": ("NEC", "PC Engine"),
     "pcfx.rom": ("NEC", "PC-FX"),
-
     "disksys.rom": ("Nintendo", "Famicom Disk System"),
     "gba_bios.bin": ("Nintendo", "Game Boy Advance"),
     "gb_bios.bin": ("Nintendo", "Game Boy"),
@@ -179,7 +166,6 @@ BIOS_FILE_MAP = {
     "dsifirmware.bin": ("Nintendo", "Nintendo DS"),
     "bios.min": ("Nintendo", "Pokemon Mini"),
     "64DD_IPL.bin": ("Nintendo", "Nintendo 64DD"),
-
     "dc_boot.bin": ("Sega", "Dreamcast"),
     "dc_flash.bin": ("Sega", "Dreamcast"),
     "bios.gg": ("Sega", "Game Gear"),
@@ -196,7 +182,6 @@ BIOS_FILE_MAP = {
     "saturn_bios.bin": ("Sega", "Saturn"),
     "sega_101.bin": ("Sega", "Saturn"),
     "stvbios.zip": ("Sega", "Saturn"),
-
     "scph1001.bin": ("Sony", "PlayStation"),
     "SCPH1001.BIN": ("Sony", "PlayStation"),
     "scph5500.bin": ("Sony", "PlayStation"),
@@ -207,7 +192,6 @@ BIOS_FILE_MAP = {
     "ps1_rom.bin": ("Sony", "PlayStation"),
     "psxonpsp660.bin": ("Sony", "PlayStation"),
     "PSXONPSP660.BIN": ("Sony", "PlayStation Portable"),
-
     "scummvm.zip": ("ScummVM", "ScummVM"),
     "MT32_CONTROL.ROM": ("ScummVM", "ScummVM"),
     "MT32_PCM.ROM": ("ScummVM", "ScummVM"),
@@ -254,8 +238,11 @@ SKIP_LARGE_ROM_DIRS = {"roms/"}
 BRANCHES = ["RetroArch", "RetroPie", "Recalbox", "batocera", "Other"]
 
 SKIP_FILES = {
-    "README.md", ".gitignore", "desktop.ini",
-    "telemetry_id", "citra_log.txt",
+    "README.md",
+    ".gitignore",
+    "desktop.ini",
+    "telemetry_id",
+    "citra_log.txt",
 }
 SKIP_EXTENSIONS = {".txt", ".log", ".pem", ".nvm", ".ctg", ".exe", ".bat", ".sh"}
 
@@ -279,17 +266,33 @@ def classify_file(filepath: str) -> tuple:
         return None
 
     clean = filepath
-    for prefix in ("bios/", "BIOS/", "roms/fba/", "roms/fbneo/", "roms/mame/",
-                   "roms/mame-libretro/", "roms/neogeo/", "roms/naomi/",
-                   "roms/atomiswave/", "roms/macintosh/"):
+    for prefix in (
+        "bios/",
+        "BIOS/",
+        "roms/fba/",
+        "roms/fbneo/",
+        "roms/mame/",
+        "roms/mame-libretro/",
+        "roms/neogeo/",
+        "roms/naomi/",
+        "roms/atomiswave/",
+        "roms/macintosh/",
+    ):
         if clean.startswith(prefix):
-            clean = clean[len(prefix):]
+            clean = clean[len(prefix) :]
             break
 
     if filepath.startswith("roms/") and not any(
-        filepath.startswith(p) for p in (
-            "roms/fba/", "roms/fbneo/", "roms/mame/", "roms/mame-libretro/",
-            "roms/neogeo/", "roms/naomi/", "roms/atomiswave/", "roms/macintosh/"
+        filepath.startswith(p)
+        for p in (
+            "roms/fba/",
+            "roms/fbneo/",
+            "roms/mame/",
+            "roms/mame-libretro/",
+            "roms/neogeo/",
+            "roms/naomi/",
+            "roms/atomiswave/",
+            "roms/macintosh/",
         )
     ):
         return None
@@ -341,12 +344,12 @@ def get_subpath(filepath: str, manufacturer: str, console: str) -> str:
     clean = filepath
     for prefix in ("bios/", "BIOS/"):
         if clean.startswith(prefix):
-            clean = clean[len(prefix):]
+            clean = clean[len(prefix) :]
             break
 
     for prefix in PATH_PREFIX_MAP:
         if clean.startswith(prefix):
-            remaining = clean[len(prefix):]
+            remaining = clean[len(prefix) :]
             if "/" in remaining:
                 return remaining
             return remaining
@@ -363,16 +366,14 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
 
         try:
             subprocess.run(
-                ["git", "rev-parse", "--verify", ref],
-                capture_output=True, check=True
+                ["git", "rev-parse", "--verify", ref], capture_output=True, check=True
             )
         except subprocess.CalledProcessError:
             print(f"  Branch {branch} not found, skipping")
             continue
 
         result = subprocess.run(
-            ["git", "ls-tree", "-r", "--name-only", ref],
-            capture_output=True, text=True
+            ["git", "ls-tree", "-r", "--name-only", ref], capture_output=True, text=True
         )
         files = result.stdout.strip().split("\n")
         print(f"\n  Branch '{branch}': {len(files)} files")
@@ -391,7 +392,8 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
             try:
                 blob = subprocess.run(
                     ["git", "show", f"{ref}:{filepath}"],
-                    capture_output=True, check=True
+                    capture_output=True,
+                    check=True,
                 )
                 content = blob.stdout
             except subprocess.CalledProcessError:
@@ -493,14 +495,20 @@ def main():
     parser = argparse.ArgumentParser(
         description="Migrate BIOS files to Manufacturer/Console structure"
     )
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Show what would be done without moving files")
-    parser.add_argument("--source", default=".",
-                        help="Source directory (repo root)")
-    parser.add_argument("--target", default="bios",
-                        help="Target directory for organized BIOS files")
-    parser.add_argument("--include-branches", action="store_true",
-                        help="Also extract BIOS files from all remote branches")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without moving files",
+    )
+    parser.add_argument("--source", default=".", help="Source directory (repo root)")
+    parser.add_argument(
+        "--target", default="bios", help="Target directory for organized BIOS files"
+    )
+    parser.add_argument(
+        "--include-branches",
+        action="store_true",
+        help="Also extract BIOS files from all remote branches",
+    )
     args = parser.parse_args()
 
     source = Path(args.source)
@@ -517,7 +525,9 @@ def main():
         print()
 
     print("=== Phase 1: Local files (libretro branch) ===")
-    moved, skipped, errors, existing_hashes = migrate_local(source, target, args.dry_run)
+    moved, skipped, errors, existing_hashes = migrate_local(
+        source, target, args.dry_run
+    )
     action = "Would copy" if args.dry_run else "Copied"
     print(f"\n{action} {moved} files, skipped {skipped}")
 
@@ -529,8 +539,15 @@ def main():
 
     if source.is_dir():
         known = set(SYSTEM_MAP.keys()) | {
-            "bios", "scripts", "platforms", "schemas", ".github", ".cache",
-            ".git", "README.md", ".gitignore",
+            "bios",
+            "scripts",
+            "platforms",
+            "schemas",
+            ".github",
+            ".cache",
+            ".git",
+            "README.md",
+            ".gitignore",
         }
         for d in sorted(source.iterdir()):
             if d.name not in known and not d.name.startswith("."):

@@ -14,27 +14,27 @@ from pathlib import Path
 
 # Macros that declare a machine entry
 _MACHINE_MACROS = re.compile(
-    r'\b(GAME|SYST|COMP|CONS)\s*\(',
+    r"\b(GAME|SYST|COMP|CONS)\s*\(",
     re.MULTILINE,
 )
 
 # ROM block boundaries
-_ROM_START = re.compile(r'ROM_START\s*\(\s*(\w+)\s*\)')
-_ROM_END = re.compile(r'ROM_END')
+_ROM_START = re.compile(r"ROM_START\s*\(\s*(\w+)\s*\)")
+_ROM_END = re.compile(r"ROM_END")
 
 # ROM_REGION variants: ROM_REGION, ROM_REGION16_BE, ROM_REGION16_LE, ROM_REGION32_LE, etc.
 _ROM_REGION = re.compile(
-    r'ROM_REGION\w*\s*\('
-    r'\s*(0x[\da-fA-F]+|\d+)\s*,'   # size
-    r'\s*"([^"]+)"\s*,',            # tag
+    r"ROM_REGION\w*\s*\("
+    r"\s*(0x[\da-fA-F]+|\d+)\s*,"  # size
+    r'\s*"([^"]+)"\s*,',  # tag
 )
 
 # ROM_SYSTEM_BIOS( index, label, description )
 _ROM_SYSTEM_BIOS = re.compile(
-    r'ROM_SYSTEM_BIOS\s*\('
-    r'\s*(\d+)\s*,'           # index
-    r'\s*"([^"]+)"\s*,'       # label
-    r'\s*"([^"]+)"\s*\)',     # description
+    r"ROM_SYSTEM_BIOS\s*\("
+    r"\s*(\d+)\s*,"  # index
+    r'\s*"([^"]+)"\s*,'  # label
+    r'\s*"([^"]+)"\s*\)',  # description
 )
 
 # All ROM_LOAD variants including custom BIOS macros.
@@ -44,23 +44,23 @@ _ROM_SYSTEM_BIOS = re.compile(
 # The key pattern: any macro containing "ROM_LOAD" or "ROMX_LOAD" in its name,
 # with the first quoted string being the ROM filename.
 _ROM_LOAD = re.compile(
-    r'\b\w*ROMX?_LOAD\w*\s*\('
-    r'[^"]*'                          # skip any args before the filename (e.g., bios index)
-    r'"([^"]+)"\s*,'                  # name (first quoted string)
-    r'\s*(0x[\da-fA-F]+|\d+)\s*,'     # offset
-    r'\s*(0x[\da-fA-F]+|\d+)\s*,',    # size
+    r"\b\w*ROMX?_LOAD\w*\s*\("
+    r'[^"]*'  # skip any args before the filename (e.g., bios index)
+    r'"([^"]+)"\s*,'  # name (first quoted string)
+    r"\s*(0x[\da-fA-F]+|\d+)\s*,"  # offset
+    r"\s*(0x[\da-fA-F]+|\d+)\s*,",  # size
 )
 
 # CRC32 and SHA1 within a ROM_LOAD line
 _CRC_SHA = re.compile(
-    r'CRC\s*\(\s*([0-9a-fA-F]+)\s*\)'
-    r'\s+'
-    r'SHA1\s*\(\s*([0-9a-fA-F]+)\s*\)',
+    r"CRC\s*\(\s*([0-9a-fA-F]+)\s*\)"
+    r"\s+"
+    r"SHA1\s*\(\s*([0-9a-fA-F]+)\s*\)",
 )
 
-_NO_DUMP = re.compile(r'\bNO_DUMP\b')
-_BAD_DUMP = re.compile(r'\bBAD_DUMP\b')
-_ROM_BIOS = re.compile(r'ROM_BIOS\s*\(\s*(\d+)\s*\)')
+_NO_DUMP = re.compile(r"\bNO_DUMP\b")
+_BAD_DUMP = re.compile(r"\bBAD_DUMP\b")
+_ROM_BIOS = re.compile(r"ROM_BIOS\s*\(\s*(\d+)\s*\)")
 
 
 def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
@@ -77,8 +77,8 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
         if block_end == -1:
             continue
 
-        block = source[start:block_end + 1]
-        if 'MACHINE_IS_BIOS_ROOT' not in block:
+        block = source[start : block_end + 1]
+        if "MACHINE_IS_BIOS_ROOT" not in block:
             continue
 
         # Extract set name: first arg after the opening paren
@@ -97,11 +97,11 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
             continue
 
         set_name = args[1].strip()
-        line_no = source[:match.start()].count('\n') + 1
+        line_no = source[: match.start()].count("\n") + 1
 
         results[set_name] = {
-            'source_file': filename,
-            'source_line': line_no,
+            "source_file": filename,
+            "source_line": line_no,
         }
 
     return results
@@ -115,7 +115,7 @@ def parse_rom_block(source: str, set_name: str) -> list[dict]:
     extracts all ROM entries. Skips NO_DUMP, flags BAD_DUMP.
     """
     pattern = re.compile(
-        r'ROM_START\s*\(\s*' + re.escape(set_name) + r'\s*\)',
+        r"ROM_START\s*\(\s*" + re.escape(set_name) + r"\s*\)",
     )
     start_match = pattern.search(source)
     if not start_match:
@@ -125,7 +125,7 @@ def parse_rom_block(source: str, set_name: str) -> list[dict]:
     if not end_match:
         return []
 
-    block = source[start_match.end():end_match.start()]
+    block = source[start_match.end() : end_match.start()]
 
     # Pre-expand macros: find #define macros in the file that contain
     # ROM_LOAD/ROM_REGION/ROM_SYSTEM_BIOS calls, then expand their
@@ -144,26 +144,26 @@ def parse_mame_source_tree(base_path: str) -> dict[str, dict]:
     results: dict[str, dict] = {}
     root = Path(base_path)
 
-    search_dirs = [root / 'src' / 'mame', root / 'src' / 'devices']
+    search_dirs = [root / "src" / "mame", root / "src" / "devices"]
 
     for search_dir in search_dirs:
         if not search_dir.is_dir():
             continue
         for dirpath, _dirnames, filenames in os.walk(search_dir):
             for fname in filenames:
-                if not fname.endswith(('.cpp', '.c', '.h', '.hxx')):
+                if not fname.endswith((".cpp", ".c", ".h", ".hxx")):
                     continue
                 filepath = Path(dirpath) / fname
                 rel_path = str(filepath.relative_to(root))
-                content = filepath.read_text(encoding='utf-8', errors='replace')
+                content = filepath.read_text(encoding="utf-8", errors="replace")
 
                 bios_sets = find_bios_root_sets(content, rel_path)
                 for set_name, info in bios_sets.items():
                     roms = parse_rom_block(content, set_name)
                     results[set_name] = {
-                        'source_file': info['source_file'],
-                        'source_line': info['source_line'],
-                        'roms': roms,
+                        "source_file": info["source_file"],
+                        "source_line": info["source_line"],
+                        "roms": roms,
                     }
 
     return results
@@ -171,13 +171,20 @@ def parse_mame_source_tree(base_path: str) -> dict[str, dict]:
 
 # Regex for #define macros that span multiple lines (backslash continuation)
 _DEFINE_RE = re.compile(
-    r'^\s*#\s*define\s+(\w+)(?:\([^)]*\))?\s*((?:.*\\\n)*.*)',
+    r"^\s*#\s*define\s+(\w+)(?:\([^)]*\))?\s*((?:.*\\\n)*.*)",
     re.MULTILINE,
 )
 
 # ROM-related tokens that indicate a macro is relevant for expansion
-_ROM_TOKENS = {'ROM_LOAD', 'ROMX_LOAD', 'ROM_REGION', 'ROM_SYSTEM_BIOS',
-               'ROM_FILL', 'ROM_COPY', 'ROM_RELOAD'}
+_ROM_TOKENS = {
+    "ROM_LOAD",
+    "ROMX_LOAD",
+    "ROM_REGION",
+    "ROM_SYSTEM_BIOS",
+    "ROM_FILL",
+    "ROM_COPY",
+    "ROM_RELOAD",
+}
 
 
 def _collect_rom_macros(source: str) -> dict[str, str]:
@@ -193,14 +200,14 @@ def _collect_rom_macros(source: str) -> dict[str, str]:
         name = m.group(1)
         body = m.group(2)
         # Join backslash-continued lines
-        body = body.replace('\\\n', ' ')
+        body = body.replace("\\\n", " ")
         # Only keep macros that contain ROM-related tokens
         if not any(tok in body for tok in _ROM_TOKENS):
             continue
         # Skip wrapper macros: if the body contains ROMX_LOAD/ROM_LOAD
         # with unquoted args (formal parameters), it's a wrapper.
         # These are already recognized by the _ROM_LOAD regex directly.
-        if re.search(r'ROMX?_LOAD\s*\(\s*\w+\s*,\s*\w+\s*,', body):
+        if re.search(r"ROMX?_LOAD\s*\(\s*\w+\s*,\s*\w+\s*,", body):
             continue
         macros[name] = body
     return macros
@@ -223,7 +230,7 @@ def _expand_macros(block: str, macros: dict[str, str], depth: int = 5) -> str:
         iterations += 1
         for name, body in macros.items():
             # Match macro invocation: NAME or NAME(args)
-            pattern = re.compile(r'\b' + re.escape(name) + r'(?:\s*\([^)]*\))?')
+            pattern = re.compile(r"\b" + re.escape(name) + r"(?:\s*\([^)]*\))?")
             if pattern.search(block):
                 block = pattern.sub(body, block)
                 changed = True
@@ -237,9 +244,9 @@ def _find_closing_paren(source: str, start: int) -> int:
     i = start
     while i < len(source):
         ch = source[i]
-        if ch == '(':
+        if ch == "(":
             depth += 1
-        elif ch == ')':
+        elif ch == ")":
             depth -= 1
             if depth == 0:
                 return i
@@ -268,24 +275,24 @@ def _split_macro_args(inner: str) -> list[str]:
                 i += 1
             if i < len(inner):
                 current.append(inner[i])
-        elif ch == '(':
+        elif ch == "(":
             depth += 1
             current.append(ch)
-        elif ch == ')':
+        elif ch == ")":
             if depth == 0:
-                args.append(''.join(current))
+                args.append("".join(current))
                 break
             depth -= 1
             current.append(ch)
-        elif ch == ',' and depth == 0:
-            args.append(''.join(current))
+        elif ch == "," and depth == 0:
+            args.append("".join(current))
             current = []
         else:
             current.append(ch)
         i += 1
 
     if current:
-        remaining = ''.join(current).strip()
+        remaining = "".join(current).strip()
         if remaining:
             args.append(remaining)
 
@@ -300,15 +307,15 @@ def _parse_rom_entries(block: str) -> list[dict]:
     Processes matches in order of appearance to track region and BIOS context.
     """
     roms: list[dict] = []
-    current_region = ''
+    current_region = ""
     bios_labels: dict[int, tuple[str, str]] = {}
 
     # Build a combined pattern that matches all interesting tokens
     # and process them in order of occurrence
     token_patterns = [
-        ('region', _ROM_REGION),
-        ('bios_label', _ROM_SYSTEM_BIOS),
-        ('rom_load', _ROM_LOAD),
+        ("region", _ROM_REGION),
+        ("bios_label", _ROM_SYSTEM_BIOS),
+        ("rom_load", _ROM_LOAD),
     ]
 
     # Collect all matches with their positions
@@ -321,22 +328,22 @@ def _parse_rom_entries(block: str) -> list[dict]:
     events.sort(key=lambda e: e[0])
 
     for _pos, tag, m in events:
-        if tag == 'region':
+        if tag == "region":
             current_region = m.group(2)
-        elif tag == 'bios_label':
+        elif tag == "bios_label":
             idx = int(m.group(1))
             bios_labels[idx] = (m.group(2), m.group(3))
-        elif tag == 'rom_load':
+        elif tag == "rom_load":
             # Get the full macro call as context (find closing paren)
             context_start = m.start()
             # Find the opening paren of the ROM_LOAD macro
-            paren_pos = block.find('(', context_start)
+            paren_pos = block.find("(", context_start)
             if paren_pos != -1:
                 close_pos = _find_closing_paren(block, paren_pos)
                 context_end = close_pos + 1 if close_pos != -1 else m.end() + 200
             else:
                 context_end = m.end() + 200
-            context = block[context_start:min(context_end, len(block))]
+            context = block[context_start : min(context_end, len(block))]
 
             if _NO_DUMP.search(context):
                 continue
@@ -345,8 +352,8 @@ def _parse_rom_entries(block: str) -> list[dict]:
             rom_size = _parse_int(m.group(3))
 
             crc_sha_match = _CRC_SHA.search(context)
-            crc32 = ''
-            sha1 = ''
+            crc32 = ""
+            sha1 = ""
             if crc_sha_match:
                 crc32 = crc_sha_match.group(1).lower()
                 sha1 = crc_sha_match.group(2).lower()
@@ -354,8 +361,8 @@ def _parse_rom_entries(block: str) -> list[dict]:
             bad_dump = bool(_BAD_DUMP.search(context))
 
             bios_index = None
-            bios_label = ''
-            bios_description = ''
+            bios_label = ""
+            bios_description = ""
             bios_ref = _ROM_BIOS.search(context)
             if bios_ref:
                 bios_index = int(bios_ref.group(1))
@@ -363,18 +370,18 @@ def _parse_rom_entries(block: str) -> list[dict]:
                     bios_label, bios_description = bios_labels[bios_index]
 
             entry: dict = {
-                'name': rom_name,
-                'size': rom_size,
-                'crc32': crc32,
-                'sha1': sha1,
-                'region': current_region,
-                'bad_dump': bad_dump,
+                "name": rom_name,
+                "size": rom_size,
+                "crc32": crc32,
+                "sha1": sha1,
+                "region": current_region,
+                "bad_dump": bad_dump,
             }
 
             if bios_index is not None:
-                entry['bios_index'] = bios_index
-                entry['bios_label'] = bios_label
-                entry['bios_description'] = bios_description
+                entry["bios_index"] = bios_index
+                entry["bios_label"] = bios_label
+                entry["bios_description"] = bios_description
 
             roms.append(entry)
 
@@ -384,6 +391,6 @@ def _parse_rom_entries(block: str) -> list[dict]:
 def _parse_int(value: str) -> int:
     """Parse an integer that may be hex (0x...) or decimal."""
     value = value.strip()
-    if value.startswith('0x') or value.startswith('0X'):
+    if value.startswith("0x") or value.startswith("0X"):
         return int(value, 16)
     return int(value)

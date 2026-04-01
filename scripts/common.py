@@ -26,9 +26,11 @@ def require_yaml():
     """Import and return yaml, exiting if PyYAML is not installed."""
     try:
         import yaml as _yaml
+
         return _yaml
     except ImportError:
         import sys
+
         print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
         sys.exit(1)
 
@@ -154,12 +156,17 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     if "inherits" in config:
         parent = load_platform_config(config["inherits"], platforms_dir)
         merged = {**parent}
-        merged.update({k: v for k, v in config.items() if k not in ("inherits", "overrides")})
+        merged.update(
+            {k: v for k, v in config.items() if k not in ("inherits", "overrides")}
+        )
         if "overrides" in config and "systems" in config["overrides"]:
             merged.setdefault("systems", {})
             for sys_id, override in config["overrides"]["systems"].items():
                 if sys_id in merged["systems"]:
-                    merged["systems"][sys_id] = {**merged["systems"][sys_id], **override}
+                    merged["systems"][sys_id] = {
+                        **merged["systems"][sys_id],
+                        **override,
+                    }
                 else:
                     merged["systems"][sys_id] = override
         config = merged
@@ -346,12 +353,14 @@ def list_available_targets(
     result = []
     for tname, tdata in sorted(data.get("targets", {}).items()):
         aliases = overrides.get(tname, {}).get("aliases", [])
-        result.append({
-            "name": tname,
-            "architecture": tdata.get("architecture", ""),
-            "core_count": len(tdata.get("cores", [])),
-            "aliases": aliases,
-        })
+        result.append(
+            {
+                "name": tname,
+                "architecture": tdata.get("architecture", ""),
+                "core_count": len(tdata.get("cores", [])),
+                "aliases": aliases,
+            }
+        )
     return result
 
 
@@ -398,7 +407,9 @@ def resolve_local_file(
         if hint_base and hint_base not in names_to_try:
             names_to_try.append(hint_base)
 
-    md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
+    md5_list = (
+        [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
+    )
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
@@ -480,7 +491,9 @@ def resolve_local_file(
 
     if candidates:
         if zipped_file:
-            candidates = [(p, m) for p, m in candidates if ".zip" in os.path.basename(p)]
+            candidates = [
+                (p, m) for p, m in candidates if ".zip" in os.path.basename(p)
+            ]
         if md5_set:
             for path, db_md5 in candidates:
                 if ".zip" in os.path.basename(path):
@@ -530,7 +543,11 @@ def resolve_local_file(
         if canonical and canonical != name:
             canonical_entry = {"name": canonical}
             result = resolve_local_file(
-                canonical_entry, db, zip_contents, dest_hint, _depth=_depth + 1,
+                canonical_entry,
+                db,
+                zip_contents,
+                dest_hint,
+                _depth=_depth + 1,
                 data_dir_registry=data_dir_registry,
             )
             if result[0]:
@@ -643,9 +660,7 @@ def build_zip_contents_index(db: dict, max_entry_size: int = 512 * 1024 * 1024) 
         if path.endswith(".zip") and os.path.exists(path):
             zip_entries.append((path, sha1))
 
-    fingerprint = frozenset(
-        (path, os.path.getmtime(path)) for path, _ in zip_entries
-    )
+    fingerprint = frozenset((path, os.path.getmtime(path)) for path, _ in zip_entries)
     if _zip_contents_cache is not None and _zip_contents_cache[0] == fingerprint:
         return _zip_contents_cache[1]
 
@@ -672,7 +687,8 @@ _emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
 
 
 def load_emulator_profiles(
-    emulators_dir: str, skip_aliases: bool = True,
+    emulators_dir: str,
+    skip_aliases: bool = True,
 ) -> dict[str, dict]:
     """Load all emulator YAML profiles from a directory (cached)."""
     cache_key = (os.path.realpath(emulators_dir), skip_aliases)
@@ -701,7 +717,8 @@ def load_emulator_profiles(
 
 
 def group_identical_platforms(
-    platforms: list[str], platforms_dir: str,
+    platforms: list[str],
+    platforms_dir: str,
     target_cores_cache: dict[str, set[str] | None] | None = None,
 ) -> list[tuple[list[str], str]]:
     """Group platforms that produce identical packs (same files + base_destination).
@@ -744,7 +761,9 @@ def group_identical_platforms(
                 fp = hashlib.sha1(f"{fp}|{tc_str}".encode()).hexdigest()
         fingerprints.setdefault(fp, []).append(platform)
         # Prefer the root platform (no inherits) as representative
-        if fp not in representatives or (not inherits[platform] and inherits.get(representatives[fp], False)):
+        if fp not in representatives or (
+            not inherits[platform] and inherits.get(representatives[fp], False)
+        ):
             representatives[fp] = platform
 
     result = []
@@ -756,7 +775,8 @@ def group_identical_platforms(
 
 
 def resolve_platform_cores(
-    config: dict, profiles: dict[str, dict],
+    config: dict,
+    profiles: dict[str, dict],
     target_cores: set[str] | None = None,
 ) -> set[str]:
     """Resolve which emulator profiles are relevant for a platform.
@@ -773,9 +793,9 @@ def resolve_platform_cores(
 
     if cores_config == "all_libretro":
         result = {
-            name for name, p in profiles.items()
-            if "libretro" in p.get("type", "")
-            and p.get("type") != "alias"
+            name
+            for name, p in profiles.items()
+            if "libretro" in p.get("type", "") and p.get("type") != "alias"
         }
     elif isinstance(cores_config, list):
         core_set = {str(c) for c in cores_config}
@@ -786,25 +806,22 @@ def resolve_platform_cores(
             core_to_profile[name] = name
             for core_name in p.get("cores", []):
                 core_to_profile[str(core_name)] = name
-        result = {
-            core_to_profile[c]
-            for c in core_set
-            if c in core_to_profile
-        }
+        result = {core_to_profile[c] for c in core_set if c in core_to_profile}
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
         # ships RetroArch + standalone emulators)
         if "all_libretro" in core_set or "retroarch" in core_set:
             result |= {
-                name for name, p in profiles.items()
-                if "libretro" in p.get("type", "")
-                and p.get("type") != "alias"
+                name
+                for name, p in profiles.items()
+                if "libretro" in p.get("type", "") and p.get("type") != "alias"
             }
     else:
         # Fallback: system ID intersection with normalization
         norm_plat_systems = {_norm_system_id(s) for s in config.get("systems", {})}
         result = {
-            name for name, p in profiles.items()
+            name
+            for name, p in profiles.items()
             if {_norm_system_id(s) for s in p.get("systems", [])} & norm_plat_systems
             and p.get("type") != "alias"
         }
@@ -826,11 +843,34 @@ def resolve_platform_cores(
 
 
 MANUFACTURER_PREFIXES = (
-    "acorn-", "apple-", "microsoft-", "nintendo-", "sony-", "sega-",
-    "snk-", "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
-    "hartung-", "tiger-", "magnavox-", "philips-", "bandai-", "casio-",
-    "coleco-", "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
-    "gce-", "interton-", "texas-instruments-", "videoton-",
+    "acorn-",
+    "apple-",
+    "microsoft-",
+    "nintendo-",
+    "sony-",
+    "sega-",
+    "snk-",
+    "panasonic-",
+    "nec-",
+    "epoch-",
+    "mattel-",
+    "fairchild-",
+    "hartung-",
+    "tiger-",
+    "magnavox-",
+    "philips-",
+    "bandai-",
+    "casio-",
+    "coleco-",
+    "commodore-",
+    "sharp-",
+    "sinclair-",
+    "atari-",
+    "sammy-",
+    "gce-",
+    "interton-",
+    "texas-instruments-",
+    "videoton-",
 )
 
 
@@ -877,7 +917,7 @@ def _norm_system_id(sid: str) -> str:
     s = SYSTEM_ALIASES.get(s, s)
     for prefix in MANUFACTURER_PREFIXES:
         if s.startswith(prefix):
-            s = s[len(prefix):]
+            s = s[len(prefix) :]
             break
     return s.replace("-", "")
 
@@ -984,9 +1024,9 @@ def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
 import re
 
 _TIMESTAMP_PATTERNS = [
-    re.compile(r'"generated_at":\s*"[^"]*"'),       # database.json
-    re.compile(r'\*Auto-generated on [^*]*\*'),      # README.md
-    re.compile(r'\*Generated on [^*]*\*'),           # docs site pages
+    re.compile(r'"generated_at":\s*"[^"]*"'),  # database.json
+    re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
+    re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
 ]
 
 
@@ -1023,8 +1063,12 @@ LARGE_FILES_REPO = "Abdess/retrobios"
 LARGE_FILES_CACHE = ".cache/large"
 
 
-def fetch_large_file(name: str, dest_dir: str = LARGE_FILES_CACHE,
-                     expected_sha1: str = "", expected_md5: str = "") -> str | None:
+def fetch_large_file(
+    name: str,
+    dest_dir: str = LARGE_FILES_CACHE,
+    expected_sha1: str = "",
+    expected_md5: str = "",
+) -> str | None:
     """Download a large file from the 'large-files' GitHub release if not cached."""
     cached = os.path.join(dest_dir, name)
     if os.path.exists(cached):
@@ -1033,7 +1077,9 @@ def fetch_large_file(name: str, dest_dir: str = LARGE_FILES_CACHE,
             if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
                 os.unlink(cached)
             elif expected_md5:
-                md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+                md5_list = [
+                    m.strip().lower() for m in expected_md5.split(",") if m.strip()
+                ]
                 if hashes["md5"].lower() not in md5_list:
                     os.unlink(cached)
                 else:
@@ -1122,8 +1168,9 @@ def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
         file_count = len(systems[sys_id].get("files", []))
         mfr = systems[sys_id].get("manufacturer", "")
         mfr_display = f"  [{mfr.split('|')[0]}]" if mfr else ""
-        print(f"  {sys_id:35s} ({file_count} file{'s' if file_count != 1 else ''}){mfr_display}")
-
+        print(
+            f"  {sys_id:35s} ({file_count} file{'s' if file_count != 1 else ''}){mfr_display}"
+        )
 
 
 def build_target_cores_cache(

@@ -10,13 +10,13 @@ Parses files like libretro's System.dat which uses the format:
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 
 
 @dataclass
 class DatRom:
     """A ROM entry from a DAT file."""
+
     name: str
     size: int
     crc32: str
@@ -28,6 +28,7 @@ class DatRom:
 @dataclass
 class DatMetadata:
     """Metadata from a DAT file header."""
+
     name: str = ""
     version: str = ""
     description: str = ""
@@ -53,7 +54,10 @@ def parse_dat(content: str) -> list[DatRom]:
 
         if stripped.startswith("comment "):
             value = stripped[8:].strip().strip('"')
-            if value in ("System", "System, firmware, and BIOS files used by libretro cores."):
+            if value in (
+                "System",
+                "System, firmware, and BIOS files used by libretro cores.",
+            ):
                 continue
             current_system = value
 
@@ -78,9 +82,16 @@ def parse_dat_metadata(content: str) -> DatMetadata:
         if in_header and stripped == ")":
             break
         if in_header:
-            for field in ("name", "version", "description", "author", "homepage", "url"):
+            for field in (
+                "name",
+                "version",
+                "description",
+                "author",
+                "homepage",
+                "url",
+            ):
                 if stripped.startswith(f"{field} "):
-                    value = stripped[len(field) + 1:].strip().strip('"')
+                    value = stripped[len(field) + 1 :].strip().strip('"')
                     setattr(meta, field, value)
 
     return meta
@@ -94,7 +105,7 @@ def _parse_rom_line(line: str, system: str) -> DatRom | None:
     if start == -1 or end == -1 or end <= start:
         return None
 
-    content = line[start + 1:end].strip()
+    content = line[start + 1 : end].strip()
 
     fields = {}
     i = 0

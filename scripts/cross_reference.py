@@ -19,7 +19,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config, require_yaml
+from common import (
+    list_registered_platforms,
+    load_database,
+    load_emulator_profiles,
+    load_platform_config,
+    require_yaml,
+)
 
 yaml = require_yaml()
 
@@ -28,11 +34,15 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB = "database.json"
 
 
-def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+def load_platform_files(
+    platforms_dir: str,
+) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
     """Load all platform configs and collect declared filenames + data_directories per system."""
     declared = {}
     platform_data_dirs = {}
-    for platform_name in list_registered_platforms(platforms_dir, include_archived=True):
+    for platform_name in list_registered_platforms(
+        platforms_dir, include_archived=True
+    ):
         config = load_platform_config(platform_name, platforms_dir)
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
@@ -46,8 +56,9 @@ def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[s
     return declared, platform_data_dirs
 
 
-def _build_supplemental_index(data_root: str = "data",
-                               bios_root: str = "bios") -> set[str]:
+def _build_supplemental_index(
+    data_root: str = "data", bios_root: str = "bios"
+) -> set[str]:
     """Build a set of filenames and directory names in data/ and inside bios/ ZIPs."""
     names: set[str] = set()
     root_path = Path(data_root)
@@ -76,12 +87,15 @@ def _build_supplemental_index(data_root: str = "data",
                 names.add(dpath.name + "/")
                 names.add(dpath.name.lower() + "/")
         import zipfile
+
         for zpath in bios_path.rglob("*.zip"):
             try:
                 with zipfile.ZipFile(zpath) as zf:
                     for member in zf.namelist():
                         if not member.endswith("/"):
-                            basename = member.rsplit("/", 1)[-1] if "/" in member else member
+                            basename = (
+                                member.rsplit("/", 1)[-1] if "/" in member else member
+                            )
                             names.add(basename)
                             names.add(basename.lower())
             except (zipfile.BadZipFile, OSError):
@@ -89,8 +103,12 @@ def _build_supplemental_index(data_root: str = "data",
     return names
 
 
-def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str, str],
-                  data_names: set[str] | None = None) -> bool:
+def _find_in_repo(
+    fname: str,
+    by_name: dict[str, list],
+    by_name_lower: dict[str, str],
+    data_names: set[str] | None = None,
+) -> bool:
     if fname in by_name:
         return True
     # For directory entries or paths, extract the meaningful basename
@@ -170,7 +188,9 @@ def cross_reference(
             if not in_repo:
                 path_field = f.get("path", "")
                 if path_field and path_field != fname:
-                    in_repo = _find_in_repo(path_field, by_name, by_name_lower, data_names)
+                    in_repo = _find_in_repo(
+                        path_field, by_name, by_name_lower, data_names
+                    )
             # Try MD5 hash match (handles files that exist under different names)
             if not in_repo:
                 md5_raw = f.get("md5", "")
@@ -231,9 +251,11 @@ def print_report(report: dict) -> None:
             status = f"{data['gap_in_repo']} in repo, {data['gap_missing']} missing"
 
         print(f"\n{data['emulator']} ({', '.join(data['systems'])})")
-        print(f"  {data['total_files']} files in profile, "
-              f"{data['platform_covered']} declared by platforms, "
-              f"{gaps} undeclared")
+        print(
+            f"  {data['total_files']} files in profile, "
+            f"{data['platform_covered']} declared by platforms, "
+            f"{gaps} undeclared"
+        )
 
         if gaps > 0:
             print(f"  Gaps: {status}")
@@ -259,7 +281,9 @@ def main():
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--emulator", "-e", help="Analyze single emulator")
-    parser.add_argument("--platform", "-p", help="Platform name (required for --target)")
+    parser.add_argument(
+        "--platform", "-p", help="Platform name (required for --target)"
+    )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
@@ -272,7 +296,10 @@ def main():
         if not args.platform:
             parser.error("--target requires --platform")
         from common import load_target_config, resolve_platform_cores
-        target_cores = load_target_config(args.platform, args.target, args.platforms_dir)
+
+        target_cores = load_target_config(
+            args.platform, args.target, args.platforms_dir
+        )
         config = load_platform_config(args.platform, args.platforms_dir)
         relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
         profiles = {k: v for k, v in profiles.items() if k in relevant}

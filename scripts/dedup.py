@@ -17,6 +17,7 @@ Two types of deduplication:
 
 After dedup, run generate_db.py --force to rebuild database indexes.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -110,13 +111,10 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
         unique_names = sorted(by_name.keys())
         if len(unique_names) > 1:
             # Check if these are all in MAME/Arcade dirs AND all ZIPs
-            all_mame_zip = (
-                all(
-                    any(_is_mame_dir(p) for p in name_paths)
-                    for name_paths in by_name.values()
-                )
-                and all(n.endswith(".zip") for n in unique_names)
-            )
+            all_mame_zip = all(
+                any(_is_mame_dir(p) for p in name_paths)
+                for name_paths in by_name.values()
+            ) and all(n.endswith(".zip") for n in unique_names)
             if all_mame_zip:
                 # MAME device clones: different ZIP names, same ROM content
                 # Keep one canonical, remove clones, record in clone map
@@ -202,7 +200,9 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
 
     prefix = "Would remove" if dry_run else "Removed"
     print(f"\n{prefix}: {total_removed} files")
-    print(f"Space {'to save' if dry_run else 'saved'}: {total_saved / 1024 / 1024:.1f} MB")
+    print(
+        f"Space {'to save' if dry_run else 'saved'}: {total_saved / 1024 / 1024:.1f} MB"
+    )
     if not dry_run and empty_cleaned:
         print(f"Cleaned {empty_cleaned} empty directories")
 
@@ -211,21 +211,27 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
         clone_path = "_mame_clones.json"
         if dry_run:
             print(f"\nWould write MAME clone map: {clone_path}")
-            print(f"  {len(mame_clones)} canonical ZIPs with "
-                  f"{sum(len(v['clones']) for v in mame_clones.values())} clones")
+            print(
+                f"  {len(mame_clones)} canonical ZIPs with "
+                f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
+            )
         else:
             with open(clone_path, "w") as f:
                 json.dump(mame_clones, f, indent=2, sort_keys=True)
             print(f"\nWrote MAME clone map: {clone_path}")
-            print(f"  {len(mame_clones)} canonical ZIPs with "
-                  f"{sum(len(v['clones']) for v in mame_clones.values())} clones")
+            print(
+                f"  {len(mame_clones)} canonical ZIPs with "
+                f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
+            )
 
     return results
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Deduplicate bios/ directory")
-    parser.add_argument("--dry-run", action="store_true", help="Preview without deleting")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Preview without deleting"
+    )
     parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
     args = parser.parse_args()
 

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -84,87 +83,84 @@ struct BurnDriver BurnDrvmslug = {
 
 
 class TestFindBiosSets(unittest.TestCase):
-
     def test_detects_neogeo(self) -> None:
-        result = find_bios_sets(NEOGEO_FIXTURE, 'd_neogeo.cpp')
-        self.assertIn('neogeo', result)
-        self.assertEqual(result['neogeo']['source_file'], 'd_neogeo.cpp')
+        result = find_bios_sets(NEOGEO_FIXTURE, "d_neogeo.cpp")
+        self.assertIn("neogeo", result)
+        self.assertEqual(result["neogeo"]["source_file"], "d_neogeo.cpp")
 
     def test_detects_pgm(self) -> None:
-        result = find_bios_sets(PGM_FIXTURE, 'd_pgm.cpp')
-        self.assertIn('pgm', result)
-        self.assertEqual(result['pgm']['source_file'], 'd_pgm.cpp')
+        result = find_bios_sets(PGM_FIXTURE, "d_pgm.cpp")
+        self.assertIn("pgm", result)
+        self.assertEqual(result["pgm"]["source_file"], "d_pgm.cpp")
 
     def test_ignores_non_bios(self) -> None:
-        result = find_bios_sets(NON_BIOS_FIXTURE, 'd_neogeo.cpp')
+        result = find_bios_sets(NON_BIOS_FIXTURE, "d_neogeo.cpp")
         self.assertEqual(result, {})
 
     def test_source_line_positive(self) -> None:
-        result = find_bios_sets(NEOGEO_FIXTURE, 'd_neogeo.cpp')
-        self.assertGreater(result['neogeo']['source_line'], 0)
+        result = find_bios_sets(NEOGEO_FIXTURE, "d_neogeo.cpp")
+        self.assertGreater(result["neogeo"]["source_line"], 0)
 
 
 class TestParseRomInfo(unittest.TestCase):
-
     def test_neogeo_rom_count(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'neogeo')
+        roms = parse_rom_info(NEOGEO_FIXTURE, "neogeo")
         self.assertEqual(len(roms), 5)
 
     def test_sentinel_skipped(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'neogeo')
-        names = [r['name'] for r in roms]
-        self.assertNotIn('', names)
+        roms = parse_rom_info(NEOGEO_FIXTURE, "neogeo")
+        names = [r["name"] for r in roms]
+        self.assertNotIn("", names)
 
     def test_crc32_lowercase_hex(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'neogeo')
+        roms = parse_rom_info(NEOGEO_FIXTURE, "neogeo")
         first = roms[0]
-        self.assertEqual(first['crc32'], '9036d879')
-        self.assertRegex(first['crc32'], r'^[0-9a-f]{8}$')
+        self.assertEqual(first["crc32"], "9036d879")
+        self.assertRegex(first["crc32"], r"^[0-9a-f]{8}$")
 
     def test_no_sha1(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'neogeo')
+        roms = parse_rom_info(NEOGEO_FIXTURE, "neogeo")
         for rom in roms:
-            self.assertNotIn('sha1', rom)
+            self.assertNotIn("sha1", rom)
 
     def test_neogeo_first_rom(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'neogeo')
+        roms = parse_rom_info(NEOGEO_FIXTURE, "neogeo")
         first = roms[0]
-        self.assertEqual(first['name'], 'sp-s2.sp1')
-        self.assertEqual(first['size'], 0x020000)
-        self.assertEqual(first['crc32'], '9036d879')
+        self.assertEqual(first["name"], "sp-s2.sp1")
+        self.assertEqual(first["size"], 0x020000)
+        self.assertEqual(first["crc32"], "9036d879")
 
     def test_pgm_rom_count(self) -> None:
-        roms = parse_rom_info(PGM_FIXTURE, 'pgm')
+        roms = parse_rom_info(PGM_FIXTURE, "pgm")
         self.assertEqual(len(roms), 3)
 
     def test_pgm_bios_entry(self) -> None:
-        roms = parse_rom_info(PGM_FIXTURE, 'pgm')
+        roms = parse_rom_info(PGM_FIXTURE, "pgm")
         bios = roms[2]
-        self.assertEqual(bios['name'], 'pgm_p01s.rom')
-        self.assertEqual(bios['crc32'], 'e42b166e')
+        self.assertEqual(bios["name"], "pgm_p01s.rom")
+        self.assertEqual(bios["crc32"], "e42b166e")
 
     def test_unknown_set_returns_empty(self) -> None:
-        roms = parse_rom_info(NEOGEO_FIXTURE, 'nonexistent')
+        roms = parse_rom_info(NEOGEO_FIXTURE, "nonexistent")
         self.assertEqual(roms, [])
 
 
 class TestParseSourceTree(unittest.TestCase):
-
     def test_walks_drv_directory(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            drv_dir = Path(tmpdir) / 'src' / 'burn' / 'drv' / 'neogeo'
+            drv_dir = Path(tmpdir) / "src" / "burn" / "drv" / "neogeo"
             drv_dir.mkdir(parents=True)
-            (drv_dir / 'd_neogeo.cpp').write_text(NEOGEO_FIXTURE)
+            (drv_dir / "d_neogeo.cpp").write_text(NEOGEO_FIXTURE)
 
             result = parse_fbneo_source_tree(tmpdir)
-            self.assertIn('neogeo', result)
-            self.assertEqual(len(result['neogeo']['roms']), 5)
+            self.assertIn("neogeo", result)
+            self.assertEqual(len(result["neogeo"]["roms"]), 5)
 
     def test_skips_non_cpp(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            drv_dir = Path(tmpdir) / 'src' / 'burn' / 'drv'
+            drv_dir = Path(tmpdir) / "src" / "burn" / "drv"
             drv_dir.mkdir(parents=True)
-            (drv_dir / 'd_neogeo.h').write_text(NEOGEO_FIXTURE)
+            (drv_dir / "d_neogeo.h").write_text(NEOGEO_FIXTURE)
 
             result = parse_fbneo_source_tree(tmpdir)
             self.assertEqual(result, {})
@@ -175,16 +171,16 @@ class TestParseSourceTree(unittest.TestCase):
             self.assertEqual(result, {})
 
     def test_multiple_sets(self) -> None:
-        combined = NEOGEO_FIXTURE + '\n' + PGM_FIXTURE
+        combined = NEOGEO_FIXTURE + "\n" + PGM_FIXTURE
         with tempfile.TemporaryDirectory() as tmpdir:
-            drv_dir = Path(tmpdir) / 'src' / 'burn' / 'drv'
+            drv_dir = Path(tmpdir) / "src" / "burn" / "drv"
             drv_dir.mkdir(parents=True)
-            (drv_dir / 'd_combined.cpp').write_text(combined)
+            (drv_dir / "d_combined.cpp").write_text(combined)
 
             result = parse_fbneo_source_tree(tmpdir)
-            self.assertIn('neogeo', result)
-            self.assertIn('pgm', result)
+            self.assertIn("neogeo", result)
+            self.assertIn("pgm", result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

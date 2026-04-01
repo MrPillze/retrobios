@@ -44,7 +44,11 @@ def _canonical_name(filepath: Path) -> str:
     if "/.variants/" in str(filepath) or "\\.variants\\" in str(filepath):
         # naomi2.zip.da79eca4 -> naomi2.zip
         parts = name.rsplit(".", 1)
-        if len(parts) == 2 and len(parts[1]) == 8 and all(c in "0123456789abcdef" for c in parts[1]):
+        if (
+            len(parts) == 2
+            and len(parts[1]) == 8
+            and all(c in "0123456789abcdef" for c in parts[1])
+        ):
             return parts[0]
     return name
 
@@ -83,7 +87,9 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
                     if existing_is_variant and not is_variant:
                         if sha1 not in aliases:
                             aliases[sha1] = []
-                        aliases[sha1].append({"name": files[sha1]["name"], "path": files[sha1]["path"]})
+                        aliases[sha1].append(
+                            {"name": files[sha1]["name"], "path": files[sha1]["path"]}
+                        )
                         files[sha1] = {
                             "path": rel_path,
                             "name": _canonical_name(filepath),
@@ -93,7 +99,9 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
                     else:
                         if sha1 not in aliases:
                             aliases[sha1] = []
-                        aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
+                        aliases[sha1].append(
+                            {"name": _canonical_name(filepath), "path": rel_path}
+                        )
                 else:
                     entry = {
                         "path": rel_path,
@@ -114,7 +122,9 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
                 # Non-variant file should be primary over .variants/ file
                 if sha1 not in aliases:
                     aliases[sha1] = []
-                aliases[sha1].append({"name": files[sha1]["name"], "path": files[sha1]["path"]})
+                aliases[sha1].append(
+                    {"name": files[sha1]["name"], "path": files[sha1]["path"]}
+                )
                 files[sha1] = {
                     "path": rel_path,
                     "name": _canonical_name(filepath),
@@ -124,7 +134,9 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
             else:
                 if sha1 not in aliases:
                     aliases[sha1] = []
-                aliases[sha1].append({"name": _canonical_name(filepath), "path": rel_path})
+                aliases[sha1].append(
+                    {"name": _canonical_name(filepath), "path": rel_path}
+                )
         else:
             entry = {
                 "path": rel_path,
@@ -275,8 +287,12 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
 def main():
     parser = argparse.ArgumentParser(description="Generate multi-indexed BIOS database")
     parser.add_argument("--force", action="store_true", help="Force rehash all files")
-    parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR, help="BIOS directory path")
-    parser.add_argument("--output", "-o", default=DEFAULT_OUTPUT, help="Output JSON file")
+    parser.add_argument(
+        "--bios-dir", default=DEFAULT_BIOS_DIR, help="BIOS directory path"
+    )
+    parser.add_argument(
+        "--output", "-o", default=DEFAULT_OUTPUT, help="Output JSON file"
+    )
     args = parser.parse_args()
 
     bios_dir = Path(args.bios_dir)
@@ -354,7 +370,10 @@ def _collect_all_aliases(files: dict) -> dict:
     if platforms_dir.is_dir():
         try:
             import yaml
-            for platform_name in list_registered_platforms(str(platforms_dir), include_archived=True):
+
+            for platform_name in list_registered_platforms(
+                str(platforms_dir), include_archived=True
+            ):
                 config_file = platforms_dir / f"{platform_name}.yml"
                 try:
                     with open(config_file) as f:
@@ -383,6 +402,7 @@ def _collect_all_aliases(files: dict) -> dict:
     try:
         sys.path.insert(0, "scripts")
         from scraper.coreinfo_scraper import Scraper as CoreInfoScraper
+
         ci_reqs = CoreInfoScraper().fetch_requirements()
         for r in ci_reqs:
             basename = r.name
@@ -400,6 +420,7 @@ def _collect_all_aliases(files: dict) -> dict:
     if emulators_dir.is_dir():
         try:
             import yaml
+
             for emu_file in emulators_dir.glob("*.yml"):
                 if emu_file.name.endswith(".old.yml"):
                     continue
@@ -454,10 +475,17 @@ def _collect_all_aliases(files: dict) -> dict:
         # ZX Spectrum
         ["48.rom", "zx48.rom"],
         # SquirrelJME - all JARs are the same
-        ["squirreljme.sqc", "squirreljme.jar", "squirreljme-fast.jar",
-         "squirreljme-slow.jar", "squirreljme-slow-test.jar",
-         "squirreljme-0.3.0.jar", "squirreljme-0.3.0-fast.jar",
-         "squirreljme-0.3.0-slow.jar", "squirreljme-0.3.0-slow-test.jar"],
+        [
+            "squirreljme.sqc",
+            "squirreljme.jar",
+            "squirreljme-fast.jar",
+            "squirreljme-slow.jar",
+            "squirreljme-slow-test.jar",
+            "squirreljme-0.3.0.jar",
+            "squirreljme-0.3.0-fast.jar",
+            "squirreljme-0.3.0-slow.jar",
+            "squirreljme-0.3.0-slow-test.jar",
+        ],
         # Arcade - FBNeo spectrum
         ["spectrum.zip", "fbneo/spectrum.zip", "spec48k.zip"],
     ]

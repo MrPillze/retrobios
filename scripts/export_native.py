@@ -9,10 +9,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml
-
 from common import list_registered_platforms, load_platform_config
 from exporter import discover_exporters
-
 
 OUTPUT_FILENAMES: dict[str, str] = {
     "retroarch": "System.dat",
@@ -94,23 +92,31 @@ def main() -> None:
     group.add_argument("--all", action="store_true", help="export all platforms")
     group.add_argument("--platform", help="export a single platform")
     parser.add_argument(
-        "--output-dir", default="dist/upstream", help="output directory",
+        "--output-dir",
+        default="dist/upstream",
+        help="output directory",
     )
     parser.add_argument(
-        "--truth-dir", default="dist/truth", help="truth YAML directory",
+        "--truth-dir",
+        default="dist/truth",
+        help="truth YAML directory",
     )
     parser.add_argument(
-        "--platforms-dir", default="platforms", help="platform configs directory",
+        "--platforms-dir",
+        default="platforms",
+        help="platform configs directory",
     )
     parser.add_argument(
-        "--include-archived", action="store_true",
+        "--include-archived",
+        action="store_true",
         help="include archived platforms",
     )
     args = parser.parse_args()
 
     if args.all:
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived,
+            args.platforms_dir,
+            include_archived=args.include_archived,
         )
     else:
         platforms = [args.platform]

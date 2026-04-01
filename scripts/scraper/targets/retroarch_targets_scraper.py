@@ -16,6 +16,7 @@ Buildbot structure varies by platform:
 - ps2:         playstation/ps2/latest/  -> *_libretro_ps2.elf.zip
 - vita:        bundles only (VPK) - no individual cores
 """
+
 from __future__ import annotations
 
 import argparse
@@ -64,7 +65,9 @@ RECIPE_TARGETS: list[tuple[str, str, str]] = [
     ("playstation/vita", "playstation-vita", "armv7"),
 ]
 
-RECIPE_BASE_URL = "https://raw.githubusercontent.com/libretro/libretro-super/master/recipes/"
+RECIPE_BASE_URL = (
+    "https://raw.githubusercontent.com/libretro/libretro-super/master/recipes/"
+)
 
 # Match any href containing _libretro followed by a platform-specific extension
 # Covers: .so.zip, .dll.zip, .dylib.zip, .nro.zip, .dol.zip, .rpx.zip,
@@ -75,7 +78,7 @@ _HREF_RE = re.compile(
 )
 
 # Extract core name: everything before _libretro
-_CORE_NAME_RE = re.compile(r'^(.+?)_libretro')
+_CORE_NAME_RE = re.compile(r"^(.+?)_libretro")
 
 
 class Scraper(BaseTargetScraper):
@@ -180,12 +183,16 @@ def main() -> None:
     data = scraper.fetch_targets()
 
     total_cores = sum(len(t["cores"]) for t in data["targets"].values())
-    print(f"\n{len(data['targets'])} targets, {total_cores} total core entries",
-          file=sys.stderr)
+    print(
+        f"\n{len(data['targets'])} targets, {total_cores} total core entries",
+        file=sys.stderr,
+    )
 
     if args.dry_run:
         for name, info in sorted(data["targets"].items()):
-            print(f"  {name:30s} {info['architecture']:10s} {len(info['cores']):>4d} cores")
+            print(
+                f"  {name:30s} {info['architecture']:10s} {len(info['cores']):>4d} cores"
+            )
         return
 
     if args.output:

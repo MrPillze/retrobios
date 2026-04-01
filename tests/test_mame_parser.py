@@ -86,101 +86,101 @@ class TestFindBiosRootSets(unittest.TestCase):
     """Tests for find_bios_root_sets."""
 
     def test_detects_neogeo_from_game_macro(self) -> None:
-        result = find_bios_root_sets(NEOGEO_FIXTURE, 'src/mame/snk/neogeo.cpp')
-        self.assertIn('neogeo', result)
-        self.assertEqual(result['neogeo']['source_file'], 'src/mame/snk/neogeo.cpp')
-        self.assertIsInstance(result['neogeo']['source_line'], int)
+        result = find_bios_root_sets(NEOGEO_FIXTURE, "src/mame/snk/neogeo.cpp")
+        self.assertIn("neogeo", result)
+        self.assertEqual(result["neogeo"]["source_file"], "src/mame/snk/neogeo.cpp")
+        self.assertIsInstance(result["neogeo"]["source_line"], int)
 
     def test_detects_from_comp_macro(self) -> None:
-        result = find_bios_root_sets(DEVICE_FIXTURE, 'src/mame/acorn/bbc.cpp')
-        self.assertIn('bbcb', result)
+        result = find_bios_root_sets(DEVICE_FIXTURE, "src/mame/acorn/bbc.cpp")
+        self.assertIn("bbcb", result)
 
     def test_detects_from_cons_macro(self) -> None:
-        result = find_bios_root_sets(CONS_FIXTURE, 'src/mame/sega/megadriv.cpp')
-        self.assertIn('megadriv', result)
+        result = find_bios_root_sets(CONS_FIXTURE, "src/mame/sega/megadriv.cpp")
+        self.assertIn("megadriv", result)
 
     def test_ignores_non_bios_games(self) -> None:
-        result = find_bios_root_sets(NON_BIOS_FIXTURE, 'src/mame/pacman/pacman.cpp')
+        result = find_bios_root_sets(NON_BIOS_FIXTURE, "src/mame/pacman/pacman.cpp")
         self.assertEqual(result, {})
 
     def test_detects_from_nodump_fixture(self) -> None:
-        result = find_bios_root_sets(NODUMP_FIXTURE, 'test.cpp')
-        self.assertIn('testnd', result)
+        result = find_bios_root_sets(NODUMP_FIXTURE, "test.cpp")
+        self.assertIn("testnd", result)
 
     def test_detects_from_baddump_fixture(self) -> None:
-        result = find_bios_root_sets(BADDUMP_FIXTURE, 'test.cpp')
-        self.assertIn('testbd', result)
+        result = find_bios_root_sets(BADDUMP_FIXTURE, "test.cpp")
+        self.assertIn("testbd", result)
 
 
 class TestParseRomBlock(unittest.TestCase):
     """Tests for parse_rom_block."""
 
     def test_extracts_rom_names(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        names = [r['name'] for r in roms]
-        self.assertIn('sp-s2.sp1', names)
-        self.assertIn('vs-bios.rom', names)
-        self.assertIn('sm1.sm1', names)
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        names = [r["name"] for r in roms]
+        self.assertIn("sp-s2.sp1", names)
+        self.assertIn("vs-bios.rom", names)
+        self.assertIn("sm1.sm1", names)
 
     def test_extracts_crc32_and_sha1(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        sp_s2 = next(r for r in roms if r['name'] == 'sp-s2.sp1')
-        self.assertEqual(sp_s2['crc32'], '9036d879')
-        self.assertEqual(sp_s2['sha1'], '4f5ed7105b7128794654ce82b51723e16e389543')
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        sp_s2 = next(r for r in roms if r["name"] == "sp-s2.sp1")
+        self.assertEqual(sp_s2["crc32"], "9036d879")
+        self.assertEqual(sp_s2["sha1"], "4f5ed7105b7128794654ce82b51723e16e389543")
 
     def test_extracts_size(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        sp_s2 = next(r for r in roms if r['name'] == 'sp-s2.sp1')
-        self.assertEqual(sp_s2['size'], 0x020000)
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        sp_s2 = next(r for r in roms if r["name"] == "sp-s2.sp1")
+        self.assertEqual(sp_s2["size"], 0x020000)
 
     def test_extracts_bios_metadata(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        sp_s2 = next(r for r in roms if r['name'] == 'sp-s2.sp1')
-        self.assertEqual(sp_s2['bios_index'], 0)
-        self.assertEqual(sp_s2['bios_label'], 'euro')
-        self.assertEqual(sp_s2['bios_description'], 'Europe MVS (Ver. 2)')
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        sp_s2 = next(r for r in roms if r["name"] == "sp-s2.sp1")
+        self.assertEqual(sp_s2["bios_index"], 0)
+        self.assertEqual(sp_s2["bios_label"], "euro")
+        self.assertEqual(sp_s2["bios_description"], "Europe MVS (Ver. 2)")
 
     def test_non_bios_rom_has_no_bios_fields(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        sm1 = next(r for r in roms if r['name'] == 'sm1.sm1')
-        self.assertNotIn('bios_index', sm1)
-        self.assertNotIn('bios_label', sm1)
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        sm1 = next(r for r in roms if r["name"] == "sm1.sm1")
+        self.assertNotIn("bios_index", sm1)
+        self.assertNotIn("bios_label", sm1)
 
     def test_skips_no_dump(self) -> None:
-        roms = parse_rom_block(NODUMP_FIXTURE, 'testnd')
-        names = [r['name'] for r in roms]
-        self.assertIn('good.rom', names)
-        self.assertNotIn('missing.rom', names)
+        roms = parse_rom_block(NODUMP_FIXTURE, "testnd")
+        names = [r["name"] for r in roms]
+        self.assertIn("good.rom", names)
+        self.assertNotIn("missing.rom", names)
 
     def test_includes_bad_dump_with_flag(self) -> None:
-        roms = parse_rom_block(BADDUMP_FIXTURE, 'testbd')
+        roms = parse_rom_block(BADDUMP_FIXTURE, "testbd")
         self.assertEqual(len(roms), 1)
-        self.assertEqual(roms[0]['name'], 'badrom.bin')
-        self.assertTrue(roms[0]['bad_dump'])
-        self.assertEqual(roms[0]['crc32'], 'deadbeef')
-        self.assertEqual(roms[0]['sha1'], '0123456789abcdef0123456789abcdef01234567')
+        self.assertEqual(roms[0]["name"], "badrom.bin")
+        self.assertTrue(roms[0]["bad_dump"])
+        self.assertEqual(roms[0]["crc32"], "deadbeef")
+        self.assertEqual(roms[0]["sha1"], "0123456789abcdef0123456789abcdef01234567")
 
     def test_handles_rom_load16_word(self) -> None:
-        roms = parse_rom_block(CONS_FIXTURE, 'megadriv')
+        roms = parse_rom_block(CONS_FIXTURE, "megadriv")
         self.assertEqual(len(roms), 1)
-        self.assertEqual(roms[0]['name'], 'epr-6209.ic7')
-        self.assertEqual(roms[0]['crc32'], 'cafebabe')
+        self.assertEqual(roms[0]["name"], "epr-6209.ic7")
+        self.assertEqual(roms[0]["crc32"], "cafebabe")
 
     def test_tracks_rom_region(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'neogeo')
-        sp_s2 = next(r for r in roms if r['name'] == 'sp-s2.sp1')
-        sm1 = next(r for r in roms if r['name'] == 'sm1.sm1')
-        self.assertEqual(sp_s2['region'], 'mainbios')
-        self.assertEqual(sm1['region'], 'audiocpu')
+        roms = parse_rom_block(NEOGEO_FIXTURE, "neogeo")
+        sp_s2 = next(r for r in roms if r["name"] == "sp-s2.sp1")
+        sm1 = next(r for r in roms if r["name"] == "sm1.sm1")
+        self.assertEqual(sp_s2["region"], "mainbios")
+        self.assertEqual(sm1["region"], "audiocpu")
 
     def test_returns_empty_for_unknown_set(self) -> None:
-        roms = parse_rom_block(NEOGEO_FIXTURE, 'nonexistent')
+        roms = parse_rom_block(NEOGEO_FIXTURE, "nonexistent")
         self.assertEqual(roms, [])
 
     def test_good_rom_not_flagged_bad_dump(self) -> None:
-        roms = parse_rom_block(NODUMP_FIXTURE, 'testnd')
-        good = next(r for r in roms if r['name'] == 'good.rom')
-        self.assertFalse(good['bad_dump'])
+        roms = parse_rom_block(NODUMP_FIXTURE, "testnd")
+        good = next(r for r in roms if r["name"] == "good.rom")
+        self.assertFalse(good["bad_dump"])
 
     def test_crc32_sha1_lowercase(self) -> None:
         fixture = """\
@@ -189,9 +189,9 @@ ROM_START( upper )
     ROM_LOAD( "test.rom", 0x00000, 0x4000, CRC(AABBCCDD) SHA1(AABBCCDDEEFF00112233AABBCCDDEEFF00112233) )
 ROM_END
 """
-        roms = parse_rom_block(fixture, 'upper')
-        self.assertEqual(roms[0]['crc32'], 'aabbccdd')
-        self.assertEqual(roms[0]['sha1'], 'aabbccddeeff00112233aabbccddeeff00112233')
+        roms = parse_rom_block(fixture, "upper")
+        self.assertEqual(roms[0]["crc32"], "aabbccdd")
+        self.assertEqual(roms[0]["sha1"], "aabbccddeeff00112233aabbccddeeff00112233")
 
 
 class TestParseMameSourceTree(unittest.TestCase):
@@ -199,26 +199,26 @@ class TestParseMameSourceTree(unittest.TestCase):
 
     def test_walks_source_tree(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            mame_dir = os.path.join(tmpdir, 'src', 'mame', 'snk')
+            mame_dir = os.path.join(tmpdir, "src", "mame", "snk")
             os.makedirs(mame_dir)
-            filepath = os.path.join(mame_dir, 'neogeo.cpp')
-            with open(filepath, 'w') as f:
+            filepath = os.path.join(mame_dir, "neogeo.cpp")
+            with open(filepath, "w") as f:
                 f.write(NEOGEO_FIXTURE)
 
             results = parse_mame_source_tree(tmpdir)
-            self.assertIn('neogeo', results)
-            self.assertEqual(len(results['neogeo']['roms']), 3)
+            self.assertIn("neogeo", results)
+            self.assertEqual(len(results["neogeo"]["roms"]), 3)
             self.assertEqual(
-                results['neogeo']['source_file'],
-                'src/mame/snk/neogeo.cpp',
+                results["neogeo"]["source_file"],
+                "src/mame/snk/neogeo.cpp",
             )
 
     def test_ignores_non_source_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            mame_dir = os.path.join(tmpdir, 'src', 'mame')
+            mame_dir = os.path.join(tmpdir, "src", "mame")
             os.makedirs(mame_dir)
             # Write a .txt file that should be ignored
-            with open(os.path.join(mame_dir, 'notes.txt'), 'w') as f:
+            with open(os.path.join(mame_dir, "notes.txt"), "w") as f:
                 f.write(NEOGEO_FIXTURE)
 
             results = parse_mame_source_tree(tmpdir)
@@ -226,13 +226,13 @@ class TestParseMameSourceTree(unittest.TestCase):
 
     def test_scans_devices_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            dev_dir = os.path.join(tmpdir, 'src', 'devices', 'bus')
+            dev_dir = os.path.join(tmpdir, "src", "devices", "bus")
             os.makedirs(dev_dir)
-            with open(os.path.join(dev_dir, 'test.cpp'), 'w') as f:
+            with open(os.path.join(dev_dir, "test.cpp"), "w") as f:
                 f.write(DEVICE_FIXTURE)
 
             results = parse_mame_source_tree(tmpdir)
-            self.assertIn('bbcb', results)
+            self.assertIn("bbcb", results)
 
     def test_empty_tree(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -240,5 +240,5 @@ class TestParseMameSourceTree(unittest.TestCase):
             self.assertEqual(results, {})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

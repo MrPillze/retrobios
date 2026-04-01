@@ -11,8 +11,6 @@ from pathlib import Path
 from .base_exporter import BaseExporter
 
 
-
-
 class Exporter(BaseExporter):
     """Export truth data to Batocera batocera-systems format."""
 
@@ -44,7 +42,9 @@ class Exporter(BaseExporter):
                 continue
 
             native_id = native_map.get(sys_id, sys_id)
-            scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            scraped_sys = (
+                scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            )
             display_name = self._display_name(sys_id, scraped_sys)
 
             # Build md5 lookup from scraped data for this system
@@ -74,9 +74,7 @@ class Exporter(BaseExporter):
                 # Original format requires md5 for every entry — skip without
                 if not md5:
                     continue
-                bios_parts.append(
-                    f'{{ "md5": "{md5}", "file": "bios/{dest}" }}'
-                )
+                bios_parts.append(f'{{ "md5": "{md5}", "file": "bios/{dest}" }}')
 
             bios_str = ", ".join(bios_parts)
             line = (

@@ -14,10 +14,10 @@ Covers:
   Cross-reference: undeclared files, standalone skipped, alias profiles skipped,
                    data_dir suppresses gaps
 """
+
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import shutil
 import sys
@@ -30,19 +30,32 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import yaml
 from common import (
-    build_zip_contents_index, check_inside_zip, compute_hashes,
+    build_zip_contents_index,
+    check_inside_zip,
+    compute_hashes,
     expand_platform_declared_names,
-    group_identical_platforms, load_emulator_profiles, load_platform_config,
-    md5_composite, md5sum, parse_md5_list, resolve_local_file,
-    resolve_platform_cores, safe_extract_zip,
-)
-from validation import (
-    _build_validation_index, check_file_validation, filter_files_by_mode,
+    group_identical_platforms,
+    load_emulator_profiles,
+    load_platform_config,
+    md5_composite,
+    parse_md5_list,
+    resolve_local_file,
+    resolve_platform_cores,
+    safe_extract_zip,
 )
 from truth import diff_platform_truth, generate_platform_truth
+from validation import (
+    _build_validation_index,
+    check_file_validation,
+    filter_files_by_mode,
+)
 from verify import (
-    Severity, Status, verify_platform, find_undeclared_files, find_exclusion_notes,
-    verify_emulator, _effective_validation_label,
+    Severity,
+    Status,
+    find_exclusion_notes,
+    find_undeclared_files,
+    verify_emulator,
+    verify_platform,
 )
 
 
@@ -52,7 +65,8 @@ def _h(data: bytes) -> dict:
         "sha1": hashlib.sha1(data).hexdigest(),
         "md5": hashlib.md5(data).hexdigest(),
         "crc32": format(hashlib.new("crc32", data).digest()[0], "08x")
-               if False else "",  # not needed for tests
+        if False
+        else "",  # not needed for tests
     }
 
 
@@ -66,6 +80,7 @@ class TestE2E(unittest.TestCase):
     def setUp(self):
         # Clear emulator profile cache to avoid stale data between tests
         from common import _emulator_profiles_cache
+
         _emulator_profiles_cache.clear()
 
         self.root = tempfile.mkdtemp()
@@ -85,7 +100,9 @@ class TestE2E(unittest.TestCase):
         self._make_file("no_md5.bin", b"NO_MD5_CHECK")
         self._make_file("truncated.bin", b"BATOCERA_TRUNCATED")
         self._make_file("alias_target.bin", b"ALIAS_FILE_DATA")
-        self._make_file("leading_zero_crc.bin", b"LEADING_ZERO_CRC_12")  # crc32=0179e92e
+        self._make_file(
+            "leading_zero_crc.bin", b"LEADING_ZERO_CRC_12"
+        )  # crc32=0179e92e
 
         # Regional variant files (same name, different content, in subdirs)
         os.makedirs(os.path.join(self.bios_dir, "TestConsole", "USA"), exist_ok=True)
@@ -109,10 +126,13 @@ class TestE2E(unittest.TestCase):
         # ZIP for multi-hash
         self._make_zip("multi.zip", {"rom.bin": b"MULTI_HASH_DATA"})
         # Archive BIOS ZIP (like neogeo.zip) containing multiple ROMs
-        self._make_zip("test_archive.zip", {
-            "rom_a.bin": b"ARCHIVE_ROM_A",
-            "rom_b.bin": b"ARCHIVE_ROM_B",
-        })
+        self._make_zip(
+            "test_archive.zip",
+            {
+                "rom_a.bin": b"ARCHIVE_ROM_A",
+                "rom_b.bin": b"ARCHIVE_ROM_B",
+            },
+        )
 
         # -- Build synthetic database --
         self.db = self._build_db()
@@ -142,7 +162,9 @@ class TestE2E(unittest.TestCase):
             f.write(data)
         h = _h(data)
         self.files[f"{subdir}/{name}" if subdir else name] = {
-            "path": path, "data": data, **h,
+            "path": path,
+            "data": data,
+            **h,
         }
         return path
 
@@ -185,8 +207,12 @@ class TestE2E(unittest.TestCase):
                 by_path_suffix.setdefault(key, []).append(info["sha1"])
         return {
             "files": files_db,
-            "indexes": {"by_md5": by_md5, "by_name": by_name, "by_crc32": {},
-                        "by_path_suffix": by_path_suffix},
+            "indexes": {
+                "by_md5": by_md5,
+                "by_name": by_name,
+                "by_crc32": {},
+                "by_path_suffix": by_path_suffix,
+            },
         }
 
     # ---------------------------------------------------------------
@@ -194,7 +220,6 @@ class TestE2E(unittest.TestCase):
     # ---------------------------------------------------------------
 
     def _create_existence_platform(self):
-        f = self.files
         config = {
             "platform": "TestExistence",
             "verification_mode": "existence",
@@ -202,10 +227,26 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "console-a": {
                     "files": [
-                        {"name": "present_req.bin", "destination": "present_req.bin", "required": True},
-                        {"name": "missing_req.bin", "destination": "missing_req.bin", "required": True},
-                        {"name": "present_opt.bin", "destination": "present_opt.bin", "required": False},
-                        {"name": "missing_opt.bin", "destination": "missing_opt.bin", "required": False},
+                        {
+                            "name": "present_req.bin",
+                            "destination": "present_req.bin",
+                            "required": True,
+                        },
+                        {
+                            "name": "missing_req.bin",
+                            "destination": "missing_req.bin",
+                            "required": True,
+                        },
+                        {
+                            "name": "present_opt.bin",
+                            "destination": "present_opt.bin",
+                            "required": False,
+                        },
+                        {
+                            "name": "missing_opt.bin",
+                            "destination": "missing_opt.bin",
+                            "required": False,
+                        },
                     ],
                 },
             },
@@ -217,7 +258,9 @@ class TestE2E(unittest.TestCase):
         f = self.files
         good_inner_md5 = f["good.zip"]["inner_md5s"]["inner.rom"]
         bad_inner_md5 = "deadbeefdeadbeefdeadbeefdeadbeef"
-        composite_md5 = hashlib.md5(b"AAAA" + b"BBBB").hexdigest()  # sorted: a.rom, b.rom
+        composite_md5 = hashlib.md5(
+            b"AAAA" + b"BBBB"
+        ).hexdigest()  # sorted: a.rom, b.rom
         multi_wrong = "0000000000000000000000000000000"
         multi_right = f["multi.zip"]["inner_md5s"]["rom.bin"]
         truncated_md5 = f["truncated.bin"]["md5"][:29]  # Batocera 29-char
@@ -230,42 +273,98 @@ class TestE2E(unittest.TestCase):
                     "includes": ["test_shared"],
                     "files": [
                         # Correct hash
-                        {"name": "correct_hash.bin", "destination": "correct_hash.bin",
-                         "md5": f["correct_hash.bin"]["md5"], "required": True},
+                        {
+                            "name": "correct_hash.bin",
+                            "destination": "correct_hash.bin",
+                            "md5": f["correct_hash.bin"]["md5"],
+                            "required": True,
+                        },
                         # Wrong hash on disk ->untested
-                        {"name": "wrong_hash.bin", "destination": "wrong_hash.bin",
-                         "md5": "ffffffffffffffffffffffffffffffff", "required": True},
+                        {
+                            "name": "wrong_hash.bin",
+                            "destination": "wrong_hash.bin",
+                            "md5": "ffffffffffffffffffffffffffffffff",
+                            "required": True,
+                        },
                         # No MD5 ->OK (existence within md5 platform)
-                        {"name": "no_md5.bin", "destination": "no_md5.bin", "required": False},
+                        {
+                            "name": "no_md5.bin",
+                            "destination": "no_md5.bin",
+                            "required": False,
+                        },
                         # Missing required
-                        {"name": "gone_req.bin", "destination": "gone_req.bin",
-                         "md5": "abcd", "required": True},
+                        {
+                            "name": "gone_req.bin",
+                            "destination": "gone_req.bin",
+                            "md5": "abcd",
+                            "required": True,
+                        },
                         # Missing optional
-                        {"name": "gone_opt.bin", "destination": "gone_opt.bin",
-                         "md5": "abcd", "required": False},
+                        {
+                            "name": "gone_opt.bin",
+                            "destination": "gone_opt.bin",
+                            "md5": "abcd",
+                            "required": False,
+                        },
                         # zipped_file correct
-                        {"name": "good.zip", "destination": "good.zip",
-                         "md5": good_inner_md5, "zipped_file": "inner.rom", "required": True},
+                        {
+                            "name": "good.zip",
+                            "destination": "good.zip",
+                            "md5": good_inner_md5,
+                            "zipped_file": "inner.rom",
+                            "required": True,
+                        },
                         # zipped_file wrong inner
-                        {"name": "bad_inner.zip", "destination": "bad_inner.zip",
-                         "md5": bad_inner_md5, "zipped_file": "inner.rom", "required": False},
+                        {
+                            "name": "bad_inner.zip",
+                            "destination": "bad_inner.zip",
+                            "md5": bad_inner_md5,
+                            "zipped_file": "inner.rom",
+                            "required": False,
+                        },
                         # zipped_file inner not found
-                        {"name": "missing_inner.zip", "destination": "missing_inner.zip",
-                         "md5": "abc", "zipped_file": "nope.rom", "required": False},
+                        {
+                            "name": "missing_inner.zip",
+                            "destination": "missing_inner.zip",
+                            "md5": "abc",
+                            "zipped_file": "nope.rom",
+                            "required": False,
+                        },
                         # md5_composite (Recalbox)
-                        {"name": "composite.zip", "destination": "composite.zip",
-                         "md5": composite_md5, "required": True},
+                        {
+                            "name": "composite.zip",
+                            "destination": "composite.zip",
+                            "md5": composite_md5,
+                            "required": True,
+                        },
                         # Multi-hash comma-separated (Recalbox)
-                        {"name": "multi.zip", "destination": "multi.zip",
-                         "md5": f"{multi_wrong},{multi_right}", "zipped_file": "rom.bin", "required": True},
+                        {
+                            "name": "multi.zip",
+                            "destination": "multi.zip",
+                            "md5": f"{multi_wrong},{multi_right}",
+                            "zipped_file": "rom.bin",
+                            "required": True,
+                        },
                         # Truncated MD5 (Batocera 29 chars)
-                        {"name": "truncated.bin", "destination": "truncated.bin",
-                         "md5": truncated_md5, "required": True},
+                        {
+                            "name": "truncated.bin",
+                            "destination": "truncated.bin",
+                            "md5": truncated_md5,
+                            "required": True,
+                        },
                         # Same destination from different entry ->worst status wins
-                        {"name": "correct_hash.bin", "destination": "dedup_target.bin",
-                         "md5": f["correct_hash.bin"]["md5"], "required": True},
-                        {"name": "correct_hash.bin", "destination": "dedup_target.bin",
-                         "md5": "wrong_for_dedup_test", "required": True},
+                        {
+                            "name": "correct_hash.bin",
+                            "destination": "dedup_target.bin",
+                            "md5": f["correct_hash.bin"]["md5"],
+                            "required": True,
+                        },
+                        {
+                            "name": "correct_hash.bin",
+                            "destination": "dedup_target.bin",
+                            "md5": "wrong_for_dedup_test",
+                            "required": True,
+                        },
                     ],
                     "data_directories": [
                         {"ref": "test-data-dir", "destination": "TestData"},
@@ -273,8 +372,12 @@ class TestE2E(unittest.TestCase):
                 },
                 "sys-renamed": {
                     "files": [
-                        {"name": "renamed_file.bin", "destination": "renamed_file.bin",
-                         "md5": f["correct_hash.bin"]["md5"], "required": True},
+                        {
+                            "name": "renamed_file.bin",
+                            "destination": "renamed_file.bin",
+                            "md5": f["correct_hash.bin"]["md5"],
+                            "required": True,
+                        },
                     ],
                 },
             },
@@ -286,7 +389,11 @@ class TestE2E(unittest.TestCase):
         shared = {
             "shared_groups": {
                 "test_shared": [
-                    {"name": "shared_file.rom", "destination": "shared_file.rom", "required": False},
+                    {
+                        "name": "shared_file.rom",
+                        "destination": "shared_file.rom",
+                        "required": False,
+                    },
                 ],
             },
         }
@@ -311,15 +418,35 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "sys-sha1": {
                     "files": [
-                        {"name": "correct_hash.bin", "destination": "correct_hash.bin",
-                         "sha1": f["correct_hash.bin"]["sha1"], "required": True},
-                        {"name": "wrong_hash.bin", "destination": "wrong_hash.bin",
-                         "sha1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "required": True},
-                        {"name": "missing_sha1.bin", "destination": "missing_sha1.bin",
-                         "sha1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "required": True},
-                        {"name": "optional_missing_sha1.bin", "destination": "optional_missing_sha1.bin",
-                         "sha1": "cccccccccccccccccccccccccccccccccccccccc", "required": False},
-                        {"name": "no_md5.bin", "destination": "no_md5.bin", "required": True},
+                        {
+                            "name": "correct_hash.bin",
+                            "destination": "correct_hash.bin",
+                            "sha1": f["correct_hash.bin"]["sha1"],
+                            "required": True,
+                        },
+                        {
+                            "name": "wrong_hash.bin",
+                            "destination": "wrong_hash.bin",
+                            "sha1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            "required": True,
+                        },
+                        {
+                            "name": "missing_sha1.bin",
+                            "destination": "missing_sha1.bin",
+                            "sha1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                            "required": True,
+                        },
+                        {
+                            "name": "optional_missing_sha1.bin",
+                            "destination": "optional_missing_sha1.bin",
+                            "sha1": "cccccccccccccccccccccccccccccccccccccccc",
+                            "required": False,
+                        },
+                        {
+                            "name": "no_md5.bin",
+                            "destination": "no_md5.bin",
+                            "required": True,
+                        },
                     ],
                 },
             },
@@ -336,9 +463,16 @@ class TestE2E(unittest.TestCase):
             "data_directories": [{"ref": "test-data-dir"}],
             "files": [
                 {"name": "present_req.bin", "required": True},
-                {"name": "alias_target.bin", "required": False,
-                 "aliases": ["alias_alt.bin"]},
-                {"name": "standalone_only.bin", "required": False, "mode": "standalone"},
+                {
+                    "name": "alias_target.bin",
+                    "required": False,
+                    "aliases": ["alias_alt.bin"],
+                },
+                {
+                    "name": "standalone_only.bin",
+                    "required": False,
+                    "mode": "standalone",
+                },
                 {"name": "undeclared_req.bin", "required": True},
                 {"name": "undeclared_opt.bin", "required": False},
             ],
@@ -371,7 +505,12 @@ class TestE2E(unittest.TestCase):
             yaml.dump(launcher, fh)
 
         # Alias profile (should be skipped)
-        alias = {"emulator": "TestAlias", "type": "alias", "alias_of": "test_emu", "files": []}
+        alias = {
+            "emulator": "TestAlias",
+            "type": "alias",
+            "alias_of": "test_emu",
+            "files": [],
+        }
         with open(os.path.join(self.emulators_dir, "test_alias.yml"), "w") as fh:
             yaml.dump(alias, fh)
 
@@ -396,7 +535,11 @@ class TestE2E(unittest.TestCase):
             "files": [
                 {"name": "rom_a.bin", "required": True, "archive": "test_archive.zip"},
                 {"name": "rom_b.bin", "required": False, "archive": "test_archive.zip"},
-                {"name": "missing_rom.bin", "required": True, "archive": "missing_archive.zip"},
+                {
+                    "name": "missing_rom.bin",
+                    "required": True,
+                    "archive": "missing_archive.zip",
+                },
             ],
         }
         with open(os.path.join(self.emulators_dir, "test_archive_emu.yml"), "w") as fh:
@@ -408,10 +551,16 @@ class TestE2E(unittest.TestCase):
             "type": "libretro",
             "systems": ["console-a"],
             "files": [
-                {"name": "Descriptive BIOS Name", "required": True,
-                 "path": "present_req.bin"},
-                {"name": "Missing Descriptive", "required": True,
-                 "path": "nonexistent_path.bin"},
+                {
+                    "name": "Descriptive BIOS Name",
+                    "required": True,
+                    "path": "present_req.bin",
+                },
+                {
+                    "name": "Missing Descriptive",
+                    "required": True,
+                    "path": "nonexistent_path.bin",
+                },
             ],
         }
         with open(os.path.join(self.emulators_dir, "test_descriptive.yml"), "w") as fh:
@@ -424,50 +573,98 @@ class TestE2E(unittest.TestCase):
             "systems": ["console-a", "sys-md5"],
             "files": [
                 # Size validation -correct size (16 bytes = len(b"PRESENT_REQUIRED"))
-                {"name": "present_req.bin", "required": True,
-                 "validation": ["size"], "size": 16,
-                 "source_ref": "test.c:10-20"},
+                {
+                    "name": "present_req.bin",
+                    "required": True,
+                    "validation": ["size"],
+                    "size": 16,
+                    "source_ref": "test.c:10-20",
+                },
                 # Size validation -wrong expected size
-                {"name": "present_opt.bin", "required": False,
-                 "validation": ["size"], "size": 9999},
+                {
+                    "name": "present_opt.bin",
+                    "required": False,
+                    "validation": ["size"],
+                    "size": 9999,
+                },
                 # CRC32 validation -correct crc32
-                {"name": "correct_hash.bin", "required": True,
-                 "validation": ["crc32"], "crc32": "91d0b1d3",
-                 "source_ref": "hash.c:42"},
+                {
+                    "name": "correct_hash.bin",
+                    "required": True,
+                    "validation": ["crc32"],
+                    "crc32": "91d0b1d3",
+                    "source_ref": "hash.c:42",
+                },
                 # CRC32 validation -wrong crc32
-                {"name": "no_md5.bin", "required": False,
-                 "validation": ["crc32"], "crc32": "deadbeef"},
+                {
+                    "name": "no_md5.bin",
+                    "required": False,
+                    "validation": ["crc32"],
+                    "crc32": "deadbeef",
+                },
                 # CRC32 starting with '0' (regression: lstrip("0x") bug)
-                {"name": "leading_zero_crc.bin", "required": True,
-                 "validation": ["crc32"], "crc32": "0179e92e"},
+                {
+                    "name": "leading_zero_crc.bin",
+                    "required": True,
+                    "validation": ["crc32"],
+                    "crc32": "0179e92e",
+                },
                 # MD5 validation -correct md5
-                {"name": "correct_hash.bin", "required": True,
-                 "validation": ["md5"], "md5": "4a8db431e3b1a1acacec60e3424c4ce8"},
+                {
+                    "name": "correct_hash.bin",
+                    "required": True,
+                    "validation": ["md5"],
+                    "md5": "4a8db431e3b1a1acacec60e3424c4ce8",
+                },
                 # SHA1 validation -correct sha1
-                {"name": "correct_hash.bin", "required": True,
-                 "validation": ["sha1"], "sha1": "a2ab6c95c5bbd191b9e87e8f4e85205a47be5764"},
+                {
+                    "name": "correct_hash.bin",
+                    "required": True,
+                    "validation": ["sha1"],
+                    "sha1": "a2ab6c95c5bbd191b9e87e8f4e85205a47be5764",
+                },
                 # MD5 validation -wrong md5
-                {"name": "alias_target.bin", "required": False,
-                 "validation": ["md5"], "md5": "0000000000000000000000000000dead"},
+                {
+                    "name": "alias_target.bin",
+                    "required": False,
+                    "validation": ["md5"],
+                    "md5": "0000000000000000000000000000dead",
+                },
                 # Adler32 -known_hash_adler32 field
-                {"name": "present_req.bin", "required": True,
-                 "known_hash_adler32": None},  # placeholder, set below
+                {
+                    "name": "present_req.bin",
+                    "required": True,
+                    "known_hash_adler32": None,
+                },  # placeholder, set below
                 # Min/max size range validation
-                {"name": "present_req.bin", "required": True,
-                 "validation": ["size"], "min_size": 10, "max_size": 100},
+                {
+                    "name": "present_req.bin",
+                    "required": True,
+                    "validation": ["size"],
+                    "min_size": 10,
+                    "max_size": 100,
+                },
                 # Signature -crypto check we can't reproduce, but size applies
-                {"name": "correct_hash.bin", "required": True,
-                 "validation": ["size", "signature"], "size": 17},
+                {
+                    "name": "correct_hash.bin",
+                    "required": True,
+                    "validation": ["size", "signature"],
+                    "size": 17,
+                },
             ],
         }
         # Compute the actual adler32 of present_req.bin for the test fixture
         import zlib as _zlib
+
         with open(self.files["present_req.bin"]["path"], "rb") as _f:
             _data = _f.read()
         _adler = format(_zlib.adler32(_data) & 0xFFFFFFFF, "08x")
         # Set the adler32 entry (the one with known_hash_adler32=None)
         for entry in emu_val["files"]:
-            if entry.get("known_hash_adler32") is None and "known_hash_adler32" in entry:
+            if (
+                entry.get("known_hash_adler32") is None
+                and "known_hash_adler32" in entry
+            ):
                 entry["known_hash_adler32"] = f"0x{_adler}"
                 break
         with open(os.path.join(self.emulators_dir, "test_validation.yml"), "w") as fh:
@@ -491,8 +688,11 @@ class TestE2E(unittest.TestCase):
             "type": "libretro",
             "systems": ["console-a"],
             "files": [
-                {"name": "present_req.bin", "required": True,
-                 "path": "subcore/bios/present_req.bin"},
+                {
+                    "name": "present_req.bin",
+                    "required": True,
+                    "path": "subcore/bios/present_req.bin",
+                },
             ],
         }
         with open(os.path.join(self.emulators_dir, "test_subdir_core.yml"), "w") as fh:
@@ -518,8 +718,12 @@ class TestE2E(unittest.TestCase):
             "bios_mode": "agnostic",
             "systems": ["console-a"],
             "files": [
-                {"name": "correct_hash.bin", "required": True,
-                 "min_size": 1, "max_size": 999999},
+                {
+                    "name": "correct_hash.bin",
+                    "required": True,
+                    "min_size": 1,
+                    "max_size": 999999,
+                },
             ],
         }
         with open(os.path.join(self.emulators_dir, "test_agnostic.yml"), "w") as fh:
@@ -535,7 +739,9 @@ class TestE2E(unittest.TestCase):
                 {"name": "agnostic_file.bin", "required": True, "agnostic": True},
             ],
         }
-        with open(os.path.join(self.emulators_dir, "test_mixed_agnostic.yml"), "w") as fh:
+        with open(
+            os.path.join(self.emulators_dir, "test_mixed_agnostic.yml"), "w"
+        ) as fh:
             yaml.dump(emu_mixed_agnostic, fh)
 
     # ---------------------------------------------------------------
@@ -543,13 +749,19 @@ class TestE2E(unittest.TestCase):
     # ---------------------------------------------------------------
 
     def test_01_resolve_sha1(self):
-        entry = {"name": "present_req.bin", "sha1": self.files["present_req.bin"]["sha1"]}
+        entry = {
+            "name": "present_req.bin",
+            "sha1": self.files["present_req.bin"]["sha1"],
+        }
         path, status = resolve_local_file(entry, self.db)
         self.assertEqual(status, "exact")
         self.assertIn("present_req.bin", path)
 
     def test_02_resolve_md5(self):
-        entry = {"name": "correct_hash.bin", "md5": self.files["correct_hash.bin"]["md5"]}
+        entry = {
+            "name": "correct_hash.bin",
+            "md5": self.files["correct_hash.bin"]["md5"],
+        }
         path, status = resolve_local_file(entry, self.db)
         self.assertEqual(status, "md5_exact")
 
@@ -626,7 +838,7 @@ class TestE2E(unittest.TestCase):
         # 2 present (1 req + 1 opt), 2 missing (1 req WARNING + 1 opt INFO)
         self.assertEqual(c[Severity.OK], 2)
         self.assertEqual(c[Severity.WARNING], 1)  # required missing
-        self.assertEqual(c[Severity.INFO], 1)      # optional missing
+        self.assertEqual(c[Severity.INFO], 1)  # optional missing
         self.assertEqual(sum(c.values()), total)
 
     def test_21_verify_md5_platform(self):
@@ -703,7 +915,9 @@ class TestE2E(unittest.TestCase):
     def test_40_cross_ref_finds_undeclared(self):
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         self.assertIn("undeclared_req.bin", names)
         self.assertIn("undeclared_opt.bin", names)
@@ -711,7 +925,9 @@ class TestE2E(unittest.TestCase):
     def test_41_cross_ref_skips_standalone(self):
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         self.assertNotIn("standalone_only.bin", names)
 
@@ -722,7 +938,9 @@ class TestE2E(unittest.TestCase):
     def test_43_cross_ref_data_dir_does_not_suppress_files(self):
         config = load_platform_config("test_md5", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         # dd_covered.bin is a file entry, not data_dir content -still undeclared
         self.assertIn("dd_covered.bin", names)
@@ -730,14 +948,17 @@ class TestE2E(unittest.TestCase):
     def test_44_cross_ref_skips_launchers(self):
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         # launcher_bios.bin from TestLauncher should NOT appear
         self.assertNotIn("launcher_bios.bin", names)
 
     def test_45_hle_fallback_downgrades_severity(self):
         """Missing file with hle_fallback=true ->INFO severity, not CRITICAL."""
-        from verify import compute_severity, Severity
+        from verify import Severity, compute_severity
+
         # required + missing + NO HLE = CRITICAL
         sev = compute_severity("missing", True, "md5", hle_fallback=False)
         self.assertEqual(sev, Severity.CRITICAL)
@@ -763,7 +984,9 @@ class TestE2E(unittest.TestCase):
         """Undeclared files include hle_fallback from emulator profile."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         hle_files = {u["name"] for u in undeclared if u.get("hle_fallback")}
         self.assertIn("hle_missing.bin", hle_files)
 
@@ -780,7 +1003,9 @@ class TestE2E(unittest.TestCase):
             config = {
                 "platform": name,
                 "verification_mode": "existence",
-                "systems": {"s": {"files": [{"name": "x.bin", "destination": "x.bin"}]}},
+                "systems": {
+                    "s": {"files": [{"name": "x.bin", "destination": "x.bin"}]}
+                },
             }
             with open(os.path.join(self.platforms_dir, f"{name}.yml"), "w") as fh:
                 yaml.dump(config, fh)
@@ -790,6 +1015,7 @@ class TestE2E(unittest.TestCase):
 
     def test_60_storage_external(self):
         from generate_pack import resolve_file
+
         entry = {"name": "large.pup", "storage": "external"}
         path, status = resolve_file(entry, self.db, self.bios_dir)
         self.assertIsNone(path)
@@ -797,18 +1023,22 @@ class TestE2E(unittest.TestCase):
 
     def test_61_storage_user_provided(self):
         from generate_pack import resolve_file
+
         entry = {"name": "user.bin", "storage": "user_provided"}
         path, status = resolve_file(entry, self.db, self.bios_dir)
         self.assertIsNone(path)
         self.assertEqual(status, "user_provided")
-
 
     def test_resolve_cores_all_libretro(self):
         """all_libretro resolves to all libretro-type profiles, excludes alias/standalone."""
         config = {"cores": "all_libretro", "systems": {"nes": {"files": []}}}
         profiles = {
             "fceumm": {"type": "libretro", "systems": ["nes"], "files": []},
-            "dolphin_standalone": {"type": "standalone", "systems": ["gc"], "files": []},
+            "dolphin_standalone": {
+                "type": "standalone",
+                "systems": ["gc"],
+                "files": [],
+            },
             "gambatte": {"type": "pure_libretro", "systems": ["gb"], "files": []},
             "mednafen_psx_hw": {"type": "alias", "alias_of": "beetle_psx", "files": []},
         }
@@ -845,18 +1075,16 @@ class TestE2E(unittest.TestCase):
         result = resolve_platform_cores(config, profiles)
         self.assertEqual(result, set())
 
-
     def test_cross_reference_uses_core_resolution(self):
         """Cross-reference matches by cores: field, not system intersection."""
         config = {
             "cores": ["fbneo"],
-            "systems": {
-                "arcade": {"files": [{"name": "neogeo.zip", "md5": "abc"}]}
-            }
+            "systems": {"arcade": {"files": [{"name": "neogeo.zip", "md5": "abc"}]}},
         }
         profiles = {
             "fbneo": {
-                "emulator": "FBNeo", "systems": ["snk-neogeo-mvs"],
+                "emulator": "FBNeo",
+                "systems": ["snk-neogeo-mvs"],
                 "type": "pure_libretro",
                 "files": [
                     {"name": "neogeo.zip", "required": True},
@@ -872,13 +1100,11 @@ class TestE2E(unittest.TestCase):
 
     def test_exclusion_notes_uses_core_resolution(self):
         """Exclusion notes match by cores: field, not system intersection."""
-        config = {
-            "cores": ["desmume2015"],
-            "systems": {"nds": {"files": []}}
-        }
+        config = {"cores": ["desmume2015"], "systems": {"nds": {"files": []}}}
         profiles = {
             "desmume2015": {
-                "emulator": "DeSmuME 2015", "type": "frozen_snapshot",
+                "emulator": "DeSmuME 2015",
+                "type": "frozen_snapshot",
                 "systems": ["nintendo-ds"],
                 "files": [],
                 "exclusion_note": "Frozen snapshot, code never loads BIOS",
@@ -887,7 +1113,6 @@ class TestE2E(unittest.TestCase):
         notes = find_exclusion_notes(config, self.emulators_dir, profiles)
         emu_names = [n["emulator"] for n in notes]
         self.assertIn("DeSmuME 2015", emu_names)
-
 
     def test_70_validation_index_built(self):
         """Validation index extracts checks from emulator profiles."""
@@ -959,12 +1184,14 @@ class TestE2E(unittest.TestCase):
         """Multiple valid sizes from different profiles are collected as a set."""
         profiles = {
             "emu_a": {
-                "type": "libretro", "files": [
+                "type": "libretro",
+                "files": [
                     {"name": "shared.bin", "validation": ["size"], "size": 512},
                 ],
             },
             "emu_b": {
-                "type": "libretro", "files": [
+                "type": "libretro",
+                "files": [
                     {"name": "shared.bin", "validation": ["size"], "size": 1024},
                 ],
             },
@@ -1037,7 +1264,6 @@ class TestE2E(unittest.TestCase):
         reason = check_file_validation(path, "wrong_hash.bin", index)
         self.assertIsNone(reason)
 
-
     # ---------------------------------------------------------------
     # Emulator/system mode verification
     # ---------------------------------------------------------------
@@ -1052,8 +1278,12 @@ class TestE2E(unittest.TestCase):
 
     def test_91_verify_emulator_standalone_filters(self):
         """Standalone mode includes mode:standalone files, excludes mode:libretro."""
-        result_lr = verify_emulator(["test_emu"], self.emulators_dir, self.db, standalone=False)
-        result_sa = verify_emulator(["test_emu"], self.emulators_dir, self.db, standalone=True)
+        result_lr = verify_emulator(
+            ["test_emu"], self.emulators_dir, self.db, standalone=False
+        )
+        result_sa = verify_emulator(
+            ["test_emu"], self.emulators_dir, self.db, standalone=True
+        )
         lr_names = {d["name"] for d in result_lr["details"]}
         sa_names = {d["name"] for d in result_sa["details"]}
         # standalone_only.bin should be in standalone, not libretro
@@ -1063,10 +1293,14 @@ class TestE2E(unittest.TestCase):
     def test_102_resolve_dest_hint_disambiguates(self):
         """dest_hint resolves regional variants with same name to distinct files."""
         usa_path, usa_status = resolve_local_file(
-            {"name": "BIOS.bin"}, self.db, dest_hint="TestConsole/USA/BIOS.bin",
+            {"name": "BIOS.bin"},
+            self.db,
+            dest_hint="TestConsole/USA/BIOS.bin",
         )
         eur_path, eur_status = resolve_local_file(
-            {"name": "BIOS.bin"}, self.db, dest_hint="TestConsole/EUR/BIOS.bin",
+            {"name": "BIOS.bin"},
+            self.db,
+            dest_hint="TestConsole/EUR/BIOS.bin",
         )
         self.assertIsNotNone(usa_path)
         self.assertIsNotNone(eur_path)
@@ -1093,7 +1327,12 @@ class TestE2E(unittest.TestCase):
 
     def test_92b_verify_emulator_game_type_rejects_standalone(self):
         """Game-type profile rejects --standalone."""
-        game = {"emulator": "TestGame", "type": "game", "systems": ["console-a"], "files": []}
+        game = {
+            "emulator": "TestGame",
+            "type": "game",
+            "systems": ["console-a"],
+            "files": [],
+        }
         with open(os.path.join(self.emulators_dir, "test_game.yml"), "w") as fh:
             yaml.dump(game, fh)
         with self.assertRaises(SystemExit):
@@ -1124,7 +1363,9 @@ class TestE2E(unittest.TestCase):
     def test_96_verify_emulator_multi(self):
         """Multi-emulator verify aggregates files."""
         result = verify_emulator(
-            ["test_emu", "test_hle"], self.emulators_dir, self.db,
+            ["test_emu", "test_hle"],
+            self.emulators_dir,
+            self.db,
         )
         self.assertEqual(len(result["emulators"]), 2)
         all_names = {d["name"] for d in result["details"]}
@@ -1146,10 +1387,10 @@ class TestE2E(unittest.TestCase):
     def test_99filter_files_by_mode(self):
         """filter_files_by_mode correctly filters standalone/libretro."""
         files = [
-            {"name": "a.bin"},                         # no mode ->both
-            {"name": "b.bin", "mode": "libretro"},     # libretro only
-            {"name": "c.bin", "mode": "standalone"},   # standalone only
-            {"name": "d.bin", "mode": "both"},         # explicit both
+            {"name": "a.bin"},  # no mode ->both
+            {"name": "b.bin", "mode": "libretro"},  # libretro only
+            {"name": "c.bin", "mode": "standalone"},  # standalone only
+            {"name": "d.bin", "mode": "both"},  # explicit both
         ]
         lr = filter_files_by_mode(files, standalone=False)
         sa = filter_files_by_mode(files, standalone=True)
@@ -1161,8 +1402,10 @@ class TestE2E(unittest.TestCase):
     def test_100_verify_emulator_empty_profile(self):
         """Profile with files:[] produces note, not error."""
         empty = {
-            "emulator": "TestEmpty", "type": "libretro",
-            "systems": ["console-a"], "files": [],
+            "emulator": "TestEmpty",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [],
             "exclusion_note": "Code never loads BIOS",
         }
         with open(os.path.join(self.emulators_dir, "test_empty.yml"), "w") as fh:
@@ -1186,7 +1429,6 @@ class TestE2E(unittest.TestCase):
             self.fail("undeclared_req.bin not found")
         # Severity should be WARNING (existence mode base)
         self.assertGreater(result["severity_counts"][Severity.WARNING], 0)
-
 
     def test_102_safe_extract_zip_blocks_traversal(self):
         """safe_extract_zip must reject zip-slip path traversal."""
@@ -1218,6 +1460,7 @@ class TestE2E(unittest.TestCase):
         with open(test_file, "wb") as f:
             f.write(data)
         import zlib
+
         expected_sha1 = hashlib.sha1(data).hexdigest()
         expected_md5 = hashlib.md5(data).hexdigest()
         expected_sha256 = hashlib.sha256(data).hexdigest()
@@ -1231,7 +1474,10 @@ class TestE2E(unittest.TestCase):
 
     def test_105_resolve_with_empty_database(self):
         """resolve_local_file handles empty database gracefully."""
-        empty_db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_path_suffix": {}}}
+        empty_db = {
+            "files": {},
+            "indexes": {"by_md5": {}, "by_name": {}, "by_path_suffix": {}},
+        }
         entry = {"name": "nonexistent.bin", "sha1": "abc123"}
         path, status = resolve_local_file(entry, empty_db)
         self.assertIsNone(path)
@@ -1268,7 +1514,6 @@ class TestE2E(unittest.TestCase):
         self.assertIn("c.bin", names)
         self.assertIn("d.bin", names)
 
-
     def test_108_standalone_path_in_undeclared(self):
         """Undeclared files use standalone_path when core is in standalone_cores."""
         # Create a platform with standalone_cores
@@ -1280,8 +1525,11 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "console-a": {
                     "files": [
-                        {"name": "present_req.bin", "destination": "present_req.bin",
-                         "required": True},
+                        {
+                            "name": "present_req.bin",
+                            "destination": "present_req.bin",
+                            "required": True,
+                        },
                     ],
                 },
             },
@@ -1296,18 +1544,30 @@ class TestE2E(unittest.TestCase):
             "cores": ["test_emu"],
             "systems": ["console-a"],
             "files": [
-                {"name": "libretro_file.bin", "path": "subdir/libretro_file.bin",
-                 "standalone_path": "flat_file.bin", "required": True},
-                {"name": "standalone_only.bin", "mode": "standalone", "required": False},
+                {
+                    "name": "libretro_file.bin",
+                    "path": "subdir/libretro_file.bin",
+                    "standalone_path": "flat_file.bin",
+                    "required": True,
+                },
+                {
+                    "name": "standalone_only.bin",
+                    "mode": "standalone",
+                    "required": False,
+                },
                 {"name": "libretro_only.bin", "mode": "libretro", "required": False},
             ],
         }
-        with open(os.path.join(self.emulators_dir, "test_standalone_emu.yml"), "w") as fh:
+        with open(
+            os.path.join(self.emulators_dir, "test_standalone_emu.yml"), "w"
+        ) as fh:
             yaml.dump(emu, fh)
 
         config = load_platform_config("test_standalone", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         by_name = {u["name"]: u for u in undeclared}
 
         # standalone_path used for undeclared file (core is standalone)
@@ -1324,7 +1584,9 @@ class TestE2E(unittest.TestCase):
         """Without standalone_cores, undeclared files use path: (libretro)."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         # standalone_only.bin should be excluded (platform has no standalone_cores)
         names = {u["name"] for u in undeclared}
         self.assertNotIn("standalone_only.bin", names)
@@ -1404,18 +1666,21 @@ class TestE2E(unittest.TestCase):
     def test_load_target_config(self):
         self._write_target_fixtures()
         from common import load_target_config
+
         cores = load_target_config("testplatform", "target-minimal", self.platforms_dir)
         self.assertEqual(cores, {"core_a"})
 
     def test_target_alias_resolution(self):
         self._write_target_fixtures()
         from common import load_target_config
+
         cores = load_target_config("testplatform", "full", self.platforms_dir)
         self.assertEqual(cores, {"core_a", "core_b", "core_d"})
 
     def test_target_unknown_error(self):
         self._write_target_fixtures()
         from common import load_target_config
+
         with self.assertRaises(ValueError) as ctx:
             load_target_config("testplatform", "nonexistent", self.platforms_dir)
         self.assertIn("target-full", str(ctx.exception))
@@ -1424,6 +1689,7 @@ class TestE2E(unittest.TestCase):
     def test_target_override_add_remove(self):
         self._write_target_fixtures()
         from common import load_target_config
+
         cores = load_target_config("testplatform", "full", self.platforms_dir)
         self.assertIn("core_d", cores)
         self.assertNotIn("core_c", cores)
@@ -1433,6 +1699,7 @@ class TestE2E(unittest.TestCase):
     def test_target_single_target_noop(self):
         self._write_target_fixtures()
         from common import load_target_config
+
         cores = load_target_config("singleplatform", "only-target", self.platforms_dir)
         self.assertEqual(cores, {"core_a", "core_b"})
 
@@ -1453,7 +1720,10 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(targets_dir, "childplatform.yml"), "w") as f:
             yaml.dump(child_config, f)
         from common import load_target_config
-        parent = load_target_config("testplatform", "target-minimal", self.platforms_dir)
+
+        parent = load_target_config(
+            "testplatform", "target-minimal", self.platforms_dir
+        )
         child = load_target_config("childplatform", "target-full", self.platforms_dir)
         self.assertEqual(parent, {"core_a"})
         self.assertEqual(child, {"core_a"})
@@ -1477,7 +1747,9 @@ class TestE2E(unittest.TestCase):
         config = {"cores": "all_libretro"}
         result = resolve_platform_cores(config, profiles)
         self.assertEqual(result, {"core_a", "core_b", "core_c", "core_d"})
-        result = resolve_platform_cores(config, profiles, target_cores={"core_a", "core_b"})
+        result = resolve_platform_cores(
+            config, profiles, target_cores={"core_a", "core_b"}
+        )
         self.assertEqual(result, {"core_a", "core_b"})
 
     def test_target_none_no_filter(self):
@@ -1495,34 +1767,48 @@ class TestE2E(unittest.TestCase):
         core_a_path = os.path.join(self.emulators_dir, "core_a.yml")
         core_b_path = os.path.join(self.emulators_dir, "core_b.yml")
         with open(core_a_path, "w") as f:
-            yaml.dump({
-                "emulator": "CoreA", "type": "libretro", "systems": ["sys1"],
-                "files": [{"name": "bios_a.bin", "required": True}],
-            }, f)
+            yaml.dump(
+                {
+                    "emulator": "CoreA",
+                    "type": "libretro",
+                    "systems": ["sys1"],
+                    "files": [{"name": "bios_a.bin", "required": True}],
+                },
+                f,
+            )
         with open(core_b_path, "w") as f:
-            yaml.dump({
-                "emulator": "CoreB", "type": "libretro", "systems": ["sys1"],
-                "files": [{"name": "bios_b.bin", "required": True}],
-            }, f)
+            yaml.dump(
+                {
+                    "emulator": "CoreB",
+                    "type": "libretro",
+                    "systems": ["sys1"],
+                    "files": [{"name": "bios_b.bin", "required": True}],
+                },
+                f,
+            )
 
         config = {"cores": "all_libretro", "systems": {"sys1": {"files": []}}}
         profiles = load_emulator_profiles(self.emulators_dir)
 
         # Without target: both cores' files are undeclared
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         self.assertIn("bios_a.bin", names)
         self.assertIn("bios_b.bin", names)
 
         # With target filtering to core_a only
         undeclared = find_undeclared_files(
-            config, self.emulators_dir, self.db, profiles,
+            config,
+            self.emulators_dir,
+            self.db,
+            profiles,
             target_cores={"core_a"},
         )
         names = {u["name"] for u in undeclared}
         self.assertIn("bios_a.bin", names)
         self.assertNotIn("bios_b.bin", names)
-
 
     # ---------------------------------------------------------------
     # Validation index per-emulator ground truth (Task: ground truth)
@@ -1543,6 +1829,7 @@ class TestE2E(unittest.TestCase):
     def test_112_build_ground_truth(self):
         """build_ground_truth returns per-emulator detail for a filename."""
         from validation import build_ground_truth
+
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         gt = build_ground_truth("present_req.bin", index)
@@ -1559,6 +1846,7 @@ class TestE2E(unittest.TestCase):
     def test_113_build_ground_truth_empty(self):
         """build_ground_truth returns [] for unknown filename."""
         from validation import build_ground_truth
+
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         gt = build_ground_truth("nonexistent.bin", index)
@@ -1585,7 +1873,9 @@ class TestE2E(unittest.TestCase):
         """find_undeclared_files attaches ground truth fields."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         for u in undeclared:
             self.assertIn("checks", u)
             self.assertIn("source_ref", u)
@@ -1631,13 +1921,23 @@ class TestE2E(unittest.TestCase):
                 self.assertEqual(d["ground_truth"], [])
                 break
 
-
     def test_120_format_ground_truth_aggregate(self):
         """Aggregate format: one line with all cores."""
         from verify import _format_ground_truth_aggregate
+
         gt = [
-            {"emulator": "beetle_psx", "checks": ["md5"], "source_ref": "libretro.cpp:252", "expected": {"md5": "abc"}},
-            {"emulator": "pcsx_rearmed", "checks": ["existence"], "source_ref": None, "expected": {}},
+            {
+                "emulator": "beetle_psx",
+                "checks": ["md5"],
+                "source_ref": "libretro.cpp:252",
+                "expected": {"md5": "abc"},
+            },
+            {
+                "emulator": "pcsx_rearmed",
+                "checks": ["existence"],
+                "source_ref": None,
+                "expected": {},
+            },
         ]
         line = _format_ground_truth_aggregate(gt)
         self.assertIn("beetle_psx", line)
@@ -1648,9 +1948,14 @@ class TestE2E(unittest.TestCase):
     def test_121_format_ground_truth_verbose(self):
         """Verbose format: one line per core with expected values and source ref."""
         from verify import _format_ground_truth_verbose
+
         gt = [
-            {"emulator": "handy", "checks": ["size", "crc32"],
-             "source_ref": "rom.h:48-49", "expected": {"size": 512, "crc32": "0d973c9d"}},
+            {
+                "emulator": "handy",
+                "checks": ["size", "crc32"],
+                "source_ref": "rom.h:48-49",
+                "expected": {"size": 512, "crc32": "0d973c9d"},
+            },
         ]
         lines = _format_ground_truth_verbose(gt)
         self.assertEqual(len(lines), 1)
@@ -1662,8 +1967,14 @@ class TestE2E(unittest.TestCase):
     def test_122_format_ground_truth_verbose_no_source_ref(self):
         """Verbose format omits bracket when source_ref is None."""
         from verify import _format_ground_truth_verbose
+
         gt = [
-            {"emulator": "core_a", "checks": ["existence"], "source_ref": None, "expected": {}},
+            {
+                "emulator": "core_a",
+                "checks": ["existence"],
+                "source_ref": None,
+                "expected": {},
+            },
         ]
         lines = _format_ground_truth_verbose(gt)
         self.assertEqual(len(lines), 1)
@@ -1711,6 +2022,7 @@ class TestE2E(unittest.TestCase):
     def test_130_required_only_excludes_optional(self):
         """--required-only excludes files with required: false from pack."""
         from generate_pack import generate_pack
+
         output_dir = os.path.join(self.root, "pack_reqonly")
         os.makedirs(output_dir, exist_ok=True)
         # Create a platform with one required and one optional file
@@ -1721,8 +2033,16 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "test-sys": {
                     "files": [
-                        {"name": "present_req.bin", "destination": "present_req.bin", "required": True},
-                        {"name": "present_opt.bin", "destination": "present_opt.bin", "required": False},
+                        {
+                            "name": "present_req.bin",
+                            "destination": "present_req.bin",
+                            "required": True,
+                        },
+                        {
+                            "name": "present_opt.bin",
+                            "destination": "present_opt.bin",
+                            "required": False,
+                        },
                     ],
                 },
             },
@@ -1730,7 +2050,11 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.platforms_dir, "test_reqonly.yml"), "w") as fh:
             yaml.dump(config, fh)
         zip_path = generate_pack(
-            "test_reqonly", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            "test_reqonly",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
             required_only=True,
         )
         self.assertIsNotNone(zip_path)
@@ -1744,6 +2068,7 @@ class TestE2E(unittest.TestCase):
     def test_131_required_only_keeps_default_required(self):
         """--required-only keeps files with no required field (default = required)."""
         from generate_pack import generate_pack
+
         output_dir = os.path.join(self.root, "pack_reqdef")
         os.makedirs(output_dir, exist_ok=True)
         # File with no required field
@@ -1762,7 +2087,11 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.platforms_dir, "test_reqdef.yml"), "w") as fh:
             yaml.dump(config, fh)
         zip_path = generate_pack(
-            "test_reqdef", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            "test_reqdef",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
             required_only=True,
         )
         self.assertIsNotNone(zip_path)
@@ -1770,10 +2099,10 @@ class TestE2E(unittest.TestCase):
             names = zf.namelist()
         self.assertTrue(any("present_req.bin" in n for n in names))
 
-
     def test_132_platform_system_filter(self):
         """--platform + --system filters systems within a platform pack."""
         from generate_pack import generate_pack
+
         output_dir = os.path.join(self.root, "pack_sysfilter")
         os.makedirs(output_dir, exist_ok=True)
         config = {
@@ -1796,7 +2125,11 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.platforms_dir, "test_sysfilter.yml"), "w") as fh:
             yaml.dump(config, fh)
         zip_path = generate_pack(
-            "test_sysfilter", self.platforms_dir, self.db, self.bios_dir, output_dir,
+            "test_sysfilter",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
             system_filter=["system-a"],
         )
         self.assertIsNotNone(zip_path)
@@ -1808,6 +2141,7 @@ class TestE2E(unittest.TestCase):
     def test_133_platform_system_filter_normalized(self):
         """_norm_system_id normalization matches with manufacturer prefix."""
         from common import _norm_system_id
+
         self.assertEqual(
             _norm_system_id("sony-playstation"),
             _norm_system_id("playstation"),
@@ -1815,8 +2149,10 @@ class TestE2E(unittest.TestCase):
 
     def test_134_list_systems_platform_context(self):
         """list_platform_system_ids lists systems from a platform YAML."""
-        from common import list_platform_system_ids
         import io
+
+        from common import list_platform_system_ids
+
         config = {
             "platform": "ListSysTest",
             "verification_mode": "existence",
@@ -1849,10 +2185,10 @@ class TestE2E(unittest.TestCase):
         self.assertIn("1 file", output)
         self.assertIn("2 files", output)
 
-
     def test_135_split_by_system(self):
         """--split generates one ZIP per system in a subdirectory."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir = os.path.join(tmpdir, "platforms")
             os.makedirs(plat_dir)
@@ -1871,24 +2207,34 @@ class TestE2E(unittest.TestCase):
                 f.write(b"system_b")
 
             from common import compute_hashes
+
             ha = compute_hashes(file_a)
             hb = compute_hashes(file_b)
 
             db = {
                 "files": {
-                    ha["sha1"]: {"name": "bios_a.bin", "md5": ha["md5"],
-                                 "sha1": ha["sha1"], "sha256": ha["sha256"],
-                                 "path": file_a,
-                                 "paths": [file_a]},
-                    hb["sha1"]: {"name": "bios_b.bin", "md5": hb["md5"],
-                                 "sha1": hb["sha1"], "sha256": hb["sha256"],
-                                 "path": file_b,
-                                 "paths": [file_b]},
+                    ha["sha1"]: {
+                        "name": "bios_a.bin",
+                        "md5": ha["md5"],
+                        "sha1": ha["sha1"],
+                        "sha256": ha["sha256"],
+                        "path": file_a,
+                        "paths": [file_a],
+                    },
+                    hb["sha1"]: {
+                        "name": "bios_b.bin",
+                        "md5": hb["md5"],
+                        "sha1": hb["sha1"],
+                        "sha256": hb["sha256"],
+                        "path": file_b,
+                        "paths": [file_b],
+                    },
                 },
                 "indexes": {
                     "by_md5": {ha["md5"]: ha["sha1"], hb["md5"]: hb["sha1"]},
                     "by_name": {"bios_a.bin": [ha["sha1"]], "bios_b.bin": [hb["sha1"]]},
-                    "by_crc32": {}, "by_path_suffix": {},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
                 },
             }
 
@@ -1899,22 +2245,33 @@ class TestE2E(unittest.TestCase):
                 "platform": "SplitTest",
                 "verification_mode": "existence",
                 "systems": {
-                    "test-system-a": {"files": [{"name": "bios_a.bin", "sha1": ha["sha1"]}]},
-                    "test-system-b": {"files": [{"name": "bios_b.bin", "sha1": hb["sha1"]}]},
+                    "test-system-a": {
+                        "files": [{"name": "bios_a.bin", "sha1": ha["sha1"]}]
+                    },
+                    "test-system-b": {
+                        "files": [{"name": "bios_b.bin", "sha1": hb["sha1"]}]
+                    },
                 },
             }
             with open(os.path.join(plat_dir, "splitplat.yml"), "w") as f:
                 yaml.dump(plat_cfg, f)
 
-            from generate_pack import generate_split_packs
             from common import build_zip_contents_index, load_emulator_profiles
+            from generate_pack import generate_split_packs
+
             zip_contents = build_zip_contents_index(db)
             emu_profiles = load_emulator_profiles(emu_dir)
 
             zip_paths = generate_split_packs(
-                "splitplat", plat_dir, db, os.path.join(tmpdir, "bios"), out_dir,
-                emulators_dir=emu_dir, zip_contents=zip_contents,
-                emu_profiles=emu_profiles, group_by="system",
+                "splitplat",
+                plat_dir,
+                db,
+                os.path.join(tmpdir, "bios"),
+                out_dir,
+                emulators_dir=emu_dir,
+                zip_contents=zip_contents,
+                emu_profiles=emu_profiles,
+                group_by="system",
             )
             self.assertEqual(len(zip_paths), 2)
 
@@ -1934,10 +2291,10 @@ class TestE2E(unittest.TestCase):
                     self.assertIn("bios_b.bin", names)
                     self.assertNotIn("bios_a.bin", names)
 
-
     def test_136_derive_manufacturer(self):
         """derive_manufacturer extracts manufacturer correctly."""
         from common import derive_manufacturer
+
         # From system ID prefix
         self.assertEqual(derive_manufacturer("sony-playstation", {}), "Sony")
         self.assertEqual(derive_manufacturer("nintendo-snes", {}), "Nintendo")
@@ -1949,13 +2306,16 @@ class TestE2E(unittest.TestCase):
             "Panasonic",
         )
         # Various = skip to prefix check, then Other
-        self.assertEqual(derive_manufacturer("arcade", {"manufacturer": "Various"}), "Other")
+        self.assertEqual(
+            derive_manufacturer("arcade", {"manufacturer": "Various"}), "Other"
+        )
         # Fallback
         self.assertEqual(derive_manufacturer("dos", {}), "Other")
 
     def test_137_group_systems_by_manufacturer(self):
         """_group_systems_by_manufacturer groups correctly."""
         from generate_pack import _group_systems_by_manufacturer
+
         systems = {
             "sony-playstation": {"files": [{"name": "a.bin"}]},
             "sony-psp": {"files": [{"name": "b.bin"}]},
@@ -1970,15 +2330,17 @@ class TestE2E(unittest.TestCase):
         self.assertIn("Other", groups)
         self.assertEqual(groups["Other"], ["arcade"])
 
-
     def test_138_parse_hash_input(self):
         """parse_hash_input handles various formats."""
         from generate_pack import parse_hash_input
+
         # Plain MD5
         result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa")
         self.assertEqual(result, [("md5", "d8f1206299c48946e6ec5ef96d014eaa")])
         # Comma-separated
-        result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa,d8f1206299c48946e6ec5ef96d014eab")
+        result = parse_hash_input(
+            "d8f1206299c48946e6ec5ef96d014eaa,d8f1206299c48946e6ec5ef96d014eab"
+        )
         self.assertEqual(len(result), 2)
         # SHA1
         sha1 = "a" * 40
@@ -1991,6 +2353,7 @@ class TestE2E(unittest.TestCase):
     def test_139_parse_hash_file(self):
         """parse_hash_file handles comments, empty lines, various formats."""
         from generate_pack import parse_hash_file
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write("# PS1 BIOS files\n")
             f.write("\n")
@@ -2007,14 +2370,18 @@ class TestE2E(unittest.TestCase):
 
     def test_140_lookup_hashes_found(self):
         """lookup_hashes returns file info for known hashes."""
-        import io
         import contextlib
+        import io
+
         from generate_pack import lookup_hashes
+
         db = {
             "files": {
                 "sha1abc": {
-                    "name": "test.bin", "md5": "md5abc",
-                    "sha1": "sha1abc", "sha256": "sha256abc",
+                    "name": "test.bin",
+                    "md5": "md5abc",
+                    "sha1": "sha1abc",
+                    "sha256": "sha256abc",
                     "paths": ["Mfr/Console/test.bin"],
                     "aliases": ["alt.bin"],
                 },
@@ -2034,23 +2401,27 @@ class TestE2E(unittest.TestCase):
 
     def test_141_lookup_hashes_not_found(self):
         """lookup_hashes reports unknown hashes."""
-        import io
         import contextlib
+        import io
+
         from generate_pack import lookup_hashes
+
         db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}}}
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            lookup_hashes([("md5", "unknown123" + "0" * 22)], db, "bios", "emulators", "platforms")
+            lookup_hashes(
+                [("md5", "unknown123" + "0" * 22)], db, "bios", "emulators", "platforms"
+            )
         output = buf.getvalue()
         self.assertIn("NOT FOUND", output)
-
 
     def test_142_from_md5_platform_pack(self):
         """--from-md5 with --platform generates correctly laid out ZIP."""
         import tempfile
-        import json
         import zipfile
+
         import yaml
+
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir = os.path.join(tmpdir, "platforms")
             os.makedirs(plat_dir)
@@ -2064,13 +2435,16 @@ class TestE2E(unittest.TestCase):
             with open(bios_file, "wb") as f:
                 f.write(b"ps1_bios_content")
             from common import compute_hashes
+
             h = compute_hashes(bios_file)
 
             db = {
                 "files": {
                     h["sha1"]: {
-                        "name": "scph5501.bin", "md5": h["md5"],
-                        "sha1": h["sha1"], "sha256": h["sha256"],
+                        "name": "scph5501.bin",
+                        "md5": h["md5"],
+                        "sha1": h["sha1"],
+                        "sha256": h["sha256"],
                         "path": bios_file,
                         "paths": ["Sony/PS1/scph5501.bin"],
                     },
@@ -2078,7 +2452,8 @@ class TestE2E(unittest.TestCase):
                 "indexes": {
                     "by_md5": {h["md5"]: h["sha1"]},
                     "by_name": {"scph5501.bin": [h["sha1"]]},
-                    "by_crc32": {}, "by_path_suffix": {},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
                 },
             }
 
@@ -2092,8 +2467,11 @@ class TestE2E(unittest.TestCase):
                 "systems": {
                     "sony-playstation": {
                         "files": [
-                            {"name": "scph5501.bin", "md5": h["md5"],
-                             "destination": "scph5501.bin"},
+                            {
+                                "name": "scph5501.bin",
+                                "md5": h["md5"],
+                                "destination": "scph5501.bin",
+                            },
                         ]
                     }
                 },
@@ -2101,15 +2479,19 @@ class TestE2E(unittest.TestCase):
             with open(os.path.join(plat_dir, "testplat.yml"), "w") as f:
                 yaml.dump(plat_cfg, f)
 
-            from generate_pack import generate_md5_pack
             from common import build_zip_contents_index
+            from generate_pack import generate_md5_pack
+
             zip_contents = build_zip_contents_index(db)
 
             zip_path = generate_md5_pack(
                 hashes=[("md5", h["md5"])],
-                db=db, bios_dir=bios_dir, output_dir=out_dir,
+                db=db,
+                bios_dir=bios_dir,
+                output_dir=out_dir,
                 zip_contents=zip_contents,
-                platform_name="testplat", platforms_dir=plat_dir,
+                platform_name="testplat",
+                platforms_dir=plat_dir,
             )
             self.assertIsNotNone(zip_path)
             with zipfile.ZipFile(zip_path) as zf:
@@ -2119,16 +2501,19 @@ class TestE2E(unittest.TestCase):
 
     def test_143_from_md5_not_in_repo(self):
         """--from-md5 reports files in DB but missing from repo."""
-        import tempfile
-        import io
         import contextlib
+        import io
+        import tempfile
+
         from generate_pack import generate_md5_pack
 
         db = {
             "files": {
                 "sha1known": {
-                    "name": "missing.bin", "md5": "md5known" + "0" * 25,
-                    "sha1": "sha1known", "sha256": "sha256known",
+                    "name": "missing.bin",
+                    "md5": "md5known" + "0" * 25,
+                    "sha1": "sha1known",
+                    "sha256": "sha256known",
                     "path": "/nonexistent/missing.bin",
                     "paths": ["Test/missing.bin"],
                 },
@@ -2146,20 +2531,23 @@ class TestE2E(unittest.TestCase):
             with contextlib.redirect_stdout(buf):
                 result = generate_md5_pack(
                     hashes=[("md5", "md5known" + "0" * 25)],
-                    db=db, bios_dir=bios_dir, output_dir=out_dir,
+                    db=db,
+                    bios_dir=bios_dir,
+                    output_dir=out_dir,
                     zip_contents={},
                 )
             output = buf.getvalue()
             self.assertIn("NOT IN REPO", output)
             self.assertIsNone(result)
 
-
     def test_144_invalid_split_emulator(self):
         """--split + --emulator is rejected."""
         import subprocess
+
         result = subprocess.run(
             ["python", "scripts/generate_pack.py", "--emulator", "test", "--split"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("error", result.stderr.lower())
@@ -2167,33 +2555,60 @@ class TestE2E(unittest.TestCase):
     def test_145_invalid_from_md5_all(self):
         """--from-md5 + --all is rejected."""
         import subprocess
+
         result = subprocess.run(
-            ["python", "scripts/generate_pack.py", "--all", "--from-md5", "abc123" + "0" * 26],
-            capture_output=True, text=True,
+            [
+                "python",
+                "scripts/generate_pack.py",
+                "--all",
+                "--from-md5",
+                "abc123" + "0" * 26,
+            ],
+            capture_output=True,
+            text=True,
         )
         self.assertNotEqual(result.returncode, 0)
 
     def test_146_invalid_from_md5_system(self):
         """--from-md5 + --system is rejected."""
         import subprocess
+
         result = subprocess.run(
-            ["python", "scripts/generate_pack.py", "--system", "psx", "--from-md5", "abc123" + "0" * 26],
-            capture_output=True, text=True,
+            [
+                "python",
+                "scripts/generate_pack.py",
+                "--system",
+                "psx",
+                "--from-md5",
+                "abc123" + "0" * 26,
+            ],
+            capture_output=True,
+            text=True,
         )
         self.assertNotEqual(result.returncode, 0)
 
     def test_147_invalid_group_by_without_split(self):
         """--group-by without --split is rejected."""
         import subprocess
+
         result = subprocess.run(
-            ["python", "scripts/generate_pack.py", "--platform", "retroarch", "--group-by", "manufacturer"],
-            capture_output=True, text=True,
+            [
+                "python",
+                "scripts/generate_pack.py",
+                "--platform",
+                "retroarch",
+                "--group-by",
+                "manufacturer",
+            ],
+            capture_output=True,
+            text=True,
         )
         self.assertNotEqual(result.returncode, 0)
 
     def test_148_valid_platform_system(self):
         """--platform + --system is accepted (not rejected at validation stage)."""
         import argparse
+
         sys.path.insert(0, "scripts")
         # Build the same parser as generate_pack.main()
         parser = argparse.ArgumentParser()
@@ -2203,7 +2618,9 @@ class TestE2E(unittest.TestCase):
         parser.add_argument("--system", "-s")
         parser.add_argument("--standalone", action="store_true")
         parser.add_argument("--split", action="store_true")
-        parser.add_argument("--group-by", choices=["system", "manufacturer"], default="system")
+        parser.add_argument(
+            "--group-by", choices=["system", "manufacturer"], default="system"
+        )
         parser.add_argument("--target", "-t")
         parser.add_argument("--from-md5")
         parser.add_argument("--from-md5-file")
@@ -2220,7 +2637,9 @@ class TestE2E(unittest.TestCase):
         # These should NOT raise
         self.assertFalse(has_emulator and (has_platform or has_all or has_system))
         self.assertFalse(has_platform and has_all)
-        self.assertTrue(has_platform or has_all or has_emulator or has_system or has_from_md5)
+        self.assertTrue(
+            has_platform or has_all or has_emulator or has_system or has_from_md5
+        )
         # --platform + --system is a valid combination
         self.assertTrue(has_platform and has_system)
 
@@ -2229,10 +2648,11 @@ class TestE2E(unittest.TestCase):
     def test_150_bizhawk_scraper_parse_firmware_and_option(self):
         """Parse FirmwareAndOption() one-liner pattern."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             FirmwareAndOption("DBEBD76A448447CB6E524AC3CB0FD19FC065D944", 256, "32X", "G", "32X_G_BIOS.BIN", "32x 68k BIOS");
             FirmwareAndOption("1E5B0B2441A4979B6966D942B20CC76C413B8C5E", 2048, "32X", "M", "32X_M_BIOS.BIN", "32x SH2 MASTER BIOS");
-        '''
+        """
         records, files = parse_firmware_database(fragment)
         self.assertEqual(len(records), 2)
         self.assertEqual(records[0]["system"], "32X")
@@ -2244,11 +2664,12 @@ class TestE2E(unittest.TestCase):
     def test_151_bizhawk_scraper_parse_variable_refs(self):
         """Parse var = File() + Firmware() + Option() pattern."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             var gbaNormal = File("300C20DF6731A33952DED8C436F7F186D25D3492", 16384, "GBA_bios.rom", "Bios (World)");
             Firmware("GBA", "Bios", "Bios");
             Option("GBA", "Bios", in gbaNormal, FirmwareOptionStatus.Ideal);
-        '''
+        """
         records, files = parse_firmware_database(fragment)
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]["system"], "GBA")
@@ -2259,13 +2680,14 @@ class TestE2E(unittest.TestCase):
     def test_152_bizhawk_scraper_skips_comments(self):
         """Commented-out blocks (PS2) are skipped."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             FirmwareAndOption("DBEBD76A448447CB6E524AC3CB0FD19FC065D944", 256, "32X", "G", "32X_G_BIOS.BIN", "32x 68k BIOS");
             /*
             Firmware("PS2", "BIOS", "PS2 Bios");
             Option("PS2", "BIOS", File("FBD54BFC020AF34008B317DCB80B812DD29B3759", 4194304, "ps2.bin", "PS2 Bios"));
             */
-        '''
+        """
         records, files = parse_firmware_database(fragment)
         systems = {r["system"] for r in records}
         self.assertNotIn("PS2", systems)
@@ -2274,18 +2696,20 @@ class TestE2E(unittest.TestCase):
     def test_153_bizhawk_scraper_arithmetic_size(self):
         """Size expressions like 4 * 1024 * 1024 are evaluated."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             FirmwareAndOption("BF861922DCB78C316360E3E742F4F70FF63C9BC3", 4 * 1024 * 1024, "N64DD", "IPL_JPN", "64DD_IPL.bin", "N64DD JPN IPL");
-        '''
+        """
         records, _ = parse_firmware_database(fragment)
         self.assertEqual(records[0]["size"], 4194304)
 
     def test_154_bizhawk_scraper_dummy_hash(self):
         """SHA1Checksum.Dummy entries get no sha1 field."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             FirmwareAndOption(SHA1Checksum.Dummy, 0, "3DS", "aes_keys", "aes_keys.txt", "AES Keys");
-        '''
+        """
         records, _ = parse_firmware_database(fragment)
         self.assertEqual(len(records), 1)
         self.assertIsNone(records[0]["sha1"])
@@ -2293,13 +2717,14 @@ class TestE2E(unittest.TestCase):
     def test_155_bizhawk_scraper_multi_option_picks_ideal(self):
         """When multiple options exist, Ideal is selected as canonical."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             var ss_100_j = File("2B8CB4F87580683EB4D760E4ED210813D667F0A2", 524288, "SAT_1.00-(J).bin", "Bios v1.00 (J)");
             var ss_101_j = File("DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720", 524288, "SAT_1.01-(J).bin", "Bios v1.01 (J)");
             Firmware("SAT", "J", "Bios (J)");
             Option("SAT", "J", in ss_100_j);
             Option("SAT", "J", in ss_101_j, FirmwareOptionStatus.Ideal);
-        '''
+        """
         records, _ = parse_firmware_database(fragment)
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]["sha1"], "DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720")
@@ -2308,13 +2733,14 @@ class TestE2E(unittest.TestCase):
     def test_156_bizhawk_scraper_is_bad_excluded(self):
         """Files with isBad: true are not selected as canonical."""
         from scraper.bizhawk_scraper import parse_firmware_database
-        fragment = '''
+
+        fragment = """
             var good = File("AAAA", 100, "good.bin", "Good");
             var bad = File("BBBB", 100, "bad.bin", "Bad", isBad: true);
             Firmware("TEST", "X", "Test");
             Option("TEST", "X", in bad);
             Option("TEST", "X", in good, FirmwareOptionStatus.Ideal);
-        '''
+        """
         records, _ = parse_firmware_database(fragment)
         self.assertEqual(records[0]["name"], "good.bin")
 
@@ -2329,12 +2755,14 @@ class TestE2E(unittest.TestCase):
         _register_path("system/SGB1.sfc", seen_files, seen_parents)
 
         # Adding system/SGB1.sfc/program.rom should conflict (parent is a file)
-        self.assertTrue(_has_path_conflict("system/SGB1.sfc/program.rom",
-                                           seen_files, seen_parents))
+        self.assertTrue(
+            _has_path_conflict("system/SGB1.sfc/program.rom", seen_files, seen_parents)
+        )
 
         # Adding system/other.bin should not conflict
-        self.assertFalse(_has_path_conflict("system/other.bin",
-                                            seen_files, seen_parents))
+        self.assertFalse(
+            _has_path_conflict("system/other.bin", seen_files, seen_parents)
+        )
 
         # Reverse: register a nested path first, then check flat
         seen_files2: set[str] = set()
@@ -2342,12 +2770,14 @@ class TestE2E(unittest.TestCase):
         _register_path("system/SGB2.sfc/program.rom", seen_files2, seen_parents2)
 
         # Adding system/SGB2.sfc as a file should conflict (it's a directory)
-        self.assertTrue(_has_path_conflict("system/SGB2.sfc",
-                                           seen_files2, seen_parents2))
+        self.assertTrue(
+            _has_path_conflict("system/SGB2.sfc", seen_files2, seen_parents2)
+        )
 
         # Adding system/SGB2.sfc/boot.rom should not conflict (sibling in same dir)
-        self.assertFalse(_has_path_conflict("system/SGB2.sfc/boot.rom",
-                                            seen_files2, seen_parents2))
+        self.assertFalse(
+            _has_path_conflict("system/SGB2.sfc/boot.rom", seen_files2, seen_parents2)
+        )
 
     def test_158_pack_skips_file_directory_conflict(self):
         """Pack generation skips entries that conflict with existing paths."""
@@ -2364,8 +2794,11 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "test-sys": {
                     "files": [
-                        {"name": "present_req.bin", "destination": "present_req.bin",
-                         "required": True},
+                        {
+                            "name": "present_req.bin",
+                            "destination": "present_req.bin",
+                            "required": True,
+                        },
                     ],
                 },
             },
@@ -2386,18 +2819,22 @@ class TestE2E(unittest.TestCase):
             yaml.dump(emu, fh)
 
         zip_path = generate_pack(
-            "test_conflict", self.platforms_dir, self.db, self.bios_dir,
-            output_dir, emulators_dir=self.emulators_dir,
+            "test_conflict",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emulators_dir=self.emulators_dir,
         )
         self.assertIsNotNone(zip_path)
         with zipfile.ZipFile(zip_path) as zf:
             names = zf.namelist()
         # Flat file should be present
-        self.assertTrue(any("present_req.bin" in n and "/" + "nested" not in n
-                            for n in names))
+        self.assertTrue(
+            any("present_req.bin" in n and "/" + "nested" not in n for n in names)
+        )
         # Nested conflict should NOT be present
         self.assertFalse(any("nested.rom" in n for n in names))
-
 
     # ---------------------------------------------------------------
     # Archive cross-reference and descriptive name tests
@@ -2407,9 +2844,13 @@ class TestE2E(unittest.TestCase):
         """Archived files group by archive; in_repo=True when archive exists."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         # test_archive.zip should appear as a single grouped entry
-        archive_entries = [u for u in undeclared if u.get("archive") == "test_archive.zip"]
+        archive_entries = [
+            u for u in undeclared if u.get("archive") == "test_archive.zip"
+        ]
         self.assertEqual(len(archive_entries), 1)
         entry = archive_entries[0]
         self.assertTrue(entry["in_repo"])
@@ -2421,8 +2862,12 @@ class TestE2E(unittest.TestCase):
         """Missing archive reported as single entry with in_repo=False."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
-        missing_entries = [u for u in undeclared if u.get("archive") == "missing_archive.zip"]
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
+        missing_entries = [
+            u for u in undeclared if u.get("archive") == "missing_archive.zip"
+        ]
         self.assertEqual(len(missing_entries), 1)
         entry = missing_entries[0]
         self.assertFalse(entry["in_repo"])
@@ -2433,7 +2878,9 @@ class TestE2E(unittest.TestCase):
         """Individual ROM names from archived files should NOT appear as separate entries."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         # Individual ROMs should NOT be in the undeclared list
         self.assertNotIn("rom_a.bin", names)
@@ -2444,9 +2891,12 @@ class TestE2E(unittest.TestCase):
         """Descriptive name with path: fallback resolves via path basename."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
-        desc_entries = {u["name"]: u for u in undeclared
-                        if u["emulator"] == "TestDescriptive"}
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
+        desc_entries = {
+            u["name"]: u for u in undeclared if u["emulator"] == "TestDescriptive"
+        }
         # "Descriptive BIOS Name" has path: "present_req.bin" which IS in by_name
         self.assertIn("Descriptive BIOS Name", desc_entries)
         self.assertTrue(desc_entries["Descriptive BIOS Name"]["in_repo"])
@@ -2463,29 +2913,43 @@ class TestE2E(unittest.TestCase):
             "systems": {
                 "console-a": {
                     "files": [
-                        {"name": "test_archive.zip", "destination": "test_archive.zip",
-                         "required": True},
+                        {
+                            "name": "test_archive.zip",
+                            "destination": "test_archive.zip",
+                            "required": True,
+                        },
                     ],
                 },
             },
         }
-        with open(os.path.join(self.platforms_dir, "test_archive_platform.yml"), "w") as fh:
+        with open(
+            os.path.join(self.platforms_dir, "test_archive_platform.yml"), "w"
+        ) as fh:
             yaml.dump(config, fh)
         config = load_platform_config("test_archive_platform", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         # test_archive.zip is declared ->its archived ROMs should be skipped
-        archive_entries = [u for u in undeclared if u.get("archive") == "test_archive.zip"]
+        archive_entries = [
+            u for u in undeclared if u.get("archive") == "test_archive.zip"
+        ]
         self.assertEqual(len(archive_entries), 0)
 
     def test_164_pack_extras_use_archive_name(self):
         """Pack extras for archived files use archive name, not individual ROM."""
         from generate_pack import _collect_emulator_extras
+
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         extras = _collect_emulator_extras(
-            config, self.emulators_dir, self.db,
-            set(), "", profiles,
+            config,
+            self.emulators_dir,
+            self.db,
+            set(),
+            "",
+            profiles,
         )
         extra_names = {e["name"] for e in extras}
         # Archive name should be present, not individual ROMs
@@ -2495,15 +2959,19 @@ class TestE2E(unittest.TestCase):
         # Missing archive should NOT be in extras (in_repo=False)
         self.assertNotIn("missing_archive.zip", extra_names)
 
-
     def test_165_pack_extras_multi_dest_cross_ref(self):
         """Same file at different paths from two profiles produces both destinations."""
         from generate_pack import _collect_emulator_extras
+
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         extras = _collect_emulator_extras(
-            config, self.emulators_dir, self.db,
-            set(), "", profiles,
+            config,
+            self.emulators_dir,
+            self.db,
+            set(),
+            "",
+            profiles,
         )
         extra_dests = {e["destination"] for e in extras}
         # Root destination (from test_emu or test_root_core, no path)
@@ -2514,13 +2982,18 @@ class TestE2E(unittest.TestCase):
     def test_166_pack_extras_multi_dest_platform_declared(self):
         """Profile with path different from platform destination adds alternative."""
         from generate_pack import _collect_emulator_extras
+
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         # Simulate platform already having present_req.bin at root
         seen = {"present_req.bin"}
         extras = _collect_emulator_extras(
-            config, self.emulators_dir, self.db,
-            seen, "", profiles,
+            config,
+            self.emulators_dir,
+            self.db,
+            seen,
+            "",
+            profiles,
         )
         extra_dests = {e["destination"] for e in extras}
         # Root is already in pack (in seen), should NOT be duplicated
@@ -2572,13 +3045,18 @@ class TestE2E(unittest.TestCase):
 
         # Clear profile cache so fresh load picks up our file
         from common import _emulator_profiles_cache
+
         _emulator_profiles_cache.clear()
 
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["testcore"]}
 
         result = generate_platform_truth(
-            "testplat", config, {}, profiles, db=None,
+            "testplat",
+            config,
+            {},
+            profiles,
+            db=None,
         )
 
         self.assertEqual(result["platform"], "testplat")
@@ -2604,12 +3082,24 @@ class TestE2E(unittest.TestCase):
             "systems": ["test-system"],
             "cores": ["dualmode"],
             "files": [
-                {"name": "both.bin", "system": "test-system", "required": True,
-                 "mode": "both"},
-                {"name": "lr_only.bin", "system": "test-system", "required": True,
-                 "mode": "libretro"},
-                {"name": "sa_only.bin", "system": "test-system", "required": True,
-                 "mode": "standalone"},
+                {
+                    "name": "both.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "mode": "both",
+                },
+                {
+                    "name": "lr_only.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "mode": "libretro",
+                },
+                {
+                    "name": "sa_only.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "mode": "standalone",
+                },
                 {"name": "nomode.bin", "system": "test-system", "required": True},
             ],
         }
@@ -2639,10 +3129,18 @@ class TestE2E(unittest.TestCase):
             "systems": ["test-system"],
             "cores": ["dualcore"],
             "files": [
-                {"name": "lr_file.bin", "system": "test-system", "required": True,
-                 "mode": "libretro"},
-                {"name": "sa_file.bin", "system": "test-system", "required": True,
-                 "mode": "standalone"},
+                {
+                    "name": "lr_file.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "mode": "libretro",
+                },
+                {
+                    "name": "sa_file.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "mode": "standalone",
+                },
             ],
         }
         with open(os.path.join(self.emulators_dir, "dualcore.yml"), "w") as f:
@@ -2672,8 +3170,12 @@ class TestE2E(unittest.TestCase):
             "systems": ["test-system"],
             "cores": ["core_a"],
             "files": [
-                {"name": "shared.bin", "system": "test-system",
-                 "required": False, "source_ref": "a.cpp:10"},
+                {
+                    "name": "shared.bin",
+                    "system": "test-system",
+                    "required": False,
+                    "source_ref": "a.cpp:10",
+                },
             ],
         }
         core_b = {
@@ -2682,8 +3184,12 @@ class TestE2E(unittest.TestCase):
             "systems": ["test-system"],
             "cores": ["core_b"],
             "files": [
-                {"name": "shared.bin", "system": "test-system",
-                 "required": True, "source_ref": "b.cpp:20"},
+                {
+                    "name": "shared.bin",
+                    "system": "test-system",
+                    "required": True,
+                    "source_ref": "b.cpp:20",
+                },
             ],
         }
         for name, data in [("core_a", core_a), ("core_b", core_b)]:
@@ -2731,9 +3237,9 @@ class TestE2E(unittest.TestCase):
         cov = result["_coverage"]
 
         self.assertEqual(cov["cores_profiled"], 1)
-        self.assertNotIn("unprofiled_core", [
-            name for name in profiles if name == "unprofiled_core"
-        ])
+        self.assertNotIn(
+            "unprofiled_core", [name for name in profiles if name == "unprofiled_core"]
+        )
         # unprofiled_core has no profile YAML so resolve_platform_cores
         # won't include it; cores_resolved reflects only matched profiles
         self.assertEqual(cov["cores_resolved"], 1)
@@ -2742,10 +3248,20 @@ class TestE2E(unittest.TestCase):
     def test_90_registry_install_metadata(self):
         """Registry install section is accessible."""
         import yaml
+
         with open("platforms/_registry.yml") as f:
             registry = yaml.safe_load(f)
-        for name in ("retroarch", "batocera", "emudeck", "recalbox",
-                      "retrobat", "retrodeck", "lakka", "romm", "bizhawk"):
+        for name in (
+            "retroarch",
+            "batocera",
+            "emudeck",
+            "recalbox",
+            "retrobat",
+            "retrodeck",
+            "lakka",
+            "romm",
+            "bizhawk",
+        ):
             plat = registry["platforms"][name]
             self.assertIn("install", plat, f"{name} missing install section")
             self.assertIn("detect", plat["install"])
@@ -2754,7 +3270,8 @@ class TestE2E(unittest.TestCase):
                 self.assertIn("os", hint)
         # EmuDeck has standalone_copies
         self.assertIn(
-            "standalone_copies", registry["platforms"]["emudeck"]["install"],
+            "standalone_copies",
+            registry["platforms"]["emudeck"]["install"],
         )
 
     def test_91_generate_manifest(self):
@@ -2767,8 +3284,13 @@ class TestE2E(unittest.TestCase):
             "platforms": {
                 "test_existence": {
                     "install": {
-                        "detect": [{"os": "linux", "method": "path_exists",
-                                    "path": "/test/bios"}],
+                        "detect": [
+                            {
+                                "os": "linux",
+                                "method": "path_exists",
+                                "path": "/test/bios",
+                            }
+                        ],
                     },
                 },
             },
@@ -2777,8 +3299,12 @@ class TestE2E(unittest.TestCase):
             yaml.dump(registry_data, fh)
 
         manifest = generate_manifest(
-            "test_existence", self.platforms_dir, self.db, self.bios_dir,
-            registry_path, emulators_dir=self.emulators_dir,
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            registry_path,
+            emulators_dir=self.emulators_dir,
         )
 
         self.assertEqual(manifest["manifest_version"], 1)
@@ -2790,7 +3316,10 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(manifest["total_files"], len(manifest["files"]))
         self.assertGreater(len(manifest["files"]), 0)
         self.assertEqual(manifest["base_destination"], "system")
-        self.assertEqual(manifest["detect"], registry_data["platforms"]["test_existence"]["install"]["detect"])
+        self.assertEqual(
+            manifest["detect"],
+            registry_data["platforms"]["test_existence"]["install"]["detect"],
+        )
 
         for f in manifest["files"]:
             self.assertIn("dest", f)
@@ -2820,15 +3349,20 @@ class TestE2E(unittest.TestCase):
         output_dir = os.path.join(self.root, "pack_manifest_cmp")
         os.makedirs(output_dir, exist_ok=True)
         zip_path = generate_pack(
-            "test_existence", self.platforms_dir, self.db, self.bios_dir,
-            output_dir, emulators_dir=self.emulators_dir,
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emulators_dir=self.emulators_dir,
         )
         self.assertIsNotNone(zip_path)
 
         # Get ZIP file destinations (exclude metadata)
         with zipfile.ZipFile(zip_path) as zf:
             zip_names = {
-                n for n in zf.namelist()
+                n
+                for n in zf.namelist()
                 if not n.startswith("INSTRUCTIONS_")
                 and n != "manifest.json"
                 and n != "README.txt"
@@ -2836,8 +3370,12 @@ class TestE2E(unittest.TestCase):
 
         # Generate manifest
         manifest = generate_manifest(
-            "test_existence", self.platforms_dir, self.db, self.bios_dir,
-            registry_path, emulators_dir=self.emulators_dir,
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            registry_path,
+            emulators_dir=self.emulators_dir,
         )
         base = manifest.get("base_destination", "")
         manifest_dests = set()
@@ -2847,7 +3385,6 @@ class TestE2E(unittest.TestCase):
 
         self.assertEqual(manifest_dests, zip_names)
 
-
     # ---------------------------------------------------------------
     # install.py tests
     # ---------------------------------------------------------------
@@ -2856,6 +3393,7 @@ class TestE2E(unittest.TestCase):
         """Parse system_directory from retroarch.cfg."""
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_retroarch_system_dir
+
         cfg = os.path.join(self.root, "retroarch.cfg")
         # Quoted absolute path
         with open(cfg, "w") as f:
@@ -2869,7 +3407,7 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(result, Path(self.root) / "system")
         # Unquoted
         with open(cfg, "w") as f:
-            f.write('system_directory = /tmp/ra_system\n')
+            f.write("system_directory = /tmp/ra_system\n")
         result = _parse_retroarch_system_dir(Path(cfg))
         self.assertEqual(result, Path("/tmp/ra_system"))
 
@@ -2877,9 +3415,12 @@ class TestE2E(unittest.TestCase):
         """Parse emulationPath from EmuDeck settings.sh."""
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_bash_var
+
         settings = os.path.join(self.root, "settings.sh")
         with open(settings, "w") as f:
-            f.write('emulationPath="/home/deck/Emulation"\nromsPath="/home/deck/Emulation/roms"\n')
+            f.write(
+                'emulationPath="/home/deck/Emulation"\nromsPath="/home/deck/Emulation/roms"\n'
+            )
         result = _parse_bash_var(Path(settings), "emulationPath")
         self.assertEqual(result, "/home/deck/Emulation")
 
@@ -2887,6 +3428,7 @@ class TestE2E(unittest.TestCase):
         """Parse $emulationPath from EmuDeck settings.ps1."""
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_ps1_var
+
         settings = os.path.join(self.root, "settings.ps1")
         with open(settings, "w") as f:
             f.write('$emulationPath="C:\\Emulation"\n')
@@ -2897,6 +3439,7 @@ class TestE2E(unittest.TestCase):
         """--target filters files by cores field."""
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _filter_by_target
+
         files = [
             {"dest": "a.bin", "cores": None},
             {"dest": "b.bin", "cores": ["flycast", "redream"]},
@@ -2912,6 +3455,7 @@ class TestE2E(unittest.TestCase):
         """Standalone keys copied to existing emulator dirs."""
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import do_standalone_copies
+
         bios_dir = Path(self.root) / "bios"
         bios_dir.mkdir(exist_ok=True)
         (bios_dir / "prod.keys").write_bytes(b"KEYS")
@@ -2920,7 +3464,12 @@ class TestE2E(unittest.TestCase):
         missing_dir = Path(self.root) / "nonexistent"
         manifest = {
             "base_destination": "bios",
-            "standalone_copies": [{"file": "prod.keys", "targets": {"linux": [str(yuzu_dir), str(missing_dir)]}}]
+            "standalone_copies": [
+                {
+                    "file": "prod.keys",
+                    "targets": {"linux": [str(yuzu_dir), str(missing_dir)]},
+                }
+            ],
         }
         copied, skipped = do_standalone_copies(manifest, bios_dir, "linux")
         self.assertEqual(copied, 1)
@@ -2928,25 +3477,42 @@ class TestE2E(unittest.TestCase):
         self.assertTrue((yuzu_dir / "prod.keys").exists())
         self.assertFalse((missing_dir / "prod.keys").exists())
 
-
     # ---------------------------------------------------------------
     # diff_platform_truth tests
     # ---------------------------------------------------------------
 
     def test_98_diff_truth_missing(self):
         """Truth has 2 files, scraped has 1 -> 1 missing with cores/source_refs."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
-            "files": [
-                {"name": "bios_a.bin", "required": True, "md5": "aaa",
-                 "_cores": ["core_a"], "_source_refs": ["src/a.c:10"]},
-                {"name": "bios_b.bin", "required": False, "md5": "bbb",
-                 "_cores": ["core_a"], "_source_refs": ["src/b.c:20"]},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [{"name": "bios_a.bin", "md5": "aaa"}],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+                    "files": [
+                        {
+                            "name": "bios_a.bin",
+                            "required": True,
+                            "md5": "aaa",
+                            "_cores": ["core_a"],
+                            "_source_refs": ["src/a.c:10"],
+                        },
+                        {
+                            "name": "bios_b.bin",
+                            "required": False,
+                            "md5": "bbb",
+                            "_cores": ["core_a"],
+                            "_source_refs": ["src/b.c:20"],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [{"name": "bios_a.bin", "md5": "aaa"}],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_missing"], 1)
         div = result["divergences"]["test-sys"]
@@ -2958,19 +3524,31 @@ class TestE2E(unittest.TestCase):
 
     def test_99_diff_truth_extra_phantom(self):
         """All cores profiled, scraped has extra file -> extra_phantom."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
-            "files": [
-                {"name": "bios.bin", "md5": "aaa",
-                 "_cores": ["core_a"], "_source_refs": []},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [
-                {"name": "bios.bin", "md5": "aaa"},
-                {"name": "phantom.bin", "md5": "zzz"},
-            ],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+                    "files": [
+                        {
+                            "name": "bios.bin",
+                            "md5": "aaa",
+                            "_cores": ["core_a"],
+                            "_source_refs": [],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {"name": "bios.bin", "md5": "aaa"},
+                        {"name": "phantom.bin", "md5": "zzz"},
+                    ],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_extra_phantom"], 1)
         div = result["divergences"]["test-sys"]
@@ -2979,20 +3557,34 @@ class TestE2E(unittest.TestCase):
 
     def test_100_diff_truth_extra_unprofiled(self):
         """Some cores unprofiled, scraped has extra -> extra_unprofiled."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"],
-                          "cores_unprofiled": ["core_b"]},
-            "files": [
-                {"name": "bios.bin", "md5": "aaa",
-                 "_cores": ["core_a"], "_source_refs": []},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [
-                {"name": "bios.bin", "md5": "aaa"},
-                {"name": "extra.bin", "md5": "yyy"},
-            ],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {
+                        "cores_profiled": ["core_a"],
+                        "cores_unprofiled": ["core_b"],
+                    },
+                    "files": [
+                        {
+                            "name": "bios.bin",
+                            "md5": "aaa",
+                            "_cores": ["core_a"],
+                            "_source_refs": [],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {"name": "bios.bin", "md5": "aaa"},
+                        {"name": "extra.bin", "md5": "yyy"},
+                    ],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_extra_unprofiled"], 1)
         div = result["divergences"]["test-sys"]
@@ -3001,16 +3593,29 @@ class TestE2E(unittest.TestCase):
 
     def test_101_diff_truth_alias_matching(self):
         """Truth file with aliases, scraped uses alias -> not extra or missing."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
-            "files": [
-                {"name": "bios.bin", "md5": "aaa", "aliases": ["alt.bin"],
-                 "_cores": ["core_a"], "_source_refs": []},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [{"name": "alt.bin", "md5": "aaa"}],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+                    "files": [
+                        {
+                            "name": "bios.bin",
+                            "md5": "aaa",
+                            "aliases": ["alt.bin"],
+                            "_cores": ["core_a"],
+                            "_source_refs": [],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [{"name": "alt.bin", "md5": "aaa"}],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_missing"], 0)
         self.assertEqual(result["summary"]["total_extra_phantom"], 0)
@@ -3018,33 +3623,56 @@ class TestE2E(unittest.TestCase):
 
     def test_102_diff_truth_case_insensitive(self):
         """Truth 'BIOS.ROM', scraped 'bios.rom' -> match, no missing."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
-            "files": [
-                {"name": "BIOS.ROM", "md5": "aaa",
-                 "_cores": ["core_a"], "_source_refs": []},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [{"name": "bios.rom", "md5": "aaa"}],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+                    "files": [
+                        {
+                            "name": "BIOS.ROM",
+                            "md5": "aaa",
+                            "_cores": ["core_a"],
+                            "_source_refs": [],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [{"name": "bios.rom", "md5": "aaa"}],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_missing"], 0)
         self.assertNotIn("test-sys", result.get("divergences", {}))
 
     def test_103_diff_truth_hash_mismatch(self):
         """Same file, different md5 -> hash_mismatch with truth_cores."""
-        truth = {"systems": {"test-sys": {
-            "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
-            "files": [
-                {"name": "bios.bin", "md5": "truth_hash",
-                 "_cores": ["core_a", "core_b"],
-                 "_source_refs": ["src/x.c:5"]},
-            ],
-        }}}
-        scraped = {"systems": {"test-sys": {
-            "files": [{"name": "bios.bin", "md5": "scraped_hash"}],
-        }}}
+        truth = {
+            "systems": {
+                "test-sys": {
+                    "_coverage": {"cores_profiled": ["core_a"], "cores_unprofiled": []},
+                    "files": [
+                        {
+                            "name": "bios.bin",
+                            "md5": "truth_hash",
+                            "_cores": ["core_a", "core_b"],
+                            "_source_refs": ["src/x.c:5"],
+                        },
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-sys": {
+                    "files": [{"name": "bios.bin", "md5": "scraped_hash"}],
+                }
+            }
+        }
         result = diff_platform_truth(truth, scraped)
         self.assertEqual(result["summary"]["total_hash_mismatch"], 1)
         div = result["divergences"]["test-sys"]
@@ -3055,7 +3683,6 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(hm["truth_md5"], "truth_hash")
         self.assertEqual(hm["scraped_md5"], "scraped_hash")
 
-
     def test_104_diff_truth_normalized_system_ids(self):
         """Diff matches systems with different ID formats via normalization."""
         from truth import diff_platform_truth
@@ -3065,8 +3692,13 @@ class TestE2E(unittest.TestCase):
                 "sega-gamegear": {
                     "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
                     "files": [
-                        {"name": "bios.gg", "required": True, "md5": "a" * 32,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "bios.gg",
+                            "required": True,
+                            "md5": "a" * 32,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 },
             }
@@ -3100,13 +3732,21 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {
                     "native_id": "Sony - PlayStation",
                     "files": [
-                        {"name": "scph5501.bin", "destination": "scph5501.bin", "required": True},
+                        {
+                            "name": "scph5501.bin",
+                            "destination": "scph5501.bin",
+                            "required": True,
+                        },
                     ],
                 },
                 "nintendo-snes": {
                     "native_id": "snes",
                     "files": [
-                        {"name": "bs-x.bin", "destination": "bs-x.bin", "required": False},
+                        {
+                            "name": "bs-x.bin",
+                            "destination": "bs-x.bin",
+                            "required": False,
+                        },
                     ],
                 },
             },
@@ -3119,7 +3759,6 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(psx["native_id"], "Sony - PlayStation")
         snes = loaded["systems"]["nintendo-snes"]
         self.assertEqual(snes["native_id"], "snes")
-
 
     # ---------------------------------------------------------------
     # Exporter: System.dat round-trip
@@ -3227,13 +3866,16 @@ class TestE2E(unittest.TestCase):
         # No profile for core_b (unprofiled)
         # Clear cache so the new profile is picked up
         from common import _emulator_profiles_cache
+
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         self.assertIn("core_a", profiles)
         self.assertNotIn("core_b", profiles)
 
         # Generate truth
-        truth = generate_platform_truth("testplat", config, registry_entry, profiles, db=None)
+        truth = generate_platform_truth(
+            "testplat", config, registry_entry, profiles, db=None
+        )
 
         # Verify truth structure
         self.assertIn("test-system", truth["systems"])
@@ -3304,7 +3946,9 @@ class TestE2E(unittest.TestCase):
         """Platform file under different name matched by MD5 is not undeclared."""
         config = load_platform_config("test_md5", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         # correct_hash.bin is declared by platform as renamed_file.bin with same MD5
         # hash-based matching should suppress it from undeclared
@@ -3318,7 +3962,6 @@ class TestE2E(unittest.TestCase):
         self.assertIn("renamed_file.bin", result)
         # correct_hash.bin is the DB canonical name for the same MD5
         self.assertIn("correct_hash.bin", result)
-
 
     # ---------------------------------------------------------------
     # Registry merge + all_libretro expansion + diff hash fallback
@@ -3358,7 +4001,7 @@ class TestE2E(unittest.TestCase):
 
     def test_176_all_libretro_in_list(self):
         """resolve_platform_cores expands all_libretro/retroarch in a list."""
-        from common import resolve_platform_cores, load_emulator_profiles
+        from common import load_emulator_profiles, resolve_platform_cores
 
         # Create a libretro profile and a standalone profile
         for name, ptype in [("lr_core", "libretro"), ("sa_core", "standalone")]:
@@ -3389,8 +4032,13 @@ class TestE2E(unittest.TestCase):
                 "test-system": {
                     "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
                     "files": [
-                        {"name": "ROM", "required": True, "md5": "abcd1234" * 4,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "ROM",
+                            "required": True,
+                            "md5": "abcd1234" * 4,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 }
             }
@@ -3419,8 +4067,13 @@ class TestE2E(unittest.TestCase):
                 "sega-gamegear": {
                     "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
                     "files": [
-                        {"name": "bios.gg", "required": True, "md5": "a" * 32,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "bios.gg",
+                            "required": True,
+                            "md5": "a" * 32,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 },
             }
@@ -3444,7 +4097,9 @@ class TestE2E(unittest.TestCase):
         """bios_mode: agnostic profiles are skipped entirely by find_undeclared_files."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         emulators = {u["emulator"] for u in undeclared}
         # TestAgnostic should NOT appear in undeclared (bios_mode: agnostic)
         self.assertNotIn("TestAgnostic", emulators)
@@ -3453,7 +4108,9 @@ class TestE2E(unittest.TestCase):
         """Files with agnostic: true are skipped, others in same profile are not."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
         names = {u["name"] for u in undeclared}
         # agnostic_file.bin should NOT be in undeclared (agnostic: true)
         self.assertNotIn("agnostic_file.bin", names)
@@ -3463,12 +4120,20 @@ class TestE2E(unittest.TestCase):
     def test_181_agnostic_extras_scan(self):
         """Agnostic profiles add all matching DB files as extras."""
         from generate_pack import _collect_emulator_extras
+
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         extras = _collect_emulator_extras(
-            config, self.emulators_dir, self.db, set(), "system", profiles,
+            config,
+            self.emulators_dir,
+            self.db,
+            set(),
+            "system",
+            profiles,
         )
-        agnostic_extras = [e for e in extras if e.get("source_emulator") == "TestAgnostic"]
+        agnostic_extras = [
+            e for e in extras if e.get("source_emulator") == "TestAgnostic"
+        ]
         # Agnostic scan should find files in the same directory as correct_hash.bin
         self.assertTrue(len(agnostic_extras) > 0, "Agnostic scan should produce extras")
         # All agnostic extras should have agnostic_scan flag
@@ -3478,8 +4143,10 @@ class TestE2E(unittest.TestCase):
     def test_182_agnostic_rename_readme(self):
         """_build_agnostic_rename_readme generates correct text."""
         from generate_pack import _build_agnostic_rename_readme
+
         result = _build_agnostic_rename_readme(
-            "dsi_nand.bin", "DSi_Nand_AUS.bin",
+            "dsi_nand.bin",
+            "DSi_Nand_AUS.bin",
             ["DSi_Nand_EUR.bin", "DSi_Nand_USA.bin"],
         )
         self.assertIn("dsi_nand.bin <- DSi_Nand_AUS.bin", result)
@@ -3500,7 +4167,6 @@ class TestE2E(unittest.TestCase):
         self.assertIsNotNone(path)
         self.assertEqual(status, "agnostic_fallback")
 
-
     def test_179_batocera_exporter_round_trip(self):
         """Batocera exporter produces valid Python dict format."""
         from exporter.batocera_exporter import Exporter
@@ -3510,9 +4176,14 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {
                     "_coverage": {"cores_profiled": ["c"]},
                     "files": [
-                        {"name": "scph5501.bin", "destination": "scph5501.bin",
-                         "required": True, "md5": "b" * 32,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "scph5501.bin",
+                            "destination": "scph5501.bin",
+                            "required": True,
+                            "md5": "b" * 32,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 }
             }
@@ -3541,9 +4212,14 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {
                     "_coverage": {"cores_profiled": ["c"]},
                     "files": [
-                        {"name": "scph5501.bin", "destination": "scph5501.bin",
-                         "required": True, "md5": "b" * 32,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "scph5501.bin",
+                            "destination": "scph5501.bin",
+                            "required": True,
+                            "md5": "b" * 32,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 }
             }
@@ -3560,7 +4236,7 @@ class TestE2E(unittest.TestCase):
         content = open(out).read()
         self.assertIn("<biosList", content)
         self.assertIn('platform="psx"', content)
-        self.assertIn('fullname=', content)
+        self.assertIn("fullname=", content)
         self.assertIn("scph5501.bin", content)
         # mandatory="true" is the default, not emitted (matching Recalbox format)
         self.assertNotIn('mandatory="false"', content)
@@ -3570,6 +4246,7 @@ class TestE2E(unittest.TestCase):
     def test_181_retrobat_exporter_round_trip(self):
         """RetroBat exporter produces valid JSON."""
         import json as _json
+
         from exporter.retrobat_exporter import Exporter
 
         truth = {
@@ -3577,9 +4254,14 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {
                     "_coverage": {"cores_profiled": ["c"]},
                     "files": [
-                        {"name": "scph5501.bin", "destination": "scph5501.bin",
-                         "required": True, "md5": "b" * 32,
-                         "_cores": ["c"], "_source_refs": []},
+                        {
+                            "name": "scph5501.bin",
+                            "destination": "scph5501.bin",
+                            "required": True,
+                            "md5": "b" * 32,
+                            "_cores": ["c"],
+                            "_source_refs": [],
+                        },
                     ],
                 }
             }
@@ -3595,18 +4277,20 @@ class TestE2E(unittest.TestCase):
 
         data = _json.loads(open(out).read())
         self.assertIn("psx", data)
-        self.assertTrue(any("scph5501" in bf["file"] for bf in data["psx"]["biosFiles"]))
+        self.assertTrue(
+            any("scph5501" in bf["file"] for bf in data["psx"]["biosFiles"])
+        )
         self.assertEqual(exp.validate(truth, out), [])
 
     def test_182_exporter_discovery(self):
         """All exporters are discovered by the plugin system."""
         from exporter import discover_exporters
+
         exporters = discover_exporters()
         self.assertIn("retroarch", exporters)
         self.assertIn("batocera", exporters)
         self.assertIn("recalbox", exporters)
         self.assertIn("retrobat", exporters)
-
 
     # ---------------------------------------------------------------
     # Hash scraper: parsers + merge
@@ -3614,7 +4298,8 @@ class TestE2E(unittest.TestCase):
 
     def test_mame_parser_finds_bios_root_sets(self):
         from scripts.scraper.mame_parser import find_bios_root_sets, parse_rom_block
-        source = '''
+
+        source = """
 ROM_START( neogeo )
     ROM_REGION( 0x020000, "mainbios", 0 )
     ROM_LOAD( "sp-s2.sp1", 0x00000, 0x020000, CRC(9036d879) SHA1(4f834c580f3471ce40c3210ef5e7491df38d8851) )
@@ -3625,7 +4310,7 @@ ROM_START( pacman )
     ROM_LOAD( "pacman.6e", 0x0000, 0x1000, CRC(c1e6ab10) SHA1(e87e059c5be45753f7e9f33dff851f16d6751181) )
 ROM_END
 GAME( 1980, pacman, 0, pacman, pacman, pacman_state, empty_init, ROT90, "Namco", "Pac-Man", 0 )
-'''
+"""
         sets = find_bios_root_sets(source, "neogeo.cpp")
         self.assertIn("neogeo", sets)
         self.assertNotIn("pacman", sets)
@@ -3635,7 +4320,8 @@ GAME( 1980, pacman, 0, pacman, pacman, pacman_state, empty_init, ROT90, "Namco",
 
     def test_fbneo_parser_finds_bios_sets(self):
         from scripts.scraper.fbneo_parser import find_bios_sets, parse_rom_info
-        source = '''
+
+        source = """
 static struct BurnRomInfo neogeoRomDesc[] = {
     { "sp-s2.sp1",    0x020000, 0x9036d879, BRF_ESS | BRF_BIOS },
     { "",              0,        0,          0 }
@@ -3649,7 +4335,7 @@ struct BurnDriver BurnDrvneogeo = {
     0, 0, 0, NULL, neogeoRomInfo, neogeoRomName, NULL, NULL,
     NULL, NULL, NULL, NULL, 0
 };
-'''
+"""
         sets = find_bios_sets(source, "d_neogeo.cpp")
         self.assertIn("neogeo", sets)
         roms = parse_rom_info(source, "neogeo")
@@ -3658,30 +4344,52 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_mame_merge_preserves_manual_fields(self):
         import json as json_mod
+
         from scripts.scraper._hash_merge import merge_mame_profile
+
         merge_dir = os.path.join(self.root, "merge_mame")
         os.makedirs(merge_dir)
         profile = {
-            "emulator": "Test", "type": "libretro",
+            "emulator": "Test",
+            "type": "libretro",
             "upstream": "https://github.com/mamedev/mame",
             "core_version": "0.285",
-            "files": [{
-                "name": "neogeo.zip", "required": True, "category": "bios_zip",
-                "system": "snk-neogeo-mvs", "note": "MVS BIOS",
-                "source_ref": "old.cpp:1",
-                "contents": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "oldcrc"}],
-            }],
+            "files": [
+                {
+                    "name": "neogeo.zip",
+                    "required": True,
+                    "category": "bios_zip",
+                    "system": "snk-neogeo-mvs",
+                    "note": "MVS BIOS",
+                    "source_ref": "old.cpp:1",
+                    "contents": [
+                        {"name": "sp-s2.sp1", "size": 131072, "crc32": "oldcrc"}
+                    ],
+                }
+            ],
         }
         profile_path = os.path.join(merge_dir, "test.yml")
         with open(profile_path, "w") as f:
             yaml.dump(profile, f, sort_keys=False)
         hashes = {
-            "source": "mamedev/mame", "version": "0.286", "commit": "abc",
+            "source": "mamedev/mame",
+            "version": "0.286",
+            "commit": "abc",
             "fetched_at": "2026-03-30T00:00:00Z",
-            "bios_sets": {"neogeo": {
-                "source_file": "neo.cpp", "source_line": 42,
-                "roms": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "newcrc", "sha1": "abc123"}],
-            }},
+            "bios_sets": {
+                "neogeo": {
+                    "source_file": "neo.cpp",
+                    "source_line": 42,
+                    "roms": [
+                        {
+                            "name": "sp-s2.sp1",
+                            "size": 131072,
+                            "crc32": "newcrc",
+                            "sha1": "abc123",
+                        }
+                    ],
+                }
+            },
         }
         hashes_path = os.path.join(merge_dir, "hashes.json")
         with open(hashes_path, "w") as f:
@@ -3696,27 +4404,42 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_fbneo_merge_updates_individual_roms(self):
         import json as json_mod
+
         from scripts.scraper._hash_merge import merge_fbneo_profile
+
         merge_dir = os.path.join(self.root, "merge_fbneo")
         os.makedirs(merge_dir)
         profile = {
-            "emulator": "FBNeo", "type": "libretro",
+            "emulator": "FBNeo",
+            "type": "libretro",
             "upstream": "https://github.com/finalburnneo/FBNeo",
             "core_version": "v1.0.0.02",
-            "files": [{"name": "sp-s2.sp1", "archive": "neogeo.zip",
-                        "system": "snk-neogeo-mvs", "required": True,
-                        "size": 131072, "crc32": "oldcrc"}],
+            "files": [
+                {
+                    "name": "sp-s2.sp1",
+                    "archive": "neogeo.zip",
+                    "system": "snk-neogeo-mvs",
+                    "required": True,
+                    "size": 131072,
+                    "crc32": "oldcrc",
+                }
+            ],
         }
         profile_path = os.path.join(merge_dir, "fbneo.yml")
         with open(profile_path, "w") as f:
             yaml.dump(profile, f, sort_keys=False)
         hashes = {
-            "source": "finalburnneo/FBNeo", "version": "v1.0.0.03", "commit": "def",
+            "source": "finalburnneo/FBNeo",
+            "version": "v1.0.0.03",
+            "commit": "def",
             "fetched_at": "2026-03-30T00:00:00Z",
-            "bios_sets": {"neogeo": {
-                "source_file": "neo.cpp", "source_line": 10,
-                "roms": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "newcrc"}],
-            }},
+            "bios_sets": {
+                "neogeo": {
+                    "source_file": "neo.cpp",
+                    "source_line": 10,
+                    "roms": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "newcrc"}],
+                }
+            },
         }
         hashes_path = os.path.join(merge_dir, "hashes.json")
         with open(hashes_path, "w") as f:

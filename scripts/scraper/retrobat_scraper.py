@@ -9,9 +9,6 @@ Hash: MD5 primary
 from __future__ import annotations
 
 import json
-import sys
-import urllib.request
-import urllib.error
 
 try:
     from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
@@ -42,7 +39,6 @@ class Scraper(BaseScraper):
     def __init__(self, url: str = SOURCE_URL):
         super().__init__(url=url)
         self._parsed: dict | None = None
-
 
     def _parse_json(self) -> dict:
         if self._parsed is not None:
@@ -89,13 +85,15 @@ class Scraper(BaseScraper):
 
                 name = file_path.split("/")[-1] if "/" in file_path else file_path
 
-                requirements.append(BiosRequirement(
-                    name=name,
-                    system=SYSTEM_SLUG_MAP.get(sys_key, sys_key),
-                    md5=md5 or None,
-                    destination=file_path,
-                    required=True,
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=name,
+                        system=SYSTEM_SLUG_MAP.get(sys_key, sys_key),
+                        md5=md5 or None,
+                        destination=file_path,
+                        required=True,
+                    )
+                )
 
         return requirements
 
@@ -170,6 +168,7 @@ class Scraper(BaseScraper):
 
 def main():
     from scripts.scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape retrobat BIOS requirements")
 
 

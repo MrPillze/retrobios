@@ -78,13 +78,17 @@ def _format_terminal(report: dict) -> str:
             lines.append(f"    + {m['name']}  [{cores}]")
         for h in div.get("hash_mismatch", []):
             ht = h["hash_type"]
-            lines.append(f"    ~ {h['name']}  {ht}: {h[f'truth_{ht}']} != {h[f'scraped_{ht}']}")
+            lines.append(
+                f"    ~ {h['name']}  {ht}: {h[f'truth_{ht}']} != {h[f'scraped_{ht}']}"
+            )
         for p in div.get("extra_phantom", []):
             lines.append(f"    - {p['name']}  (phantom)")
         for u in div.get("extra_unprofiled", []):
             lines.append(f"    ? {u['name']}  (unprofiled)")
         for r in div.get("required_mismatch", []):
-            lines.append(f"    ! {r['name']}  required: {r['truth_required']} != {r['scraped_required']}")
+            lines.append(
+                f"    ! {r['name']}  required: {r['truth_required']} != {r['scraped_required']}"
+            )
 
     uncovered = report.get("uncovered_systems", [])
     if uncovered:
@@ -125,13 +129,17 @@ def _format_markdown(report: dict) -> str:
             lines.append(f"- **Add** `{m['name']}`{refs}")
         for h in div.get("hash_mismatch", []):
             ht = h["hash_type"]
-            lines.append(f"- **Fix hash** `{h['name']}` {ht}: `{h[f'truth_{ht}']}` != `{h[f'scraped_{ht}']}`")
+            lines.append(
+                f"- **Fix hash** `{h['name']}` {ht}: `{h[f'truth_{ht}']}` != `{h[f'scraped_{ht}']}`"
+            )
         for p in div.get("extra_phantom", []):
             lines.append(f"- **Remove** `{p['name']}` (phantom)")
         for u in div.get("extra_unprofiled", []):
             lines.append(f"- **Check** `{u['name']}` (unprofiled cores)")
         for r in div.get("required_mismatch", []):
-            lines.append(f"- **Fix required** `{r['name']}`: truth={r['truth_required']}, scraped={r['scraped_required']}")
+            lines.append(
+                f"- **Fix required** `{r['name']}`: truth={r['truth_required']}, scraped={r['scraped_required']}"
+            )
         lines.append("")
 
     uncovered = report.get("uncovered_systems", [])
@@ -148,17 +156,25 @@ def _format_markdown(report: dict) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Compare scraped vs truth YAMLs")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--all", action="store_true", help="diff all registered platforms")
+    group.add_argument(
+        "--all", action="store_true", help="diff all registered platforms"
+    )
     group.add_argument("--platform", help="diff a single platform")
-    parser.add_argument("--json", action="store_true", dest="json_output", help="JSON output")
-    parser.add_argument("--format", choices=["terminal", "markdown"], default="terminal")
+    parser.add_argument(
+        "--json", action="store_true", dest="json_output", help="JSON output"
+    )
+    parser.add_argument(
+        "--format", choices=["terminal", "markdown"], default="terminal"
+    )
     parser.add_argument("--truth-dir", default="dist/truth")
     parser.add_argument("--platforms-dir", default="platforms")
     parser.add_argument("--include-archived", action="store_true")
     args = parser.parse_args()
 
     if args.all:
-        platforms = list_registered_platforms(args.platforms_dir, include_archived=args.include_archived)
+        platforms = list_registered_platforms(
+            args.platforms_dir, include_archived=args.include_archived
+        )
     else:
         platforms = [args.platform]
 
@@ -169,7 +185,10 @@ def main() -> None:
         truth = _load_truth(args.truth_dir, platform)
         if truth is None:
             if not args.json_output:
-                print(f"skip {platform}: no truth YAML in {args.truth_dir}/", file=sys.stderr)
+                print(
+                    f"skip {platform}: no truth YAML in {args.truth_dir}/",
+                    file=sys.stderr,
+                )
             continue
 
         try:

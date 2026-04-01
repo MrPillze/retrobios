@@ -170,7 +170,9 @@ class Exporter(BaseExporter):
                 if native_id in manifest:
                     # Merge into existing component (multiple truth systems
                     # may map to the same native ID)
-                    existing_names = {e["filename"] for e in manifest[native_id]["bios"]}
+                    existing_names = {
+                        e["filename"] for e in manifest[native_id]["bios"]
+                    }
                     for entry in bios_entries:
                         if entry["filename"] not in existing_names:
                             manifest[native_id]["bios"].append(entry)

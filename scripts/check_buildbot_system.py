@@ -9,6 +9,7 @@ Usage:
     python scripts/check_buildbot_system.py --update
     python scripts/check_buildbot_system.py --json
 """
+
 from __future__ import annotations
 
 import argparse
@@ -36,10 +37,14 @@ def fetch_index() -> set[str]:
     """Fetch .index from buildbot, return set of ZIP filenames."""
     req = urllib.request.Request(INDEX_URL, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return {line.strip() for line in resp.read().decode().splitlines() if line.strip()}
+        return {
+            line.strip() for line in resp.read().decode().splitlines() if line.strip()
+        }
 
 
-def load_tracked_entries(registry_path: str = DEFAULT_REGISTRY) -> dict[str, tuple[str, str]]:
+def load_tracked_entries(
+    registry_path: str = DEFAULT_REGISTRY,
+) -> dict[str, tuple[str, str]]:
     """Load buildbot entries from _data_dirs.yml.
 
     Returns {decoded_zip_name: (key, source_url)}.
@@ -64,8 +69,9 @@ def load_tracked_entries(registry_path: str = DEFAULT_REGISTRY) -> dict[str, tup
 def get_remote_etag(url: str) -> str | None:
     """HEAD request to get ETag."""
     try:
-        req = urllib.request.Request(url, method="HEAD",
-                                     headers={"User-Agent": USER_AGENT})
+        req = urllib.request.Request(
+            url, method="HEAD", headers={"User-Agent": USER_AGENT}
+        )
         with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
             return resp.headers.get("ETag") or resp.headers.get("Last-Modified") or ""
     except (urllib.error.URLError, OSError):
@@ -114,8 +120,15 @@ def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
             status = "OK"
         else:
             status = "UPDATED"
-        results.append({"zip": z, "status": status, "key": key,
-                        "stored_etag": stored, "remote_etag": remote or ""})
+        results.append(
+            {
+                "zip": z,
+                "status": status,
+                "key": key,
+                "stored_etag": stored,
+                "remote_etag": remote or "",
+            }
+        )
 
     return {"entries": results}
 
@@ -144,8 +157,13 @@ def update_changed(report: dict) -> None:
         if e["status"] == "UPDATED" and e.get("key"):
             log.info("refreshing %s ...", e["key"])
             subprocess.run(
-                [sys.executable, "scripts/refresh_data_dirs.py",
-                 "--force", "--key", e["key"]],
+                [
+                    sys.executable,
+                    "scripts/refresh_data_dirs.py",
+                    "--force",
+                    "--key",
+                    e["key"],
+                ],
                 check=False,
             )
 
@@ -155,10 +173,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Check buildbot system directory for changes",
     )
-    parser.add_argument("--update", action="store_true",
-                        help="Auto-refresh changed entries")
-    parser.add_argument("--json", action="store_true", dest="json_output",
-                        help="Machine-readable JSON output")
+    parser.add_argument(
+        "--update", action="store_true", help="Auto-refresh changed entries"
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        dest="json_output",
+        help="Machine-readable JSON output",
+    )
     parser.add_argument("--registry", default=DEFAULT_REGISTRY)
     args = parser.parse_args()
 

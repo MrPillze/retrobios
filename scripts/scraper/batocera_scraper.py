@@ -12,8 +12,8 @@ import ast
 import json
 import re
 import sys
-import urllib.request
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 import yaml
@@ -102,7 +102,6 @@ SYSTEM_SLUG_MAP = {
     "dragon64": "dragon64",
     "mc10": "mc10",
     "msx2+": "microsoft-msx",
-    "msxturbor": "microsoft-msx",
     "spectravideo": "spectravideo",
     "tvc": "videoton-tvc",
     "enterprise": "enterprise-64-128",
@@ -116,7 +115,7 @@ SYSTEM_SLUG_MAP = {
 }
 
 
-_MD5_RE = re.compile(r'^[a-fA-F0-9]+$')
+_MD5_RE = re.compile(r"^[a-fA-F0-9]+$")
 
 
 def _load_md5_index() -> dict[str, str]:
@@ -183,11 +182,11 @@ class Scraper(BaseScraper):
 
     def _extract_systems_dict(self, raw: str) -> dict:
         """Extract and parse the 'systems' dict from the Python source via ast.literal_eval."""
-        match = re.search(r'^systems\s*=\s*\{', raw, re.MULTILINE)
+        match = re.search(r"^systems\s*=\s*\{", raw, re.MULTILINE)
         if not match:
             raise ValueError("Could not find 'systems = {' in batocera-systems")
 
-        start = match.start() + raw[match.start():].index("{")
+        start = match.start() + raw[match.start() :].index("{")
         depth = 0
         i = start
         in_str = False
@@ -195,7 +194,7 @@ class Scraper(BaseScraper):
         while i < len(raw):
             ch = raw[i]
             if in_str:
-                if ch == '\\':
+                if ch == "\\":
                     i += 2
                     continue
                 if ch == str_ch:
@@ -214,7 +213,7 @@ class Scraper(BaseScraper):
                     i += 1
             i += 1
 
-        dict_str = raw[start:i + 1]
+        dict_str = raw[start : i + 1]
 
         lines = []
         for line in dict_str.split("\n"):
@@ -224,7 +223,7 @@ class Scraper(BaseScraper):
             j = 0
             while j < len(line):
                 ch = line[j]
-                if ch == '\\' and j + 1 < len(line):
+                if ch == "\\" and j + 1 < len(line):
                     clean.append(ch)
                     clean.append(line[j + 1])
                     j += 2
@@ -246,8 +245,8 @@ class Scraper(BaseScraper):
         clean_dict_str = "\n".join(lines)
 
         # OrderedDict({...}) -> just the inner dict literal
-        clean_dict_str = re.sub(r'OrderedDict\(\s*\{', '{', clean_dict_str)
-        clean_dict_str = re.sub(r'\}\s*\)', '}', clean_dict_str)
+        clean_dict_str = re.sub(r"OrderedDict\(\s*\{", "{", clean_dict_str)
+        clean_dict_str = re.sub(r"\}\s*\)", "}", clean_dict_str)
 
         try:
             return ast.literal_eval(clean_dict_str)
@@ -279,22 +278,24 @@ class Scraper(BaseScraper):
 
                 name = file_path.split("/")[-1] if "/" in file_path else file_path
 
-                requirements.append(BiosRequirement(
-                    name=name,
-                    system=system_slug,
-                    md5=md5 or None,
-                    destination=file_path,
-                    required=True,
-                    zipped_file=zipped_file or None,
-                    native_id=sys_key,
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=name,
+                        system=system_slug,
+                        md5=md5 or None,
+                        destination=file_path,
+                        required=True,
+                        zipped_file=zipped_file or None,
+                        native_id=sys_key,
+                    )
+                )
 
         return requirements
 
     def validate_format(self, raw_data: str) -> bool:
         """Validate batocera-systems format."""
         has_systems = "systems" in raw_data and "biosFiles" in raw_data
-        has_dict = re.search(r'^systems\s*=\s*\{', raw_data, re.MULTILINE) is not None
+        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
         has_md5 = '"md5"' in raw_data
         has_file = '"file"' in raw_data
         return has_systems and has_dict and has_md5 and has_file
@@ -336,7 +337,9 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        tag = fetch_github_latest_tag("batocera-linux/batocera.linux", prefix="batocera-")
+        tag = fetch_github_latest_tag(
+            "batocera-linux/batocera.linux", prefix="batocera-"
+        )
         batocera_version = ""
         if tag:
             num = tag.removeprefix("batocera-")
@@ -344,7 +347,9 @@ class Scraper(BaseScraper):
                 batocera_version = num
         if not batocera_version:
             # Preserve existing version when fetch fails (offline mode)
-            existing = Path(__file__).resolve().parents[2] / "platforms" / "batocera.yml"
+            existing = (
+                Path(__file__).resolve().parents[2] / "platforms" / "batocera.yml"
+            )
             if existing.exists():
                 with open(existing) as f:
                     old = yaml.safe_load(f) or {}
@@ -369,6 +374,7 @@ class Scraper(BaseScraper):
 
 def main():
     from scripts.scraper.base_scraper import scraper_cli
+
     scraper_cli(Scraper, "Scrape batocera BIOS requirements")
 
 

@@ -156,7 +156,9 @@ class Exporter(BaseExporter):
                         continue
                     md5 = fe.get("md5", "")
                     if isinstance(md5, list):
-                        md5s.extend(m for m in md5 if m and re.fullmatch(r"[a-f0-9]{32}", m))
+                        md5s.extend(
+                            m for m in md5 if m and re.fullmatch(r"[a-f0-9]{32}", m)
+                        )
                     elif md5 and re.fullmatch(r"[a-f0-9]{32}", md5):
                         md5s.append(md5)
                 if md5s:
@@ -195,7 +197,8 @@ class Exporter(BaseExporter):
             # Only flag if the system has usable data for the function type
             if cfg["pattern"] == "md5":
                 has_md5 = any(
-                    fe.get("md5") and isinstance(fe.get("md5"), str)
+                    fe.get("md5")
+                    and isinstance(fe.get("md5"), str)
                     and re.fullmatch(r"[a-f0-9]{32}", fe["md5"])
                     for fe in sys_data["files"]
                 )

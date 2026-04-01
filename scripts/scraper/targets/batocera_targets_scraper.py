@@ -6,6 +6,7 @@ Sources (batocera-linux/batocera.linux):
   - package/batocera/emulationstation/batocera-es-system/es_systems.yml
     -- emulator requireAnyOf flag mapping
 """
+
 from __future__ import annotations
 
 import argparse
@@ -35,23 +36,23 @@ _HEADERS = {
     "Accept": "application/vnd.github.v3+json",
 }
 
-_TARGET_FLAG_RE = re.compile(r'^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y', re.MULTILINE)
+_TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 
 # Matches: select BR2_PACKAGE_FOO  (optional: if CONDITION)
 # Condition may span multiple lines (backslash continuation)
 _SELECT_RE = re.compile(
-    r'^\s+select\s+(BR2_PACKAGE_\w+)'   # package being selected
-    r'(?:\s+if\s+((?:[^\n]|\\\n)+?))?'  # optional "if CONDITION" (may continue with \)
-    r'(?:\s*#[^\n]*)?$',                # optional trailing comment
+    r"^\s+select\s+(BR2_PACKAGE_\w+)"  # package being selected
+    r"(?:\s+if\s+((?:[^\n]|\\\n)+?))?"  # optional "if CONDITION" (may continue with \)
+    r"(?:\s*#[^\n]*)?$",  # optional trailing comment
     re.MULTILINE,
 )
 
 # Meta-flag definition: "if COND\n\tconfig DERIVED_FLAG\n\t...\nendif"
 _META_BLOCK_RE = re.compile(
-    r'^if\s+((?:[^\n]|\\\n)+?)\n'       # condition (may span lines via \)
-    r'(?:.*?\n)*?'                       # optional lines before the config
-    r'\s+config\s+(BR2_PACKAGE_\w+)'    # derived flag name
-    r'.*?^endif',                        # end of block
+    r"^if\s+((?:[^\n]|\\\n)+?)\n"  # condition (may span lines via \)
+    r"(?:.*?\n)*?"  # optional lines before the config
+    r"\s+config\s+(BR2_PACKAGE_\w+)"  # derived flag name
+    r".*?^endif",  # end of block
     re.MULTILINE | re.DOTALL,
 )
 
@@ -80,7 +81,7 @@ def _fetch_json(url: str) -> list | dict | None:
 
 def _normalise_condition(raw: str) -> str:
     """Strip backslash-continuations and collapse whitespace."""
-    return re.sub(r'\\\n\s*', ' ', raw).strip()
+    return re.sub(r"\\\n\s*", " ", raw).strip()
 
 
 def _tokenise(condition: str) -> list[str]:
@@ -89,14 +90,16 @@ def _tokenise(condition: str) -> list[str]:
     return token_re.findall(condition)
 
 
-def _check_condition(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool, int]:
+def _check_condition(
+    tokens: list[str], pos: int, active: frozenset[str]
+) -> tuple[bool, int]:
     """Recursive descent check of a Kconfig boolean expression."""
     return _check_or(tokens, pos, active)
 
 
 def _check_or(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool, int]:
     left, pos = _check_and(tokens, pos, active)
-    while pos < len(tokens) and tokens[pos] == '||':
+    while pos < len(tokens) and tokens[pos] == "||":
         pos += 1
         right, pos = _check_and(tokens, pos, active)
         left = left or right
@@ -105,7 +108,7 @@ def _check_or(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool
 
 def _check_and(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool, int]:
     left, pos = _check_not(tokens, pos, active)
-    while pos < len(tokens) and tokens[pos] == '&&':
+    while pos < len(tokens) and tokens[pos] == "&&":
         pos += 1
         right, pos = _check_not(tokens, pos, active)
         left = left and right
@@ -113,24 +116,26 @@ def _check_and(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[boo
 
 
 def _check_not(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool, int]:
-    if pos < len(tokens) and tokens[pos] == '!':
+    if pos < len(tokens) and tokens[pos] == "!":
         pos += 1
         val, pos = _check_atom(tokens, pos, active)
         return not val, pos
     return _check_atom(tokens, pos, active)
 
 
-def _check_atom(tokens: list[str], pos: int, active: frozenset[str]) -> tuple[bool, int]:
+def _check_atom(
+    tokens: list[str], pos: int, active: frozenset[str]
+) -> tuple[bool, int]:
     if pos >= len(tokens):
         return True, pos
     tok = tokens[pos]
-    if tok == '(':
+    if tok == "(":
         pos += 1
         val, pos = _check_or(tokens, pos, active)
-        if pos < len(tokens) and tokens[pos] == ')':
+        if pos < len(tokens) and tokens[pos] == ")":
             pos += 1
         return val, pos
-    if tok.startswith('BR2_'):
+    if tok.startswith("BR2_"):
         pos += 1
         return tok in active, pos
     if tok.startswith('"'):
@@ -170,7 +175,9 @@ def _parse_meta_flags(text: str) -> list[tuple[str, str]]:
     return results
 
 
-def _expand_flags(primary_flag: str, meta_rules: list[tuple[str, str]]) -> frozenset[str]:
+def _expand_flags(
+    primary_flag: str, meta_rules: list[tuple[str, str]]
+) -> frozenset[str]:
     """Given a board's primary flag, expand to all active derived flags.
 
     Iterates until stable (handles chained derivations like X86_64_ANY -> X86_ANY).
@@ -194,7 +201,7 @@ def _parse_selects(text: str) -> list[tuple[str, str]]:
     results: list[tuple[str, str]] = []
     for m in _SELECT_RE.finditer(text):
         pkg = m.group(1)
-        cond = _normalise_condition(m.group(2) or '')
+        cond = _normalise_condition(m.group(2) or "")
         results.append((pkg, cond))
     return results
 
@@ -261,7 +268,8 @@ class Scraper(BaseTargetScraper):
         if not data or not isinstance(data, list):
             return []
         return [
-            item["name"] for item in data
+            item["name"]
+            for item in data
             if isinstance(item, dict)
             and item.get("name", "").startswith("batocera-")
             and item.get("name", "").endswith(".board")

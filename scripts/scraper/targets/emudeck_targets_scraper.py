@@ -4,6 +4,7 @@ Sources:
   SteamOS: dragoonDorise/EmuDeck -functions/EmuScripts/*.sh
   Windows: EmuDeck/emudeck-we -functions/EmuScripts/*.ps1
 """
+
 from __future__ import annotations
 
 import argparse
@@ -20,8 +21,12 @@ from . import BaseTargetScraper
 
 PLATFORM_NAME = "emudeck"
 
-STEAMOS_API = "https://api.github.com/repos/dragoonDorise/EmuDeck/contents/functions/EmuScripts"
-WINDOWS_API = "https://api.github.com/repos/EmuDeck/emudeck-we/contents/functions/EmuScripts"
+STEAMOS_API = (
+    "https://api.github.com/repos/dragoonDorise/EmuDeck/contents/functions/EmuScripts"
+)
+WINDOWS_API = (
+    "https://api.github.com/repos/EmuDeck/emudeck-we/contents/functions/EmuScripts"
+)
 
 # Map EmuDeck script names to emulator profile keys
 # Script naming: emuDeckDolphin.sh -> dolphin
@@ -70,8 +75,8 @@ def _list_emuscripts(api_url: str) -> list[str]:
 def _script_to_core(filename: str) -> str | None:
     """Convert EmuScripts filename to core profile key."""
     # Strip extension and emuDeck prefix
-    name = re.sub(r'\.(sh|ps1)$', '', filename, flags=re.IGNORECASE)
-    name = re.sub(r'^emuDeck', '', name, flags=re.IGNORECASE)
+    name = re.sub(r"\.(sh|ps1)$", "", filename, flags=re.IGNORECASE)
+    name = re.sub(r"^emuDeck", "", name, flags=re.IGNORECASE)
     if not name:
         return None
     key = name.lower()
@@ -86,8 +91,9 @@ class Scraper(BaseTargetScraper):
     def __init__(self, url: str = "https://github.com/dragoonDorise/EmuDeck"):
         super().__init__(url=url)
 
-    def _fetch_cores_for_target(self, api_url: str, label: str,
-                                arch: str = "x86_64") -> list[str]:
+    def _fetch_cores_for_target(
+        self, api_url: str, label: str, arch: str = "x86_64"
+    ) -> list[str]:
         print(f"  fetching {label} EmuScripts...", file=sys.stderr)
         scripts = _list_emuscripts(api_url)
         cores: list[str] = []
@@ -99,7 +105,7 @@ class Scraper(BaseTargetScraper):
                 seen.add(core)
                 cores.append(core)
             # Detect RetroArch presence (provides all libretro cores)
-            name = re.sub(r'\.(sh|ps1)$', '', script, flags=re.IGNORECASE)
+            name = re.sub(r"\.(sh|ps1)$", "", script, flags=re.IGNORECASE)
             if name.lower() in ("emudeckretroarch", "retroarch_maincfg"):
                 has_retroarch = True
 
@@ -112,15 +118,18 @@ class Scraper(BaseTargetScraper):
                     seen.add(c)
                     cores.append(c)
 
-        print(f"    {label}: {standalone_count} standalone + "
-              f"{len(cores) - standalone_count} via RetroArch = {len(cores)} total",
-              file=sys.stderr)
+        print(
+            f"    {label}: {standalone_count} standalone + "
+            f"{len(cores) - standalone_count} via RetroArch = {len(cores)} total",
+            file=sys.stderr,
+        )
         return sorted(cores)
 
     @staticmethod
     def _load_retroarch_cores(arch: str) -> list[str]:
         """Load RetroArch target cores for given architecture."""
         import os
+
         target_path = os.path.join("platforms", "targets", "retroarch.yml")
         if not os.path.exists(target_path):
             return []
@@ -157,9 +166,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Scrape EmuDeck emulator targets"
-    )
+    parser = argparse.ArgumentParser(description="Scrape EmuDeck emulator targets")
     parser.add_argument("--dry-run", action="store_true", help="Show target summary")
     parser.add_argument("--output", "-o", help="Output YAML file")
     args = parser.parse_args()

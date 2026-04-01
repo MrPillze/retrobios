@@ -19,7 +19,6 @@ the Ideal non-bad option is selected as canonical.
 from __future__ import annotations
 
 import re
-import sys
 
 try:
     from .base_scraper import (
@@ -108,12 +107,33 @@ SYSTEM_ID_MAP: dict[str, str] = {
 
 # Cores that overlap with BizHawk's system coverage
 BIZHAWK_CORES = [
-    "gambatte", "mgba", "sameboy", "melonds", "snes9x", "bsnes",
-    "beetle_psx", "beetle_saturn", "beetle_pce", "beetle_pcfx",
-    "beetle_wswan", "beetle_vb", "beetle_ngp", "opera", "stella",
-    "picodrive", "ppsspp", "handy", "quicknes", "genesis_plus_gx",
-    "ares", "mupen64plus_next", "puae", "prboom", "virtualjaguar",
-    "vice_x64", "mame",
+    "gambatte",
+    "mgba",
+    "sameboy",
+    "melonds",
+    "snes9x",
+    "bsnes",
+    "beetle_psx",
+    "beetle_saturn",
+    "beetle_pce",
+    "beetle_pcfx",
+    "beetle_wswan",
+    "beetle_vb",
+    "beetle_ngp",
+    "opera",
+    "stella",
+    "picodrive",
+    "ppsspp",
+    "handy",
+    "quicknes",
+    "genesis_plus_gx",
+    "ares",
+    "mupen64plus_next",
+    "puae",
+    "prboom",
+    "virtualjaguar",
+    "vice_x64",
+    "mame",
 ]
 
 
@@ -137,9 +157,7 @@ def _safe_arithmetic(expr: str) -> int:
 def _strip_comments(source: str) -> str:
     """Remove block comments and #if false blocks."""
     source = re.sub(r"/\*.*?\*/", "", source, flags=re.DOTALL)
-    source = re.sub(
-        r"#if\s+false\b.*?#endif", "", source, flags=re.DOTALL
-    )
+    source = re.sub(r"#if\s+false\b.*?#endif", "", source, flags=re.DOTALL)
     return source
 
 
@@ -158,14 +176,14 @@ def parse_firmware_database(
     var_to_hash: dict[str, str] = {}
 
     file_re = re.compile(
-        r'(?:var\s+(\w+)\s*=\s*)?'
-        r'File\(\s*'
+        r"(?:var\s+(\w+)\s*=\s*)?"
+        r"File\(\s*"
         r'(?:"([A-Fa-f0-9]+)"|SHA1Checksum\.Dummy)\s*,\s*'
-        r'([^,]+?)\s*,\s*'
+        r"([^,]+?)\s*,\s*"
         r'"([^"]+)"\s*,\s*'
         r'"([^"]*)"'
-        r'(?:\s*,\s*isBad:\s*(true|false))?'
-        r'\s*\)'
+        r"(?:\s*,\s*isBad:\s*(true|false))?"
+        r"\s*\)"
     )
 
     for m in file_re.finditer(source):
@@ -194,15 +212,15 @@ def parse_firmware_database(
 
     # FirmwareAndOption one-liner
     fao_re = re.compile(
-        r'FirmwareAndOption\(\s*'
+        r"FirmwareAndOption\(\s*"
         r'(?:"([A-Fa-f0-9]+)"|SHA1Checksum\.Dummy)\s*,\s*'
-        r'([^,]+?)\s*,\s*'
+        r"([^,]+?)\s*,\s*"
         r'"([^"]+)"\s*,\s*'
         r'"([^"]+)"\s*,\s*'
         r'"([^"]+)"\s*,\s*'
         r'"([^"]*)"'
-        r'(?:\s*,\s*FirmwareOptionStatus\.(\w+))?'
-        r'\s*\)'
+        r"(?:\s*,\s*FirmwareOptionStatus\.(\w+))?"
+        r"\s*\)"
     )
 
     # Firmware(system, id, desc)
@@ -213,10 +231,10 @@ def parse_firmware_database(
     # Option(system, id, in varref|File(...), status?)
     option_re = re.compile(
         r'Option\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*,\s*'
-        r'(?:in\s+(\w+)'
+        r"(?:in\s+(\w+)"
         r'|File\(\s*"([A-Fa-f0-9]+)"\s*,\s*([^,]+?)\s*,\s*"([^"]+)"\s*,\s*"([^"]*)"\s*\))'
-        r'(?:\s*,\s*FirmwareOptionStatus\.(\w+))?'
-        r'\s*\)'
+        r"(?:\s*,\s*FirmwareOptionStatus\.(\w+))?"
+        r"\s*\)"
     )
 
     # Collect firmware slots
@@ -269,15 +287,17 @@ def parse_firmware_database(
         desc = m.group(6)
         status = m.group(7) or "Acceptable"
 
-        records.append({
-            "system": system,
-            "firmware_id": fw_id,
-            "sha1": sha1,
-            "name": name,
-            "size": _safe_arithmetic(size_expr),
-            "description": desc,
-            "status": status,
-        })
+        records.append(
+            {
+                "system": system,
+                "firmware_id": fw_id,
+                "sha1": sha1,
+                "name": name,
+                "size": _safe_arithmetic(size_expr),
+                "description": desc,
+                "status": status,
+            }
+        )
 
     # Build records from Firmware+Option pairs, picking best option
     for (system, fw_id), options in slot_options.items():
@@ -291,15 +311,17 @@ def parse_firmware_database(
         viable.sort(key=lambda x: STATUS_RANK.get(x[1], 2), reverse=True)
         best_file, best_status = viable[0]
 
-        records.append({
-            "system": system,
-            "firmware_id": fw_id,
-            "sha1": best_file["sha1"],
-            "name": best_file["name"],
-            "size": best_file["size"],
-            "description": best_file.get("description", desc),
-            "status": best_status,
-        })
+        records.append(
+            {
+                "system": system,
+                "firmware_id": fw_id,
+                "sha1": best_file["sha1"],
+                "name": best_file["name"],
+                "size": best_file["size"],
+                "description": best_file.get("description", desc),
+                "status": best_status,
+            }
+        )
 
     return records, files_by_hash
 

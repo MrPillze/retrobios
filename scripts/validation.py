@@ -63,28 +63,37 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 continue
             if fname not in index:
                 index[fname] = {
-                    "checks": set(), "sizes": set(),
-                    "min_size": None, "max_size": None,
-                    "crc32": set(), "md5": set(), "sha1": set(), "sha256": set(),
-                    "adler32": set(), "crypto_only": set(),
-                    "emulators": set(), "per_emulator": {},
+                    "checks": set(),
+                    "sizes": set(),
+                    "min_size": None,
+                    "max_size": None,
+                    "crc32": set(),
+                    "md5": set(),
+                    "sha1": set(),
+                    "sha256": set(),
+                    "adler32": set(),
+                    "crypto_only": set(),
+                    "emulators": set(),
+                    "per_emulator": {},
                 }
             index[fname]["emulators"].add(emu_name)
             index[fname]["checks"].update(checks)
             # Track non-reproducible crypto checks
-            index[fname]["crypto_only"].update(
-                c for c in checks if c in _CRYPTO_CHECKS
-            )
+            index[fname]["crypto_only"].update(c for c in checks if c in _CRYPTO_CHECKS)
             # Size checks
             if "size" in checks:
                 if f.get("size") is not None:
                     index[fname]["sizes"].add(f["size"])
                 if f.get("min_size") is not None:
                     cur = index[fname]["min_size"]
-                    index[fname]["min_size"] = min(cur, f["min_size"]) if cur is not None else f["min_size"]
+                    index[fname]["min_size"] = (
+                        min(cur, f["min_size"]) if cur is not None else f["min_size"]
+                    )
                 if f.get("max_size") is not None:
                     cur = index[fname]["max_size"]
-                    index[fname]["max_size"] = max(cur, f["max_size"]) if cur is not None else f["max_size"]
+                    index[fname]["max_size"] = (
+                        max(cur, f["max_size"]) if cur is not None else f["max_size"]
+                    )
             # Hash checks -collect all accepted hashes as sets (multiple valid
             # versions of the same file, e.g. MT-32 ROM versions)
             if "crc32" in checks and f.get("crc32"):
@@ -132,7 +141,9 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             if emu_name in pe:
                 # Merge checks from multiple file entries for same emulator
                 existing = pe[emu_name]
-                merged_checks = sorted(set(existing["checks"]) | set(pe_entry["checks"]))
+                merged_checks = sorted(
+                    set(existing["checks"]) | set(pe_entry["checks"])
+                )
                 existing["checks"] = merged_checks
                 existing["expected"].update(pe_entry["expected"])
                 if pe_entry["source_ref"] and not existing["source_ref"]:
@@ -160,17 +171,21 @@ def build_ground_truth(filename: str, validation_index: dict[str, dict]) -> list
     result = []
     for emu_name in sorted(entry["per_emulator"]):
         detail = entry["per_emulator"][emu_name]
-        result.append({
-            "emulator": emu_name,
-            "checks": detail["checks"],
-            "source_ref": detail.get("source_ref"),
-            "expected": detail.get("expected", {}),
-        })
+        result.append(
+            {
+                "emulator": emu_name,
+                "checks": detail["checks"],
+                "source_ref": detail.get("source_ref"),
+                "expected": detail.get("expected", {}),
+            }
+        )
     return result
 
 
 def check_file_validation(
-    local_path: str, filename: str, validation_index: dict[str, dict],
+    local_path: str,
+    filename: str,
+    validation_index: dict[str, dict],
     bios_dir: str = "bios",
 ) -> str | None:
     """Check emulator-level validation on a resolved file.
@@ -199,10 +214,9 @@ def check_file_validation(
 
     # Hash checks -compute once, reuse for all hash types.
     # Each hash field is a set of accepted values (multiple valid ROM versions).
-    need_hashes = (
-        any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256"))
-        or entry.get("adler32")
-    )
+    need_hashes = any(
+        h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256")
+    ) or entry.get("adler32")
     if need_hashes:
         hashes = compute_hashes(local_path)
         for hash_type in ("crc32", "md5", "sha1", "sha256"):
@@ -218,6 +232,7 @@ def check_file_validation(
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
         from crypto_verify import check_crypto_validation
+
         crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
         if crypto_reason:
             return crypto_reason

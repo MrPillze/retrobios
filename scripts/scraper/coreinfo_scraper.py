@@ -13,19 +13,24 @@ Complements libretro_scraper (System.dat) with:
 
 from __future__ import annotations
 
+import json
 import re
 import sys
-import urllib.request
 import urllib.error
-import json
+import urllib.request
 
 try:
     from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
 except ImportError:
     # Allow running directly: python scripts/scraper/coreinfo_scraper.py
     import os
+
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-    from scraper.base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from scraper.base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+    )
 
 PLATFORM_NAME = "libretro_coreinfo"
 
@@ -168,11 +173,13 @@ def _extract_firmware(info: dict) -> list[dict]:
         if _is_native_lib(path):
             continue
 
-        firmware.append({
-            "path": path,
-            "desc": desc,
-            "optional": opt.lower() == "true",
-        })
+        firmware.append(
+            {
+                "path": path,
+                "desc": desc,
+                "optional": opt.lower() == "true",
+            }
+        )
 
     return firmware
 
@@ -182,7 +189,7 @@ def _extract_md5_from_notes(info: dict) -> dict[str, str]:
     notes = info.get("notes", "")
     md5_map = {}
 
-    for match in re.finditer(r'\(!\)\s+(.+?)\s+\(md5\):\s+([a-f0-9]{32})', notes):
+    for match in re.finditer(r"\(!\)\s+(.+?)\s+\(md5\):\s+([a-f0-9]{32})", notes):
         filename = match.group(1).strip()
         md5 = match.group(2)
         md5_map[filename] = md5
@@ -202,15 +209,19 @@ class Scraper(BaseScraper):
         # Use the tree API to get all files at once
         url = f"{GITHUB_API}/git/trees/master?recursive=1"
         try:
-            req = urllib.request.Request(url, headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            })
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": "retrobios-scraper/1.0",
+                    "Accept": "application/vnd.github.v3+json",
+                },
+            )
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = json.loads(resp.read())
 
             return [
-                item["path"] for item in data.get("tree", [])
+                item["path"]
+                for item in data.get("tree", [])
                 if item["path"].endswith("_libretro.info")
             ]
         except (urllib.error.URLError, json.JSONDecodeError) as e:
@@ -220,7 +231,9 @@ class Scraper(BaseScraper):
         """Fetch and parse a single .info file."""
         url = f"{RAW_BASE}/{filename}"
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "retrobios-scraper/1.0"}
+            )
             with urllib.request.urlopen(req, timeout=15) as resp:
                 content = resp.read().decode("utf-8")
             return _parse_info_file(content)
@@ -253,17 +266,25 @@ class Scraper(BaseScraper):
 
                 basename = path.split("/")[-1] if "/" in path else path
                 # Full path when basename is generic to avoid SGB1.sfc/program.rom vs SGB2.sfc/program.rom collisions
-                GENERIC_NAMES = {"program.rom", "data.rom", "boot.rom", "bios.bin", "firmware.bin"}
+                GENERIC_NAMES = {
+                    "program.rom",
+                    "data.rom",
+                    "boot.rom",
+                    "bios.bin",
+                    "firmware.bin",
+                }
                 name = path if basename.lower() in GENERIC_NAMES else basename
                 md5 = md5_map.get(basename)
 
-                requirements.append(BiosRequirement(
-                    name=name,
-                    system=system,
-                    md5=md5,
-                    destination=path,
-                    required=not fw["optional"],
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=name,
+                        system=system,
+                        md5=md5,
+                        destination=path,
+                        required=not fw["optional"],
+                    )
+                )
 
         return requirements
 
@@ -281,7 +302,9 @@ def main():
     """CLI entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Scrape libretro-core-info firmware requirements")
+    parser = argparse.ArgumentParser(
+        description="Scrape libretro-core-info firmware requirements"
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--compare-db", help="Compare against database.json")
     args = parser.parse_args()
@@ -296,6 +319,7 @@ def main():
 
     if args.compare_db:
         import json as _json
+
         with open(args.compare_db) as f:
             db = _json.load(f)
 
@@ -320,6 +344,7 @@ def main():
         return
 
     from collections import defaultdict
+
     by_system = defaultdict(list)
     for r in reqs:
         by_system[r.system].append(r)

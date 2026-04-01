@@ -13,7 +13,8 @@ from validation import filter_files_by_mode
 
 
 def _determine_core_mode(
-    emu_name: str, profile: dict,
+    emu_name: str,
+    profile: dict,
     cores_config: str | list | None,
     standalone_set: set[str] | None,
 ) -> str:
@@ -62,7 +63,10 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
 
 
 def _merge_file_into_system(
-    system: dict, file_entry: dict, emu_name: str, db: dict | None,
+    system: dict,
+    file_entry: dict,
+    emu_name: str,
+    db: dict | None,
 ) -> None:
     """Merge a file entry into a system's file list, deduplicating by name."""
     files = system.setdefault("files", [])
@@ -100,9 +104,22 @@ def _merge_file_into_system(
     entry: dict = {"name": file_entry["name"]}
     if file_entry.get("required") is not None:
         entry["required"] = file_entry["required"]
-    for field in ("sha1", "md5", "sha256", "crc32", "size", "path",
-                  "description", "hle_fallback", "category", "note",
-                  "validation", "min_size", "max_size", "aliases"):
+    for field in (
+        "sha1",
+        "md5",
+        "sha256",
+        "crc32",
+        "size",
+        "path",
+        "description",
+        "hle_fallback",
+        "category",
+        "note",
+        "validation",
+        "min_size",
+        "max_size",
+        "aliases",
+    ):
         val = file_entry.get(field)
         if val is not None:
             entry[field] = val
@@ -206,7 +223,9 @@ def generate_platform_truth(
         if mode == "both":
             filtered = raw_files
         else:
-            filtered = filter_files_by_mode(raw_files, standalone=(mode == "standalone"))
+            filtered = filter_files_by_mode(
+                raw_files, standalone=(mode == "standalone")
+            )
 
         for fe in filtered:
             profile_sid = fe.get("system", "")
@@ -217,9 +236,13 @@ def generate_platform_truth(
             system = systems.setdefault(sys_id, {})
             _merge_file_into_system(system, fe, emu_name, db)
             # Track core contribution per system
-            sys_cov = system_cores.setdefault(sys_id, {
-                "profiled": set(), "unprofiled": set(),
-            })
+            sys_cov = system_cores.setdefault(
+                sys_id,
+                {
+                    "profiled": set(),
+                    "unprofiled": set(),
+                },
+            )
             sys_cov["profiled"].add(emu_name)
 
     # Ensure all systems of resolved cores have entries (even with 0 files).
@@ -230,17 +253,25 @@ def generate_platform_truth(
         for prof_sid in profile.get("systems", []):
             sys_id = _map_sys_id(prof_sid)
             systems.setdefault(sys_id, {})
-            sys_cov = system_cores.setdefault(sys_id, {
-                "profiled": set(), "unprofiled": set(),
-            })
+            sys_cov = system_cores.setdefault(
+                sys_id,
+                {
+                    "profiled": set(),
+                    "unprofiled": set(),
+                },
+            )
             sys_cov["profiled"].add(emu_name)
 
     # Track unprofiled cores per system based on profile system lists
     for emu_name in cores_unprofiled:
         for sys_id in systems:
-            sys_cov = system_cores.setdefault(sys_id, {
-                "profiled": set(), "unprofiled": set(),
-            })
+            sys_cov = system_cores.setdefault(
+                sys_id,
+                {
+                    "profiled": set(),
+                    "unprofiled": set(),
+                },
+            )
             sys_cov["unprofiled"].add(emu_name)
 
     # Convert sets to sorted lists for serialization
@@ -268,6 +299,7 @@ def generate_platform_truth(
 
 
 # Platform truth diffing
+
 
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     """Compare files between truth and scraped for a single system."""
@@ -310,32 +342,38 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
             t_set = {v.lower() for v in t_list}
             s_set = {v.lower() for v in s_list}
             if not t_set & s_set:
-                hash_mismatch.append({
-                    "name": s_entry["name"],
-                    "hash_type": h,
-                    f"truth_{h}": t_hash,
-                    f"scraped_{h}": s_hash,
-                    "truth_cores": list(t_entry.get("_cores", [])),
-                })
+                hash_mismatch.append(
+                    {
+                        "name": s_entry["name"],
+                        "hash_type": h,
+                        f"truth_{h}": t_hash,
+                        f"scraped_{h}": s_hash,
+                        "truth_cores": list(t_entry.get("_cores", [])),
+                    }
+                )
                 break
 
         # Required mismatch
         t_req = t_entry.get("required")
         s_req = s_entry.get("required")
         if t_req is not None and s_req is not None and t_req != s_req:
-            required_mismatch.append({
-                "name": s_entry["name"],
-                "truth_required": t_req,
-                "scraped_required": s_req,
-            })
+            required_mismatch.append(
+                {
+                    "name": s_entry["name"],
+                    "truth_required": t_req,
+                    "scraped_required": s_req,
+                }
+            )
 
     # Collect unmatched files from both sides
     unmatched_truth = [
-        fe for fe in truth_sys.get("files", [])
+        fe
+        for fe in truth_sys.get("files", [])
         if fe["name"].lower() not in matched_truth_names
     ]
     unmatched_scraped = {
-        s_key: s_entry for s_key, s_entry in scraped_index.items()
+        s_key: s_entry
+        for s_key, s_entry in scraped_index.items()
         if s_key not in truth_index
     }
 
@@ -369,11 +407,13 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     # Truth files not matched (by name, alias, or hash) -> missing
     for fe in unmatched_truth:
         if fe["name"].lower() not in rename_matched_truth:
-            missing.append({
-                "name": fe["name"],
-                "cores": list(fe.get("_cores", [])),
-                "source_refs": list(fe.get("_source_refs", [])),
-            })
+            missing.append(
+                {
+                    "name": fe["name"],
+                    "cores": list(fe.get("_cores", [])),
+                    "source_refs": list(fe.get("_source_refs", [])),
+                }
+            )
 
     # Scraped files not in truth -> extra
     coverage = truth_sys.get("_coverage", {})

@@ -21,12 +21,17 @@ import json
 import os
 import subprocess
 import sys
-import urllib.request
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import list_registered_platforms, load_database, load_platform_config, require_yaml
+from common import (
+    list_registered_platforms,
+    load_database,
+    load_platform_config,
+    require_yaml,
+)
 
 yaml = require_yaml()
 
@@ -83,14 +88,16 @@ def find_missing(config: dict, db: dict) -> list[dict]:
                 found = any(m in by_md5 for m in md5_list)
 
             if not found:
-                missing.append({
-                    "name": name,
-                    "system": sys_id,
-                    "sha1": sha1,
-                    "md5": md5,
-                    "size": file_entry.get("size"),
-                    "destination": file_entry.get("destination", name),
-                })
+                missing.append(
+                    {
+                        "name": name,
+                        "system": sys_id,
+                        "sha1": sha1,
+                        "md5": md5,
+                        "size": file_entry.get("size"),
+                        "destination": file_entry.get("destination", name),
+                    }
+                )
 
     return missing
 
@@ -139,14 +146,16 @@ def step2_scan_branches(entry: dict) -> bytes | None:
         try:
             subprocess.run(
                 ["git", "rev-parse", "--verify", ref],
-                capture_output=True, check=True,
+                capture_output=True,
+                check=True,
             )
         except subprocess.CalledProcessError:
             continue
 
         result = subprocess.run(
             ["git", "ls-tree", "-r", "--name-only", ref],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
 
         for filepath in result.stdout.strip().split("\n"):
@@ -154,7 +163,8 @@ def step2_scan_branches(entry: dict) -> bytes | None:
                 try:
                     blob = subprocess.run(
                         ["git", "show", f"{ref}:{filepath}"],
-                        capture_output=True, check=True,
+                        capture_output=True,
+                        check=True,
                     )
                     if verify_content(blob.stdout, entry):
                         return blob.stdout
@@ -172,7 +182,9 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
     for url_template in PUBLIC_REPOS:
         url = url_template.format(name=name)
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "retrobios-fetch/1.0"}
+            )
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = _read_limited(resp)
                 if data is None:
@@ -185,7 +197,9 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
         if "/" in destination:
             url = url_template.format(name=destination)
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
+                req = urllib.request.Request(
+                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
+                )
                 with urllib.request.urlopen(req, timeout=30) as resp:
                     data = _read_limited(resp)
                     if data is None:
@@ -206,7 +220,9 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
         for path in [name, f"system/{name}", f"bios/{name}"]:
             url = f"https://archive.org/download/{collection_id}/{path}"
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": "retrobios-fetch/1.0"})
+                req = urllib.request.Request(
+                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
+                )
                 with urllib.request.urlopen(req, timeout=30) as resp:
                     data = _read_limited(resp)
                     if data is None:
@@ -221,12 +237,13 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
         return None
 
     search_url = (
-        f"https://archive.org/advancedsearch.php?"
-        f"q=sha1:{sha1}&output=json&rows=1"
+        f"https://archive.org/advancedsearch.php?q=sha1:{sha1}&output=json&rows=1"
     )
 
     try:
-        req = urllib.request.Request(search_url, headers={"User-Agent": "retrobios-fetch/1.0"})
+        req = urllib.request.Request(
+            search_url, headers={"User-Agent": "retrobios-fetch/1.0"}
+        )
         with urllib.request.urlopen(req, timeout=30) as resp:
             result = json.loads(resp.read())
             docs = result.get("response", {}).get("docs", [])
@@ -235,7 +252,9 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
                 if identifier:
                     dl_url = f"https://archive.org/download/{identifier}/{name}"
                     try:
-                        req2 = urllib.request.Request(dl_url, headers={"User-Agent": "retrobios-fetch/1.0"})
+                        req2 = urllib.request.Request(
+                            dl_url, headers={"User-Agent": "retrobios-fetch/1.0"}
+                        )
                         with urllib.request.urlopen(req2, timeout=30) as resp2:
                             data = _read_limited(resp2)
                             if data is not None and verify_content(data, entry):
@@ -297,7 +316,7 @@ def fetch_missing(
             continue
 
         if dry_run:
-            print(f"    [DRY RUN] Would search branches, repos, archive.org")
+            print("    [DRY RUN] Would search branches, repos, archive.org")
             still_missing.append(entry)
             stats["not_found"] += 1
             continue
@@ -323,7 +342,7 @@ def fetch_missing(
             stats["found"] += 1
             continue
 
-        print(f"    [5] Not found - needs community contribution")
+        print("    [5] Not found - needs community contribution")
         still_missing.append(entry)
         stats["not_found"] += 1
 
@@ -345,16 +364,20 @@ def generate_issue_body(missing: list[dict], platform: str) -> str:
     for entry in missing:
         sha1 = entry.get("sha1") or "N/A"
         md5 = entry.get("md5") or "N/A"
-        lines.append(f"| `{entry['name']}` | {entry['system']} | `{sha1[:12]}...` | `{md5[:12]}...` |")
+        lines.append(
+            f"| `{entry['name']}` | {entry['system']} | `{sha1[:12]}...` | `{md5[:12]}...` |"
+        )
 
-    lines.extend([
-        "",
-        "### How to Contribute",
-        "",
-        "1. Fork this repository",
-        "2. Add the BIOS file to `bios/Manufacturer/Console/`",
-        "3. Create a Pull Request - checksums are verified automatically",
-    ])
+    lines.extend(
+        [
+            "",
+            "### How to Contribute",
+            "",
+            "1. Fork this repository",
+            "2. Add the BIOS file to `bios/Manufacturer/Console/`",
+            "3. Create a Pull Request - checksums are verified automatically",
+        ]
+    )
 
     return "\n".join(lines)
 
@@ -363,11 +386,15 @@ def main():
     parser = argparse.ArgumentParser(description="Auto-fetch missing BIOS files")
     parser.add_argument("--platform", "-p", help="Platform to check")
     parser.add_argument("--all", action="store_true", help="Check all platforms")
-    parser.add_argument("--dry-run", action="store_true", help="Don't download, just report")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Don't download, just report"
+    )
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
-    parser.add_argument("--create-issues", action="store_true", help="Output GitHub Issue bodies")
+    parser.add_argument(
+        "--create-issues", action="store_true", help="Output GitHub Issue bodies"
+    )
     args = parser.parse_args()
 
     if not os.path.exists(args.db):
@@ -378,7 +405,8 @@ def main():
 
     if args.all:
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=True,
+            args.platforms_dir,
+            include_archived=True,
         )
     elif args.platform:
         platforms = [args.platform]
@@ -389,19 +417,19 @@ def main():
     all_still_missing = {}
 
     for platform in sorted(platforms):
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Platform: {platform}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         try:
             config = load_platform_config(platform, args.platforms_dir)
         except FileNotFoundError:
-            print(f"  Config not found, skipping")
+            print("  Config not found, skipping")
             continue
 
         missing = find_missing(config, db)
         if not missing:
-            print(f"  All BIOS files present!")
+            print("  All BIOS files present!")
             continue
 
         print(f"  {len(missing)} missing files")
@@ -414,9 +442,9 @@ def main():
         print(f"\n  Results: {stats['found']} found, {stats['not_found']} not found")
 
     if args.create_issues and all_still_missing:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print("GitHub Issue Bodies")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         for platform, missing in all_still_missing.items():
             print(f"\n--- Issue for {platform} ---\n")
             print(generate_issue_body(missing, platform))

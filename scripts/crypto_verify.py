@@ -14,6 +14,7 @@ Source refs:
   Azahar src/core/hw/rsa/rsa.cpp
   Azahar src/core/file_sys/otp.cpp
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -22,8 +23,8 @@ import subprocess
 from collections.abc import Callable
 from pathlib import Path
 
-
 # Key file parsing (keys.txt / aes_keys.txt format)
+
 
 def parse_keys_file(path: str | Path) -> dict[str, dict[str, bytes]]:
     """Parse a 3DS keys file with :AES, :RSA, :ECC sections.
@@ -67,6 +68,7 @@ def find_keys_file(bios_dir: str | Path) -> Path | None:
 
 # Pure Python RSA-2048 PKCS1v15 SHA256 verification (zero dependencies)
 
+
 def _rsa_verify_pkcs1v15_sha256(
     message: bytes,
     signature: bytes,
@@ -98,14 +100,29 @@ def _rsa_verify_pkcs1v15_sha256(
     # PKCS#1 v1.5 signature encoding: 0x00 0x01 [0xFF padding] 0x00 [DigestInfo]
     # DigestInfo for SHA-256:
     # SEQUENCE { SEQUENCE { OID sha256, NULL }, OCTET STRING hash }
-    digest_info_prefix = bytes([
-        0x30, 0x31,  # SEQUENCE (49 bytes)
-        0x30, 0x0D,  # SEQUENCE (13 bytes)
-        0x06, 0x09,  # OID (9 bytes)
-        0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,  # sha256
-        0x05, 0x00,  # NULL
-        0x04, 0x20,  # OCTET STRING (32 bytes)
-    ])
+    digest_info_prefix = bytes(
+        [
+            0x30,
+            0x31,  # SEQUENCE (49 bytes)
+            0x30,
+            0x0D,  # SEQUENCE (13 bytes)
+            0x06,
+            0x09,  # OID (9 bytes)
+            0x60,
+            0x86,
+            0x48,
+            0x01,
+            0x65,
+            0x03,
+            0x04,
+            0x02,
+            0x01,  # sha256
+            0x05,
+            0x00,  # NULL
+            0x04,
+            0x20,  # OCTET STRING (32 bytes)
+        ]
+    )
 
     sha256_hash = hashlib.sha256(message).digest()
     expected_digest_info = digest_info_prefix + sha256_hash
@@ -122,11 +139,13 @@ def _rsa_verify_pkcs1v15_sha256(
 
 # AES-128-CBC decryption (with fallback)
 
+
 def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
     """Decrypt AES-128-CBC without padding."""
     # Try cryptography library first
     try:
         from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
         cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
         decryptor = cipher.decryptor()
         return decryptor.update(data) + decryptor.finalize()
@@ -136,6 +155,7 @@ def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
     # Try pycryptodome
     try:
         from Crypto.Cipher import AES  # type: ignore[import-untyped]
+
         cipher = AES.new(key, AES.MODE_CBC, iv)
         return cipher.decrypt(data)
     except ImportError:
@@ -145,8 +165,15 @@ def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
     try:
         result = subprocess.run(
             [
-                "openssl", "enc", "-aes-128-cbc", "-d",
-                "-K", key.hex(), "-iv", iv.hex(), "-nopad",
+                "openssl",
+                "enc",
+                "-aes-128-cbc",
+                "-d",
+                "-K",
+                key.hex(),
+                "-iv",
+                iv.hex(),
+                "-nopad",
             ],
             input=data,
             capture_output=True,
@@ -161,6 +188,7 @@ def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
 
 
 # File verification functions
+
 
 def verify_secure_info_a(
     filepath: str | Path,
@@ -204,7 +232,10 @@ def verify_secure_info_a(
             continue
         modified_body = bytes([test_region]) + body[1:]
         if _rsa_verify_pkcs1v15_sha256(modified_body, signature, modulus, exponent):
-            return False, f"signature invalid (region changed from {test_region} to {region_byte})"
+            return (
+                False,
+                f"signature invalid (region changed from {test_region} to {region_byte})",
+            )
 
     return False, "signature invalid"
 
@@ -307,7 +338,7 @@ def verify_otp(
 
     Returns (valid, reason_string).
     """
-    from sect233r1 import ecdsa_verify_sha256, _ec_mul, _Gx, _Gy, _N
+    from sect233r1 import _N, _ec_mul, _Gx, _Gy, ecdsa_verify_sha256
 
     data = bytearray(Path(filepath).read_bytes())
 
@@ -322,7 +353,10 @@ def verify_otp(
     magic = struct.unpack_from("<I", data, 0)[0]
     if magic != 0xDEADB00F:
         if not otp_key or not otp_iv:
-            return False, "encrypted OTP but missing AES keys (otpKey/otpIV) in keys file"
+            return (
+                False,
+                "encrypted OTP but missing AES keys (otpKey/otpIV) in keys file",
+            )
         try:
             data = bytearray(_aes_128_cbc_decrypt(bytes(data), otp_key, otp_iv))
         except RuntimeError as e:
@@ -343,7 +377,10 @@ def verify_otp(
     ecc_keys = keys.get("ECC", {})
     root_public_xy = ecc_keys.get("rootPublicXY")
     if not root_public_xy or len(root_public_xy) != 60:
-        return True, "decrypted, magic valid, SHA-256 valid (ECC skipped: no rootPublicXY)"
+        return (
+            True,
+            "decrypted, magic valid, SHA-256 valid (ECC skipped: no rootPublicXY)",
+        )
 
     # Extract CTCert fields from OTP body
     device_id = struct.unpack_from("<I", data, 0x04)[0]
@@ -368,9 +405,7 @@ def verify_otp(
     pub_point = _ec_mul(priv_key_int, (_Gx, _Gy))
     if pub_point is None:
         return False, "ECC cert: derived public key is point at infinity"
-    pub_key_xy = (
-        pub_point[0].to_bytes(30, "big") + pub_point[1].to_bytes(30, "big")
-    )
+    pub_key_xy = pub_point[0].to_bytes(30, "big") + pub_point[1].to_bytes(30, "big")
 
     # Build certificate body (what was signed)
     # Issuer: "Nintendo CA - G3_NintendoCTR2prod" or "...dev"
@@ -379,12 +414,12 @@ def verify_otp(
         issuer_str = b"Nintendo CA - G3_NintendoCTR2prod"
     else:
         issuer_str = b"Nintendo CA - G3_NintendoCTR2dev"
-    issuer[:len(issuer_str)] = issuer_str
+    issuer[: len(issuer_str)] = issuer_str
 
     # Name: "CT{device_id:08X}-{system_type:02X}"
     name = bytearray(0x40)
     name_str = f"CT{device_id:08X}-{system_type:02X}".encode()
-    name[:len(name_str)] = name_str
+    name[: len(name_str)] = name_str
 
     # Key type = 2 (ECC), big-endian u32
     key_type = struct.pack(">I", 2)

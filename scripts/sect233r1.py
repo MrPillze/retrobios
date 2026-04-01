@@ -9,6 +9,7 @@ Curve: sect233r1 (NIST B-233, SEC 2 v2)
 Field: GF(2^233) with irreducible polynomial t^233 + t^74 + 1
 Equation: y^2 + xy = x^3 + x^2 + b
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -33,6 +34,7 @@ _H = 2
 
 
 # GF(2^233) field arithmetic
+
 
 def _gf_reduce(a: int) -> int:
     """Reduce polynomial a modulo t^233 + t^74 + 1."""
@@ -170,6 +172,7 @@ def _ec_mul(k: int, p: tuple[int, int] | None) -> tuple[int, int] | None:
 
 
 # ECDSA-SHA256 verification
+
 
 def _modinv(a: int, m: int) -> int:
     """Modular inverse of a modulo m (integers, not GF(2^m))."""

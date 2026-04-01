@@ -22,10 +22,10 @@ Usage:
     ]
     build_deterministic_zip("neogeo.zip", recipe, atom_store)
 """
+
 from __future__ import annotations
 
 import hashlib
-import struct
 import zipfile
 import zlib
 from io import BytesIO
@@ -63,7 +63,9 @@ def build_deterministic_zip(
     # Sort by filename for deterministic order
     sorted_recipe = sorted(recipe, key=lambda r: r["name"])
 
-    with zipfile.ZipFile(str(output_path), "w", compression, compresslevel=_COMPRESS_LEVEL) as zf:
+    with zipfile.ZipFile(
+        str(output_path), "w", compression, compresslevel=_COMPRESS_LEVEL
+    ) as zf:
         for entry in sorted_recipe:
             name = entry["name"]
             expected_crc = entry.get("crc32", "").lower()
@@ -127,12 +129,14 @@ def extract_atoms_with_names(zip_path: str | Path) -> list[dict]:
                 continue
             data = zf.read(info.filename)
             crc = format(zlib.crc32(data) & 0xFFFFFFFF, "08x")
-            result.append({
-                "name": info.filename,
-                "crc32": crc,
-                "size": len(data),
-                "data": data,
-            })
+            result.append(
+                {
+                    "name": info.filename,
+                    "crc32": crc,
+                    "size": len(data),
+                    "data": data,
+                }
+            )
     return result
 
 
@@ -154,7 +158,9 @@ def verify_zip_determinism(zip_path: str | Path) -> tuple[bool, str, str]:
     # Rebuild to memory
     buf = BytesIO()
     sorted_recipe = sorted(recipe, key=lambda r: r["name"])
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED, compresslevel=_COMPRESS_LEVEL) as zf:
+    with zipfile.ZipFile(
+        buf, "w", zipfile.ZIP_DEFLATED, compresslevel=_COMPRESS_LEVEL
+    ) as zf:
         for entry in sorted_recipe:
             info = zipfile.ZipInfo(filename=entry["name"], date_time=_FIXED_DATE_TIME)
             info.compress_type = zipfile.ZIP_DEFLATED

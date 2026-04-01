@@ -16,8 +16,6 @@ Recalbox verification logic:
 from __future__ import annotations
 
 import sys
-import urllib.request
-import urllib.error
 import xml.etree.ElementTree as ET
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_tag
@@ -121,17 +119,19 @@ class Scraper(BaseScraper):
             for bios_elem in system_elem.findall("bios"):
                 paths_str = bios_elem.get("path", "")
                 md5_str = bios_elem.get("md5", "")
-                core = bios_elem.get("core", "")
+                bios_elem.get("core", "")
                 mandatory = bios_elem.get("mandatory", "true") != "false"
-                hash_match_mandatory = bios_elem.get("hashMatchMandatory", "true") != "false"
-                note = bios_elem.get("note", "")
+                bios_elem.get("hashMatchMandatory", "true") != "false"
+                bios_elem.get("note", "")
 
                 paths = [p.strip() for p in paths_str.split("|") if p.strip()]
                 if not paths:
                     continue
 
                 primary_path = paths[0]
-                name = primary_path.split("/")[-1] if "/" in primary_path else primary_path
+                name = (
+                    primary_path.split("/")[-1] if "/" in primary_path else primary_path
+                )
 
                 md5_list = [m.strip() for m in md5_str.split(",") if m.strip()]
                 all_md5 = ",".join(md5_list) if md5_list else None
@@ -141,14 +141,16 @@ class Scraper(BaseScraper):
                     continue
                 seen.add(dedup_key)
 
-                requirements.append(BiosRequirement(
-                    name=name,
-                    system=system_slug,
-                    md5=all_md5,
-                    destination=primary_path,
-                    required=mandatory,
-                    native_id=platform,
-                ))
+                requirements.append(
+                    BiosRequirement(
+                        name=name,
+                        system=system_slug,
+                        md5=all_md5,
+                        destination=primary_path,
+                        required=mandatory,
+                        native_id=platform,
+                    )
+                )
 
         return requirements
 
@@ -168,7 +170,9 @@ class Scraper(BaseScraper):
                 md5_str = bios_elem.get("md5", "")
                 core = bios_elem.get("core", "")
                 mandatory = bios_elem.get("mandatory", "true") != "false"
-                hash_match_mandatory = bios_elem.get("hashMatchMandatory", "true") != "false"
+                hash_match_mandatory = (
+                    bios_elem.get("hashMatchMandatory", "true") != "false"
+                )
                 note = bios_elem.get("note", "")
 
                 paths = [p.strip() for p in paths_str.split("|") if p.strip()]
@@ -179,17 +183,19 @@ class Scraper(BaseScraper):
 
                 name = paths[0].split("/")[-1] if "/" in paths[0] else paths[0]
 
-                requirements.append({
-                    "name": name,
-                    "system": system_slug,
-                    "system_name": system_name,
-                    "paths": paths,
-                    "md5_list": md5_list,
-                    "core": core,
-                    "mandatory": mandatory,
-                    "hash_match_mandatory": hash_match_mandatory,
-                    "note": note,
-                })
+                requirements.append(
+                    {
+                        "name": name,
+                        "system": system_slug,
+                        "system_name": system_name,
+                        "paths": paths,
+                        "md5_list": md5_list,
+                        "core": core,
+                        "mandatory": mandatory,
+                        "hash_match_mandatory": hash_match_mandatory,
+                        "note": note,
+                    }
+                )
 
         return requirements
 
@@ -245,7 +251,9 @@ def main():
     parser = argparse.ArgumentParser(description="Scrape Recalbox es_bios.xml")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--json", action="store_true")
-    parser.add_argument("--full", action="store_true", help="Show full Recalbox-specific fields")
+    parser.add_argument(
+        "--full", action="store_true", help="Show full Recalbox-specific fields"
+    )
     parser.add_argument("--output", "-o")
     args = parser.parse_args()
 
@@ -264,6 +272,7 @@ def main():
 
     if args.dry_run:
         from collections import defaultdict
+
         by_system = defaultdict(list)
         for r in reqs:
             by_system[r.system].append(r)
@@ -272,7 +281,7 @@ def main():
             for f in files[:5]:
                 print(f"  {f.name} (md5={f.md5[:12] if f.md5 else 'N/A'}...)")
             if len(files) > 5:
-                print(f"  ... +{len(files)-5} more")
+                print(f"  ... +{len(files) - 5} more")
         print(f"\nTotal: {len(reqs)} BIOS files across {len(by_system)} systems")
         return
 

@@ -15,8 +15,6 @@ from pathlib import Path
 from .base_exporter import BaseExporter
 
 
-
-
 class Exporter(BaseExporter):
     """Export truth data to Recalbox es_bios.xml format."""
 
@@ -51,7 +49,9 @@ class Exporter(BaseExporter):
                 continue
 
             native_id = native_map.get(sys_id, sys_id)
-            scraped_sys = scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            scraped_sys = (
+                scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
+            )
             display_name = self._display_name(sys_id, scraped_sys)
 
             lines.append(f'  <system fullname="{display_name}" platform="{native_id}">')
@@ -85,7 +85,9 @@ class Exporter(BaseExporter):
 
                 # Build cores string from _cores
                 cores_list = fe.get("_cores", [])
-                core_str = ",".join(f"libretro/{c}" for c in cores_list) if cores_list else ""
+                core_str = (
+                    ",".join(f"libretro/{c}" for c in cores_list) if cores_list else ""
+                )
 
                 attrs = [f'path="{path}"']
                 if md5:
@@ -97,7 +99,7 @@ class Exporter(BaseExporter):
                 if core_str:
                     attrs.append(f'core="{core_str}"')
 
-                lines.append(f'    <bios {" ".join(attrs)} />')
+                lines.append(f"    <bios {' '.join(attrs)} />")
 
             lines.append("  </system>")
 
@@ -125,6 +127,9 @@ class Exporter(BaseExporter):
                 if name.startswith("_") or self._is_pattern(name):
                     continue
                 dest = self._dest(fe)
-                if name.lower() not in exported_paths and dest.lower() not in exported_paths:
+                if (
+                    name.lower() not in exported_paths
+                    and dest.lower() not in exported_paths
+                ):
                     issues.append(f"missing: {name}")
         return issues

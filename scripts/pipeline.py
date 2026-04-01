@@ -19,10 +19,10 @@ Usage:
     python scripts/pipeline.py --skip-docs        # skip steps 8-9
     python scripts/pipeline.py --offline          # skip step 2
 """
+
 from __future__ import annotations
 
 import argparse
-import json
 import subprocess
 import sys
 import time
@@ -54,6 +54,7 @@ def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
     Returns {group_label: (ok, total)}.
     """
     import re
+
     counts = {}
     for line in output.splitlines():
         m = re.match(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)", line)
@@ -71,6 +72,7 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
     Returns {pack_label: (ok, total)}.
     """
     import re
+
     counts = {}
     current_label = ""
     for line in output.splitlines():
@@ -84,7 +86,7 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
         base_m = re.search(r"\((\d+) baseline", line)
         ok_m = re.search(r"(\d+)/(\d+) files OK", line)
         if base_m and ok_m:
-            baseline = int(base_m.group(1))
+            int(base_m.group(1))
             ok, total = int(ok_m.group(1)), int(ok_m.group(2))
             counts[current_label] = (ok, total)
         elif ok_m:
@@ -118,12 +120,18 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
                 print(f"  {v_label}: MISMATCH total verify {v_total} != pack {p_total}")
                 all_ok = False
             elif p_ok < v_ok:
-                print(f"  {v_label}: MISMATCH pack {p_ok} OK < verify {v_ok} OK (/{v_total})")
+                print(
+                    f"  {v_label}: MISMATCH pack {p_ok} OK < verify {v_ok} OK (/{v_total})"
+                )
                 all_ok = False
             elif p_ok == v_ok:
-                print(f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK")
+                print(
+                    f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK"
+                )
             else:
-                print(f"  {v_label}: verify {v_ok}/{v_total}, pack {p_ok}/{p_total} OK (pack resolves more)")
+                print(
+                    f"  {v_label}: verify {v_ok}/{v_total}, pack {p_ok}/{p_total} OK (pack resolves more)"
+                )
         else:
             print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
 
@@ -134,26 +142,45 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
 
 def main():
     parser = argparse.ArgumentParser(description="Run the full retrobios pipeline")
-    parser.add_argument("--include-archived", action="store_true",
-                        help="Include archived platforms")
-    parser.add_argument("--skip-packs", action="store_true",
-                        help="Only regenerate DB and verify, skip pack generation")
-    parser.add_argument("--skip-docs", action="store_true",
-                        help="Skip README and site generation")
-    parser.add_argument("--offline", action="store_true",
-                        help="Skip data directory refresh")
-    parser.add_argument("--output-dir", default="dist",
-                        help="Pack output directory (default: dist/)")
+    parser.add_argument(
+        "--include-archived", action="store_true", help="Include archived platforms"
+    )
+    parser.add_argument(
+        "--skip-packs",
+        action="store_true",
+        help="Only regenerate DB and verify, skip pack generation",
+    )
+    parser.add_argument(
+        "--skip-docs", action="store_true", help="Skip README and site generation"
+    )
+    parser.add_argument(
+        "--offline", action="store_true", help="Skip data directory refresh"
+    )
+    parser.add_argument(
+        "--output-dir", default="dist", help="Pack output directory (default: dist/)"
+    )
     # --include-extras is now a no-op: core requirements are always included
-    parser.add_argument("--include-extras", action="store_true",
-                        help="(no-op) Core requirements are always included")
+    parser.add_argument(
+        "--include-extras",
+        action="store_true",
+        help="(no-op) Core requirements are always included",
+    )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
-    parser.add_argument("--check-buildbot", action="store_true",
-                        help="Check buildbot system directory for changes")
-    parser.add_argument("--with-truth", action="store_true",
-                        help="Generate truth YAMLs and diff against scraped")
-    parser.add_argument("--with-export", action="store_true",
-                        help="Export native formats (implies --with-truth)")
+    parser.add_argument(
+        "--check-buildbot",
+        action="store_true",
+        help="Check buildbot system directory for changes",
+    )
+    parser.add_argument(
+        "--with-truth",
+        action="store_true",
+        help="Generate truth YAMLs and diff against scraped",
+    )
+    parser.add_argument(
+        "--with-export",
+        action="store_true",
+        help="Export native formats (implies --with-truth)",
+    )
     args = parser.parse_args()
 
     results = {}
@@ -162,8 +189,15 @@ def main():
 
     # Step 1: Generate database
     ok, out = run(
-        [sys.executable, "scripts/generate_db.py", "--force",
-         "--bios-dir", "bios", "--output", "database.json"],
+        [
+            sys.executable,
+            "scripts/generate_db.py",
+            "--force",
+            "--bios-dir",
+            "bios",
+            "--output",
+            "database.json",
+        ],
         "1/8 generate database",
     )
     results["generate_db"] = ok
@@ -216,8 +250,13 @@ def main():
 
     # Step 2c: Generate truth YAMLs
     if args.with_truth or args.with_export:
-        truth_cmd = [sys.executable, "scripts/generate_truth.py", "--all",
-                     "--output-dir", str(Path(args.output_dir) / "truth")]
+        truth_cmd = [
+            sys.executable,
+            "scripts/generate_truth.py",
+            "--all",
+            "--output-dir",
+            str(Path(args.output_dir) / "truth"),
+        ]
         if args.include_archived:
             truth_cmd.append("--include-archived")
         if args.target:
@@ -242,9 +281,15 @@ def main():
 
     # Step 2e: Export native formats
     if args.with_export:
-        export_cmd = [sys.executable, "scripts/export_native.py", "--all",
-                      "--output-dir", str(Path(args.output_dir) / "upstream"),
-                      "--truth-dir", str(Path(args.output_dir) / "truth")]
+        export_cmd = [
+            sys.executable,
+            "scripts/export_native.py",
+            "--all",
+            "--output-dir",
+            str(Path(args.output_dir) / "upstream"),
+            "--truth-dir",
+            str(Path(args.output_dir) / "truth"),
+        ]
         if args.include_archived:
             export_cmd.append("--include-archived")
         ok, _ = run(export_cmd, "2e export native")
@@ -267,8 +312,11 @@ def main():
     pack_output = ""
     if not args.skip_packs:
         pack_cmd = [
-            sys.executable, "scripts/generate_pack.py", "--all",
-            "--output-dir", args.output_dir,
+            sys.executable,
+            "scripts/generate_pack.py",
+            "--all",
+            "--output-dir",
+            args.output_dir,
         ]
         if args.include_archived:
             pack_cmd.append("--include-archived")
@@ -288,8 +336,12 @@ def main():
     # Step 4b: Generate install manifests
     if not args.skip_packs:
         manifest_cmd = [
-            sys.executable, "scripts/generate_pack.py", "--all",
-            "--manifest", "--output-dir", "install",
+            sys.executable,
+            "scripts/generate_pack.py",
+            "--all",
+            "--manifest",
+            "--output-dir",
+            "install",
         ]
         if args.include_archived:
             manifest_cmd.append("--include-archived")
@@ -307,8 +359,11 @@ def main():
     # Step 4c: Generate target manifests
     if not args.skip_packs:
         target_cmd = [
-            sys.executable, "scripts/generate_pack.py",
-            "--manifest-targets", "--output-dir", "install/targets",
+            sys.executable,
+            "scripts/generate_pack.py",
+            "--manifest-targets",
+            "--output-dir",
+            "install/targets",
         ]
         ok, _ = run(target_cmd, "4c/8 generate target manifests")
         results["generate_target_manifests"] = ok
@@ -329,8 +384,12 @@ def main():
     # Step 6: Pack integrity (extract + hash verification)
     if not args.skip_packs:
         integrity_cmd = [
-            sys.executable, "scripts/generate_pack.py", "--all",
-            "--verify-packs", "--output-dir", args.output_dir,
+            sys.executable,
+            "scripts/generate_pack.py",
+            "--all",
+            "--verify-packs",
+            "--output-dir",
+            args.output_dir,
         ]
         if args.include_archived:
             integrity_cmd.append("--include-archived")
@@ -344,8 +403,14 @@ def main():
     # Step 7: Generate README
     if not args.skip_docs:
         ok, _ = run(
-            [sys.executable, "scripts/generate_readme.py",
-             "--db", "database.json", "--platforms-dir", "platforms"],
+            [
+                sys.executable,
+                "scripts/generate_readme.py",
+                "--db",
+                "database.json",
+                "--platforms-dir",
+                "platforms",
+            ],
             "7/8 generate readme",
         )
         results["generate_readme"] = ok

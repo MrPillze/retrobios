@@ -19,25 +19,39 @@ import os
 import re
 import sys
 import tempfile
-import urllib.request
 import urllib.error
+import urllib.request
 import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     MANUFACTURER_PREFIXES,
-    build_target_cores_cache, build_zip_contents_index, check_inside_zip,
-    compute_hashes, expand_platform_declared_names, fetch_large_file, group_identical_platforms,
-    list_emulator_profiles, list_platform_system_ids, list_registered_platforms,
-    filter_systems_by_target, list_system_ids, load_database,
-    load_data_dir_registry, load_emulator_profiles, load_platform_config,
-    md5_composite, require_yaml, resolve_local_file,
-)
-from validation import (
-    _build_validation_index, check_file_validation, filter_files_by_mode,
+    build_target_cores_cache,
+    build_zip_contents_index,
+    check_inside_zip,
+    compute_hashes,
+    expand_platform_declared_names,
+    fetch_large_file,
+    filter_systems_by_target,
+    group_identical_platforms,
+    list_emulator_profiles,
+    list_platform_system_ids,
+    list_registered_platforms,
+    list_system_ids,
+    load_data_dir_registry,
+    load_database,
+    load_emulator_profiles,
+    load_platform_config,
+    require_yaml,
+    resolve_local_file,
 )
 from deterministic_zip import rebuild_zip_deterministic
+from validation import (
+    _build_validation_index,
+    check_file_validation,
+    filter_files_by_mode,
+)
 
 yaml = require_yaml()
 
@@ -169,7 +183,11 @@ def _find_candidate_satisfying_both(
         return None
 
     md5_expected = file_entry.get("md5", "")
-    md5_set = {m.strip().lower() for m in md5_expected.split(",") if m.strip()} if md5_expected else set()
+    md5_set = (
+        {m.strip().lower() for m in md5_expected.split(",") if m.strip()}
+        if md5_expected
+        else set()
+    )
 
     by_name = db.get("indexes", {}).get("by_name", {})
     files_db = db.get("files", {})
@@ -177,7 +195,11 @@ def _find_candidate_satisfying_both(
     for sha1 in by_name.get(fname, []):
         candidate = files_db.get(sha1, {})
         path = candidate.get("path", "")
-        if not path or not os.path.exists(path) or os.path.realpath(path) == os.path.realpath(local_path):
+        if (
+            not path
+            or not os.path.exists(path)
+            or os.path.realpath(path) == os.path.realpath(local_path)
+        ):
             continue
         # Must still satisfy platform MD5
         if md5_set and candidate.get("md5", "").lower() not in md5_set:
@@ -202,8 +224,7 @@ def _path_parents(dest: str) -> list[str]:
     return ["/".join(parts[:i]) for i in range(1, len(parts))]
 
 
-def _has_path_conflict(dest: str, seen_files: set[str],
-                       seen_parents: set[str]) -> bool:
+def _has_path_conflict(dest: str, seen_files: set[str], seen_parents: set[str]) -> bool:
     """Check if dest conflicts with existing paths (file vs directory).
 
     Returns True if adding dest would create an impossible extraction:
@@ -218,18 +239,21 @@ def _has_path_conflict(dest: str, seen_files: set[str],
     return False
 
 
-def _register_path(dest: str, seen_files: set[str],
-                   seen_parents: set[str]) -> None:
+def _register_path(dest: str, seen_files: set[str], seen_parents: set[str]) -> None:
     """Track a file path and its parent directories."""
     seen_files.add(dest)
     for parent in _path_parents(dest):
         seen_parents.add(parent)
 
 
-def resolve_file(file_entry: dict, db: dict, bios_dir: str,
-                  zip_contents: dict | None = None,
-                  dest_hint: str = "",
-                  data_dir_registry: dict | None = None) -> tuple[str | None, str]:
+def resolve_file(
+    file_entry: dict,
+    db: dict,
+    bios_dir: str,
+    zip_contents: dict | None = None,
+    dest_hint: str = "",
+    data_dir_registry: dict | None = None,
+) -> tuple[str | None, str]:
     """Resolve a BIOS file with storage tiers and release asset fallback.
 
     Wraps common.resolve_local_file() with pack-specific logic for
@@ -242,9 +266,13 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     if storage == "external":
         return None, "external"
 
-    path, status = resolve_local_file(file_entry, db, zip_contents,
-                                      dest_hint=dest_hint,
-                                      data_dir_registry=data_dir_registry)
+    path, status = resolve_local_file(
+        file_entry,
+        db,
+        zip_contents,
+        dest_hint=dest_hint,
+        data_dir_registry=data_dir_registry,
+    )
     if path and status != "hash_mismatch":
         return path, status
 
@@ -253,7 +281,9 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     name = file_entry.get("name", "")
     sha1 = file_entry.get("sha1")
     md5_raw = file_entry.get("md5", "")
-    md5_list = [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
+    md5_list = (
+        [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
+    )
     first_md5 = md5_list[0] if md5_list else ""
     cached = fetch_large_file(name, expected_sha1=sha1 or "", expected_md5=first_md5)
     if cached:
@@ -264,7 +294,6 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
         return path, status
 
     return None, "not_found"
-
 
 
 def download_external(file_entry: dict, dest_path: str) -> bool:
@@ -278,11 +307,15 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
     md5 = file_entry.get("md5")
 
     if not (sha256 or sha1 or md5):
-        print(f"    WARNING: no hash for {file_entry['name']}, skipping unverifiable download")
+        print(
+            f"    WARNING: no hash for {file_entry['name']}, skipping unverifiable download"
+        )
         return False
 
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-pack-gen/1.0"})
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "retrobios-pack-gen/1.0"}
+        )
         with urllib.request.urlopen(req, timeout=120) as resp:
             data = resp.read()
     except urllib.error.URLError as e:
@@ -329,6 +362,7 @@ def _detect_extras_prefix(config: dict, base_dest: str) -> str:
     if not dests:
         return ""
     from collections import Counter
+
     roots = Counter(d.split("/", 1)[0] for d in dests)
     most_common, count = roots.most_common(1)[0]
     if count / len(dests) > 0.9:
@@ -388,17 +422,18 @@ def _detect_slug_structure(config: dict) -> tuple[bool, dict[str, str]]:
             if d and d.count("/") > 1:
                 deep_files += 1
     shallow = deep_files / total_files < 0.05 if total_files else True
-    return (all_have_slash and varying_slugs and high_coverage
-            and shallow), sys_to_slug
+    return (all_have_slash and varying_slugs and high_coverage and shallow), sys_to_slug
 
 
 def _map_emulator_to_slug(
     profile: dict,
-    platform_systems: set[str], norm_map: dict[str, str],
+    platform_systems: set[str],
+    norm_map: dict[str, str],
     sys_to_slug: dict[str, str],
 ) -> str:
     """Map an emulator to a destination slug for slug-based platforms."""
     from common import _norm_system_id
+
     emu_systems = set(profile.get("systems", []))
     # Direct match
     direct = emu_systems & platform_systems
@@ -437,10 +472,14 @@ def _collect_emulator_extras(
 
     Works for ANY platform (RetroArch, Batocera, Recalbox, etc.)
     """
-    from common import resolve_platform_cores, _norm_system_id
+    from common import _norm_system_id, resolve_platform_cores
     from verify import find_undeclared_files
 
-    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+    profiles = (
+        emu_profiles
+        if emu_profiles is not None
+        else load_emulator_profiles(emulators_dir)
+    )
 
     # Detect destination conventions for core extras
     extras_prefix = _detect_extras_prefix(config, base_dest)
@@ -451,7 +490,9 @@ def _collect_emulator_extras(
         for sid in platform_systems:
             norm_map[_norm_system_id(sid)] = sid
 
-    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
+    undeclared = find_undeclared_files(
+        config, emulators_dir, db, emu_profiles, target_cores=target_cores
+    )
     extras = []
     seen_dests: set[str] = set(seen)
     for u in undeclared:
@@ -475,7 +516,10 @@ def _collect_emulator_extras(
                         profile = pp
                         break
             slug = _map_emulator_to_slug(
-                profile, platform_systems, norm_map, sys_to_slug,
+                profile,
+                platform_systems,
+                norm_map,
+                sys_to_slug,
             )
             if not slug:
                 continue  # can't place without slug
@@ -485,13 +529,15 @@ def _collect_emulator_extras(
         if full_dest in seen_dests:
             continue
         seen_dests.add(full_dest)
-        extras.append({
-            "name": name,
-            "destination": dest,
-            "required": u.get("required", False),
-            "hle_fallback": u.get("hle_fallback", False),
-            "source_emulator": u.get("emulator", ""),
-        })
+        extras.append(
+            {
+                "name": name,
+                "destination": dest,
+                "required": u.get("required", False),
+                "hle_fallback": u.get("hle_fallback", False),
+                "source_emulator": u.get("emulator", ""),
+            }
+        )
 
     # Second pass: find alternative destinations for files already in the pack.
     # A file declared by the platform or emitted above may also be needed at a
@@ -550,17 +596,22 @@ def _collect_emulator_extras(
             if full_dest in seen_dests:
                 continue
             # Check file exists in repo or data dirs
-            if not (by_name.get(fname) or by_name.get(dest.rsplit("/", 1)[-1])
-                    or by_path_suffix.get(dest)):
+            if not (
+                by_name.get(fname)
+                or by_name.get(dest.rsplit("/", 1)[-1])
+                or by_path_suffix.get(dest)
+            ):
                 continue
             seen_dests.add(full_dest)
-            extras.append({
-                "name": fname,
-                "destination": dest,
-                "required": f.get("required", False),
-                "hle_fallback": f.get("hle_fallback", False),
-                "source_emulator": profile.get("emulator", emu_name),
-            })
+            extras.append(
+                {
+                    "name": fname,
+                    "destination": dest,
+                    "required": f.get("required", False),
+                    "hle_fallback": f.get("hle_fallback", False),
+                    "source_emulator": profile.get("emulator", emu_name),
+                }
+            )
 
     # Archive prefix pass: cores that store BIOS archives in a subdirectory
     # (e.g. system/fbneo/neogeo.zip).  When the archive is already covered at
@@ -589,13 +640,15 @@ def _collect_emulator_extras(
             if not by_name.get(archive_name):
                 continue
             seen_dests.add(full_dest)
-            extras.append({
-                "name": archive_name,
-                "destination": dest,
-                "required": True,
-                "hle_fallback": False,
-                "source_emulator": profile.get("emulator", emu_name),
-            })
+            extras.append(
+                {
+                    "name": archive_name,
+                    "destination": dest,
+                    "required": True,
+                    "hle_fallback": False,
+                    "source_emulator": profile.get("emulator", emu_name),
+                }
+            )
 
     # Third pass: agnostic scan — for filename-agnostic cores, include all
     # DB files matching the system path prefix and size criteria.
@@ -673,20 +726,27 @@ def _collect_emulator_extras(
                 if full_dest in seen_dests:
                     continue
                 seen_dests.add(full_dest)
-                extras.append({
-                    "name": scan_name,
-                    "destination": dest,
-                    "required": False,
-                    "hle_fallback": False,
-                    "source_emulator": profile.get("emulator", emu_name),
-                    "agnostic_scan": True,
-                })
+                extras.append(
+                    {
+                        "name": scan_name,
+                        "destination": dest,
+                        "required": False,
+                        "hle_fallback": False,
+                        "source_emulator": profile.get("emulator", emu_name),
+                        "agnostic_scan": True,
+                    }
+                )
 
     return extras
 
 
-def _build_readme(platform_name: str, platform_display: str,
-                  base_dest: str, total_files: int, num_systems: int) -> str:
+def _build_readme(
+    platform_name: str,
+    platform_display: str,
+    base_dest: str,
+    total_files: int,
+    num_systems: int,
+) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     sep = "=" * 50
     header = (
@@ -710,7 +770,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  1. Find your RetroArch system directory:\n"
             "     - RetroArch > Settings > Directory > System/BIOS\n"
             "     - Default: retroarch/system/\n"
-            "  2. Open the \"system\" folder from this archive\n"
+            '  2. Open the "system" folder from this archive\n'
             "  3. Copy ALL contents into your system directory\n"
             "  4. Overwrite if asked\n\n"
             "  Option C: Manual (handheld / SD card)\n"
@@ -718,7 +778,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  Anbernic, Retroid, Miyoo, Trimui, etc.:\n"
             "  1. Connect your SD card to your PC\n"
             "  2. Find the BIOS folder (usually BIOS/ or system/)\n"
-            "  3. Copy ALL contents of \"system\" from this archive\n"
+            '  3. Copy ALL contents of "system" from this archive\n'
             "  4. Eject SD card and reboot your device\n\n"
             "  Common paths by device:\n"
             "    Anbernic (ArkOS/JELOS): BIOS/\n"
@@ -737,14 +797,14 @@ def _build_readme(platform_name: str, platform_display: str,
             "  1. On your PC, open the Batocera network share:\n"
             "     - Windows: \\\\BATOCERA\\share\\bios\\\n"
             "     - Mac/Linux: smb://batocera/share/bios/\n"
-            "  2. Open the \"bios\" folder from this archive\n"
+            '  2. Open the "bios" folder from this archive\n'
             "  3. Copy ALL contents into the share\n"
             "  4. Overwrite if asked\n\n"
             "  Option C: Manual (SD card)\n"
             "  --------------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /userdata/bios/ on the SHARE partition\n"
-            "  3. Copy ALL contents of \"bios\" from this archive\n\n"
+            '  3. Copy ALL contents of "bios" from this archive\n\n'
             "  NOTE: Dreamcast flash memory is named dc_nvmem.bin\n"
             "  (if your setup asks for dc_flash.bin, same file).\n\n"
         ),
@@ -758,13 +818,13 @@ def _build_readme(platform_name: str, platform_display: str,
             "  1. On your PC, open the Recalbox network share:\n"
             "     - Windows: \\\\RECALBOX\\share\\bios\\\n"
             "     - Mac/Linux: smb://recalbox/share/bios/\n"
-            "  2. Open the \"bios\" folder from this archive\n"
+            '  2. Open the "bios" folder from this archive\n'
             "  3. Copy ALL contents into the share\n\n"
             "  Option C: Manual (SD card)\n"
             "  --------------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /recalbox/share/bios/\n"
-            "  3. Copy ALL contents of \"bios\" from this archive\n\n"
+            '  3. Copy ALL contents of "bios" from this archive\n\n'
         ),
         "emudeck": (
             "INSTALLATION GUIDE (Steam Deck / Linux)\n\n"
@@ -778,7 +838,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  ----------------\n"
             "  1. Open Dolphin file manager\n"
             "  2. Navigate to ~/Emulation/bios/\n"
-            "  3. Open the \"bios\" folder from this archive\n"
+            '  3. Open the "bios" folder from this archive\n'
             "  4. Copy ALL contents into ~/Emulation/bios/\n\n"
             "  STANDALONE EMULATORS (extra step)\n"
             "  Switch and 3DS emulators need keys in specific folders:\n"
@@ -799,9 +859,9 @@ def _build_readme(platform_name: str, platform_display: str,
             "  1. Open Dolphin file manager\n"
             "  2. Show hidden files (Ctrl+H)\n"
             "  3. Navigate to ~/retrodeck/\n"
-            "  4. Open the \"bios\" folder from this archive\n"
+            '  4. Open the "bios" folder from this archive\n'
             "  5. Copy ALL contents into ~/retrodeck/bios/\n"
-            "  6. If the archive contains a \"roms\" folder, copy\n"
+            '  6. If the archive contains a "roms" folder, copy\n'
             "     its contents into ~/retrodeck/roms/\n\n"
             "  NOTE: RetroDECK uses its own BIOS checker. After\n"
             "  copying, open RetroDECK > Tools > BIOS Checker to\n"
@@ -818,7 +878,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  1. Open your RetroBat installation folder\n"
             "  2. Navigate to the bios\\ subfolder\n"
             "     (default: C:\\RetroBat\\bios\\)\n"
-            "  3. Open the \"bios\" folder from this archive\n"
+            '  3. Open the "bios" folder from this archive\n'
             "  4. Copy ALL contents into your bios\\ folder\n"
             "  5. Overwrite if asked\n\n"
         ),
@@ -828,7 +888,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  2. Navigate to the Firmware subfolder:\n"
             "     - Windows: BizHawk\\Firmware\\\n"
             "     - Linux: ~/.config/BizHawk/Firmware/\n"
-            "  3. Open the \"Firmware\" folder from this archive\n"
+            '  3. Open the "Firmware" folder from this archive\n'
             "  4. Copy ALL contents into your Firmware folder\n"
             "  5. In BizHawk: Config > Paths > Firmware should\n"
             "     point to this folder\n\n"
@@ -837,7 +897,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "INSTALLATION GUIDE (RomM server)\n\n"
             "  1. Locate your RomM library folder\n"
             "  2. Navigate to the bios/ subdirectory\n"
-            "  3. Copy ALL contents of \"bios\" from this archive\n"
+            '  3. Copy ALL contents of "bios" from this archive\n'
             "  4. Restart the RomM service to detect new files\n\n"
         ),
         "retropie": (
@@ -845,7 +905,7 @@ def _build_readme(platform_name: str, platform_display: str,
             "  Option A: Via network share\n"
             "  --------------------------\n"
             "  1. On your PC, open: \\\\RETROPIE\\bios\\\n"
-            "  2. Copy ALL contents of \"BIOS\" from this archive\n\n"
+            '  2. Copy ALL contents of "BIOS" from this archive\n\n'
             "  Option B: Via SSH\n"
             "  -----------------\n"
             "  1. SSH into your Pi: ssh pi@retropie\n"
@@ -854,19 +914,22 @@ def _build_readme(platform_name: str, platform_display: str,
             "  ---------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /home/pi/RetroPie/BIOS/\n"
-            "  3. Copy ALL contents of \"BIOS\" from this archive\n\n"
+            '  3. Copy ALL contents of "BIOS" from this archive\n\n'
         ),
     }
 
     # Lakka uses same guide as RetroArch
     guides["lakka"] = guides["retroarch"]
 
-    guide = guides.get(platform_name, (
-        f"INSTALLATION\n\n"
-        f"  1. Open the \"{base_dest or 'files'}\" folder in this archive\n"
-        f"  2. Copy ALL contents to your BIOS directory\n"
-        f"  3. Overwrite if asked\n\n"
-    ))
+    guide = guides.get(
+        platform_name,
+        (
+            f"INSTALLATION\n\n"
+            f'  1. Open the "{base_dest or "files"}" folder in this archive\n'
+            f"  2. Copy ALL contents to your BIOS directory\n"
+            f"  3. Overwrite if asked\n\n"
+        ),
+    )
 
     footer = (
         "TROUBLESHOOTING\n\n"
@@ -884,7 +947,9 @@ def _build_readme(platform_name: str, platform_display: str,
 
 
 def _build_agnostic_rename_readme(
-    destination: str, original: str, alternatives: list[str],
+    destination: str,
+    original: str,
+    alternatives: list[str],
 ) -> str:
     """Build a README explaining an agnostic file rename."""
     lines = [
@@ -940,7 +1005,7 @@ def generate_pack(
             s = sid.lower().replace("_", "-")
             for prefix in MANUFACTURER_PREFIXES:
                 if s.startswith(prefix):
-                    s = s[len(prefix):]
+                    s = s[len(prefix) :]
                     break
             parts = s.split("-")
             display_parts.append("_".join(p.title() for p in parts if p))
@@ -960,7 +1025,9 @@ def generate_pack(
     user_provided = []
     seen_destinations: set[str] = set()
     seen_lower: set[str] = set()  # only used when case_insensitive=True
-    seen_parents: set[str] = set()  # parent dirs of added files (path conflict detection)
+    seen_parents: set[str] = (
+        set()
+    )  # parent dirs of added files (path conflict detection)
     # Per-file status: worst status wins (missing > untested > ok)
     file_status: dict[str, str] = {}
     file_reasons: dict[str, str] = {}
@@ -972,7 +1039,10 @@ def generate_pack(
 
     # Filter systems by target if specified
     from common import resolve_platform_cores
-    plat_cores = resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
+
+    plat_cores = (
+        resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
+    )
     pack_systems = filter_systems_by_target(
         config.get("systems", {}),
         emu_profiles or {},
@@ -982,13 +1052,19 @@ def generate_pack(
 
     if system_filter:
         from common import _norm_system_id
+
         norm_filter = {_norm_system_id(s) for s in system_filter}
-        filtered = {sid: sys_data for sid, sys_data in pack_systems.items()
-                    if sid in system_filter or _norm_system_id(sid) in norm_filter}
+        filtered = {
+            sid: sys_data
+            for sid, sys_data in pack_systems.items()
+            if sid in system_filter or _norm_system_id(sid) in norm_filter
+        }
         if not filtered:
             available = sorted(pack_systems.keys())[:10]
-            print(f"  WARNING: no systems matched filter {system_filter} "
-                  f"(available: {', '.join(available)})")
+            print(
+                f"  WARNING: no systems matched filter {system_filter} "
+                f"(available: {', '.join(available)})"
+            )
             return None
         pack_systems = filtered
 
@@ -1013,7 +1089,9 @@ def generate_pack(
                     full_dest = dest
 
                 dedup_key = full_dest
-                already_packed = dedup_key in seen_destinations or (case_insensitive and dedup_key.lower() in seen_lower)
+                already_packed = dedup_key in seen_destinations or (
+                    case_insensitive and dedup_key.lower() in seen_lower
+                )
 
                 if _has_path_conflict(full_dest, seen_destinations, seen_parents):
                     continue
@@ -1028,22 +1106,34 @@ def generate_pack(
                     if case_insensitive:
                         seen_lower.add(dedup_key.lower())
                     file_status.setdefault(dedup_key, "ok")
-                    instructions = file_entry.get("instructions", "Please provide this file manually.")
+                    instructions = file_entry.get(
+                        "instructions", "Please provide this file manually."
+                    )
                     instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
-                    instr_path = f"{base_dest}/{instr_name}" if base_dest else instr_name
-                    zf.writestr(instr_path, f"File needed: {file_entry['name']}\n\n{instructions}\n")
+                    instr_path = (
+                        f"{base_dest}/{instr_name}" if base_dest else instr_name
+                    )
+                    zf.writestr(
+                        instr_path,
+                        f"File needed: {file_entry['name']}\n\n{instructions}\n",
+                    )
                     user_provided.append(file_entry["name"])
                     total_files += 1
                     continue
 
                 local_path, status = resolve_file(
-                    file_entry, db, bios_dir, zip_contents,
+                    file_entry,
+                    db,
+                    bios_dir,
+                    zip_contents,
                     data_dir_registry=data_registry,
                 )
 
                 if status == "external":
                     file_ext = os.path.splitext(file_entry["name"])[1] or ""
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp:
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=file_ext
+                    ) as tmp:
                         tmp_path = tmp.name
 
                     try:
@@ -1119,10 +1209,16 @@ def generate_pack(
                                     if _n and _n != original_name:
                                         alt_names.append(_n)
                             readme_text = _build_agnostic_rename_readme(
-                                dest_name, original_name, alt_names,
+                                dest_name,
+                                original_name,
+                                alt_names,
                             )
                             readme_name = f"RENAMED_{dest_name}.txt"
-                            readme_full = f"{base_dest}/{readme_name}" if base_dest else readme_name
+                            readme_full = (
+                                f"{base_dest}/{readme_name}"
+                                if base_dest
+                                else readme_name
+                            )
                             if readme_full not in seen_destinations:
                                 zf.writestr(readme_full, readme_text)
                                 seen_destinations.add(readme_full)
@@ -1140,12 +1236,15 @@ def generate_pack(
                         inner_md5_raw = file_entry.get("md5", "")
                         inner_md5_list = (
                             [m.strip() for m in inner_md5_raw.split(",") if m.strip()]
-                            if inner_md5_raw else [""]
+                            if inner_md5_raw
+                            else [""]
                         )
                         zip_ok = False
                         last_result = "not_in_zip"
                         for md5_candidate in inner_md5_list:
-                            last_result = check_inside_zip(local_path, zf_name, md5_candidate)
+                            last_result = check_inside_zip(
+                                local_path, zf_name, md5_candidate
+                            )
                             if last_result == "ok":
                                 zip_ok = True
                                 break
@@ -1159,7 +1258,9 @@ def generate_pack(
                             file_reasons[dedup_key] = "cannot read ZIP"
                         else:
                             file_status[dedup_key] = "untested"
-                            file_reasons[dedup_key] = f"{zf_name} MD5 mismatch inside ZIP"
+                            file_reasons[dedup_key] = (
+                                f"{zf_name} MD5 mismatch inside ZIP"
+                            )
                     else:
                         file_status[dedup_key] = "untested"
                         file_reasons[dedup_key] = "hash mismatch"
@@ -1170,14 +1271,22 @@ def generate_pack(
                 # Platform verification (existence/md5) is the authority for pack status.
                 # Emulator checks are supplementary -logged but don't downgrade.
                 # When a discrepancy is found, try to find a file satisfying both.
-                if (file_status.get(dedup_key) == "ok"
-                        and local_path and validation_index):
+                if (
+                    file_status.get(dedup_key) == "ok"
+                    and local_path
+                    and validation_index
+                ):
                     fname = file_entry.get("name", "")
-                    reason = check_file_validation(local_path, fname, validation_index,
-                                                   bios_dir)
+                    reason = check_file_validation(
+                        local_path, fname, validation_index, bios_dir
+                    )
                     if reason:
                         better = _find_candidate_satisfying_both(
-                            file_entry, db, local_path, validation_index, bios_dir,
+                            file_entry,
+                            db,
+                            local_path,
+                            validation_index,
+                            bios_dir,
                         )
                         if better:
                             local_path = better
@@ -1214,8 +1323,13 @@ def generate_pack(
             core_files = []
         else:
             core_files = _collect_emulator_extras(
-                config, emulators_dir, db,
-                seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
+                config,
+                emulators_dir,
+                db,
+                seen_destinations,
+                base_dest,
+                emu_profiles,
+                target_cores=target_cores,
             )
         core_count = 0
         for fe in core_files:
@@ -1247,8 +1361,12 @@ def generate_pack(
 
             dest_hint = fe.get("destination", "")
             local_path, status = resolve_file(
-                fe, db, bios_dir, zip_contents,
-                dest_hint=dest_hint, data_dir_registry=data_registry,
+                fe,
+                db,
+                bios_dir,
+                zip_contents,
+                dest_hint=dest_hint,
+                data_dir_registry=data_registry,
             )
             if status in ("not_found", "external", "user_provided"):
                 continue
@@ -1276,7 +1394,9 @@ def generate_pack(
                     continue
                 local_path = entry.get("local_cache", "")
                 if not local_path or not os.path.isdir(local_path):
-                    print(f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py")
+                    print(
+                        f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py"
+                    )
                     continue
                 dd_dest = dd.get("destination", "")
                 if base_dest and dd_dest:
@@ -1290,7 +1410,9 @@ def generate_pack(
                         src = os.path.join(root, fname)
                         rel = os.path.relpath(src, local_path)
                         full = f"{dd_prefix}/{rel}"
-                        if full in seen_destinations or (full.lower() in seen_lower and case_insensitive):
+                        if full in seen_destinations or (
+                            full.lower() in seen_lower and case_insensitive
+                        ):
                             continue
                         if _has_path_conflict(full, seen_destinations, seen_parents):
                             continue
@@ -1303,8 +1425,9 @@ def generate_pack(
 
         # README.txt for users -personalized step-by-step per platform
         num_systems = len(pack_systems)
-        readme_text = _build_readme(platform_name, platform_display,
-                                    base_dest, total_files, num_systems)
+        readme_text = _build_readme(
+            platform_name, platform_display, base_dest, total_files, num_systems
+        )
         zf.writestr("README.txt", readme_text)
 
     files_ok = sum(1 for s in file_status.values() if s == "ok")
@@ -1318,7 +1441,9 @@ def generate_pack(
     if files_miss:
         parts.append(f"{files_miss} missing")
     baseline = total_files - core_count
-    print(f"  {zip_path}: {total_files} files packed ({baseline} baseline + {core_count} from cores), {', '.join(parts)} [{verification_mode}]")
+    print(
+        f"  {zip_path}: {total_files} files packed ({baseline} baseline + {core_count} from cores), {', '.join(parts)} [{verification_mode}]"
+    )
 
     for key, reason in sorted(file_reasons.items()):
         status = file_status.get(key, "")
@@ -1329,7 +1454,9 @@ def generate_pack(
     return zip_path
 
 
-def _extract_zip_to_archive(source_zip: str, dest_prefix: str, target_zf: zipfile.ZipFile):
+def _extract_zip_to_archive(
+    source_zip: str, dest_prefix: str, target_zf: zipfile.ZipFile
+):
     """Extract contents of a source ZIP into target ZIP under dest_prefix."""
     with zipfile.ZipFile(source_zip, "r") as src:
         for info in src.infolist():
@@ -1343,7 +1470,9 @@ def _extract_zip_to_archive(source_zip: str, dest_prefix: str, target_zf: zipfil
             target_zf.writestr(target_path, data)
 
 
-def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.ZipFile):
+def _normalize_zip_for_pack(
+    source_zip: str, dest_path: str, target_zf: zipfile.ZipFile
+):
     """Add a MAME BIOS ZIP to the pack as a deterministic rebuild.
 
     Instead of copying the original ZIP (with non-deterministic metadata),
@@ -1356,6 +1485,7 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
     - Bit-identical ZIPs across platforms and build times
     """
     import tempfile as _tmp
+
     tmp_fd, tmp_path = _tmp.mkstemp(suffix=".zip", dir="tmp")
     os.close(tmp_fd)
     try:
@@ -1370,8 +1500,10 @@ def _normalize_zip_for_pack(source_zip: str, dest_path: str, target_zf: zipfile.
 
 # Emulator/system mode pack generation
 
-def _resolve_destination(file_entry: dict, pack_structure: dict | None,
-                         standalone: bool) -> str:
+
+def _resolve_destination(
+    file_entry: dict, pack_structure: dict | None, standalone: bool
+) -> str:
     """Resolve the ZIP destination path for a file entry."""
     # 1. standalone_path override
     if standalone and file_entry.get("standalone_path"):
@@ -1414,25 +1546,34 @@ def generate_emulator_pack(
     selected: list[tuple[str, dict]] = []
     for name in profile_names:
         if name not in all_profiles:
-            available = sorted(k for k, v in all_profiles.items()
-                               if v.get("type") not in ("alias", "test"))
+            available = sorted(
+                k
+                for k, v in all_profiles.items()
+                if v.get("type") not in ("alias", "test")
+            )
             print(f"Error: emulator '{name}' not found", file=sys.stderr)
             print(f"Available: {', '.join(available[:10])}...", file=sys.stderr)
             return None
         p = all_profiles[name]
         if p.get("type") == "alias":
             alias_of = p.get("alias_of", "?")
-            print(f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
-                  file=sys.stderr)
+            print(
+                f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
+                file=sys.stderr,
+            )
             return None
         if p.get("type") == "launcher":
-            print(f"Error: {name} is a launcher -use the emulator it launches",
-                  file=sys.stderr)
+            print(
+                f"Error: {name} is a launcher -use the emulator it launches",
+                file=sys.stderr,
+            )
             return None
         ptype = p.get("type", "libretro")
         if standalone and "standalone" not in ptype:
-            print(f"Error: {name} ({ptype}) does not support --standalone",
-                  file=sys.stderr)
+            print(
+                f"Error: {name} ({ptype}) does not support --standalone",
+                file=sys.stderr,
+            )
             return None
         selected.append((name, p))
 
@@ -1446,7 +1587,9 @@ def generate_emulator_pack(
     missing_files = []
     seen_destinations: set[str] = set()
     seen_lower: set[str] = set()
-    seen_parents: set[str] = set()  # parent dirs of added files (path conflict detection)
+    seen_parents: set[str] = (
+        set()
+    )  # parent dirs of added files (path conflict detection)
     seen_hashes: set[str] = set()  # SHA1 dedup for same file, different path
     data_dir_notices: list[str] = []
     data_registry = load_data_dir_registry(
@@ -1519,7 +1662,10 @@ def generate_emulator_pack(
 
                 archive_entry = {"name": archive_name}
                 local_path, status = resolve_file(
-                    archive_entry, db, bios_dir, zip_contents,
+                    archive_entry,
+                    db,
+                    bios_dir,
+                    zip_contents,
                     data_dir_registry=data_registry,
                 )
                 if local_path and status not in ("not_found",):
@@ -1563,13 +1709,19 @@ def generate_emulator_pack(
 
                 dest_hint = fe.get("path", "")
                 local_path, status = resolve_file(
-                    fe, db, bios_dir, zip_contents,
-                    dest_hint=dest_hint, data_dir_registry=data_registry,
+                    fe,
+                    db,
+                    bios_dir,
+                    zip_contents,
+                    dest_hint=dest_hint,
+                    data_dir_registry=data_registry,
                 )
 
                 if status == "external":
                     file_ext = os.path.splitext(fe["name"])[1] or ""
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp:
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=file_ext
+                    ) as tmp:
                         tmp_path = tmp.name
                     try:
                         if download_external(fe, tmp_path):
@@ -1613,7 +1765,7 @@ def generate_emulator_pack(
         os.unlink(zip_path)
 
     # Report
-    label = " + ".join(p.get("emulator", n) for n, p in selected)
+    " + ".join(p.get("emulator", n) for n, p in selected)
     missing_count = len(missing_files)
     ok_count = total_files
     parts = [f"{ok_count} files packed"]
@@ -1623,7 +1775,9 @@ def generate_emulator_pack(
     for name in missing_files:
         print(f"  MISSING: {name}")
     for ref in sorted(set(data_dir_notices)):
-        print(f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)")
+        print(
+            f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
+        )
 
     return zip_path if total_files > 0 or missing_files else None
 
@@ -1656,13 +1810,19 @@ def generate_system_pack(
         for p in profiles.values():
             all_systems.update(p.get("systems", []))
         if standalone:
-            print(f"No standalone emulators found for system(s): {', '.join(system_ids)}",
-                  file=sys.stderr)
+            print(
+                f"No standalone emulators found for system(s): {', '.join(system_ids)}",
+                file=sys.stderr,
+            )
         else:
-            print(f"No emulators found for system(s): {', '.join(system_ids)}",
-                  file=sys.stderr)
-        print(f"Available systems: {', '.join(sorted(all_systems)[:20])}...",
-              file=sys.stderr)
+            print(
+                f"No emulators found for system(s): {', '.join(system_ids)}",
+                file=sys.stderr,
+            )
+        print(
+            f"Available systems: {', '.join(sorted(all_systems)[:20])}...",
+            file=sys.stderr,
+        )
         return None
 
     # Use system-based ZIP name
@@ -1670,8 +1830,14 @@ def generate_system_pack(
         "_".join(w.title() for w in sid.split("-")) for sid in system_ids
     )
     result = generate_emulator_pack(
-        matching, emulators_dir, db, bios_dir, output_dir,
-        standalone, zip_contents, required_only=required_only,
+        matching,
+        emulators_dir,
+        db,
+        bios_dir,
+        output_dir,
+        standalone,
+        zip_contents,
+        required_only=required_only,
     )
     if result:
         # Rename to system-based name
@@ -1693,7 +1859,7 @@ def _system_display_name(system_id: str) -> str:
     s = system_id.lower().replace("_", "-")
     for prefix in MANUFACTURER_PREFIXES:
         if s.startswith(prefix):
-            s = s[len(prefix):]
+            s = s[len(prefix) :]
             break
     parts = s.split("-")
     return "_".join(p.title() for p in parts if p)
@@ -1706,6 +1872,7 @@ def _group_systems_by_manufacturer(
 ) -> dict[str, list[str]]:
     """Group system IDs by manufacturer for --split --group-by manufacturer."""
     from common import derive_manufacturer
+
     groups: dict[str, list[str]] = {}
     for sid, sys_data in systems.items():
         mfr = derive_manufacturer(sid, sys_data)
@@ -1747,7 +1914,12 @@ def generate_split_packs(
     base_dest = config.get("base_destination", "")
     if emu_profiles:
         all_extras = _collect_emulator_extras(
-            config, emulators_dir, db, set(), base_dest, emu_profiles,
+            config,
+            emulators_dir,
+            db,
+            set(),
+            base_dest,
+            emu_profiles,
             target_cores=target_cores,
         )
     else:
@@ -1755,6 +1927,7 @@ def generate_split_packs(
     # Map each extra to matching systems via source_emulator.
     # Index by both profile key AND display name (source_emulator uses display).
     from common import _norm_system_id
+
     emu_system_map: dict[str, set[str]] = {}
     for name, p in emu_profiles.items():
         raw = set(p.get("systems", []))
@@ -1765,7 +1938,7 @@ def generate_split_packs(
         if display and display != name:
             emu_system_map[display] = combined
 
-    plat_norm = {_norm_system_id(s): s for s in systems}
+    {_norm_system_id(s): s for s in systems}
 
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
@@ -1773,15 +1946,24 @@ def generate_split_packs(
         group_norm = {_norm_system_id(s) for s in group_system_ids}
         group_match = group_sys_set | group_norm
         group_extras = [
-            fe for fe in all_extras
+            fe
+            for fe in all_extras
             if emu_system_map.get(fe.get("source_emulator", ""), set()) & group_match
         ]
         zip_path = generate_pack(
-            platform_name, platforms_dir, db, bios_dir, split_dir,
-            emulators_dir=emulators_dir, zip_contents=zip_contents,
-            data_registry=data_registry, emu_profiles=emu_profiles,
-            target_cores=target_cores, required_only=required_only,
-            system_filter=group_system_ids, precomputed_extras=group_extras,
+            platform_name,
+            platforms_dir,
+            db,
+            bios_dir,
+            split_dir,
+            emulators_dir=emulators_dir,
+            zip_contents=zip_contents,
+            data_registry=data_registry,
+            emu_profiles=emu_profiles,
+            target_cores=target_cores,
+            required_only=required_only,
+            system_filter=group_system_ids,
+            precomputed_extras=group_extras,
         )
         if zip_path:
             version = config.get("version", config.get("dat_version", ""))
@@ -1801,14 +1983,18 @@ def generate_split_packs(
         group_norm = {_norm_system_id(s) for s in group_system_ids}
         all_groups_match |= set(group_system_ids) | group_norm
     undistributed = [
-        fe for fe in all_extras
-        if not emu_system_map.get(fe.get("source_emulator", ""), set()) & all_groups_match
+        fe
+        for fe in all_extras
+        if not emu_system_map.get(fe.get("source_emulator", ""), set())
+        & all_groups_match
     ]
     if undistributed:
         emus = sorted({fe.get("source_emulator", "?") for fe in undistributed})
-        print(f"  NOTE: {len(undistributed)} core extras from {len(emus)} emulators "
-              f"not in split packs (missing systems: field in profiles: "
-              f"{', '.join(emus[:5])}{'...' if len(emus) > 5 else ''})")
+        print(
+            f"  NOTE: {len(undistributed)} core extras from {len(emus)} emulators "
+            f"not in split packs (missing systems: field in profiles: "
+            f"{', '.join(emus[:5])}{'...' if len(emus) > 5 else ''})"
+        )
 
     return results
 
@@ -1894,7 +2080,9 @@ def generate_md5_pack(
 
             if matched_fe:
                 if emulator_name and emu_pack_structure is not None:
-                    dest = _resolve_destination(matched_fe, emu_pack_structure, standalone)
+                    dest = _resolve_destination(
+                        matched_fe, emu_pack_structure, standalone
+                    )
                 else:
                     dest = matched_fe.get("destination", matched_fe.get("name", name))
             elif paths:
@@ -1910,7 +2098,9 @@ def generate_md5_pack(
             seen.add(full_dest)
 
             fe_for_resolve = {"name": name, "sha1": sha1, "md5": entry.get("md5", "")}
-            local_path, status = resolve_file(fe_for_resolve, db, bios_dir, zip_contents)
+            local_path, status = resolve_file(
+                fe_for_resolve, db, bios_dir, zip_contents
+            )
 
             if status == "not_found" or not local_path:
                 not_in_repo.append((name, hash_val))
@@ -1968,9 +2158,9 @@ def _validate_args(args, parser):
     has_all = args.all
     has_emulator = bool(args.emulator)
     has_system = bool(args.system)
-    has_from_md5 = bool(args.from_md5 or getattr(args, 'from_md5_file', None))
+    has_from_md5 = bool(args.from_md5 or getattr(args, "from_md5_file", None))
 
-    if args.from_md5 and getattr(args, 'from_md5_file', None):
+    if args.from_md5 and getattr(args, "from_md5_file", None):
         parser.error("--from-md5 and --from-md5-file are mutually exclusive")
     if has_from_md5 and has_all:
         parser.error("--from-md5 requires --platform or --emulator, not --all")
@@ -1982,13 +2172,19 @@ def _validate_args(args, parser):
     # --platform/--all and --system can combine (system filters within platform)
     # --emulator is exclusive with everything else
     if has_emulator and (has_platform or has_all or has_system):
-        parser.error("--emulator is mutually exclusive with --platform, --all, and --system")
+        parser.error(
+            "--emulator is mutually exclusive with --platform, --all, and --system"
+        )
     if has_platform and has_all:
         parser.error("--platform and --all are mutually exclusive")
     if not (has_platform or has_all or has_emulator or has_system or has_from_md5):
         parser.error("Specify --platform, --all, --emulator, --system, or --from-md5")
-    if args.standalone and not (has_emulator or (has_system and not has_platform and not has_all)):
-        parser.error("--standalone requires --emulator or --system (without --platform)")
+    if args.standalone and not (
+        has_emulator or (has_system and not has_platform and not has_all)
+    ):
+        parser.error(
+            "--standalone requires --emulator or --system (without --platform)"
+        )
     if args.split and not (has_platform or has_all):
         parser.error("--split requires --platform or --all")
     if args.split and has_emulator:
@@ -2026,7 +2222,9 @@ def _write_manifest_if_changed(path: str, manifest: dict) -> None:
         f.write(new_json)
 
 
-def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_cores_cache):
+def _run_manifest_mode(
+    args, groups, db, zip_contents, emu_profiles, target_cores_cache
+):
     """Generate JSON manifests instead of ZIP packs."""
     registry_path = os.path.join(args.platforms_dir, "_registry.yml")
     os.makedirs(args.output_dir, exist_ok=True)
@@ -2039,15 +2237,22 @@ def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_core
         try:
             tc = target_cores_cache.get(representative) if args.target else None
             manifest = generate_manifest(
-                representative, args.platforms_dir, db, args.bios_dir,
-                registry_path, emulators_dir=args.emulators_dir,
-                zip_contents=zip_contents, emu_profiles=emu_profiles,
+                representative,
+                args.platforms_dir,
+                db,
+                args.bios_dir,
+                registry_path,
+                emulators_dir=args.emulators_dir,
+                zip_contents=zip_contents,
+                emu_profiles=emu_profiles,
                 target_cores=tc,
             )
             out_path = os.path.join(args.output_dir, f"{representative}.json")
             _write_manifest_if_changed(out_path, manifest)
-            print(f"  {out_path}: {manifest['total_files']} files, "
-                  f"{manifest['total_size']} bytes")
+            print(
+                f"  {out_path}: {manifest['total_files']} files, "
+                f"{manifest['total_size']} bytes"
+            )
             # Create aliases for grouped platforms (e.g., lakka -> retroarch)
             for alias_plat in group_platforms:
                 if alias_plat != representative:
@@ -2055,11 +2260,15 @@ def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_core
                     alias_manifest = dict(manifest)
                     alias_manifest["platform"] = alias_plat
                     alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
-                    alias_manifest["display_name"] = alias_cfg.get("platform", alias_plat)
+                    alias_manifest["display_name"] = alias_cfg.get(
+                        "platform", alias_plat
+                    )
                     alias_registry = registry.get("platforms", {}).get(alias_plat, {})
                     alias_install = alias_registry.get("install", {})
                     alias_manifest["detect"] = alias_install.get("detect", [])
-                    alias_manifest["standalone_copies"] = alias_install.get("standalone_copies", [])
+                    alias_manifest["standalone_copies"] = alias_install.get(
+                        "standalone_copies", []
+                    )
                     _write_manifest_if_changed(alias_path, alias_manifest)
                     print(f"  {alias_path}: alias of {representative}")
         except (FileNotFoundError, OSError, yaml.YAMLError) as e:
@@ -2111,7 +2320,11 @@ def _run_verify_packs(args):
                     dest = fe.get("destination", fe.get("name", ""))
                     if not dest:
                         continue
-                    fp = os.path.join(extract_dir, base_dest, dest) if base_dest else os.path.join(extract_dir, dest)
+                    fp = (
+                        os.path.join(extract_dir, base_dest, dest)
+                        if base_dest
+                        else os.path.join(extract_dir, dest)
+                    )
                     # Case-insensitive fallback
                     if not os.path.exists(fp):
                         parent = os.path.dirname(fp)
@@ -2143,9 +2356,13 @@ def _run_verify_packs(args):
                     if not expected_md5:
                         ok += 1
                         continue
-                    md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+                    md5_list = [
+                        m.strip().lower() for m in expected_md5.split(",") if m.strip()
+                    ]
                     actual_md5 = hashlib.md5(open(fp, "rb").read()).hexdigest()
-                    if actual_md5 in md5_list or any(actual_md5.startswith(m) for m in md5_list if len(m) < 32):
+                    if actual_md5 in md5_list or any(
+                        actual_md5.startswith(m) for m in md5_list if len(m) < 32
+                    ):
                         ok += 1
                         continue
                     # ZIP inner content
@@ -2154,16 +2371,37 @@ def _run_verify_packs(args):
                         continue
                     # Path collision
                     bn = os.path.basename(dest)
-                    collision = sum(1 for sd in systems.values() for ff in sd.get("files", [])
-                                    if os.path.basename(ff.get("destination", ff.get("name", "")) or "") == bn) > 1
+                    collision = (
+                        sum(
+                            1
+                            for sd in systems.values()
+                            for ff in sd.get("files", [])
+                            if os.path.basename(
+                                ff.get("destination", ff.get("name", "")) or ""
+                            )
+                            == bn
+                        )
+                        > 1
+                    )
                     if collision:
                         ok += 1
                     else:
                         hash_fail.append(f"{sys_id}: {dest}")
 
-            total = sum(len([f for f in s.get("files", []) if f.get("destination", f.get("name", ""))]) for s in systems.values())
+            total = sum(
+                len(
+                    [
+                        f
+                        for f in s.get("files", [])
+                        if f.get("destination", f.get("name", ""))
+                    ]
+                )
+                for s in systems.values()
+            )
             if missing or hash_fail:
-                print(f"  {platform_name}: FAIL ({len(missing)} missing, {len(hash_fail)} hash errors / {total})")
+                print(
+                    f"  {platform_name}: FAIL ({len(missing)} missing, {len(hash_fail)} hash errors / {total})"
+                )
                 for m in missing[:5]:
                     print(f"    MISSING: {m}")
                 for h in hash_fail[:5]:
@@ -2178,13 +2416,24 @@ def _run_verify_packs(args):
         sys.exit(1)
 
 
-def _run_platform_packs(args, groups, db, zip_contents, data_registry,
-                        emu_profiles, target_cores_cache, system_filter):
+def _run_platform_packs(
+    args,
+    groups,
+    db,
+    zip_contents,
+    data_registry,
+    emu_profiles,
+    target_cores_cache,
+    system_filter,
+):
     """Generate ZIP packs for platform groups and verify."""
     for group_platforms, representative in groups:
         variants = [p for p in group_platforms if p != representative]
         if variants:
-            all_names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
+            all_names = [
+                load_platform_config(p, args.platforms_dir).get("platform", p)
+                for p in group_platforms
+            ]
             label = " / ".join(all_names)
             print(f"\nGenerating pack for {label}...")
         else:
@@ -2194,19 +2443,33 @@ def _run_platform_packs(args, groups, db, zip_contents, data_registry,
             tc = target_cores_cache.get(representative) if args.target else None
             if args.split:
                 zip_paths = generate_split_packs(
-                    representative, args.platforms_dir, db, args.bios_dir,
-                    args.output_dir, group_by=args.group_by,
-                    emulators_dir=args.emulators_dir, zip_contents=zip_contents,
-                    data_registry=data_registry, emu_profiles=emu_profiles,
-                    target_cores=tc, required_only=args.required_only,
+                    representative,
+                    args.platforms_dir,
+                    db,
+                    args.bios_dir,
+                    args.output_dir,
+                    group_by=args.group_by,
+                    emulators_dir=args.emulators_dir,
+                    zip_contents=zip_contents,
+                    data_registry=data_registry,
+                    emu_profiles=emu_profiles,
+                    target_cores=tc,
+                    required_only=args.required_only,
                 )
                 print(f"  Split into {len(zip_paths)} packs")
             else:
                 zip_path = generate_pack(
-                    representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
-                    include_extras=args.include_extras, emulators_dir=args.emulators_dir,
-                    zip_contents=zip_contents, data_registry=data_registry,
-                    emu_profiles=emu_profiles, target_cores=tc,
+                    representative,
+                    args.platforms_dir,
+                    db,
+                    args.bios_dir,
+                    args.output_dir,
+                    include_extras=args.include_extras,
+                    emulators_dir=args.emulators_dir,
+                    zip_contents=zip_contents,
+                    data_registry=data_registry,
+                    emu_profiles=emu_profiles,
+                    target_cores=tc,
                     required_only=args.required_only,
                     system_filter=system_filter,
                 )
@@ -2214,8 +2477,14 @@ def _run_platform_packs(args, groups, db, zip_contents, data_registry,
                 rep_cfg = load_platform_config(representative, args.platforms_dir)
                 ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
                 ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
-                all_names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
-                combined = "_".join(n.replace(" ", "") for n in all_names) + f"{ver_tag}_BIOS_Pack.zip"
+                all_names = [
+                    load_platform_config(p, args.platforms_dir).get("platform", p)
+                    for p in group_platforms
+                ]
+                combined = (
+                    "_".join(n.replace(" ", "") for n in all_names)
+                    + f"{ver_tag}_BIOS_Pack.zip"
+                )
                 new_path = os.path.join(os.path.dirname(zip_path), combined)
                 if new_path != zip_path:
                     os.rename(zip_path, new_path)
@@ -2225,15 +2494,16 @@ def _run_platform_packs(args, groups, db, zip_contents, data_registry,
 
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
-    all_ok = verify_and_finalize_packs(args.output_dir, db,
-                                        skip_conformance=skip_conf,
-                                        data_registry=data_registry)
+    all_ok = verify_and_finalize_packs(
+        args.output_dir, db, skip_conformance=skip_conf, data_registry=data_registry
+    )
     if args.split:
         for entry in os.listdir(args.output_dir):
             sub = os.path.join(args.output_dir, entry)
             if os.path.isdir(sub) and entry.endswith("_Split"):
-                ok = verify_and_finalize_packs(sub, db, skip_conformance=True,
-                                               data_registry=data_registry)
+                ok = verify_and_finalize_packs(
+                    sub, db, skip_conformance=True, data_registry=data_registry
+                )
                 all_ok = all_ok and ok
     if not all_ok:
         print("WARNING: some packs have verification errors")
@@ -2243,44 +2513,83 @@ def _run_platform_packs(args, groups, db, zip_contents, data_registry,
 def main():
     parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
     parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
-    parser.add_argument("--all", action="store_true", help="Generate packs for all active platforms")
-    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
+    parser.add_argument(
+        "--all", action="store_true", help="Generate packs for all active platforms"
+    )
+    parser.add_argument(
+        "--emulator", "-e", help="Emulator profile name(s), comma-separated"
+    )
     parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
     parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
-    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
-    parser.add_argument("--list-systems", action="store_true", help="List available systems")
-    parser.add_argument("--include-archived", action="store_true", help="Include archived platforms")
+    parser.add_argument(
+        "--list-emulators", action="store_true", help="List available emulators"
+    )
+    parser.add_argument(
+        "--list-systems", action="store_true", help="List available systems"
+    )
+    parser.add_argument(
+        "--include-archived", action="store_true", help="Include archived platforms"
+    )
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
     parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
     parser.add_argument("--output-dir", "-o", default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--include-extras", action="store_true",
-                        help="(no-op) Core requirements are always included")
+    parser.add_argument(
+        "--include-extras",
+        action="store_true",
+        help="(no-op) Core requirements are always included",
+    )
     parser.add_argument("--emulators-dir", default="emulators")
-    parser.add_argument("--offline", action="store_true",
-                        help="Skip data directory freshness check, use cache only")
-    parser.add_argument("--refresh-data", action="store_true",
-                        help="Force re-download all data directories")
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Skip data directory freshness check, use cache only",
+    )
+    parser.add_argument(
+        "--refresh-data",
+        action="store_true",
+        help="Force re-download all data directories",
+    )
     parser.add_argument("--list", action="store_true", help="List available platforms")
-    parser.add_argument("--required-only", action="store_true",
-                        help="Only include required files, skip optional")
-    parser.add_argument("--split", action="store_true",
-                        help="Generate one ZIP per system/manufacturer")
-    parser.add_argument("--group-by", choices=["system", "manufacturer"],
-                        default="system",
-                        help="Grouping for --split (default: system)")
+    parser.add_argument(
+        "--required-only",
+        action="store_true",
+        help="Only include required files, skip optional",
+    )
+    parser.add_argument(
+        "--split", action="store_true", help="Generate one ZIP per system/manufacturer"
+    )
+    parser.add_argument(
+        "--group-by",
+        choices=["system", "manufacturer"],
+        default="system",
+        help="Grouping for --split (default: system)",
+    )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
-    parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
-    parser.add_argument("--from-md5",
-                        help="Hash(es) to look up or pack (comma-separated)")
-    parser.add_argument("--from-md5-file",
-                        help="File with hashes (one per line)")
-    parser.add_argument("--manifest", action="store_true",
-                        help="Output JSON manifests instead of ZIP packs")
-    parser.add_argument("--manifest-targets", action="store_true",
-                        help="Convert target YAMLs to installer JSON")
-    parser.add_argument("--verify-packs", action="store_true",
-                        help="Extract and verify pack integrity (path + hash)")
+    parser.add_argument(
+        "--list-targets",
+        action="store_true",
+        help="List available targets for the platform",
+    )
+    parser.add_argument(
+        "--from-md5", help="Hash(es) to look up or pack (comma-separated)"
+    )
+    parser.add_argument("--from-md5-file", help="File with hashes (one per line)")
+    parser.add_argument(
+        "--manifest",
+        action="store_true",
+        help="Output JSON manifests instead of ZIP packs",
+    )
+    parser.add_argument(
+        "--manifest-targets",
+        action="store_true",
+        help="Convert target YAMLs to installer JSON",
+    )
+    parser.add_argument(
+        "--verify-packs",
+        action="store_true",
+        help="Extract and verify pack integrity (path + hash)",
+    )
     args = parser.parse_args()
 
     # Quick-exit modes
@@ -2289,7 +2598,8 @@ def main():
         return
     if args.manifest_targets:
         generate_target_manifests(
-            os.path.join(args.platforms_dir, "targets"), args.output_dir)
+            os.path.join(args.platforms_dir, "targets"), args.output_dir
+        )
         return
     if args.list:
         for p in list_platforms(args.platforms_dir):
@@ -2308,35 +2618,48 @@ def main():
         if not args.platform:
             parser.error("--list-targets requires --platform")
         from common import list_available_targets
+
         targets = list_available_targets(args.platform, args.platforms_dir)
         if not targets:
             print(f"No targets configured for platform '{args.platform}'")
             return
         for t in targets:
-            aliases = f" (aliases: {', '.join(t['aliases'])})" if t['aliases'] else ""
-            print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
+            aliases = f" (aliases: {', '.join(t['aliases'])})" if t["aliases"] else ""
+            print(
+                f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}"
+            )
         return
 
     _validate_args(args, parser)
 
     # Hash lookup / pack mode
-    has_from_md5 = bool(args.from_md5 or getattr(args, 'from_md5_file', None))
+    has_from_md5 = bool(args.from_md5 or getattr(args, "from_md5_file", None))
     if has_from_md5:
-        hashes = parse_hash_input(args.from_md5) if args.from_md5 else parse_hash_file(args.from_md5_file)
+        hashes = (
+            parse_hash_input(args.from_md5)
+            if args.from_md5
+            else parse_hash_file(args.from_md5_file)
+        )
         if not hashes:
             print("No valid hashes found in input", file=sys.stderr)
             sys.exit(1)
         db = load_database(args.db)
         if not args.platform and not args.emulator:
-            lookup_hashes(hashes, db, args.bios_dir, args.emulators_dir,
-                         args.platforms_dir)
+            lookup_hashes(
+                hashes, db, args.bios_dir, args.emulators_dir, args.platforms_dir
+            )
             return
         zip_contents = build_zip_contents_index(db)
         result = generate_md5_pack(
-            hashes=hashes, db=db, bios_dir=args.bios_dir,
-            output_dir=args.output_dir, zip_contents=zip_contents,
-            platform_name=args.platform, platforms_dir=args.platforms_dir,
-            emulator_name=args.emulator, emulators_dir=args.emulators_dir,
+            hashes=hashes,
+            db=db,
+            bios_dir=args.bios_dir,
+            output_dir=args.output_dir,
+            zip_contents=zip_contents,
+            platform_name=args.platform,
+            platforms_dir=args.platforms_dir,
+            emulator_name=args.emulator,
+            emulators_dir=args.emulators_dir,
             standalone=getattr(args, "standalone", False),
         )
         if not result:
@@ -2350,8 +2673,14 @@ def main():
     if args.emulator:
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
         if not generate_emulator_pack(
-            names, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents, required_only=args.required_only,
+            names,
+            args.emulators_dir,
+            db,
+            args.bios_dir,
+            args.output_dir,
+            args.standalone,
+            zip_contents,
+            required_only=args.required_only,
         ):
             sys.exit(1)
         return
@@ -2360,18 +2689,29 @@ def main():
     if args.system and not args.platform and not args.all:
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
         if not generate_system_pack(
-            system_ids, args.emulators_dir, db, args.bios_dir, args.output_dir,
-            args.standalone, zip_contents, required_only=args.required_only,
+            system_ids,
+            args.emulators_dir,
+            db,
+            args.bios_dir,
+            args.output_dir,
+            args.standalone,
+            zip_contents,
+            required_only=args.required_only,
         ):
             sys.exit(1)
         return
 
-    system_filter = [s.strip() for s in args.system.split(",") if s.strip()] if args.system else None
+    system_filter = (
+        [s.strip() for s in args.system.split(",") if s.strip()]
+        if args.system
+        else None
+    )
 
     # Platform mode
     if args.all:
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived)
+            args.platforms_dir, include_archived=args.include_archived
+        )
     elif args.platform:
         platforms = [args.platform]
     else:
@@ -2380,7 +2720,8 @@ def main():
 
     data_registry = load_data_dir_registry(args.platforms_dir)
     if data_registry and not args.offline:
-        from refresh_data_dirs import refresh_all, load_registry
+        from refresh_data_dirs import load_registry, refresh_all
+
         registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
         results = refresh_all(registry, force=args.refresh_data)
         updated = sum(1 for v in results.values() if v)
@@ -2393,20 +2734,34 @@ def main():
     if args.target:
         try:
             target_cores_cache, platforms = build_target_cores_cache(
-                platforms, args.target, args.platforms_dir, is_all=args.all,
+                platforms,
+                args.target,
+                args.platforms_dir,
+                is_all=args.all,
             )
         except (FileNotFoundError, ValueError) as e:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
 
-    groups = group_identical_platforms(platforms, args.platforms_dir,
-                                      target_cores_cache if args.target else None)
+    groups = group_identical_platforms(
+        platforms, args.platforms_dir, target_cores_cache if args.target else None
+    )
 
     if args.manifest:
-        _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_cores_cache)
+        _run_manifest_mode(
+            args, groups, db, zip_contents, emu_profiles, target_cores_cache
+        )
     else:
-        _run_platform_packs(args, groups, db, zip_contents, data_registry,
-                            emu_profiles, target_cores_cache, system_filter)
+        _run_platform_packs(
+            args,
+            groups,
+            db,
+            zip_contents,
+            data_registry,
+            emu_profiles,
+            target_cores_cache,
+            system_filter,
+        )
 
 
 # Manifest generation (JSON inventory for install.py)
@@ -2491,6 +2846,7 @@ def generate_manifest(
 
     # Filter systems by target
     from common import resolve_platform_cores
+
     plat_cores = resolve_platform_cores(config, emu_profiles) if target_cores else None
     pack_systems = filter_systems_by_target(
         config.get("systems", {}),
@@ -2550,7 +2906,9 @@ def generate_manifest(
 
             if _is_large_file(local_path or "", repo_root):
                 entry["storage"] = "release"
-                entry["release_asset"] = os.path.basename(local_path) if local_path else file_entry["name"]
+                entry["release_asset"] = (
+                    os.path.basename(local_path) if local_path else file_entry["name"]
+                )
 
             manifest_files.append(entry)
             total_size += file_size
@@ -2561,8 +2919,13 @@ def generate_manifest(
 
     # Phase 2: core complement (emulator extras)
     core_files = _collect_emulator_extras(
-        config, emulators_dir, db,
-        seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
+        config,
+        emulators_dir,
+        db,
+        seen_destinations,
+        base_dest,
+        emu_profiles,
+        target_cores=target_cores,
     )
     extras_pfx = _detect_extras_prefix(config, base_dest)
     for fe in core_files:
@@ -2585,8 +2948,9 @@ def generate_manifest(
             continue
 
         dest_hint = fe.get("destination", "")
-        local_path, status = resolve_file(fe, db, bios_dir, zip_contents,
-                                          dest_hint=dest_hint)
+        local_path, status = resolve_file(
+            fe, db, bios_dir, zip_contents, dest_hint=dest_hint
+        )
         if status in ("not_found", "external", "user_provided"):
             continue
 
@@ -2610,7 +2974,9 @@ def generate_manifest(
 
         if _is_large_file(local_path or "", repo_root):
             entry["storage"] = "release"
-            entry["release_asset"] = os.path.basename(local_path) if local_path else fe["name"]
+            entry["release_asset"] = (
+                os.path.basename(local_path) if local_path else fe["name"]
+            )
 
         manifest_files.append(entry)
         total_size += file_size
@@ -2621,9 +2987,11 @@ def generate_manifest(
 
     # No phase 3 (data directories) -skipped for manifest
 
-    now = __import__("datetime").datetime.now(
-        __import__("datetime").timezone.utc
-    ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now = (
+        __import__("datetime")
+        .datetime.now(__import__("datetime").timezone.utc)
+        .strftime("%Y-%m-%dT%H:%M:%SZ")
+    )
 
     result: dict = {
         "manifest_version": 1,
@@ -2643,8 +3011,10 @@ def generate_manifest(
 
 # Post-generation pack verification + manifest + SHA256SUMS
 
-def verify_pack(zip_path: str, db: dict,
-                data_registry: dict | None = None) -> tuple[bool, dict]:
+
+def verify_pack(
+    zip_path: str, db: dict, data_registry: dict | None = None
+) -> tuple[bool, dict]:
     """Verify a generated pack ZIP by re-hashing every file inside.
 
     Checks against database.json, data directory caches, and verifies
@@ -2673,9 +3043,9 @@ def verify_pack(zip_path: str, db: dict,
     manifest = {
         "version": 1,
         "generator": "retrobios generate_pack.py",
-        "generated": __import__("datetime").datetime.now(
-            __import__("datetime").timezone.utc
-        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated": __import__("datetime")
+        .datetime.now(__import__("datetime").timezone.utc)
+        .strftime("%Y-%m-%dT%H:%M:%SZ"),
         "files": [],
     }
     errors = []
@@ -2685,7 +3055,10 @@ def verify_pack(zip_path: str, db: dict,
             if info.is_dir():
                 continue
             name = info.filename
-            if name.startswith("INSTRUCTIONS_") or name in ("manifest.json", "README.txt"):
+            if name.startswith("INSTRUCTIONS_") or name in (
+                "manifest.json",
+                "README.txt",
+            ):
                 continue
             with zf.open(info) as f:
                 sha1_h = hashlib.sha1()
@@ -2728,10 +3101,19 @@ def verify_pack(zip_path: str, db: dict,
                         continue
                     try:
                         import io as _io
+
                         with zipfile.ZipFile(_src_path) as _sz:
-                            _sc = {i.filename: i.CRC for i in _sz.infolist() if not i.is_dir()}
+                            _sc = {
+                                i.filename: i.CRC
+                                for i in _sz.infolist()
+                                if not i.is_dir()
+                            }
                         with zipfile.ZipFile(_io.BytesIO(zf.read(name))) as _pz:
-                            _pc = {i.filename: i.CRC for i in _pz.infolist() if not i.is_dir()}
+                            _pc = {
+                                i.filename: i.CRC
+                                for i in _pz.infolist()
+                                if not i.is_dir()
+                            }
                         if _sc == _pc:
                             status = "verified_rebuild"
                             file_name = _bn
@@ -2742,7 +3124,7 @@ def verify_pack(zip_path: str, db: dict,
             # Data directory: check against cached files
             if status == "untracked" and _data_index:
                 _bn = os.path.basename(name)
-                _pr = name[len("system/"):] if name.startswith("system/") else name
+                _pr = name[len("system/") :] if name.startswith("system/") else name
                 _cands = []
                 if _pr in _data_path_index:
                     _cands.append(_data_path_index[_pr])
@@ -2759,10 +3141,19 @@ def verify_pack(zip_path: str, db: dict,
                     if name.endswith(".zip") and _dp.endswith(".zip"):
                         try:
                             import io as _io2
+
                             with zipfile.ZipFile(_io2.BytesIO(zf.read(name))) as _pz2:
-                                _pc2 = {i.filename: i.CRC for i in _pz2.infolist() if not i.is_dir()}
+                                _pc2 = {
+                                    i.filename: i.CRC
+                                    for i in _pz2.infolist()
+                                    if not i.is_dir()
+                                }
                             with zipfile.ZipFile(_dp) as _dz:
-                                _dc = {i.filename: i.CRC for i in _dz.infolist() if not i.is_dir()}
+                                _dc = {
+                                    i.filename: i.CRC
+                                    for i in _dz.infolist()
+                                    if not i.is_dir()
+                                }
                             if _pc2 == _dc:
                                 status = "verified_data"
                                 file_name = _bn
@@ -2770,14 +3161,16 @@ def verify_pack(zip_path: str, db: dict,
                         except (zipfile.BadZipFile, OSError):
                             continue
 
-            manifest["files"].append({
-                "path": name,
-                "sha1": sha1,
-                "md5": md5,
-                "size": size,
-                "status": status,
-                "name": file_name,
-            })
+            manifest["files"].append(
+                {
+                    "path": name,
+                    "sha1": sha1,
+                    "md5": md5,
+                    "size": size,
+                    "status": status,
+                    "name": file_name,
+                }
+            )
 
             # Corruption check: SHA1 in DB but doesn't match what we computed
             # This should never happen (we looked up by SHA1), but catches
@@ -2785,7 +3178,9 @@ def verify_pack(zip_path: str, db: dict,
             if db_entry and status == "verified_md5":
                 expected_sha1 = db_entry.get("sha1", "")
                 if expected_sha1 and expected_sha1.lower() != sha1.lower():
-                    errors.append(f"{name}: SHA1 mismatch (expected {expected_sha1}, got {sha1})")
+                    errors.append(
+                        f"{name}: SHA1 mismatch (expected {expected_sha1}, got {sha1})"
+                    )
 
     verified = sum(1 for f in manifest["files"] if f["status"].startswith("verified"))
     untracked = sum(1 for f in manifest["files"] if f["status"] == "untracked")
@@ -2817,11 +3212,16 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
     else:
         # Rebuild to replace existing manifest
         import tempfile as _tempfile
-        tmp_fd, tmp_path = _tempfile.mkstemp(suffix=".zip", dir=os.path.dirname(zip_path))
+
+        tmp_fd, tmp_path = _tempfile.mkstemp(
+            suffix=".zip", dir=os.path.dirname(zip_path)
+        )
         os.close(tmp_fd)
         try:
-            with zipfile.ZipFile(zip_path, "r") as src, \
-                 zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as dst:
+            with (
+                zipfile.ZipFile(zip_path, "r") as src,
+                zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as dst,
+            ):
                 for item in src.infolist():
                     if item.filename == "manifest.json":
                         continue
@@ -2855,8 +3255,11 @@ def generate_sha256sums(output_dir: str) -> str | None:
 
 
 def verify_pack_against_platform(
-    zip_path: str, platform_name: str, platforms_dir: str,
-    db: dict | None = None, emulators_dir: str = "emulators",
+    zip_path: str,
+    platform_name: str,
+    platforms_dir: str,
+    db: dict | None = None,
+    emulators_dir: str = "emulators",
     emu_profiles: dict | None = None,
 ) -> tuple[bool, int, int, list[str]]:
     """Verify a pack ZIP against its platform config and core requirements.
@@ -2872,6 +3275,7 @@ def verify_pack_against_platform(
     Returns (all_ok, checked, present, errors).
     """
     from collections import Counter
+
     from verify import find_undeclared_files
 
     config = load_platform_config(platform_name, platforms_dir)
@@ -2902,7 +3306,10 @@ def verify_pack_against_platform(
         # Zero-byte check (exclude Dolphin GraphicMods markers)
         for info in zf.infolist():
             if info.file_size == 0 and not info.is_dir():
-                if "GraphicMods" not in info.filename and info.filename not in ("manifest.json", "README.txt"):
+                if "GraphicMods" not in info.filename and info.filename not in (
+                    "manifest.json",
+                    "README.txt",
+                ):
                     errors.append(f"zero-byte: {info.filename}")
 
         # 1. Baseline file presence
@@ -2952,8 +3359,9 @@ def verify_pack_against_platform(
                     continue
                 # Skip unresolvable files (game_data dirs, etc.)
                 fe = {"name": u["name"], "destination": dest}
-                local_path, status = resolve_file(fe, db, "bios", {},
-                                                  dest_hint=raw_dest)
+                local_path, status = resolve_file(
+                    fe, db, "bios", {}, dest_hint=raw_dest
+                )
                 if status in ("not_found", "external", "user_provided"):
                     continue
                 core_checked += 1
@@ -2965,14 +3373,25 @@ def verify_pack_against_platform(
         checked = baseline_checked + core_checked
         present = baseline_present + core_present
 
-    return (len(errors) == 0, checked, present, errors,
-            baseline_checked, baseline_present, core_checked, core_present)
+    return (
+        len(errors) == 0,
+        checked,
+        present,
+        errors,
+        baseline_checked,
+        baseline_present,
+        core_checked,
+        core_present,
+    )
 
 
-def verify_and_finalize_packs(output_dir: str, db: dict,
-                               platforms_dir: str = "platforms",
-                               skip_conformance: bool = False,
-                               data_registry: dict | None = None) -> bool:
+def verify_and_finalize_packs(
+    output_dir: str,
+    db: dict,
+    platforms_dir: str = "platforms",
+    skip_conformance: bool = False,
+    data_registry: dict | None = None,
+) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
     Two-stage verification:
@@ -3003,8 +3422,10 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
         ok, manifest = verify_pack(zip_path, db, data_registry=data_registry)
         summary = manifest["summary"]
         status = "OK" if ok else "ERRORS"
-        print(f"  verify {name}: {summary['verified']}/{summary['total_files']} verified, "
-              f"{summary['untracked']} untracked, {summary['errors']} errors [{status}]")
+        print(
+            f"  verify {name}: {summary['verified']}/{summary['total_files']} verified, "
+            f"{summary['untracked']} untracked, {summary['errors']} errors [{status}]"
+        )
         if not ok:
             for err in manifest["errors"]:
                 print(f"    ERROR: {err}")
@@ -3017,14 +3438,26 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
             continue
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:
-            (p_ok, total, matched, p_errors,
-             bl_checked, bl_present, core_checked, core_present) = \
-                verify_pack_against_platform(
-                    zip_path, pname, platforms_dir, db=db,
-                )
+            (
+                p_ok,
+                total,
+                matched,
+                p_errors,
+                bl_checked,
+                bl_present,
+                core_checked,
+                core_present,
+            ) = verify_pack_against_platform(
+                zip_path,
+                pname,
+                platforms_dir,
+                db=db,
+            )
             status = "OK" if p_ok else "FAILED"
-            print(f"  platform {pname}: {bl_present}/{bl_checked} baseline, "
-                  f"{core_present}/{core_checked} cores, {status}")
+            print(
+                f"  platform {pname}: {bl_present}/{bl_checked} baseline, "
+                f"{core_present}/{core_checked} cores, {status}"
+            )
             if not p_ok:
                 for err in p_errors:
                     print(f"    {err}")

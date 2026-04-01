@@ -2,6 +2,7 @@
 
 Auto-detects *_targets_scraper.py files and exposes their scrapers.
 """
+
 from __future__ import annotations
 
 import importlib

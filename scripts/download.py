@@ -16,8 +16,8 @@ import argparse
 import json
 import os
 import sys
-import urllib.request
 import urllib.error
+import urllib.request
 import zipfile
 from pathlib import Path
 
@@ -31,10 +31,13 @@ REPO = "Abdess/retrobios"
 def get_latest_release() -> dict:
     """Fetch latest release info from GitHub API."""
     url = f"{GITHUB_API}/repos/{REPO}/releases/latest"
-    req = urllib.request.Request(url, headers={
-        "User-Agent": "retrobios-downloader/1.0",
-        "Accept": "application/vnd.github.v3+json",
-    })
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "retrobios-downloader/1.0",
+            "Accept": "application/vnd.github.v3+json",
+        },
+    )
 
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -71,7 +74,9 @@ def find_asset(release: dict, platform: str) -> dict | None:
 
 def download_file(url: str, dest: str, expected_size: int = 0):
     """Download a file with progress indication."""
-    req = urllib.request.Request(url, headers={"User-Agent": "retrobios-downloader/1.0"})
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "retrobios-downloader/1.0"}
+    )
 
     with urllib.request.urlopen(req, timeout=300) as resp:
         total = int(resp.headers.get("Content-Length", expected_size))
@@ -88,7 +93,11 @@ def download_file(url: str, dest: str, expected_size: int = 0):
                 if total > 0:
                     pct = downloaded * 100 // total
                     bar = "=" * (pct // 2) + " " * (50 - pct // 2)
-                    print(f"\r  [{bar}] {pct}% ({downloaded:,}/{total:,})", end="", flush=True)
+                    print(
+                        f"\r  [{bar}] {pct}% ({downloaded:,}/{total:,})",
+                        end="",
+                        flush=True,
+                    )
 
     print()
 
@@ -114,11 +123,14 @@ def verify_files(platform: str, dest_dir: str, release: dict):
         return
 
     import tempfile
+
     tmp = tempfile.NamedTemporaryFile(suffix=".json", delete=False)
     tmp.close()
 
     try:
-        download_file(db_asset["browser_download_url"], tmp.name, db_asset.get("size", 0))
+        download_file(
+            db_asset["browser_download_url"], tmp.name, db_asset.get("size", 0)
+        )
         with open(tmp.name) as f:
             db = json.load(f)
     finally:
@@ -142,7 +154,9 @@ def verify_files(platform: str, dest_dir: str, release: dict):
                     break
                 else:
                     mismatched += 1
-                    print(f"  MISMATCH: {name} (expected {sha1[:12]}..., got {local_sha1[:12]}...)")
+                    print(
+                        f"  MISMATCH: {name} (expected {sha1[:12]}..., got {local_sha1[:12]}...)"
+                    )
                     found = True
                     break
 
@@ -166,7 +180,7 @@ def show_info(platform: str, release: dict):
 
     print(f"  Platform: {platform}")
     print(f"  File: {asset['name']}")
-    print(f"  Size: {asset['size']:,} bytes ({asset['size'] / (1024*1024):.1f} MB)")
+    print(f"  Size: {asset['size']:,} bytes ({asset['size'] / (1024 * 1024):.1f} MB)")
     print(f"  Downloads: {asset.get('download_count', 'N/A')}")
     print(f"  Updated: {asset.get('updated_at', 'N/A')}")
 
@@ -200,7 +214,12 @@ Examples:
                     print(f"  - {p}")
             else:
                 print("No platform packs found in latest release")
-        except (urllib.error.URLError, urllib.error.HTTPError, OSError, json.JSONDecodeError) as e:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            OSError,
+            json.JSONDecodeError,
+        ) as e:
             print(f"Error: {e}")
         return
 
@@ -233,6 +252,7 @@ Examples:
         sys.exit(1)
 
     import tempfile
+
     fd, zip_path = tempfile.mkstemp(suffix=".zip")
     os.close(fd)
 
