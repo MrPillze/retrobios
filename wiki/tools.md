@@ -104,6 +104,16 @@ python scripts/generate_pack.py --platform retroarch --list-systems
 python scripts/generate_pack.py --all --target x86_64
 python scripts/generate_pack.py --platform retroarch --target switch
 
+# Source variants
+python scripts/generate_pack.py --platform retroarch --source platform  # YAML baseline only
+python scripts/generate_pack.py --platform retroarch --source truth     # emulator profiles only
+python scripts/generate_pack.py --platform retroarch --source full      # both (default)
+python scripts/generate_pack.py --all --all-variants --output-dir dist/ # all 6 combinations
+python scripts/generate_pack.py --all --all-variants --verify-packs --output-dir dist/
+
+# Data refresh
+python scripts/generate_pack.py --all --refresh-data  # force re-download data dirs
+
 # Install manifests (consumed by install.py)
 python scripts/generate_pack.py --all --manifest --output-dir install/
 python scripts/generate_pack.py --manifest-targets --output-dir install/targets/
@@ -123,6 +133,9 @@ If none exists, the platform version is kept and the discrepancy is reported.
 - `--from-md5`: look up a hash in the database, or build a custom pack with `--platform`/`--emulator`
 - `--from-md5-file`: same, reading hashes from a file (one per line, comments with #)
 - `--target`: filter by hardware target (e.g. `switch`, `rpi4`, `x86_64`)
+- `--source {platform,truth,full}`: select file source (platform YAML only, emulator profiles only, or both)
+- `--all-variants`: generate all 6 combinations of source x required_only
+- `--refresh-data`: force re-download all data directories before packing
 
 ### cross_reference.py
 
@@ -173,6 +186,7 @@ python scripts/refresh_data_dirs.py
 python scripts/refresh_data_dirs.py --key dolphin-sys --force
 python scripts/refresh_data_dirs.py --dry-run              # preview without downloading
 python scripts/refresh_data_dirs.py --platform batocera    # single platform only
+python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 ```
 
 ### Other tools
@@ -180,10 +194,10 @@ python scripts/refresh_data_dirs.py --platform batocera    # single platform onl
 | Script | Purpose |
 |--------|---------|
 | `common.py` | Shared library: hash computation, file resolution, platform config loading, emulator profiles, target filtering |
-| `dedup.py` | Deduplicate `bios/`, move duplicates to `.variants/`. RPG Maker and ScummVM excluded (NODEDUP) |
+| `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`), move duplicates to `.variants/`. RPG Maker and ScummVM excluded (NODEDUP) |
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline) |
-| `list_platforms.py` | List active platforms (used by CI) |
+| `list_platforms.py` | List active platforms (`--all` includes archived, used by CI) |
 | `download.py` | Download packs from GitHub releases (Python, multi-threaded) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
