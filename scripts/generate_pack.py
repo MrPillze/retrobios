@@ -1336,148 +1336,148 @@ def generate_pack(
                     zf.write(local_path, full_dest)
                 total_files += 1
 
-        # Core requirements: files platform's cores need but YAML doesn't declare
-        if emu_profiles is None:
-            emu_profiles = load_emulator_profiles(emulators_dir)
-        if source == "platform":
-            core_files = []
-        elif precomputed_extras is not None:
-            core_files = precomputed_extras
-        elif system_filter and source != "truth":
-            core_files = []
-        else:
-            core_files = _collect_emulator_extras(
-                config,
-                emulators_dir,
-                db,
-                seen_destinations,
-                base_dest,
-                emu_profiles,
-                target_cores=target_cores,
-                include_all=(source == "truth"),
-            )
+      # Core requirements: files platform's cores need but YAML doesn't declare
+      if emu_profiles is None:
+          emu_profiles = load_emulator_profiles(emulators_dir)
+      if source == "platform":
+          core_files = []
+      elif precomputed_extras is not None:
+          core_files = precomputed_extras
+      elif system_filter and source != "truth":
+          core_files = []
+      else:
+          core_files = _collect_emulator_extras(
+              config,
+              emulators_dir,
+              db,
+              seen_destinations,
+              base_dest,
+              emu_profiles,
+              target_cores=target_cores,
+              include_all=(source == "truth"),
+          )
 
-        # Truth mode + system_filter: filter core files by system ID
-        if system_filter and source == "truth" and core_files:
-            from common import _norm_system_id
+      # Truth mode + system_filter: filter core files by system ID
+      if system_filter and source == "truth" and core_files:
+          from common import _norm_system_id
 
-            norm_filter = {_norm_system_id(s) for s in system_filter} | set(
-                system_filter
-            )
-            emu_system_map: dict[str, set[str]] = {}
-            for _emu_name, _p in (emu_profiles or {}).items():
-                raw = set(_p.get("systems", []))
-                norm = {_norm_system_id(s) for s in raw}
-                combined = raw | norm
-                emu_system_map[_emu_name] = combined
-                _display = _p.get("emulator", "")
-                if _display and _display != _emu_name:
-                    emu_system_map[_display] = combined
-            core_files = [
-                fe
-                for fe in core_files
-                if emu_system_map.get(fe.get("source_emulator", ""), set())
-                & norm_filter
-            ]
-        core_count = 0
-        for fe in core_files:
-            if required_only and fe.get("required") is False:
-                continue
-            dest = _sanitize_path(fe.get("destination", fe["name"]))
-            if not dest:
-                continue
-            # Core extras: _collect_emulator_extras already adjusted
-            # destinations for slug-based platforms.  Apply the effective
-            # prefix (base_dest, or inferred from YAML when base_dest is
-            # empty — e.g. RetroDECK infers "bios").
-            extras_pfx = _detect_extras_prefix(config, base_dest)
-            if extras_pfx:
-                if not dest.startswith(f"{extras_pfx}/"):
-                    full_dest = f"{extras_pfx}/{dest}"
-                else:
-                    full_dest = dest
-            else:
-                full_dest = dest
-            if full_dest in seen_destinations:
-                continue
-            # Skip case-insensitive duplicates (Windows/macOS FS safety)
-            if full_dest.lower() in seen_lower and case_insensitive:
-                continue
-            # Skip file/directory path conflicts (e.g., SGB1.sfc file vs SGB1.sfc/ dir)
-            if _has_path_conflict(full_dest, seen_destinations, seen_parents):
-                continue
+          norm_filter = {_norm_system_id(s) for s in system_filter} | set(
+              system_filter
+          )
+          emu_system_map: dict[str, set[str]] = {}
+          for _emu_name, _p in (emu_profiles or {}).items():
+              raw = set(_p.get("systems", []))
+              norm = {_norm_system_id(s) for s in raw}
+              combined = raw | norm
+              emu_system_map[_emu_name] = combined
+              _display = _p.get("emulator", "")
+              if _display and _display != _emu_name:
+                  emu_system_map[_display] = combined
+          core_files = [
+              fe
+              for fe in core_files
+              if emu_system_map.get(fe.get("source_emulator", ""), set())
+              & norm_filter
+          ]
+      core_count = 0
+      for fe in core_files:
+          if required_only and fe.get("required") is False:
+              continue
+          dest = _sanitize_path(fe.get("destination", fe["name"]))
+          if not dest:
+              continue
+          # Core extras: _collect_emulator_extras already adjusted
+          # destinations for slug-based platforms.  Apply the effective
+          # prefix (base_dest, or inferred from YAML when base_dest is
+          # empty — e.g. RetroDECK infers "bios").
+          extras_pfx = _detect_extras_prefix(config, base_dest)
+          if extras_pfx:
+              if not dest.startswith(f"{extras_pfx}/"):
+                  full_dest = f"{extras_pfx}/{dest}"
+              else:
+                  full_dest = dest
+          else:
+              full_dest = dest
+          if full_dest in seen_destinations:
+              continue
+          # Skip case-insensitive duplicates (Windows/macOS FS safety)
+          if full_dest.lower() in seen_lower and case_insensitive:
+              continue
+          # Skip file/directory path conflicts (e.g., SGB1.sfc file vs SGB1.sfc/ dir)
+          if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+              continue
 
-            dest_hint = fe.get("destination", "")
-            local_path, status = resolve_file(
-                fe,
-                db,
-                bios_dir,
-                zip_contents,
-                dest_hint=dest_hint,
-                data_dir_registry=data_registry,
-            )
-            if status in ("not_found", "external", "user_provided"):
-                continue
+          dest_hint = fe.get("destination", "")
+          local_path, status = resolve_file(
+              fe,
+              db,
+              bios_dir,
+              zip_contents,
+              dest_hint=dest_hint,
+              data_dir_registry=data_registry,
+          )
+          if status in ("not_found", "external", "user_provided"):
+              continue
 
-            if local_path.endswith(".zip"):
-                _normalize_zip_for_pack(local_path, full_dest, zf)
-            else:
-                zf.write(local_path, full_dest)
-            seen_destinations.add(full_dest)
-            _register_path(full_dest, seen_destinations, seen_parents)
-            if case_insensitive:
-                seen_lower.add(full_dest.lower())
-            core_count += 1
-            total_files += 1
+          if local_path.endswith(".zip"):
+              _normalize_zip_for_pack(local_path, full_dest, zf)
+          else:
+              zf.write(local_path, full_dest)
+          seen_destinations.add(full_dest)
+          _register_path(full_dest, seen_destinations, seen_parents)
+          if case_insensitive:
+              seen_lower.add(full_dest.lower())
+          core_count += 1
+          total_files += 1
 
-        # Data directories from _data_dirs.yml
-        for sys_id, system in sorted(pack_systems.items()):
-            for dd in system.get("data_directories", []):
-                ref_key = dd.get("ref", "")
-                if not ref_key or not data_registry or ref_key not in data_registry:
-                    continue
-                entry = data_registry[ref_key]
-                allowed = entry.get("for_platforms")
-                if allowed and platform_name not in allowed:
-                    continue
-                local_path = entry.get("local_cache", "")
-                if not local_path or not os.path.isdir(local_path):
-                    print(
-                        f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py"
-                    )
-                    continue
-                dd_dest = dd.get("destination", "")
-                if base_dest and dd_dest:
-                    dd_prefix = f"{base_dest}/{dd_dest}"
-                elif base_dest:
-                    dd_prefix = base_dest
-                else:
-                    dd_prefix = dd_dest
-                for root, _dirs, filenames in os.walk(local_path):
-                    for fname in filenames:
-                        src = os.path.join(root, fname)
-                        rel = os.path.relpath(src, local_path)
-                        full = f"{dd_prefix}/{rel}"
-                        if full in seen_destinations or (
-                            full.lower() in seen_lower and case_insensitive
-                        ):
-                            continue
-                        if _has_path_conflict(full, seen_destinations, seen_parents):
-                            continue
-                        seen_destinations.add(full)
-                        _register_path(full, seen_destinations, seen_parents)
-                        if case_insensitive:
-                            seen_lower.add(full.lower())
-                        zf.write(src, full)
-                        total_files += 1
+      # Data directories from _data_dirs.yml
+      for sys_id, system in sorted(pack_systems.items()):
+          for dd in system.get("data_directories", []):
+              ref_key = dd.get("ref", "")
+              if not ref_key or not data_registry or ref_key not in data_registry:
+                  continue
+              entry = data_registry[ref_key]
+              allowed = entry.get("for_platforms")
+              if allowed and platform_name not in allowed:
+                  continue
+              local_path = entry.get("local_cache", "")
+              if not local_path or not os.path.isdir(local_path):
+                  print(
+                      f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py"
+                  )
+                  continue
+              dd_dest = dd.get("destination", "")
+              if base_dest and dd_dest:
+                  dd_prefix = f"{base_dest}/{dd_dest}"
+              elif base_dest:
+                  dd_prefix = base_dest
+              else:
+                  dd_prefix = dd_dest
+              for root, _dirs, filenames in os.walk(local_path):
+                  for fname in filenames:
+                      src = os.path.join(root, fname)
+                      rel = os.path.relpath(src, local_path)
+                      full = f"{dd_prefix}/{rel}"
+                      if full in seen_destinations or (
+                          full.lower() in seen_lower and case_insensitive
+                      ):
+                          continue
+                      if _has_path_conflict(full, seen_destinations, seen_parents):
+                          continue
+                      seen_destinations.add(full)
+                      _register_path(full, seen_destinations, seen_parents)
+                      if case_insensitive:
+                          seen_lower.add(full.lower())
+                      zf.write(src, full)
+                      total_files += 1
 
-        # README.txt for users -personalized step-by-step per platform
-        num_systems = len(pack_systems)
-        readme_text = _build_readme(
-            platform_name, platform_display, base_dest, total_files, num_systems,
-            source=source,
-        )
-        zf.writestr("README.txt", readme_text)
+      # README.txt for users -personalized step-by-step per platform
+      num_systems = len(pack_systems)
+      readme_text = _build_readme(
+          platform_name, platform_display, base_dest, total_files, num_systems,
+          source=source,
+      )
+      zf.writestr("README.txt", readme_text)
 
     files_ok = sum(1 for s in file_status.values() if s == "ok")
     files_untested = sum(1 for s in file_status.values() if s == "untested")
