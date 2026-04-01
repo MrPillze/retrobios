@@ -2099,6 +2099,13 @@ def main():
     for d in GENERATED_DIRS:
         (docs / d).mkdir(parents=True, exist_ok=True)
 
+    # Copy stylesheet if source exists
+    css_src = Path("docs_assets") / "extra.css"
+    css_dest = docs / "stylesheets" / "extra.css"
+    if css_src.exists():
+        css_dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(css_src, css_dest)
+
     registry_path = Path(args.platforms_dir) / "_registry.yml"
     registry = {}
     if registry_path.exists():
