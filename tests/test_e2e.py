@@ -4451,5 +4451,35 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(result["core_version"], "v1.0.0.03")
 
 
+    def _load_config(self, platform_name: str) -> dict:
+        return load_platform_config(platform_name, self.platforms_dir)
+
+    def test_200_find_undeclared_include_all(self):
+        """include_all=True returns ALL core files, including declared ones."""
+        from verify import find_undeclared_files
+
+        config = self._load_config("test_existence")
+        profiles = load_emulator_profiles(self.emulators_dir)
+        # Without include_all: only undeclared files returned
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles
+        )
+        undeclared_names = {u["name"] for u in undeclared}
+        # present_req.bin is declared in platform YAML, should NOT be in undeclared
+        self.assertNotIn("present_req.bin", undeclared_names)
+
+        # With include_all: ALL core files returned, including declared ones
+        all_files = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles, include_all=True
+        )
+        all_names = {u["name"] for u in all_files}
+        # present_req.bin IS declared but should be returned with include_all
+        self.assertIn("present_req.bin", all_names)
+        # undeclared files should still be present
+        self.assertIn("undeclared_req.bin", all_names)
+        # Launcher/alias files should still be excluded
+        self.assertNotIn("launcher_bios.bin", all_names)
+
+
 if __name__ == "__main__":
     unittest.main()

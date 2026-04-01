@@ -313,6 +313,7 @@ def find_undeclared_files(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     data_names: set[str] | None = None,
+    include_all: bool = False,
 ) -> list[dict]:
     """Find files needed by cores but not declared in platform config."""
     # Collect all filenames declared by this platform, enriched with
@@ -385,12 +386,13 @@ def find_undeclared_files(
             archive = f.get("archive")
 
             # Skip files declared by the platform (by name or archive)
-            if fname in declared_names:
-                seen_files.add(fname)
-                continue
-            if archive and archive in declared_names:
-                seen_files.add(fname)
-                continue
+            if not include_all:
+                if fname in declared_names:
+                    seen_files.add(fname)
+                    continue
+                if archive and archive in declared_names:
+                    seen_files.add(fname)
+                    continue
 
             seen_files.add(fname)
 
