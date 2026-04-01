@@ -457,6 +457,7 @@ def _collect_emulator_extras(
     base_dest: str,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
+    include_all: bool = False,
 ) -> list[dict]:
     """Collect core requirement files from emulator profiles not in the platform pack.
 
@@ -491,7 +492,8 @@ def _collect_emulator_extras(
             norm_map[_norm_system_id(sid)] = sid
 
     undeclared = find_undeclared_files(
-        config, emulators_dir, db, emu_profiles, target_cores=target_cores
+        config, emulators_dir, db, emu_profiles, target_cores=target_cores,
+        include_all=include_all,
     )
     extras = []
     seen_dests: set[str] = set(seen)

@@ -4480,6 +4480,35 @@ struct BurnDriver BurnDrvneogeo = {
         # Launcher/alias files should still be excluded
         self.assertNotIn("launcher_bios.bin", all_names)
 
+    def test_201_collect_emulator_extras_include_all(self):
+        """include_all=True passes through to find_undeclared_files."""
+        from generate_pack import _collect_emulator_extras
+
+        config = self._load_config("test_existence")
+        profiles = load_emulator_profiles(self.emulators_dir)
+        base_dest = config.get("base_destination", "")
+
+        # Default call must succeed without TypeError
+        extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db, set(), base_dest, profiles
+        )
+        self.assertIsInstance(extras, list)
+
+        # include_all=True must be accepted and return a list
+        all_extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db, set(), base_dest, profiles,
+            include_all=True,
+        )
+        self.assertIsInstance(all_extras, list)
+
+        # include_all=True is a superset: at least as many entries as default
+        all_names = {e["name"] for e in all_extras}
+        default_names = {e["name"] for e in extras}
+        self.assertGreaterEqual(len(all_names), len(default_names))
+        # All default entries are present in include_all result
+        for name in default_names:
+            self.assertIn(name, all_names)
+
 
 if __name__ == "__main__":
     unittest.main()
