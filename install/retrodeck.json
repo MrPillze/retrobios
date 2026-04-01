@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-04-01T09:05:30Z",
+  "generated": "2026-04-01T14:43:08Z",
   "base_destination": "",
   "detect": [
     {
@@ -14,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 3127,
-  "total_size": 5865074692,
+  "total_files": 3144,
+  "total_size": 5871582893,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -13776,6 +13777,15 @@
       ]
     },
     {
+      "dest": "kick31.rom",
+      "sha1": "3b7f1493b27e212830f989f26ca76c02049f09ca",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick31.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
       "dest": "kick.rom",
       "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
       "size": 262144,
@@ -13908,6 +13918,24 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "Amiberry"
+      ]
+    },
+    {
+      "dest": "BB01R4_OS.ROM",
+      "sha1": "decde89fbae90adb591ad2fc553d35f49030c129",
+      "size": 16384,
+      "repo_path": "bios/Atari/400-800/BB01R4_OS.ROM",
+      "cores": [
+        "Atari800"
+      ]
+    },
+    {
+      "dest": "XEGAME.ROM",
+      "sha1": "a107db7f16a1129cf9d933c9cf4f013b068c9e82",
+      "size": 8192,
+      "repo_path": "bios/Atari/400-800/XEGAME.ROM",
+      "cores": [
+        "Atari800"
       ]
     },
     {
@@ -14203,6 +14231,15 @@
       "sha1": "c5d283604beebb3d832f15a0b3fc60d10dd4bddc",
       "size": 6144,
       "repo_path": "bios/Nintendo/SNES/dsp1.program.rom",
+      "cores": [
+        "bsnes"
+      ]
+    },
+    {
+      "dest": "st018.data.rom",
+      "sha1": "b19c0f8f207d62fdabf4bf71442826063bccc626",
+      "size": 32768,
+      "repo_path": "bios/Nintendo/SNES/st018.data.rom",
       "cores": [
         "bsnes"
       ]
@@ -16165,6 +16202,15 @@
       ]
     },
     {
+      "dest": "ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
       "dest": "hiscore.dat",
       "sha1": "7381472bf046126257e51a0124e4553282f020e5",
       "size": 322458,
@@ -16344,10 +16390,37 @@
       ]
     },
     {
+      "dest": "amiga-os-204.rom",
+      "sha1": "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-204.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
       "dest": "amiga-os-205.rom",
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-120.rom",
+      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-310-a1200.rom",
+      "sha1": "e21545723fe8374e91342617604f1b3d703094f1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
       "cores": [
         "FS-UAE"
       ]
@@ -16362,10 +16435,46 @@
       ]
     },
     {
+      "dest": "amiga-os-310-a4000.rom",
+      "sha1": "5fe04842d04a489720f0f4bb0e46948199406f49",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-310-cd32.rom",
+      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-ext-310-cd32.rom",
+      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
       "dest": "cd32fmv.rom",
       "sha1": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
       "size": 262144,
       "repo_path": "bios/Commodore/Amiga/cd32fmv.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-ext-130-cdtv.rom",
+      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "FS-UAE"
       ]
@@ -16773,6 +16882,15 @@
       "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "Genesis Plus GX"
+      ]
+    },
+    {
+      "dest": "ROM",
+      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
+      "size": 131072,
+      "repo_path": "bios/Apple/Apple IIGS/ROM",
+      "cores": [
+        "GSplus"
       ]
     },
     {
@@ -17570,6 +17688,15 @@
       ]
     },
     {
+      "dest": "bctvidbs.zip",
+      "sha1": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
+      "size": 3753,
+      "repo_path": "bios/Arcade/Arcade/bctvidbs.zip",
+      "cores": [
+        "MAME 2009"
+      ]
+    },
+    {
       "dest": "cd32.zip",
       "sha1": "2b43d67e90767a43b435b3a9f504346cff0f64ca",
       "size": 673571,
@@ -17983,6 +18110,60 @@
       "repo_path": "bios/Nintendo/Nintendo 64DD/Mupen64plus/font.ttf",
       "cores": [
         "Mupen64Plus-Next"
+      ]
+    },
+    {
+      "dest": "np2/2608_bd.wav",
+      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
+      "size": 19192,
+      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_sd.wav",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_top.wav",
+      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
+      "size": 57016,
+      "repo_path": "bios/NEC/PC-98/2608_top.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_hh.wav",
+      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
+      "size": 36722,
+      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_tom.wav",
+      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
+      "size": 23092,
+      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
+      "dest": "np2/2608_rim.wav",
+      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
+      "size": 5288,
+      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
+      "cores": [
+        "nekop2"
       ]
     },
     {
@@ -19684,6 +19865,15 @@
       ]
     },
     {
+      "dest": "quasi88/n88jisho.rom",
+      "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
+      "size": 524288,
+      "repo_path": "bios/NEC/PC-98/n88jisho.rom",
+      "cores": [
+        "QUASI88"
+      ]
+    },
+    {
       "dest": "quasi88/font.rom",
       "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
       "size": 288768,
@@ -19708,6 +19898,15 @@
       "repo_path": "bios/NEC/PC-88/font3.rom",
       "cores": [
         "QUASI88"
+      ]
+    },
+    {
+      "dest": "dc_bios.bin",
+      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "cores": [
+        "Redream"
       ]
     },
     {
@@ -19780,6 +19979,15 @@
       "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
+      "cores": [
+        "Rustation"
+      ]
+    },
+    {
+      "dest": "scph102.bin",
+      "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "Rustation"
       ]
@@ -21418,6 +21626,15 @@
       ]
     },
     {
+      "dest": "alpha-basic.rom",
+      "sha1": "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/alpha-basic.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
       "dest": "mc10.rom",
       "sha1": "4afff2b4c120334481aab7b02c3552bf76f1bc43",
       "size": 8192,
@@ -21485,6 +21702,15 @@
       "sha1": "9079a477c3f22e46cebb1e68b61df5bd607c71a4",
       "size": 8192,
       "repo_path": "bios/Tandy/CoCo/mx1600extbas.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "cp400ext.rom",
+      "sha1": "a348a165009a6de1ae6fc18ed77137b38b6ed46d",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/cp400ext.rom",
       "cores": [
         "XRoar"
       ]
@@ -22381,15 +22607,6 @@
       ]
     },
     {
-      "dest": "ep128emu/roms/zx48.rom",
-      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
-      "cores": [
-        "ep128emu-core"
-      ]
-    },
-    {
       "dest": "fbalpha2012/hiscore.dat",
       "sha1": "7381472bf046126257e51a0124e4553282f020e5",
       "size": 322458,
@@ -22556,60 +22773,6 @@
       "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef",
       "size": 16384,
       "repo_path": "bios/NEC/PC-98/sound.rom",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_bd.wav",
-      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
-      "size": 19192,
-      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_sd.wav",
-      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
-      "size": 15558,
-      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_top.wav",
-      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
-      "size": 57016,
-      "repo_path": "bios/NEC/PC-98/2608_top.wav",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_hh.wav",
-      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
-      "size": 36722,
-      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_tom.wav",
-      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
-      "size": 23092,
-      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
-      "cores": [
-        "nekop2"
-      ]
-    },
-    {
-      "dest": "np2/2608_rim.wav",
-      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
-      "size": 5288,
-      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
       "cores": [
         "nekop2"
       ]
@@ -22916,15 +23079,6 @@
       "sha1": "82e11a177af6a5091dd67f50a2f4bafda84d6556",
       "size": 131072,
       "repo_path": "bios/NEC/PC-88/KANJI1.ROM",
-      "cores": [
-        "QUASI88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88jisho.rom",
-      "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
-      "size": 524288,
-      "repo_path": "bios/NEC/PC-98/n88jisho.rom",
       "cores": [
         "QUASI88"
       ]

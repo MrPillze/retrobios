@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-31T21:00:28Z",
+  "generated": "2026-04-01T14:41:41Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1523,
-  "total_size": 3888059911,
+  "total_files": 1540,
+  "total_size": 3891615271,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -2589,6 +2590,15 @@
       ]
     },
     {
+      "dest": "kick31.rom",
+      "sha1": "3b7f1493b27e212830f989f26ca76c02049f09ca",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick31.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
       "dest": "kick.rom",
       "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
       "size": 262144,
@@ -4110,6 +4120,15 @@
       ]
     },
     {
+      "dest": "Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "AmstradCPC/os464.rom",
       "sha1": "475c8080065a7aa9984daca0415a3d70a5305be2",
       "size": 16384,
@@ -4164,6 +4183,15 @@
       ]
     },
     {
+      "dest": "AmstradCPC/amsdos.rom",
+      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
+      "size": 16384,
+      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "AppleII/apple2o.rom",
       "sha1": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "size": 12288,
@@ -4200,6 +4228,33 @@
       ]
     },
     {
+      "dest": "AppleII/apple2-character.rom",
+      "sha1": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
+      "size": 2048,
+      "repo_path": "bios/Apple/Apple II/apple2-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleII/apple2eu-character.rom",
+      "sha1": "7060de104046736529c1e8a687a0dd7b84f8c51b",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleII/apple2e-character.rom",
+      "sha1": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2e-character.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "AppleII/scsi.rom",
       "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
       "size": 8192,
@@ -4222,6 +4277,24 @@
       "sha1": "bc32bc0e8902946663998f56aea52be597d9e361",
       "size": 262144,
       "repo_path": "bios/Apple/Apple II/apple2gs.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleIIgs/apple2gs.chr",
+      "sha1": "34e2443e2ef960a36c047a09ed5a93f471797f89",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/apple2gs.chr",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "AppleIIgs/341s0632-2",
+      "sha1": "141d18c36a617ab9dce668445440d34354be0672",
+      "size": 4096,
+      "repo_path": "bios/Apple/Apple II/341s0632-2",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4263,6 +4336,15 @@
       ]
     },
     {
+      "dest": "DiskII/state-machine-16.rom",
+      "sha1": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
+      "size": 256,
+      "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "DiskII/boot-13.rom",
       "sha1": "afd060e6f35faf3bb0146fa889fc787adf56330a",
       "size": 256,
@@ -4285,6 +4367,15 @@
       "sha1": "dbe6ceeb5a5d7f2a3ef9777478b26a7fbc2ba0f6",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/exos10.bin",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Enterprise/exos20.bin",
+      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos20.bin",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4411,6 +4502,15 @@
       "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "MSX/msx-japanese.rom",
+      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -5160,6 +5260,15 @@
       "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph3000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1001_v20.bin",
+      "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
       "cores": [
         "DuckStation"
       ]
@@ -6085,6 +6194,15 @@
       ]
     },
     {
+      "dest": "MSX2PEXT.ROM",
+      "sha1": "fe0254cbfc11405b79e7c86c7769bd6322b04995",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2PEXT.ROM",
+      "cores": [
+        "fMSX"
+      ]
+    },
+    {
       "dest": "DISK.ROM",
       "sha1": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
       "size": 16384,
@@ -6649,6 +6767,15 @@
       "repo_path": "bios/Sega/Mega Drive/sk2chip.bin",
       "cores": [
         "Genesis Plus GX"
+      ]
+    },
+    {
+      "dest": "ROM",
+      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
+      "size": 131072,
+      "repo_path": "bios/Apple/Apple IIGS/ROM",
+      "cores": [
+        "GSplus"
       ]
     },
     {
@@ -8407,6 +8534,15 @@
       ]
     },
     {
+      "dest": "SegaCDBIOS9303.bin",
+      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
+      "size": 131072,
+      "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
+      "cores": [
+        "PicoDrive"
+      ]
+    },
+    {
       "dest": "us_scd1_9210.bin",
       "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
       "size": 131072,
@@ -8704,6 +8840,15 @@
       ]
     },
     {
+      "dest": "dc_bios.bin",
+      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "cores": [
+        "Redream"
+      ]
+    },
+    {
       "dest": "same_cdi/bios/cdimono2.zip",
       "sha1": "9492247203b71c12d88fad0a5437376941c7870a",
       "size": 244291,
@@ -8854,6 +8999,15 @@
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFreeTypeOt.sprx",
       "cores": [
         "shadps4"
+      ]
+    },
+    {
+      "dest": "BIOS.col",
+      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
+      "size": 8192,
+      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": [
+        "SMS Plus GX"
       ]
     },
     {
@@ -9070,6 +9224,15 @@
       "repo_path": "bios/Atari/2600/KVSHARED.WAV",
       "cores": [
         "Stella 2023"
+      ]
+    },
+    {
+      "dest": "MYTOWNS.ROM",
+      "sha1": "e245f8086df57ce6e48853f0e13525f738e5c4d8",
+      "size": 32,
+      "repo_path": "bios/Fujitsu/FM Towns/MYTOWNS.ROM",
+      "cores": [
+        "tsugaru"
       ]
     },
     {
@@ -10153,6 +10316,15 @@
       ]
     },
     {
+      "dest": "xmil/IPLROM.X1T",
+      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
+      "size": 32768,
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
       "dest": "xmil/FNT0808.X1",
       "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
       "size": 2048,
@@ -10270,6 +10442,24 @@
       ]
     },
     {
+      "dest": "bas13.rom",
+      "sha1": "28b92bebe35fa4f026a084416d6ea3b1552b63d3",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/bas13.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "bas12.rom",
+      "sha1": "0f14dc46c647510eb0b7bd3f53e33da07907d04f",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/bas12.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
       "dest": "bas11.rom",
       "sha1": "cecb7c24ff1e0ab5836e4a7a8eb1b8e01f1fded3",
       "size": 8192,
@@ -10279,10 +10469,64 @@
       ]
     },
     {
+      "dest": "bas10.rom",
+      "sha1": "1f08455cd48ce6a06132aea15c4778f264e19539",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/bas10.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "extbas11.rom",
+      "sha1": "ad927fb4f30746d820cb8b860ebb585e7f095dea",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/extbas11.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
       "dest": "extbas10.rom",
       "sha1": "7275f1e3f165ff6a4657e4e5e24cb8b817239f54",
       "size": 8192,
       "repo_path": "bios/Tandy/CoCo/extbas10.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "coco3.rom",
+      "sha1": "e0d82953fb6fd03768604933df1ce8bc51fc427d",
+      "size": 32768,
+      "repo_path": "bios/Tandy/CoCo/coco3.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "coco3p.rom",
+      "sha1": "631e383068b1f52a8f419f4114b69501b21cf379",
+      "size": 32768,
+      "repo_path": "bios/Tandy/CoCo/coco3p.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "mc10.rom",
+      "sha1": "4afff2b4c120334481aab7b02c3552bf76f1bc43",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/mc10.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "alice.rom",
+      "sha1": "c2166b91e6396a311f486832012aa43e0d2b19f8",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/alice.rom",
       "cores": [
         "XRoar"
       ]
@@ -10355,6 +10599,15 @@
       "sha1": "a348a165009a6de1ae6fc18ed77137b38b6ed46d",
       "size": 8192,
       "repo_path": "bios/Tandy/CoCo/cp400ext.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "disk11.rom",
+      "sha1": "10bdc5aa2d7d7f205f67b47b19003a4bd89defd1",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/disk11.rom",
       "cores": [
         "XRoar"
       ]
@@ -10990,100 +11243,10 @@
       ]
     },
     {
-      "dest": "Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AmstradCPC/amsdos.rom",
-      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
-      "size": 16384,
-      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleII/apple2-character.rom",
-      "sha1": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
-      "size": 2048,
-      "repo_path": "bios/Apple/Apple II/apple2-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleII/apple2eu-character.rom",
-      "sha1": "7060de104046736529c1e8a687a0dd7b84f8c51b",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleII/apple2e-character.rom",
-      "sha1": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2e-character.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleIIgs/apple2gs.chr",
-      "sha1": "34e2443e2ef960a36c047a09ed5a93f471797f89",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/apple2gs.chr",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "AppleIIgs/341s0632-2",
-      "sha1": "141d18c36a617ab9dce668445440d34354be0672",
-      "size": 4096,
-      "repo_path": "bios/Apple/Apple II/341s0632-2",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
       "dest": "ColecoVision/coleco.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "DiskII/state-machine-16.rom",
-      "sha1": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
-      "size": 256,
-      "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "Enterprise/exos20.bin",
-      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos20.bin",
-      "cores": [
-        "Clock Signal (CLK)"
-      ]
-    },
-    {
-      "dest": "MSX/msx-japanese.rom",
-      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -11410,15 +11573,6 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
-      ]
-    },
-    {
-      "dest": "xmil/IPLROM.X1T",
-      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
-      "size": 32768,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
-      "cores": [
-        "X Millennium"
       ]
     },
     {

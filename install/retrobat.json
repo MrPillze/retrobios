@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-03-31T21:01:36Z",
+  "generated": "2026-04-01T14:42:50Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -13,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1160,
-  "total_size": 4297510031,
+  "total_files": 1162,
+  "total_size": 4297772175,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -4454,6 +4455,15 @@
       ]
     },
     {
+      "dest": "ROM",
+      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
+      "size": 131072,
+      "repo_path": "bios/Apple/Apple IIGS/ROM",
+      "cores": [
+        "GSplus"
+      ]
+    },
+    {
       "dest": "c600.rom",
       "sha1": "d4181c9f046aafc3fb326b381baac809d9e38d16",
       "size": 256,
@@ -6353,6 +6363,15 @@
       ]
     },
     {
+      "dest": "SegaCDBIOS9303.bin",
+      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
+      "size": 131072,
+      "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
+      "cores": [
+        "PicoDrive"
+      ]
+    },
+    {
       "dest": "us_scd1_9210.bin",
       "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
       "size": 131072,
@@ -7104,6 +7123,15 @@
       ],
       "storage": "release",
       "release_asset": "PSP2UPDAT.PUP"
+    },
+    {
+      "dest": "xmil/IPLROM.X1T",
+      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
+      "size": 32768,
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
+      "cores": [
+        "X Millennium"
+      ]
     },
     {
       "dest": "xmil/FNT0808.X1",
@@ -8192,15 +8220,6 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
-      ]
-    },
-    {
-      "dest": "xmil/IPLROM.X1T",
-      "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
-      "size": 32768,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
-      "cores": [
-        "X Millennium"
       ]
     },
     {

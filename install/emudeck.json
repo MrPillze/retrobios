@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-31T21:00:40Z",
+  "generated": "2026-04-01T14:41:53Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -50,8 +51,8 @@
       }
     }
   ],
-  "total_files": 509,
-  "total_size": 3267803462,
+  "total_files": 526,
+  "total_size": 3276716358,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -933,10 +934,154 @@
       ]
     },
     {
+      "dest": "scph1000.bin",
+      "sha1": "343883a7b555646da8cee54aadd2795b6e7dd070",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1001.bin",
+      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
       "dest": "scph1002a.bin",
       "sha1": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002b.bin",
+      "sha1": "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1002c.bin",
+      "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "dtlh1100.bin",
+      "sha1": "73107d468fc7cb1d2c5b18b269715dd889ecef06",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/dtlh1100.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph3000.bin",
+      "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph3000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1001_v20.bin",
+      "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph3500.bin",
+      "sha1": "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph3500.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1001_v21.bin",
+      "sha1": "ca7af30b50d9756cbd764640126c454cff658479",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph5000.bin",
+      "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph5000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7000.bin",
+      "sha1": "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7000.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7000w.bin",
+      "sha1": "1b0dbdb23da9dc0776aac58d0755dc80fea20975",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7001.bin",
+      "sha1": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7001.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph7002.bin",
+      "sha1": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph7002.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph100.bin",
+      "sha1": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph100.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph101_v44.bin",
+      "sha1": "7771d6e90980408f753891648685def6dd42ef6d",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph101_v44.bin",
       "cores": [
         "DuckStation"
       ]
@@ -964,6 +1109,15 @@
       "sha1": "dbc7339e5d85827c095764fc077b41f78fd2ecae",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph102B.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "scph1000r.bin",
+      "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
       "cores": [
         "DuckStation"
       ]

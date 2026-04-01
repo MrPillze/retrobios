@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-03-31T21:01:26Z",
+  "generated": "2026-04-01T14:42:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1093,
-  "total_size": 3499462394,
+  "total_files": 1097,
+  "total_size": 3500142330,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -1988,6 +1989,15 @@
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
+      "dest": "kick31.rom",
+      "sha1": "3b7f1493b27e212830f989f26ca76c02049f09ca",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick31.rom",
       "cores": [
         "Amiberry"
       ]
@@ -4217,6 +4227,15 @@
       "repo_path": "bios/Sega/Mega Drive/sk2chip.bin",
       "cores": [
         "Genesis Plus GX"
+      ]
+    },
+    {
+      "dest": "ROM",
+      "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
+      "size": 131072,
+      "repo_path": "bios/Apple/Apple IIGS/ROM",
+      "cores": [
+        "GSplus"
       ]
     },
     {
@@ -6933,6 +6952,24 @@
       "sha1": "4a5851aa66eb426e9bb0bba196f1e02d48156068",
       "size": 8192,
       "repo_path": "bios/Dragon/Dragon/alpha-boot-v1.0.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "alpha-basic.rom",
+      "sha1": "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/alpha-basic.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "alice.rom",
+      "sha1": "c2166b91e6396a311f486832012aa43e0d2b19f8",
+      "size": 8192,
+      "repo_path": "bios/Tandy/CoCo/alice.rom",
       "cores": [
         "XRoar"
       ]

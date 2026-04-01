@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-03-31T21:00:57Z",
+  "generated": "2026-04-01T14:42:08Z",
   "base_destination": "system",
   "detect": [
     {
@@ -32,8 +33,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1609,
-  "total_size": 5248935496,
+  "total_files": 1620,
+  "total_size": 5255358024,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -3177,6 +3178,15 @@
       ]
     },
     {
+      "dest": "kick31.rom",
+      "sha1": "3b7f1493b27e212830f989f26ca76c02049f09ca",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/kick31.rom",
+      "cores": [
+        "Amiberry"
+      ]
+    },
+    {
       "dest": "kick.rom",
       "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
       "size": 262144,
@@ -3984,6 +3994,15 @@
       "repo_path": "bios/Microsoft/Xbox/cromwell_1024.bin",
       "cores": [
         "DirectXBox"
+      ]
+    },
+    {
+      "dest": "GC/USA/IPL.bin",
+      "sha1": "ef9194ab4804aa0aa8540d846caf291b28331165",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
+      "cores": [
+        "Dolphin"
       ]
     },
     {
@@ -5214,10 +5233,37 @@
       ]
     },
     {
+      "dest": "amiga-os-204.rom",
+      "sha1": "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-204.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
       "dest": "amiga-os-205.rom",
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-120.rom",
+      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-310-a1200.rom",
+      "sha1": "e21545723fe8374e91342617604f1b3d703094f1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
       "cores": [
         "FS-UAE"
       ]
@@ -5232,10 +5278,46 @@
       ]
     },
     {
+      "dest": "amiga-os-310-a4000.rom",
+      "sha1": "5fe04842d04a489720f0f4bb0e46948199406f49",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-os-310-cd32.rom",
+      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-ext-310-cd32.rom",
+      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
       "dest": "cd32fmv.rom",
       "sha1": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
       "size": 262144,
       "repo_path": "bios/Commodore/Amiga/cd32fmv.rom",
+      "cores": [
+        "FS-UAE"
+      ]
+    },
+    {
+      "dest": "amiga-ext-130-cdtv.rom",
+      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "FS-UAE"
       ]
@@ -9443,6 +9525,24 @@
       ]
     },
     {
+      "dest": "dc_bios.bin",
+      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "cores": [
+        "Redream"
+      ]
+    },
+    {
+      "dest": "dc_flash.bin",
+      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+      "size": 131072,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "cores": [
+        "Redream"
+      ]
+    },
+    {
       "dest": "scph_v11j.bin",
       "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
       "size": 524288,
@@ -9501,6 +9601,15 @@
       "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
+      "cores": [
+        "Rustation"
+      ]
+    },
+    {
+      "dest": "scph102.bin",
+      "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "Rustation"
       ]
@@ -10730,6 +10839,15 @@
       ]
     },
     {
+      "dest": "xmil/FNT0808.X1",
+      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "size": 2048,
+      "repo_path": "bios/Sharp/X1/FNT0808.X1",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
       "dest": "xmil/FNT0816.X1",
       "sha1": "4f06d20c997a79ee6af954b69498147789bf1847",
       "size": 4096,
@@ -11486,15 +11604,6 @@
       ]
     },
     {
-      "dest": "GC/USA/IPL.bin",
-      "sha1": "ef9194ab4804aa0aa8540d846caf291b28331165",
-      "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
-      "cores": [
-        "Dolphin"
-      ]
-    },
-    {
       "dest": "GC/EUR/IPL.bin",
       "sha1": "80b8744ff5e43585392f55546bd03a673d11ef5f",
       "size": 2097152,
@@ -12059,15 +12168,6 @@
       "repo_path": "bios/Arcade/Arcade/hiscore.dat",
       "cores": [
         "UME 2015"
-      ]
-    },
-    {
-      "dest": "xmil/FNT0808.X1",
-      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
-      "size": 2048,
-      "repo_path": "bios/Sharp/X1/FNT0808.X1",
-      "cores": [
-        "X Millennium"
       ]
     },
     {

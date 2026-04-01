@@ -1,9 +1,10 @@
 {
   "manifest_version": 1,
+  "source": "full",
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-04-01T09:05:31Z",
+  "generated": "2026-04-01T14:43:09Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -13,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 530,
-  "total_size": 1073883091,
+  "total_files": 535,
+  "total_size": 1076531155,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -2641,6 +2642,15 @@
       ]
     },
     {
+      "dest": "psx/psxonpsp660.bin",
+      "sha1": "96880d1ca92a016ff054be5159bb06fe03cb4e14",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/psxonpsp660.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
       "dest": "psx/ps1_rom.bin",
       "sha1": "c40146361eb8cf670b19fdc9759190257803cab7",
       "size": 524288,
@@ -2665,6 +2675,15 @@
       "repo_path": "bios/Microsoft/Xbox/cromwell_1024.bin",
       "cores": [
         "DirectXBox"
+      ]
+    },
+    {
+      "dest": "ngc/GC/USA/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
       ]
     },
     {
@@ -2764,6 +2783,15 @@
       "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/zx128.rom",
+      "cores": [
+        "ep128emu-core"
+      ]
+    },
+    {
+      "dest": "acpc/ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/zx48.rom",
       "cores": [
         "ep128emu-core"
       ]
@@ -3509,6 +3537,15 @@
       ]
     },
     {
+      "dest": "gamegear/BIOS.col",
+      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
+      "size": 8192,
+      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": [
+        "SMS Plus GX"
+      ]
+    },
+    {
       "dest": "j2me/squirreljme-0.3.0-fast.jar",
       "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
       "size": 2367241,
@@ -3612,6 +3649,15 @@
       "sha1": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
       "size": 32768,
       "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1T.44620f57",
+      "cores": [
+        "X Millennium"
+      ]
+    },
+    {
+      "dest": "x1/xmil/FNT0808.X1",
+      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "size": 2048,
+      "repo_path": "bios/Sharp/X1/FNT0808.X1",
       "cores": [
         "X Millennium"
       ]

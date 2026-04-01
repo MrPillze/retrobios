@@ -491,9 +491,18 @@ def _collect_emulator_extras(
         for sid in platform_systems:
             norm_map[_norm_system_id(sid)] = sid
 
+    # Use strict YAML names (no DB alias enrichment) so that files known
+    # under an alias still get packed at the emulator's expected path.
+    yaml_names: set[str] = set()
+    for system in config.get("systems", {}).values():
+        for fe in system.get("files", []):
+            name = fe.get("name", "")
+            if name:
+                yaml_names.add(name)
+
     undeclared = find_undeclared_files(
         config, emulators_dir, db, emu_profiles, target_cores=target_cores,
-        include_all=include_all,
+        include_all=include_all, declared_names=yaml_names,
     )
     extras = []
     seen_dests: set[str] = set(seen)
@@ -1497,7 +1506,7 @@ def generate_pack(
     elif source == "truth":
         print(
             f"  {zip_path}: {total_files} files packed (ground truth only), "
-            f"{', '.join(parts)} [{verification_mode}]"
+            f"{core_count} from emulator profiles [{verification_mode}]"
         )
     else:
         baseline = total_files - core_count
@@ -2708,8 +2717,9 @@ def main():
     )
     args = parser.parse_args()
 
-    # Quick-exit modes
-    if args.verify_packs:
+    # Quick-exit modes: --verify-packs alone = verify existing packs only
+    # Combined with --all-variants, generation runs first then verify
+    if args.verify_packs and not args.all_variants:
         _run_verify_packs(args)
         return
     if args.manifest_targets:

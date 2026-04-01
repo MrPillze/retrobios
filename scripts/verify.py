@@ -314,11 +314,16 @@ def find_undeclared_files(
     target_cores: set[str] | None = None,
     data_names: set[str] | None = None,
     include_all: bool = False,
+    declared_names: set[str] | None = None,
 ) -> list[dict]:
-    """Find files needed by cores but not declared in platform config."""
-    # Collect all filenames declared by this platform, enriched with
-    # canonical names from DB via MD5 (handles platform renaming)
-    declared_names = expand_platform_declared_names(config, db)
+    """Find files needed by cores but not declared in platform config.
+
+    declared_names overrides the default enriched set from
+    expand_platform_declared_names.  Pass a strict set (YAML names only)
+    when building packs so alias-only names still get packed.
+    """
+    if declared_names is None:
+        declared_names = expand_platform_declared_names(config, db)
 
     # Collect data_directory refs
     declared_dd: set[str] = set()
