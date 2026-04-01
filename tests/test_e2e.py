@@ -4573,5 +4573,113 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("_Truth_", bn)
 
 
+    def test_205_pack_source_platform_required(self):
+        """source='platform' + required_only=True."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_plat_req")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        zip_path = generate_pack(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emu_profiles=profiles,
+            emulators_dir=self.emulators_dir,
+            source="platform",
+            required_only=True,
+        )
+        self.assertIsNotNone(zip_path)
+        self.assertIn("_Platform_Required_", os.path.basename(zip_path))
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        self.assertTrue(any("present_req.bin" in n for n in names))
+        self.assertFalse(any("present_opt.bin" in n for n in names))
+
+    def test_206_pack_source_truth_required(self):
+        """source='truth' + required_only=True."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_truth_req")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        zip_path = generate_pack(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emu_profiles=profiles,
+            emulators_dir=self.emulators_dir,
+            source="truth",
+            required_only=True,
+        )
+        self.assertIsNotNone(zip_path)
+        self.assertIn("_Truth_Required_", os.path.basename(zip_path))
+
+    def test_207_manifest_source(self):
+        """generate_manifest respects source param."""
+        from generate_pack import generate_manifest
+
+        profiles = load_emulator_profiles(self.emulators_dir)
+        registry_path = os.path.join(self.platforms_dir, "_registry.yml")
+        if not os.path.exists(registry_path):
+            with open(registry_path, "w") as fh:
+                yaml.dump({"platforms": {}}, fh)
+        manifest_full = generate_manifest(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            registry_path, emulators_dir=self.emulators_dir, emu_profiles=profiles,
+            source="full",
+        )
+        manifest_plat = generate_manifest(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            registry_path, emulators_dir=self.emulators_dir, emu_profiles=profiles,
+            source="platform",
+        )
+        self.assertLessEqual(manifest_plat["total_files"], manifest_full["total_files"])
+        self.assertEqual(manifest_plat.get("source"), "platform")
+        self.assertEqual(manifest_full.get("source"), "full")
+
+    def test_208_split_source_tag_in_dirname(self):
+        """generate_split_packs uses source tag in split directory name."""
+        from generate_pack import generate_split_packs
+
+        output_dir = os.path.join(self.root, "split_src")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        generate_split_packs(
+            "test_existence", self.platforms_dir, self.db, self.bios_dir,
+            output_dir, emulators_dir=self.emulators_dir, emu_profiles=profiles,
+            source="platform",
+        )
+        entries = os.listdir(output_dir)
+        platform_dirs = [e for e in entries if "_Platform_" in e and "Split" in e]
+        self.assertTrue(len(platform_dirs) > 0, f"No _Platform_ split dir in {entries}")
+
+    def test_209_all_variants_generates_6_zips(self):
+        """All 6 source x required combinations produce unique ZIPs."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_allvar")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        variants = [
+            ("full", False), ("full", True),
+            ("platform", False), ("platform", True),
+            ("truth", False), ("truth", True),
+        ]
+        for source, required_only in variants:
+            generate_pack(
+                "test_existence", self.platforms_dir, self.db, self.bios_dir,
+                output_dir, emu_profiles=profiles, emulators_dir=self.emulators_dir,
+                source=source, required_only=required_only,
+            )
+        zips = [f for f in os.listdir(output_dir) if f.endswith(".zip")]
+        self.assertEqual(len(zips), 6, f"Expected 6 ZIPs, got {len(zips)}: {zips}")
+        self.assertEqual(len(set(zips)), 6)
+
+
 if __name__ == "__main__":
     unittest.main()
