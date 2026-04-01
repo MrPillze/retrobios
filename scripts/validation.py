@@ -204,35 +204,56 @@ def build_ground_truth(filename: str, validation_index: dict[str, dict]) -> list
     return result
 
 
+def _emulators_for_check(
+    check_type: str, per_emulator: dict[str, dict],
+) -> list[str]:
+    """Return emulator names that validate a specific check type."""
+    result = []
+    for emu, detail in per_emulator.items():
+        emu_checks = detail.get("checks", [])
+        if check_type in emu_checks:
+            result.append(emu)
+        # adler32 is stored as known_hash, not always in validation list
+        if check_type == "adler32" and detail.get("expected", {}).get("adler32"):
+            if emu not in result:
+                result.append(emu)
+    return sorted(result)
+
+
 def check_file_validation(
     local_path: str,
     filename: str,
     validation_index: dict[str, dict],
     bios_dir: str = "bios",
-) -> str | None:
+) -> tuple[str, list[str]] | None:
     """Check emulator-level validation on a resolved file.
 
     Supports: size (exact/min/max), crc32, md5, sha1, adler32,
     signature (RSA-2048 PKCS1v15 SHA256), crypto (AES-128-CBC + SHA256).
 
     Returns None if all checks pass or no validation applies.
-    Returns a reason string if a check fails.
+    Returns (reason, emulators) tuple on failure, where *emulators*
+    lists only those cores whose check actually failed.
     """
     entry = validation_index.get(filename)
     if not entry:
         return None
     checks = entry["checks"]
+    pe = entry.get("per_emulator", {})
 
     # Size checks -sizes is a set of accepted values
     if "size" in checks:
         actual_size = os.path.getsize(local_path)
         if entry["sizes"] and actual_size not in entry["sizes"]:
             expected = ",".join(str(s) for s in sorted(entry["sizes"]))
-            return f"size mismatch: got {actual_size}, accepted [{expected}]"
+            emus = _emulators_for_check("size", pe)
+            return f"size mismatch: got {actual_size}, accepted [{expected}]", emus
         if entry["min_size"] is not None and actual_size < entry["min_size"]:
-            return f"size too small: min {entry['min_size']}, got {actual_size}"
+            emus = _emulators_for_check("size", pe)
+            return f"size too small: min {entry['min_size']}, got {actual_size}", emus
         if entry["max_size"] is not None and actual_size > entry["max_size"]:
-            return f"size too large: max {entry['max_size']}, got {actual_size}"
+            emus = _emulators_for_check("size", pe)
+            return f"size too large: max {entry['max_size']}, got {actual_size}", emus
 
     # Hash checks -compute once, reuse for all hash types.
     # Each hash field is a set of accepted values (multiple valid ROM versions).
@@ -245,14 +266,23 @@ def check_file_validation(
             if hash_type in checks and entry[hash_type]:
                 if hashes[hash_type].lower() not in entry[hash_type]:
                     expected = ",".join(sorted(entry[hash_type]))
-                    return f"{hash_type} mismatch: got {hashes[hash_type]}, accepted [{expected}]"
+                    emus = _emulators_for_check(hash_type, pe)
+                    return (
+                        f"{hash_type} mismatch: got {hashes[hash_type]}, "
+                        f"accepted [{expected}]",
+                        emus,
+                    )
         if entry["adler32"]:
             actual_adler = hashes["adler32"].lower()
             if entry.get("adler32_byteswap"):
                 actual_adler = _adler32_byteswapped(local_path)
             if actual_adler not in entry["adler32"]:
                 expected = ",".join(sorted(entry["adler32"]))
-                return f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]"
+                emus = _emulators_for_check("adler32", pe)
+                return (
+                    f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]",
+                    emus,
+                )
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
@@ -260,7 +290,8 @@ def check_file_validation(
 
         crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
         if crypto_reason:
-            return crypto_reason
+            emus = sorted(entry.get("emulators", []))
+            return crypto_reason, emus
 
     return None
 

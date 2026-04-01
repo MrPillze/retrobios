@@ -1137,9 +1137,11 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         path = self.files["present_opt.bin"]["path"]
-        reason = check_file_validation(path, "present_opt.bin", index)
-        self.assertIsNotNone(reason)
+        result = check_file_validation(path, "present_opt.bin", index)
+        self.assertIsNotNone(result)
+        reason, emus = result
         self.assertIn("size mismatch", reason)
+        self.assertIsInstance(emus, list)
 
     def test_73_validation_crc32_pass(self):
         """File with correct CRC32 passes validation."""
@@ -1154,9 +1156,11 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         path = self.files["no_md5.bin"]["path"]
-        reason = check_file_validation(path, "no_md5.bin", index)
-        self.assertIsNotNone(reason)
+        result = check_file_validation(path, "no_md5.bin", index)
+        self.assertIsNotNone(result)
+        reason, emus = result
         self.assertIn("crc32 mismatch", reason)
+        self.assertIsInstance(emus, list)
 
     def test_75_validation_applied_in_existence_mode(self):
         """Existence mode reports discrepancy when validation fails, keeps OK."""
@@ -1212,9 +1216,11 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
         path = self.files["alias_target.bin"]["path"]
-        reason = check_file_validation(path, "alias_target.bin", index)
-        self.assertIsNotNone(reason)
+        result = check_file_validation(path, "alias_target.bin", index)
+        self.assertIsNotNone(result)
+        reason, emus = result
         self.assertIn("md5 mismatch", reason)
+        self.assertIsInstance(emus, list)
 
     def test_81_validation_index_has_md5_sha1(self):
         """Validation index stores md5 and sha1 when declared."""

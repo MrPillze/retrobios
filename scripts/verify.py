@@ -103,8 +103,9 @@ def verify_entry_existence(
         return {"name": name, "status": Status.MISSING, "required": required}
     result = {"name": name, "status": Status.OK, "required": required}
     if validation_index:
-        reason = check_file_validation(local_path, name, validation_index)
-        if reason:
+        check = check_file_validation(local_path, name, validation_index)
+        if check:
+            reason, emus_list = check
             suppressed = False
             if db:
                 better = _find_best_variant(
@@ -113,8 +114,7 @@ def verify_entry_existence(
                 if better:
                     suppressed = True
             if not suppressed:
-                ventry = validation_index.get(name, {})
-                emus = ", ".join(ventry.get("emulators", []))
+                emus = ", ".join(emus_list)
                 result["discrepancy"] = (
                     f"file present (OK) but {emus} says {reason}"
                 )
@@ -608,24 +608,25 @@ def _find_best_variant(
 
     # Pass 1: hash-based lookup from emulator expected values
     ventry = validation_index[fname]
+    indexes = db.get("indexes", {})
     for hash_type, db_index_key in (
-        ("sha1", "by_sha1"),
+        ("sha1", None),
         ("md5", "by_md5"),
         ("crc32", "by_crc32"),
+        ("sha256", "by_sha256"),
     ):
         expected = ventry.get(hash_type)
         if not expected:
             continue
-        db_index = db.get("indexes", {}).get(db_index_key, {})
-        if not db_index:
-            # by_sha1 is the files dict itself (sha1 = primary key)
-            if hash_type == "sha1":
-                for h in expected:
-                    if h in files_db:
-                        result = _try_candidate(h)
-                        if result:
-                            return result
+        if db_index_key is None:
+            # SHA1 is the primary key of files_db
+            for h in expected:
+                if h in files_db:
+                    result = _try_candidate(h)
+                    if result:
+                        return result
             continue
+        db_index = indexes.get(db_index_key, {})
         for h in expected:
             entries = db_index.get(h)
             if not entries:
@@ -640,16 +641,7 @@ def _find_best_variant(
                 if result:
                     return result
 
-    # Pass 2: SHA256 scan (no index, but emulators like ares validate by sha256)
-    expected_sha256 = ventry.get("sha256")
-    if expected_sha256:
-        for sha1, entry in files_db.items():
-            if entry.get("sha256", "").lower() in expected_sha256:
-                result = _try_candidate(sha1)
-                if result:
-                    return result
-
-    # Pass 3: name-based lookup (aliases, .variants/ with same filename)
+    # Pass 2: name-based lookup (aliases, .variants/ with same filename)
     by_name = db.get("indexes", {}).get("by_name", {})
     for sha1 in by_name.get(fname, []):
         result = _try_candidate(sha1)
@@ -732,8 +724,11 @@ def verify_platform(
                 # mismatches are reported as discrepancies, not failures.
                 if result["status"] == Status.OK and local_path and validation_index:
                     fname = file_entry.get("name", "")
-                    reason = check_file_validation(local_path, fname, validation_index)
-                    if reason:
+                    check = check_file_validation(
+                        local_path, fname, validation_index,
+                    )
+                    if check:
+                        reason, emus_list = check
                         better = _find_best_variant(
                             file_entry,
                             db,
@@ -741,8 +736,7 @@ def verify_platform(
                             validation_index,
                         )
                         if not better:
-                            ventry = validation_index.get(fname, {})
-                            emus = ", ".join(ventry.get("emulators", []))
+                            emus = ", ".join(emus_list)
                             result["discrepancy"] = (
                                 f"{platform} says OK but {emus} says {reason}"
                             )
@@ -1233,8 +1227,9 @@ def verify_emulator(
                 result = {"name": name, "status": Status.MISSING, "required": required}
             else:
                 # Apply emulator validation
-                reason = check_file_validation(local_path, name, validation_index)
-                if reason:
+                check = check_file_validation(local_path, name, validation_index)
+                if check:
+                    reason, _emus = check
                     result = {
                         "name": name,
                         "status": Status.UNTESTED,

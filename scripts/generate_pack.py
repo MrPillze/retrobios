@@ -1308,10 +1308,11 @@ def generate_pack(
                     and validation_index
                 ):
                     fname = file_entry.get("name", "")
-                    reason = check_file_validation(
+                    check = check_file_validation(
                         local_path, fname, validation_index, bios_dir
                     )
-                    if reason:
+                    if check:
+                        reason, emus_list = check
                         better = _find_candidate_satisfying_both(
                             file_entry,
                             db,
@@ -1322,8 +1323,7 @@ def generate_pack(
                         if better:
                             local_path = better
                         else:
-                            ventry = validation_index.get(fname, {})
-                            emus = ", ".join(ventry.get("emulators", []))
+                            emus = ", ".join(emus_list)
                             file_reasons.setdefault(
                                 dedup_key,
                                 f"{platform_display} says OK but {emus} says {reason}",

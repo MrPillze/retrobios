@@ -168,6 +168,7 @@ def build_indexes(files: dict, aliases: dict) -> dict:
     by_md5 = {}
     by_name = {}
     by_crc32 = {}
+    by_sha256 = {}
     by_path_suffix = {}
 
     for sha1, entry in files.items():
@@ -179,6 +180,7 @@ def build_indexes(files: dict, aliases: dict) -> dict:
         by_name[name].append(sha1)
 
         by_crc32[entry["crc32"]] = sha1
+        by_sha256[entry["sha256"]] = sha1
 
         # Path suffix index for regional variant resolution
         suffix = _path_suffix(entry["path"])
@@ -208,6 +210,7 @@ def build_indexes(files: dict, aliases: dict) -> dict:
         "by_md5": by_md5,
         "by_name": by_name,
         "by_crc32": by_crc32,
+        "by_sha256": by_sha256,
         "by_path_suffix": by_path_suffix,
     }
 
