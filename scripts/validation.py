@@ -15,6 +15,25 @@ from common import compute_hashes
 # verify.py cannot reproduce these -size checks still apply if combined.
 _CRYPTO_CHECKS = frozenset({"signature", "crypto"})
 
+
+def _adler32_byteswapped(path: str) -> str:
+    """Compute adler32 on 16-bit byte-swapped data.
+
+    Dolphin's DSP loader swaps every 16-bit word before hashing
+    (Common::swap16 in DSPLLE.cpp:LoadDSPRom).  This reproduces that
+    transform so verify.py can match the expected adler32 values.
+    """
+    import struct
+    import zlib
+
+    with open(path, "rb") as f:
+        data = f.read()
+    # Pad to even length if necessary
+    if len(data) % 2:
+        data += b"\x00"
+    swapped = struct.pack(f">{len(data) // 2}H", *struct.unpack(f"<{len(data) // 2}H", data))
+    return format(zlib.adler32(swapped) & 0xFFFFFFFF, "08x")
+
 # All reproducible validation types.
 _HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
 
@@ -72,6 +91,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "sha1": set(),
                     "sha256": set(),
                     "adler32": set(),
+                    "adler32_byteswap": False,
                     "crypto_only": set(),
                     "emulators": set(),
                     "per_emulator": {},
@@ -120,6 +140,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 if norm.startswith("0x"):
                     norm = norm[2:]
                 index[fname]["adler32"].add(norm)
+            if f.get("adler32_byteswap"):
+                index[fname]["adler32_byteswap"] = True
             # Per-emulator ground truth detail
             expected: dict = {}
             if "size" in checks:
@@ -225,9 +247,12 @@ def check_file_validation(
                     expected = ",".join(sorted(entry[hash_type]))
                     return f"{hash_type} mismatch: got {hashes[hash_type]}, accepted [{expected}]"
         if entry["adler32"]:
-            if hashes["adler32"].lower() not in entry["adler32"]:
+            actual_adler = hashes["adler32"].lower()
+            if entry.get("adler32_byteswap"):
+                actual_adler = _adler32_byteswapped(local_path)
+            if actual_adler not in entry["adler32"]:
                 expected = ",".join(sorted(entry["adler32"]))
-                return f"adler32 mismatch: got 0x{hashes['adler32']}, accepted [{expected}]"
+                return f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]"
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
