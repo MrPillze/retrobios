@@ -2367,6 +2367,19 @@ def _run_verify_packs(args):
             print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
             continue
 
+        # Detect source from ZIP filename
+        pack_source = "full"
+        if zip_path:
+            bn = os.path.basename(zip_path)
+            if "_Platform_" in bn:
+                pack_source = "platform"
+            elif "_Truth_" in bn:
+                pack_source = "truth"
+
+        if pack_source == "truth":
+            print(f"  {platform_name}: OK (truth pack, verified by hash integrity)")
+            continue
+
         extract_dir = os.path.join("tmp", "verify_packs", platform_name)
         os.makedirs(extract_dir, exist_ok=True)
         try:
@@ -3527,6 +3540,9 @@ def verify_and_finalize_packs(
         # Stage 2: platform conformance (extract + verify)
         # Skipped for filtered/split/custom packs (intentionally partial)
         if skip_conformance:
+            continue
+        # Skip conformance for non-full source variants
+        if "_Platform_" in name or "_Truth_" in name:
             continue
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:
