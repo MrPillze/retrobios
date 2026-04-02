@@ -7,7 +7,7 @@ Technical documentation for the RetroBIOS toolchain.
 - **[Getting started](getting-started.md)** - installation, BIOS directory paths per platform, verification
 - **[FAQ](faq.md)** - common questions, troubleshooting, hash explanations
 
-If you just want to download BIOS packs, see the [home page](../README.md).
+If you just want to download BIOS packs, see the [home page](../index.md).
 
 ## Technical reference
 
@@ -26,7 +26,7 @@ If you just want to download BIOS packs, see the [home page](../README.md).
 - **[Testing guide](testing-guide.md)** - run tests, fixture pattern, how to add tests, CI integration
 - **[Release process](release-process.md)** - CI workflows, large files, manual release
 
-See [contributing](../CONTRIBUTING.md) for submission guidelines.
+See [contributing](../contributing.md) for submission guidelines.
 
 ## Glossary
 
