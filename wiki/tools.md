@@ -8,7 +8,7 @@ Run everything in sequence:
 
 ```bash
 python scripts/pipeline.py --offline              # DB + verify + packs + manifests + integrity + readme + site
-python scripts/pipeline.py --offline --skip-packs  # DB + verify only
+python scripts/pipeline.py --offline --skip-packs  # DB + verify + readme + site
 python scripts/pipeline.py --offline --skip-docs   # skip readme + site generation
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
 python scripts/pipeline.py --offline --with-truth  # include truth generation + diff
