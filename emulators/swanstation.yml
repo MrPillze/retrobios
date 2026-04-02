@@ -70,11 +70,12 @@ files:
     aliases: []
 
   - name: "ps1_rom.bin"
-    description: "PS3 (v5.0 06-23-03 A)"
+    description: "PS3 embedded PS1 BIOS (v5.0 06-23-03 A)"
     region: "Auto"
     required: false
     md5: "81bbe60ba7a3d1cea1d48c14cbcc647b"
-    size: 4089584
+    size: [524288, 4194304, 4089584]
     validation: [size, md5]
-    source_ref: "src/core/bios.cpp:70"
+    note: "Accepts PS1 (512KB), PS2 (4MB), and PS3 (0x3E66F0) sizes. Only first 512KB used."
+    source_ref: "src/core/bios.h:9, src/core/bios.cpp:70,83"
     aliases: []

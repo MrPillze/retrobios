@@ -1176,7 +1176,10 @@ def generate_emulator_page(
             if fsystem:
                 details.append(f"System: {_system_link(fsystem, '../')}")
             if size:
-                size_str = _fmt_size(size)
+                if isinstance(size, list):
+                    size_str = " / ".join(_fmt_size(s) for s in size)
+                else:
+                    size_str = _fmt_size(size)
                 if fmin or fmax:
                     bounds = []
                     if fmin:

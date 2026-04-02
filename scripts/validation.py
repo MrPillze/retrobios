@@ -102,8 +102,12 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             index[fname]["crypto_only"].update(c for c in checks if c in _CRYPTO_CHECKS)
             # Size checks
             if "size" in checks:
-                if f.get("size") is not None:
-                    index[fname]["sizes"].add(f["size"])
+                raw_size = f.get("size")
+                if raw_size is not None:
+                    if isinstance(raw_size, list):
+                        index[fname]["sizes"].update(raw_size)
+                    else:
+                        index[fname]["sizes"].add(raw_size)
                 if f.get("min_size") is not None:
                     cur = index[fname]["min_size"]
                     index[fname]["min_size"] = (
