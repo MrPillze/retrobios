@@ -758,6 +758,7 @@ def _build_readme(
     total_files: int,
     num_systems: int,
     source: str = "full",
+    contributors: list[dict] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     sep = "=" * 50
@@ -971,7 +972,18 @@ def _build_readme(
             "  Independent of platform scraper accuracy.\n\n"
         )
 
-    return header + source_info + guide + footer
+    credits = ""
+    if contributors:
+        credits = "\nCONTRIBUTORS\n\n"
+        for cb in contributors:
+            username = cb.get("username", "")
+            contribution = cb.get("contribution", "")
+            pr = cb.get("pr")
+            pr_ref = f" (#{pr})" if pr else ""
+            credits += f"  @{username} - {contribution}{pr_ref}\n"
+        credits += "\n"
+
+    return header + source_info + guide + credits + footer
 
 
 def _build_agnostic_rename_readme(
@@ -1482,9 +1494,15 @@ def generate_pack(
 
       # README.txt for users -personalized step-by-step per platform
       num_systems = len(pack_systems)
+      _registry_path = Path(platforms_dir) / "_registry.yml"
+      _pack_registry: dict = {}
+      if _registry_path.exists():
+          with open(_registry_path) as _rf:
+              _pack_registry = (yaml.safe_load(_rf) or {}).get("platforms", {})
       readme_text = _build_readme(
           platform_name, platform_display, base_dest, total_files, num_systems,
           source=source,
+          contributors=_pack_registry.get(platform_name, {}).get("contributed_by", []),
       )
       zf.writestr("README.txt", readme_text)
 
