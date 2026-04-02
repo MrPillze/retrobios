@@ -89,7 +89,7 @@ A hash is a fixed-length fingerprint computed from a file's contents. If even on
 | SHA1 | 40 hex chars | `10155d8d6e6e832d8ea1571511e40dfb15fede05` |
 | CRC32 | 8 hex chars | `2F468B96` |
 
-Different platforms use different hash types for verification. Batocera uses MD5, RetroArch checks existence only, and RomM accepts any of the three.
+Different platforms use different hash types for verification. Batocera uses MD5, RetroArch checks existence only, BizHawk uses SHA1, and RomM uses MD5.
 
 ## Why does my verification report say UNTESTED?
 

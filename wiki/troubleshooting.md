@@ -72,13 +72,11 @@ filename from the emulator profile.
 
 ## Hash mismatch / UNTESTED
 
-`verify.py` reports `HASH_MISMATCH` or `UNTESTED` for a file.
-
-**HASH_MISMATCH:**
+`verify.py` reports `UNTESTED` for a file.
 
 The file exists and was hashed, but the computed hash doesn't match any expected
 value. This means you have a different version of the file than what the platform
-or emulator expects.
+or emulator expects. The reason field shows the expected vs actual hash prefix.
 
 To find the correct version, check the system page on the site. It lists every
 known BIOS file with its expected MD5 and SHA1.
@@ -147,10 +145,11 @@ How to read and interpret `verify.py` output.
 | Status | Meaning |
 |--------|---------|
 | `ok` | File present, hash matches (or existence check passed) |
-| `untested` | File present, hash not confirmed (existence-only platforms) |
+| `untested` | File present, hash not confirmed against expected value |
 | `missing` | File not found in the repository |
-| `hash_mismatch` | File found but hash doesn't match expected value |
-| `size_mismatch` | File found but size doesn't match what the emulator expects |
+
+Hash and size mismatches are reported as `untested` with a reason field
+showing expected vs actual values (e.g., `expected abc123… got def456…`).
 
 **Reading the output:**
 

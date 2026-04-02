@@ -324,10 +324,13 @@ python scripts/pipeline.py --offline
 This executes in sequence:
 
 1. `generate_db.py` - rebuild `database.json` from `bios/`
-2. `refresh_data_dirs.py` - update data directories
+2. `refresh_data_dirs.py` - update data directories (skipped with `--offline`)
 3. `verify.py --all` - verify all platforms including the new one
-4. `generate_pack.py --all` - build ZIP packs
+4. `generate_pack.py --all` - build ZIP packs + install manifests
 5. Consistency check - verify counts match between verify and pack
+6. Pack integrity - extract ZIPs and verify hashes per platform mode
+7. `generate_readme.py` - regenerate README
+8. `generate_site.py` - regenerate documentation site
 
 Check the output for:
 

@@ -76,7 +76,7 @@ Recalbox uses three severity levels derived from two YAML fields (`mandatory` an
 |-----------|--------------------|--------|-------------------|
 | true      | true               | RED    | CRITICAL          |
 | true      | false              | YELLOW | WARNING           |
-| false     | (any)              | GREEN  | INFO              |
+| false     | (any)              | GREEN  | WARNING           |
 
 ### checkInsideZip (Batocera zippedFile)
 
@@ -93,9 +93,10 @@ If the inner file is not found inside the ZIP, the status is UNTESTED with a rea
 
 ### RomM verification
 
-RomM checks both file size and hash. It accepts any hash type (MD5, SHA1, or CRC32).
-ZIP files are not opened; only the container is checked. `verify.py` replicates this
-by checking size first, then trying each available hash.
+RomM uses MD5 verification (`verification_mode: md5`). The platform YAML stores
+SHA1, MD5, and CRC32 for reference, but `verify.py` checks only the MD5 field,
+matching the platform's runtime behavior. ZIP files are not opened; only the
+container is checked.
 
 
 ## SHA1 Mode

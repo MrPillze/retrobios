@@ -85,7 +85,7 @@ Relative to the RetroBat installation directory (e.g., `C:\RetroBat\bios\`).
 ### RetroDECK
 
 ```
-~/.var/app/net.retrodeck.retrodeck/retrodeck/bios/
+~/retrodeck/bios/
 ```
 
 ### EmuDeck

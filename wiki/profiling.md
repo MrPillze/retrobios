@@ -250,7 +250,7 @@ even if documentation mentions it.
 |-------|----------|-------------|
 | `emulator` | yes | display name |
 | `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility`, `test` |
-| `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `alias`, `launcher` |
+| `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `launcher`, `other` |
 | `source` | yes | libretro core repository URL |
 | `upstream` | no | original emulator repository URL |
 | `profiled_date` | yes | date of source analysis |
@@ -275,7 +275,7 @@ even if documentation mentions it.
 | `system` | system ID this file belongs to (for multi-system profiles) |
 | `size` | expected size in bytes |
 | `min_size`, `max_size` | size range when the code accepts a range |
-| `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
+| `md5`, `sha1`, `crc32`, `sha256`, `adler32` | expected hashes from source code |
 | `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
 | `aliases` | alternate filenames for the same file |
 | `mode` | `libretro`, `standalone`, or `both` |

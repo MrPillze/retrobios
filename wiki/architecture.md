@@ -34,7 +34,7 @@ Upstream sources          Scrapers parse       generate_db.py scans
   batocera-systems                             builds database.json
   es_bios.xml (recalbox)                       (SHA1 primary key,
   core-info .info files                         indexes: by_md5, by_name,
-  FirmwareDatabase.cs                           by_crc32, by_path_suffix)
+  FirmwareDatabase.cs                           by_crc32, by_sha256, by_path_suffix)
   MAME/FBNeo source
 
 emulators/*.yml          verify.py checks      generate_pack.py resolves
@@ -254,7 +254,7 @@ python -m unittest tests.test_e2e -v
 
 | Workflow | File | Trigger | Role |
 |----------|------|---------|------|
-| Build & Release | `build.yml` | `workflow_dispatch` (manual) | restore large files, build packs, create GitHub release |
+| Build & Release | `build.yml` | push to main (bios/, platforms/) + manual | restore large files, build packs, create GitHub release |
 | Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | generate site, build with MkDocs, deploy to GitHub Pages |
 | PR Validation | `validate.yml` | pull request on `bios/`/`platforms/` | validate BIOS hashes, schema check, run tests, auto-label PR |
 | Weekly Sync | `watch.yml` | cron (Monday 6 AM UTC) + manual | scrape upstream sources, detect changes, create update PR |

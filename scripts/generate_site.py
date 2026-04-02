@@ -331,10 +331,13 @@ def generate_home(
             "    |----------|-----------|",
             "    | RetroArch / Lakka | `system/` |",
             "    | Batocera | `/userdata/bios/` |",
+            "    | BizHawk | `Firmware/` |",
+            "    | EmuDeck | `Emulation/bios/` |",
             "    | Recalbox | `/recalbox/share/bios/` |",
             "    | RetroBat | `bios/` |",
             "    | RetroDECK | `~/retrodeck/bios/` |",
-            "    | EmuDeck | `Emulation/bios/` |",
+            "    | RetroPie | `~/RetroPie/BIOS/` |",
+            "    | RomM | `bios/{platform_slug}/` |",
             "",
         ]
     )
