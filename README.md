@@ -118,8 +118,8 @@ To keep packs accurate, each file is checked against the emulator's source code.
 
 ## Contributors
 
-<a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a> RomM [#37](https://github.com/Abdess/retrobios/pull/37)
-<a href="https://github.com/monster-penguin"><img src="https://avatars.githubusercontent.com/u/266009589?v=4" width="50" title="monster-penguin"></a> RetroDECK [#36](https://github.com/Abdess/retrobios/pull/36)
+<a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a>
+<a href="https://github.com/monster-penguin"><img src="https://avatars.githubusercontent.com/u/266009589?v=4" width="50" title="monster-penguin"></a>
 
 
 ## Contributing
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-04-02T13:28:54Z*
+*Auto-generated on 2026-04-02T13:38:26Z*
