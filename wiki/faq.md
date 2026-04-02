@@ -93,9 +93,11 @@ Different platforms use different hash types for verification. Batocera uses MD5
 
 ## Why does my verification report say UNTESTED?
 
-UNTESTED means the file exists on disk but its hash was not confirmed against a known value. This happens on existence-mode platforms (RetroArch, Lakka, RetroPie) where the platform only checks that the file is present, without verifying its contents.
+UNTESTED means the file exists on disk but its hash does not match the expected value. This happens on MD5/SHA1-mode platforms (Batocera, Recalbox, BizHawk, etc.) when the file is present but contains different data than what the platform declares.
 
-The file may still be correct. Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects.
+On existence-mode platforms (RetroArch, Lakka, RetroPie), files are never UNTESTED because the platform only checks presence, not content. Those files show as OK if present.
+
+Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects.
 
 ## Can I use BIOS from one platform on another?
 

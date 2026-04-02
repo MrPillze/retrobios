@@ -33,7 +33,7 @@ See [contributing](../CONTRIBUTING.md) for submission guidelines.
 - **BIOS** - firmware burned into console hardware, needed by emulators that rely on original boot code
 - **firmware** - system software loaded by a console at boot; used interchangeably with BIOS in this project
 - **HLE** - High-Level Emulation; software reimplementation of BIOS functions, avoids needing the original file
-- **hash** - fixed-length fingerprint of a file's contents; this project uses MD5, SHA1, SHA256, and CRC32
+- **hash** - fixed-length fingerprint of a file's contents; this project uses MD5, SHA1, SHA256, CRC32, and Adler-32
 - **platform** - a distribution that packages emulators (RetroArch, Batocera, Recalbox, EmuDeck, etc.)
 - **core** - an emulator packaged as a libretro plugin, loaded by RetroArch or compatible frontends
 - **profile** - a YAML file in `emulators/` documenting one core's BIOS requirements, verified against source code

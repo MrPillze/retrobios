@@ -275,7 +275,8 @@ even if documentation mentions it.
 | `system` | system ID this file belongs to (for multi-system profiles) |
 | `size` | expected size in bytes |
 | `min_size`, `max_size` | size range when the code accepts a range |
-| `md5`, `sha1`, `crc32`, `sha256`, `adler32` | expected hashes from source code |
+| `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
+| `known_hash_adler32` | expected Adler-32 hash (used by Dolphin IPL files) |
 | `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
 | `aliases` | alternate filenames for the same file |
 | `mode` | `libretro`, `standalone`, or `both` |
@@ -288,4 +289,7 @@ even if documentation mentions it.
 | `note` | additional context |
 | `contents` | structure of files inside a BIOS ZIP (`name`, `description`, `size`, `crc32`) |
 | `storage` | `large_file` for files > 50 MB stored as release assets |
+| `agnostic` | true if any file under the system path within size constraints satisfies the requirement |
+| `unsourceable` | reason why the file cannot be sourced (acknowledged gap) |
+| `destination` | target path within the BIOS directory |
 

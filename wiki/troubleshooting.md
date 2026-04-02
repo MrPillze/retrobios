@@ -18,8 +18,8 @@ cannot start games for that system at all.
 
 **Check if the hash matches:**
 
-Look for `HASH_MISMATCH` in the verify output. This means the file exists but
-contains different data than expected. Common causes:
+Look for `untested` entries in the verify output. This means the file exists but
+its hash does not match the expected value. Common causes:
 
 - Wrong region (a PAL BIOS instead of NTSC, or vice versa)
 - Wrong hardware revision (e.g. SCPH-5501 vs SCPH-1001 for PlayStation)
