@@ -116,6 +116,10 @@ To keep packs accurate, each file is checked against the emulator's source code.
 3. **Build packs** - include baseline files plus what each platform's cores need
 4. **Verify** - run platform-native checks and emulator-level validation
 
+## Community tools
+
+- [BIOS Preservation Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool) by [monster-penguin](https://github.com/monster-penguin) - scan, verify, and stage your own BIOS collection using RetroBIOS hash metadata
+
 ## Contributors
 
 <a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a>

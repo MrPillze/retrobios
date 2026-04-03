@@ -2211,6 +2211,7 @@ def generate_mkdocs_nav(
         {"Adding a scraper": "wiki/adding-a-scraper.md"},
         {"Testing guide": "wiki/testing-guide.md"},
         {"Release process": "wiki/release-process.md"},
+        {"Community tools": "wiki/community-tools.md"},
     ]
 
     return [

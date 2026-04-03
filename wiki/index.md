@@ -28,6 +28,10 @@ If you just want to download BIOS packs, see the [home page](../index.md).
 
 See [contributing](../contributing.md) for submission guidelines.
 
+## Community
+
+- **[Community tools](community-tools.md)** - projects built on RetroBIOS data
+
 ## Glossary
 
 - **BIOS** - firmware burned into console hardware, needed by emulators that rely on original boot code
