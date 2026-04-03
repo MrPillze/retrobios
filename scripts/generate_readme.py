@@ -143,7 +143,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             pass
 
     lines = [
-        "# RetroBIOS",
+        '<p align="center">',
+        '  <img src=".github/assets/banner.png" alt="RetroBIOS" width="400">',
+        "</p>",
         "",
         f"Complete BIOS and firmware packs for "
         f"{', '.join(c['platform'] for c in sorted(coverages.values(), key=lambda x: x[

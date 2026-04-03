@@ -2,9 +2,7 @@
   <img src=".github/assets/banner.png" alt="RetroBIOS" width="400">
 </p>
 
-<p align="center">
-  Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
-</p>
+Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
 **7,302** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
@@ -120,10 +118,6 @@ To keep packs accurate, each file is checked against the emulator's source code.
 3. **Build packs** - include baseline files plus what each platform's cores need
 4. **Verify** - run platform-native checks and emulator-level validation
 
-## Community tools
-
-- [BIOS Preservation Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool) by [monster-penguin](https://github.com/monster-penguin) - scan, verify, and stage your own BIOS collection using RetroBIOS hash metadata
-
 ## Contributors
 
 <a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a>
@@ -138,4 +132,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-04-02T13:38:26Z*
+*Auto-generated on 2026-04-03T12:21:45Z*
