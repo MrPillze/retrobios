@@ -390,8 +390,16 @@ def do_standalone_copies(
 ) -> tuple[int, int]:
     """Copy BIOS files to standalone emulator directories.
 
+    Supports:
+    - file: single file copy
+    - pattern: glob match (e.g. "scph*.bin")
+    - note: informational message when detect path exists
+    - WSL fallback to linux targets
+
     Returns (copied_count, skipped_count).
     """
+    from fnmatch import fnmatch
+
     copies = manifest.get("standalone_copies", [])
     if not copies:
         return 0, 0
@@ -400,21 +408,48 @@ def do_standalone_copies(
     skipped = 0
 
     for entry in copies:
-        src = bios_path / entry["file"]
-        if not src.exists():
+        # Note entries: print message if emulator detected
+        if "note" in entry:
+            detect_paths = entry.get("detect", {}).get(os_type, [])
+            if not detect_paths and os_type == "wsl":
+                detect_paths = entry.get("detect", {}).get("linux", [])
+            for dp in detect_paths:
+                expanded = Path(os.path.expandvars(os.path.expanduser(dp)))
+                if expanded.is_dir():
+                    print(f"  {entry['note']}")
+                    break
             continue
+
+        # Resolve source files
+        if "pattern" in entry:
+            sources = [
+                f for f in bios_path.rglob("*")
+                if fnmatch(f.name, entry["pattern"]) and f.is_file()
+            ]
+        else:
+            src = bios_path / entry["file"]
+            sources = [src] if src.exists() else []
+
+        if not sources:
+            continue
+
+        # Resolve target directories with WSL fallback
         targets = entry.get("targets", {}).get(os_type, [])
+        if not targets and os_type == "wsl":
+            targets = entry.get("targets", {}).get("linux", [])
+
         for target_dir_str in targets:
             target_dir = Path(os.path.expandvars(os.path.expanduser(target_dir_str)))
-            if target_dir.is_dir():
+            if not target_dir.is_dir():
+                skipped += len(sources)
+                continue
+            for src in sources:
                 dest = target_dir / src.name
                 try:
                     shutil.copy2(src, dest)
                     copied += 1
                 except OSError:
                     skipped += 1
-            else:
-                skipped += 1
 
     return copied, skipped
 
