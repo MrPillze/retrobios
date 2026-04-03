@@ -1,6 +1,10 @@
-# RetroBIOS
+<p align="center">
+  <img src=".github/assets/banner.png" alt="RetroBIOS" width="400">
+</p>
 
-Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
+<p align="center">
+  Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
+</p>
 
 **7,302** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 

@@ -2260,6 +2260,15 @@ def main():
         css_dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(css_src, css_dest)
 
+    # Copy branding assets
+    images_dest = docs / "assets" / "images"
+    images_dest.mkdir(parents=True, exist_ok=True)
+    assets_src = Path(".github") / "assets"
+    for name, dest_name in [("logo.png", "logo.png"), ("favicon.png", "favicon.png")]:
+        src = assets_src / name
+        if src.exists():
+            shutil.copy2(src, images_dest / dest_name)
+
     registry_path = Path(args.platforms_dir) / "_registry.yml"
     registry = {}
     if registry_path.exists():
@@ -2405,6 +2414,8 @@ theme:
       icon: material/brightness-4
       name: Switch to auto
   font: false
+  logo: assets/images/logo.png
+  favicon: assets/images/favicon.png
   icon:
     logo: material/chip
   features:
