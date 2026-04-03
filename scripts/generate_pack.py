@@ -246,6 +246,13 @@ def _register_path(dest: str, seen_files: set[str], seen_parents: set[str]) -> N
         seen_parents.add(parent)
 
 
+def _flat(arcname: str, prefix: str, flatten: bool) -> str:
+    """Strip base_destination prefix from ZIP arcname when flattening."""
+    if flatten and prefix and arcname.startswith(prefix + "/"):
+        return arcname[len(prefix) + 1:]
+    return arcname
+
+
 def resolve_file(
     file_entry: dict,
     db: dict,
@@ -1022,6 +1029,7 @@ def generate_pack(
     system_filter: list[str] | None = None,
     precomputed_extras: list[dict] | None = None,
     source: str = "full",
+    flatten: bool = True,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -1157,7 +1165,7 @@ def generate_pack(
                         f"{base_dest}/{instr_name}" if base_dest else instr_name
                     )
                     zf.writestr(
-                        instr_path,
+                        _flat(instr_path, base_dest, flatten),
                         f"File needed: {file_entry['name']}\n\n{instructions}\n",
                     )
                     user_provided.append(file_entry["name"])
@@ -1183,9 +1191,9 @@ def generate_pack(
                         if download_external(file_entry, tmp_path):
                             extract = file_entry.get("extract", False)
                             if extract and tmp_path.endswith(".zip"):
-                                _extract_zip_to_archive(tmp_path, full_dest, zf)
+                                _extract_zip_to_archive(tmp_path, _flat(full_dest, base_dest, flatten), zf)
                             else:
-                                zf.write(tmp_path, full_dest)
+                                zf.write(tmp_path, _flat(full_dest, base_dest, flatten))
                             seen_destinations.add(dedup_key)
                             _register_path(dedup_key, seen_destinations, seen_parents)
                             if case_insensitive:
@@ -1263,7 +1271,7 @@ def generate_pack(
                                 else readme_name
                             )
                             if readme_full not in seen_destinations:
-                                zf.writestr(readme_full, readme_text)
+                                zf.writestr(_flat(readme_full, base_dest, flatten), readme_text)
                                 seen_destinations.add(readme_full)
                         status = "agnostic_fallback"
                         # Fall through to normal packing below
@@ -1349,12 +1357,13 @@ def generate_pack(
                     seen_lower.add(dedup_key.lower())
 
                 extract = file_entry.get("extract", False)
+                flat_dest = _flat(full_dest, base_dest, flatten)
                 if extract and local_path.endswith(".zip"):
-                    _extract_zip_to_archive(local_path, full_dest, zf)
+                    _extract_zip_to_archive(local_path, flat_dest, zf)
                 elif local_path.endswith(".zip"):
-                    _normalize_zip_for_pack(local_path, full_dest, zf)
+                    _normalize_zip_for_pack(local_path, flat_dest, zf)
                 else:
-                    zf.write(local_path, full_dest)
+                    zf.write(local_path, flat_dest)
                 total_files += 1
 
       # Core requirements: files platform's cores need but YAML doesn't declare
@@ -1440,10 +1449,11 @@ def generate_pack(
           if status in ("not_found", "external", "user_provided"):
               continue
 
+          flat_dest = _flat(full_dest, base_dest, flatten)
           if local_path.endswith(".zip"):
-              _normalize_zip_for_pack(local_path, full_dest, zf)
+              _normalize_zip_for_pack(local_path, flat_dest, zf)
           else:
-              zf.write(local_path, full_dest)
+              zf.write(local_path, flat_dest)
           seen_destinations.add(full_dest)
           _register_path(full_dest, seen_destinations, seen_parents)
           if case_insensitive:
@@ -1489,7 +1499,7 @@ def generate_pack(
                       _register_path(full, seen_destinations, seen_parents)
                       if case_insensitive:
                           seen_lower.add(full.lower())
-                      zf.write(src, full)
+                      zf.write(src, _flat(full, base_dest, flatten))
                       total_files += 1
 
       # README.txt for users -personalized step-by-step per platform
