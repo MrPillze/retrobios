@@ -994,8 +994,10 @@ class TestE2E(unittest.TestCase):
         groups = group_identical_platforms(
             ["test_existence", "test_inherited"], self.platforms_dir
         )
-        # Different base_destination ->separate groups
-        self.assertEqual(len(groups), 2)
+        # With flat ZIPs, base_destination no longer separates groups
+        # Platforms with same files (regardless of base_dest) are grouped
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups[0][0]), 2)
 
     def test_51_platform_grouping_same(self):
         # Create two identical platforms
