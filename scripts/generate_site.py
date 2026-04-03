@@ -2141,89 +2141,95 @@ def generate_which_pack() -> str:
     return """\
 # Which pack?
 
-## Automatic install (recommended)
+## The fast way
 
-The installer auto-detects the platform and BIOS directory.
+Run the installer. It detects the platform, finds the BIOS folder, and downloads everything.
 
 **Linux / Mac / Steam Deck:**
 
-    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+```sh
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+```
 
 **Windows (PowerShell):**
 
-    iwr -useb https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+```powershell
+iwr -useb https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+```
 
-## By device
+The installer also copies keys and firmware to standalone emulators (Yuzu, Eden, Ryujinx, DuckStation, PCSX2, Dolphin, etc.) when they are installed on the system.
 
-### PC (Windows)
+---
 
-| Software installed | Recommended pack |
-|---|---|
-| RetroArch | RetroArch pack |
-| RetroBat | RetroBat pack |
-| BizHawk | BizHawk pack |
-| LaunchBox (with RetroArch) | RetroArch pack |
+## Manual download
 
-### PC (Linux)
-
-| Software installed | Recommended pack |
-|---|---|
-| RetroArch | RetroArch pack |
-| Batocera | Batocera pack |
-| Recalbox | Recalbox pack |
+Go to the [releases page](https://github.com/Abdess/retrobios/releases), pick the pack that matches the setup, extract the files into the BIOS folder listed below.
 
 ### Steam Deck
 
-| Software installed | Recommended pack |
-|---|---|
-| EmuDeck | EmuDeck pack |
-| RetroDECK | RetroDECK pack |
-| RetroArch standalone | RetroArch pack |
+| Setup | Pack | Extract to |
+|-------|------|-----------|
+| [EmuDeck](https://www.emudeck.com/) (installs multiple emulators, adds games to Steam) | EmuDeck | `Emulation/bios/` |
+| [RetroDECK](https://retrodeck.net/) (single Flatpak app, all-in-one) | RetroDECK | `~/retrodeck/bios/` |
+| RetroArch standalone (installed from Discover or Steam) | RetroArch / Lakka | RetroArch system folder |
+
+### PC (Windows)
+
+| Setup | Pack | Extract to |
+|-------|------|-----------|
+| [RetroArch](https://www.retroarch.com/) (multi-system emulator with cores) | RetroArch / Lakka | `retroarch/system/` |
+| [RetroBat](https://www.retrobat.org/) (Windows frontend with EmulationStation) | RetroBat | `RetroBat/bios/` |
+| [BizHawk](https://tasvideos.org/BizHawk) (accuracy-focused, popular for TAS and speedruns) | BizHawk | `BizHawk/Firmware/` |
+| [LaunchBox](https://www.launchbox-app.com/) (game library manager, launches other emulators) | RetroArch / Lakka | RetroArch system folder |
+
+### PC (Linux)
+
+| Setup | Pack | Extract to |
+|-------|------|-----------|
+| RetroArch (native, Flatpak, or Snap) | RetroArch / Lakka | RetroArch system folder |
+| [Batocera](https://batocera.org/) (bootable USB or full install) | Batocera | `/userdata/bios/` |
+| [Recalbox](https://www.recalbox.com/) (similar to Batocera, different UI) | Recalbox | `/recalbox/share/bios/` |
 
 ### Raspberry Pi / Single-board computers
 
-| Software installed | Recommended pack |
-|---|---|
-| RetroPie | RetroArch / Lakka pack |
-| Lakka | RetroArch / Lakka pack |
-| Batocera | Batocera pack |
-| Recalbox | Recalbox pack |
-
-### Dedicated emulation box
-
-| Software installed | Recommended pack |
-|---|---|
-| Batocera | Batocera pack |
-| Recalbox | Recalbox pack |
-| Lakka | RetroArch / Lakka pack |
+| Setup | Pack | Extract to |
+|-------|------|-----------|
+| [RetroPie](https://retropie.org.uk/) (the classic Pi emulation setup, most community guides) | RetroArch / Lakka | `~/RetroPie/BIOS/` |
+| [Lakka](https://www.lakka.tv/) (lightweight RetroArch OS, minimal config) | RetroArch / Lakka | `/storage/system/` |
+| [Batocera](https://batocera.org/) (easy setup, works on Pi 3/4/5 and many other boards) | Batocera | `/userdata/bios/` |
+| [Recalbox](https://www.recalbox.com/) (plug-and-play experience, good for beginners) | Recalbox | `/recalbox/share/bios/` |
 
 ### Android handheld (Retroid Pocket, R36S, Miyoo, etc.)
 
-RetroArch is the most common emulator on Android handhelds.
-Download the RetroArch pack and extract the files into the
-RetroArch system folder on internal storage or SD card.
+Most Android handhelds run RetroArch. Download the **RetroArch / Lakka** pack and extract into the RetroArch system folder (usually `RetroArch/system/` on internal storage or SD card).
 
 ### Self-hosted ROM manager
 
-| Software | Recommended pack |
-|---|---|
-| RomM | RomM pack |
+| Setup | Pack | Extract to |
+|-------|------|-----------|
+| [RomM](https://github.com/rommapp/romm) (web-based ROM manager with EmulatorJS) | RomM | `bios/{platform_slug}/` |
 
-## Full pack vs Platform pack
+---
 
-Two pack types are available for each platform:
+## Full pack or Platform pack?
 
-- **Full pack** (recommended): the platform's BIOS list plus all files
-  needed by each emulator core. Covers alternate cores, optional firmware,
-  and edge cases.
-- **Platform pack**: only the files the platform officially checks for.
-  Smaller download, good for limited storage or default cores only.
+Each platform has two pack types on the releases page.
 
-When in doubt, the full pack is the safest choice.
+**Full pack** (recommended)
 
-## Download
+Contains the platform's own BIOS list plus all files needed by each emulator core available on that platform. This covers alternate cores, optional firmware that improves accuracy, and edge cases. Larger download, but everything works out of the box with any core.
 
-All packs are on the [releases page](https://github.com/Abdess/retrobios/releases).
+**Platform pack**
+
+Contains only the files the platform officially checks for. Much smaller download. Good for limited storage (SD cards, handhelds) or setups that only use default cores.
+
+When in doubt, take the full pack. Storage is cheap, troubleshooting missing BIOS files is not.
+
+---
+
+## Still not sure?
+
+The [platforms section](platforms/index.md) lists every supported platform with its coverage details. Each emulator page in the [emulators section](emulators/index.md) shows exactly which BIOS files it needs and why.
 """
 
 
