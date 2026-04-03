@@ -2613,9 +2613,11 @@ def _run_platform_packs(
                         load_platform_config(p, args.platforms_dir).get("platform", p)
                         for p in group_platforms
                     ]
+                    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
+                    req_tag = "_Required" if required_only else ""
                     combined = (
                         "_".join(n.replace(" ", "") for n in all_names)
-                        + f"{ver_tag}_BIOS_Pack.zip"
+                        + f"{ver_tag}{source_tag}{req_tag}_BIOS_Pack.zip"
                     )
                     new_path = os.path.join(os.path.dirname(zip_path), combined)
                     if new_path != zip_path:
