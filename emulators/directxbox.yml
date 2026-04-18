@@ -53,6 +53,7 @@ files:
 
   - name: "cromwell_1024.bin"
     path: "cromwell_1024.bin"
+    size: 1048576
     validation: [size]
     required: true
     note: >

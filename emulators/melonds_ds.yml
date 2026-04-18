@@ -27,7 +27,7 @@ files:
     hle_fallback: true
     size: 16384
     validation: [size]
-    crc32: "0x1280f0d5"
+    crc32: 1280f0d5
     source_ref: "src/libretro/config/console.cpp:219, melonDS:src/MemConstants.h:31,36"
 
   - name: bios9.bin
@@ -37,7 +37,7 @@ files:
     hle_fallback: true
     size: 4096
     validation: [size]
-    crc32: "0x2ab23573"
+    crc32: 2ab23573
     source_ref: "src/libretro/config/console.cpp:220, melonDS:src/MemConstants.h:30,37"
 
   - name: firmware.bin
@@ -55,7 +55,7 @@ files:
     required: true
     size: 65536
     validation: [size]
-    crc32: "0x4316CC42"
+    crc32: 4316cc42
     source_ref: "src/libretro/config/console.cpp:333, melonDS:src/MemConstants.h:32,44"
     note: "Contains eMMC key-Y at offset 0x8308 for NAND init"
 
@@ -65,7 +65,7 @@ files:
     required: true
     size: 65536
     validation: [size]
-    crc32: "0xBAE84F6C"
+    crc32: bae84f6c
     source_ref: "src/libretro/config/console.cpp:338, melonDS:src/MemConstants.h:32,45"
 
   - name: dsi_firmware.bin

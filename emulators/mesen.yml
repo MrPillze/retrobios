@@ -65,5 +65,7 @@ files:
     description: "External NES color palette"
     required: false
     source_ref: "Libretro/libretro.cpp:301-323 (load_custom_palette), Libretro/libretro.cpp:405-406 (called when mesen_palette == Custom)"
+    min_size: 192
+    max_size: 1536
     validation: [size]
-    note: "Loaded when mesen_palette core option is Custom. Accepts exactly 192 bytes (64 RGB triplets) or 1536 bytes (512 entries for emphasis combos). Falls back to built-in default palette if size doesn't match."
+    note: "Accepts 192 bytes (64 RGB triplets) or 1536 bytes (512 emphasis combos). Falls back to built-in default if size doesn't match."

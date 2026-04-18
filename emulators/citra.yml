@@ -35,9 +35,10 @@ files:
     system: nintendo-3ds
     description: "ARM9 bootrom"
     required: false
+    size: 65536
     validation: [size]
     source_ref: "src/core/hw/aes/key.cpp:162-172 LoadBootromKeys(), src/core/hw/rsa/rsa.cpp:55-65 InitSlots()"
-    note: "expected size 65536 bytes, provides AES and RSA keys"
+    note: "provides AES and RSA keys"
 
   - name: shared_font.bin
     path: "Citra/sysdata/shared_font.bin"
