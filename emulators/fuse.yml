@@ -244,7 +244,7 @@ files:
   - name: "fuse/128p-0.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 0. Required for Pentagon machines."
@@ -253,7 +253,7 @@ files:
   - name: "fuse/128p-1.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 1. Required for Pentagon machines."
@@ -262,7 +262,7 @@ files:
   - name: "fuse/trdos.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "TR-DOS ROM (Beta 128 disk interface). Used by Pentagon and Scorpion."
@@ -271,7 +271,7 @@ files:
   - name: "fuse/gluck.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Gluck ROM. Required for Pentagon 512K and 1024."
@@ -281,7 +281,7 @@ files:
   - name: "fuse/256s-0.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 0. Required for Scorpion machine."
@@ -290,7 +290,7 @@ files:
   - name: "fuse/256s-1.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 1. Required for Scorpion machine."
@@ -299,7 +299,7 @@ files:
   - name: "fuse/256s-2.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 2. Required for Scorpion machine."
@@ -308,7 +308,7 @@ files:
   - name: "fuse/256s-3.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 3 (TR-DOS). Required for Scorpion machine."
@@ -318,7 +318,7 @@ files:
   - name: "fuse/if1-2.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Interface 1 ROM (edition 2). Loaded by peripherals/if1.c:403."
@@ -347,7 +347,7 @@ files:
   - name: "fuse/didaktik80.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 14336
     validation: [size]
     note: "Didaktik 80 disk interface ROM. Not embedded."
@@ -356,7 +356,7 @@ files:
   - name: "fuse/opus.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Opus Discovery disk interface ROM. Not embedded."
@@ -365,7 +365,7 @@ files:
   - name: "fuse/mf1.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Multiface 1 ROM. Not embedded."
@@ -374,7 +374,7 @@ files:
   - name: "fuse/mf128.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Multiface 128 ROM. Not embedded."
@@ -383,7 +383,7 @@ files:
   - name: "fuse/mf3.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Multiface 3 ROM. Not embedded."
@@ -402,7 +402,7 @@ files:
   - name: "fuse/ttx2000s.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "TTX2000S teletext adapter ROM. Not embedded."
@@ -411,7 +411,7 @@ files:
   - name: "fuse/usource.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+
     size: 8192
     validation: [size]
     note: "Currah uSource ROM. Not embedded."

@@ -533,7 +533,7 @@ files:
 
   - name: "U-Boot LEON3"
     path: "qemu/u-boot.bin"
-    sha1: ""
+
     required: false
     note: "U-Boot for LEON3 SPARC board. Not shipped with QEMU, user-supplied."
     source_ref: "hw/sparc/leon3.c:53"
@@ -611,28 +611,28 @@ files:
   # ========================================================
   - name: "MIPS BIOS (big-endian)"
     path: "qemu/mips_bios.bin"
-    sha1: ""
+
     required: false
     note: "Default BIOS for big-endian MIPS machines (Malta, MIPSsim, Jazz). Not shipped with QEMU."
     source_ref: "hw/mips/malta.c:97"
 
   - name: "MIPS BIOS (little-endian)"
     path: "qemu/mipsel_bios.bin"
-    sha1: ""
+
     required: false
     note: "Default BIOS for little-endian MIPS machines (Malta, MIPSsim, Jazz). Not shipped with QEMU."
     source_ref: "hw/mips/malta.c:99"
 
   - name: "Loongson3 BIOS"
     path: "qemu/bios_loongson3.bin"
-    sha1: ""
+
     required: false
     note: "Default BIOS for Loongson3 virtual MIPS machine. Not shipped with QEMU."
     source_ref: "hw/mips/loongson3_virt.c:63"
 
   - name: "PMON Fuloong2e"
     path: "qemu/pmon_2e.bin"
-    sha1: ""
+
     required: false
     note: "PMON monitor for Fuloong2e MIPS board. Not shipped with QEMU."
     source_ref: "hw/mips/fuloong2e.c:58"
@@ -642,7 +642,7 @@ files:
   # ========================================================
   - name: "Macintosh ROM"
     path: "qemu/MacROM.bin"
-    sha1: ""
+
     required: false
     note: "Apple Macintosh ROM for Quadra 800 emulation. Not shipped with QEMU."
     source_ref: "hw/m68k/q800.c:62"
@@ -652,7 +652,7 @@ files:
   # ========================================================
   - name: "Canon A1100 ROM"
     path: "qemu/canon-a1100-rom1.bin"
-    sha1: ""
+
     required: false
     note: "Canon PowerShot A1100 IS DIGIC camera ROM. Not shipped with QEMU."
     source_ref: "hw/arm/digic_boards.c:131"
@@ -702,7 +702,7 @@ files:
 
   - name: "Virtex ML507 DTB (PPC)"
     path: "qemu/virtex-ml507.dtb"
-    sha1: ""
+
     required: false
     note: "Device tree blob for Xilinx Virtex ML507 PowerPC board. Not shipped with QEMU."
     source_ref: "hw/ppc/virtex_ml507.c:148"
